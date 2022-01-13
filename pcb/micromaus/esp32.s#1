@@ -291,12 +291,11 @@
 <sheets>
 <sheet>
 <plain>
-<rectangle x1="58.42" y1="119.38" x2="76.2" y2="149.86" layer="91"/>
 </plain>
 <instances>
-<instance part="U1" gate="G$1" x="68.58" y="38.1" smashed="yes">
-<attribute name="NAME" x="58.6241" y="72.2345" size="1.783840625" layer="95"/>
-<attribute name="VALUE" x="58.3733" y="2.4319" size="1.78345" layer="96"/>
+<instance part="U1" gate="G$1" x="78.74" y="48.26" smashed="yes">
+<attribute name="NAME" x="68.7841" y="82.3945" size="1.783840625" layer="95"/>
+<attribute name="VALUE" x="68.5333" y="12.5919" size="1.78345" layer="96"/>
 </instance>
 </instances>
 <busses>
