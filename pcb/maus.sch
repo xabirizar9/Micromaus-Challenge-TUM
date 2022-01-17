@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
@@ -11870,7 +11870,7 @@ Low profile connectors, straight&lt;p&gt;
 </instance>
 <instance part="SV2" gate="1" x="25.4" y="20.32" smashed="yes">
 <attribute name="VALUE" x="21.59" y="12.7" size="1.778" layer="96"/>
-<attribute name="NAME" x="21.59" y="26.162" size="1.778" layer="95"/>
+<attribute name="NAME" x="21.59" y="26.162" size="1.778" layer="95" rot="MR0"/>
 </instance>
 </instances>
 <busses>
@@ -11995,6 +11995,20 @@ Low profile connectors, straight&lt;p&gt;
 <wire x1="45.72" y1="30.48" x2="45.72" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="CR1" gate="A" pin="VS"/>
 <wire x1="45.72" y1="17.78" x2="60.96" y2="17.78" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="H_ENABLE" class="0">
+<segment>
+<pinref part="CR1" gate="A" pin="ENABLEA"/>
+<wire x1="60.96" y1="12.7" x2="58.42" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="12.7" x2="58.42" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="-2.54" x2="109.22" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="-2.54" x2="109.22" y2="15.24" width="0.1524" layer="91"/>
+<pinref part="CR1" gate="A" pin="ENABLEB"/>
+<wire x1="109.22" y1="15.24" x2="106.68" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="-2.54" x2="124.46" y2="-2.54" width="0.1524" layer="91"/>
+<junction x="109.22" y="-2.54"/>
+<label x="127" y="-2.54" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 </nets>
