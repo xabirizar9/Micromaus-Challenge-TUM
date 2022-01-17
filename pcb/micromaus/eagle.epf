@@ -266,6 +266,9 @@ UsedLibraryUrn="urn:adsk.eagle:library:197"
 UsedLibraryUrn="urn:adsk.eagle:library:198"
 UsedLibraryUrn="urn:adsk.eagle:library:199"
 UsedLibrary="CH340C.lbr"
+UsedLibrary="CP2102.lbr"
+UsedLibrary="ESP32-S2-WROOM.lbr"
+UsedLibrary="shared.lbr"
 
 [Win_1]
 Type="Control Panel"
