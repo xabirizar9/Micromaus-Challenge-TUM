@@ -10956,6 +10956,52 @@ Mouser: 946-MP2333HGTL-P</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="xt60">
+<packages>
+<package name="XT60-UPRIGHT">
+<pad name="P-" x="-3.6" y="0" drill="4.5" diameter="5" shape="offset" rot="R180"/>
+<pad name="P+" x="3.6" y="0" drill="4.5" diameter="5" shape="offset"/>
+<wire x1="7.55" y1="4.05" x2="7.55" y2="2.9" width="0.127" layer="21"/>
+<wire x1="7.55" y1="4.05" x2="-6.35" y2="4.05" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="4.05" x2="-7.5" y2="2.9" width="0.127" layer="21"/>
+<wire x1="7.55" y1="-4.05" x2="7.55" y2="-2.9" width="0.127" layer="21"/>
+<wire x1="7.55" y1="-4.05" x2="-6.35" y2="-4.05" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="-4.05" x2="-7.5" y2="-2.9" width="0.127" layer="21"/>
+<text x="-6" y="4.4" size="1.27" layer="25">&gt;NAME</text>
+<text x="-6.4" y="-5.7" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="XT60">
+<pin name="+" x="-7.62" y="5.08" length="middle" direction="out"/>
+<pin name="-" x="-7.62" y="-5.08" length="middle" direction="out"/>
+<wire x1="-2.54" y1="7.62" x2="-2.54" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-7.62" x2="5.08" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="5.08" y1="-7.62" x2="5.08" y2="7.62" width="0.254" layer="94"/>
+<wire x1="5.08" y1="7.62" x2="-2.54" y2="7.62" width="0.254" layer="94"/>
+<text x="-2.54" y="7.62" size="1.778" layer="95">&gt;NAME</text>
+<text x="-2.54" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="XT60">
+<gates>
+<gate name="G$1" symbol="XT60" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="XT60-UPRIGHT">
+<connects>
+<connect gate="G$1" pin="+" pad="P+"/>
+<connect gate="G$1" pin="-" pad="P-"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -11017,6 +11063,8 @@ Mouser: 946-MP2333HGTL-P</description>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="1n"/>
 <part name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="1n"/>
+<part name="U$2" library="xt60" deviceset="XT60" device=""/>
+<part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -11244,6 +11292,13 @@ auflösung</text>
 <attribute name="NAME" x="52.324" y="-47.879" size="1.778" layer="95"/>
 <attribute name="VALUE" x="52.324" y="-52.959" size="1.778" layer="96"/>
 </instance>
+<instance part="U$2" gate="G$1" x="-121.92" y="20.32" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-119.38" y="27.94" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="-119.38" y="10.16" size="1.778" layer="96" rot="MR0"/>
+</instance>
+<instance part="GND15" gate="1" x="-111.76" y="10.16" smashed="yes">
+<attribute name="VALUE" x="-114.3" y="7.62" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -11338,6 +11393,12 @@ auflösung</text>
 <pinref part="C9" gate="G$1" pin="2"/>
 <wire x1="111.76" y1="40.64" x2="111.76" y2="43.18" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="U$2" gate="G$1" pin="-"/>
+<pinref part="GND15" gate="1" pin="GND"/>
+<wire x1="-114.3" y1="15.24" x2="-111.76" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="-111.76" y1="15.24" x2="-111.76" y2="12.7" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="+5V" class="0">
 <segment>
@@ -11357,6 +11418,7 @@ auflösung</text>
 <wire x1="-5.08" y1="50.8" x2="-5.08" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="55.88" x2="-5.08" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="50.8" x2="20.32" y2="50.8" width="0.1524" layer="91"/>
+<junction x="-5.08" y="50.8"/>
 </segment>
 <segment>
 <pinref part="L1" gate="G$1" pin="2"/>
@@ -11472,6 +11534,11 @@ auflösung</text>
 <wire x1="106.68" y1="68.58" x2="106.68" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="106.68" y1="71.12" x2="99.06" y2="71.12" width="0.1524" layer="91"/>
 <label x="99.06" y="71.12" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$2" gate="G$1" pin="+"/>
+<wire x1="-114.3" y1="25.4" x2="-111.76" y2="25.4" width="0.1524" layer="91"/>
+<label x="-111.76" y="25.4" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$5" class="0">
@@ -11626,6 +11693,10 @@ auflösung</text>
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="202,1,-60.96,68.58,IC1B,IN+,,,,"/>
+<approved hash="202,1,-60.96,63.5,IC1B,IN-,,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>
