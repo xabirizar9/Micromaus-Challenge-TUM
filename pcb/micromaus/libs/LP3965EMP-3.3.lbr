@@ -108,7 +108,7 @@
 <pin name="~SD" x="-20.32" y="-2.54" length="middle" direction="in"/>
 <pin name="SENSE/ADJ" x="-20.32" y="-5.08" length="middle" direction="in"/>
 <pin name="GND" x="-20.32" y="-10.16" length="middle" direction="in"/>
-<pin name="VOUT" x="20.32" y="2.54" length="middle" direction="out" rot="R180"/>
+<pin name="VOUT" x="20.32" y="2.54" length="middle" direction="pas" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
