@@ -10753,11 +10753,11 @@ Source: www.bourns.com .. 6000_series.pdf</description>
 <wire x1="15.24" y1="7.62" x2="-15.24" y2="7.62" width="0.1524" layer="94"/>
 <text x="-4.59875" y="10.0613" size="2.083409375" layer="95" ratio="10" rot="SR0">&gt;NAME</text>
 <text x="-5.7719" y="-19.299" size="2.085" layer="96" ratio="10" rot="SR0">&gt;VALUE</text>
-<pin name="VIN" x="-20.32" y="2.54" length="middle" direction="pwr"/>
+<pin name="VIN" x="-20.32" y="2.54" length="middle" direction="in"/>
 <pin name="~SD" x="-20.32" y="-2.54" length="middle" direction="in"/>
 <pin name="SENSE/ADJ" x="-20.32" y="-5.08" length="middle" direction="in"/>
-<pin name="GND" x="-20.32" y="-10.16" length="middle" direction="pas"/>
-<pin name="VOUT" x="20.32" y="2.54" length="middle" direction="out" rot="R180"/>
+<pin name="GND" x="-20.32" y="-10.16" length="middle" direction="in"/>
+<pin name="VOUT" x="20.32" y="2.54" length="middle" direction="pas" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -10831,11 +10831,11 @@ Source: www.bourns.com .. 6000_series.pdf</description>
 Synchronous Buck Converter
 with Power Good and Soft Start
 in SOT583 (1.6x2mm) Package</description>
-<pin name="IN" x="-12.7" y="7.62" length="middle" direction="pwr"/>
+<pin name="IN" x="-12.7" y="7.62" length="middle" direction="in"/>
 <pin name="PG" x="-12.7" y="2.54" length="middle" direction="out"/>
 <pin name="EN" x="-12.7" y="-2.54" length="middle" direction="in"/>
 <pin name="SS" x="-12.7" y="-7.62" length="middle" direction="in"/>
-<pin name="GND" x="12.7" y="-7.62" length="middle" direction="pwr" rot="R180"/>
+<pin name="GND" x="12.7" y="-7.62" length="middle" direction="in" rot="R180"/>
 <pin name="FB" x="12.7" y="-2.54" length="middle" direction="in" rot="R180"/>
 <pin name="SW" x="12.7" y="2.54" length="middle" direction="pas" rot="R180"/>
 <pin name="BST" x="12.7" y="7.62" length="middle" direction="pas" rot="R180"/>
@@ -10973,8 +10973,8 @@ Mouser: 946-MP2333HGTL-P</description>
 </packages>
 <symbols>
 <symbol name="XT60">
-<pin name="+" x="-7.62" y="5.08" length="middle" direction="out"/>
-<pin name="-" x="-7.62" y="-5.08" length="middle" direction="out"/>
+<pin name="+" x="-7.62" y="5.08" length="middle" direction="pas"/>
+<pin name="-" x="-7.62" y="-5.08" length="middle" direction="pas"/>
 <wire x1="-2.54" y1="7.62" x2="-2.54" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="-2.54" y1="-7.62" x2="5.08" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="5.08" y1="-7.62" x2="5.08" y2="7.62" width="0.254" layer="94"/>
