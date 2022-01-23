@@ -88,8 +88,8 @@
 </packages>
 <symbols>
 <symbol name="XT60">
-<pin name="+" x="-7.62" y="5.08" length="middle" direction="out"/>
-<pin name="-" x="-7.62" y="-5.08" length="middle" direction="out"/>
+<pin name="+" x="-7.62" y="5.08" length="middle" direction="pas"/>
+<pin name="-" x="-7.62" y="-5.08" length="middle" direction="pas"/>
 <wire x1="-2.54" y1="7.62" x2="-2.54" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="-2.54" y1="-7.62" x2="5.08" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="5.08" y1="-7.62" x2="5.08" y2="7.62" width="0.254" layer="94"/>
