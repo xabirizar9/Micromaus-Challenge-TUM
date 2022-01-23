@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
@@ -11416,8 +11416,6 @@ In this library the device names are the same as the pin names of the symbols, t
 <part name="SUPPLY4" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY5" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -12016,14 +12014,6 @@ In this library the device names are the same as the pin names of the symbols, t
 <instance part="+3V1" gate="G$1" x="73.66" y="66.04" smashed="yes">
 <attribute name="VALUE" x="71.12" y="60.96" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R5" gate="G$1" x="55.88" y="43.18" smashed="yes">
-<attribute name="NAME" x="52.07" y="44.6786" size="1.778" layer="95"/>
-<attribute name="VALUE" x="52.07" y="39.878" size="1.778" layer="96"/>
-</instance>
-<instance part="R6" gate="G$1" x="114.3" y="68.58" smashed="yes">
-<attribute name="NAME" x="110.49" y="70.0786" size="1.778" layer="95"/>
-<attribute name="VALUE" x="110.49" y="65.278" size="1.778" layer="96"/>
-</instance>
 </instances>
 <busses>
 </busses>
@@ -12186,54 +12176,38 @@ In this library the device names are the same as the pin names of the symbols, t
 <wire x1="73.66" y1="55.88" x2="73.66" y2="53.34" width="0.1524" layer="91"/>
 <junction x="73.66" y="55.88"/>
 <pinref part="SV1" gate="1" pin="4"/>
-<wire x1="73.66" y1="53.34" x2="86.36" y2="53.34" width="0.1524" layer="91"/>
-<pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="86.36" y1="53.34" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="43.18" x2="86.36" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="43.18" x2="86.36" y2="53.34" width="0.1524" layer="91"/>
-<junction x="86.36" y="53.34"/>
-<pinref part="R6" gate="G$1" pin="1"/>
-<wire x1="109.22" y1="68.58" x2="86.36" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="68.58" x2="86.36" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="53.34" x2="109.22" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="ESP32" class="0">
+<net name="ESP32_M2_CH_A" class="0">
 <segment>
-<pinref part="SV3" gate="1" pin="6"/>
-<wire x1="58.42" y1="53.34" x2="66.04" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="53.34" x2="66.04" y2="50.8" width="0.1524" layer="91"/>
-<label x="66.04" y="48.26" size="1.778" layer="95" rot="R270" xref="yes"/>
-<pinref part="SV3" gate="1" pin="5"/>
-<wire x1="43.18" y1="53.34" x2="43.18" y2="48.26" width="0.1524" layer="91"/>
-<label x="43.18" y="45.72" size="1.778" layer="95" rot="R270" xref="yes"/>
-<wire x1="43.18" y1="48.26" x2="43.18" y2="45.72" width="0.1524" layer="91"/>
-<wire x1="43.18" y1="48.26" x2="50.8" y2="48.26" width="0.1524" layer="91"/>
-<junction x="43.18" y="48.26"/>
-<pinref part="R5" gate="G$1" pin="1"/>
-<wire x1="50.8" y1="48.26" x2="50.8" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="50.8" x2="66.04" y2="48.26" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="48.26" x2="50.8" y2="48.26" width="0.1524" layer="91"/>
-<junction x="50.8" y="48.26"/>
-</segment>
-<segment>
-<pinref part="SV1" gate="1" pin="5"/>
-<wire x1="124.46" y1="55.88" x2="127" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="127" y1="55.88" x2="129.54" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="129.54" y1="55.88" x2="129.54" y2="60.96" width="0.1524" layer="91"/>
-<label x="129.54" y="60.96" size="1.778" layer="95" rot="R90" xref="yes"/>
-<pinref part="R6" gate="G$1" pin="2"/>
-<wire x1="119.38" y1="68.58" x2="127" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="127" y1="68.58" x2="127" y2="63.5" width="0.1524" layer="91"/>
-<junction x="127" y="55.88"/>
-<wire x1="127" y1="63.5" x2="127" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="127" y1="63.5" x2="109.22" y2="63.5" width="0.1524" layer="91"/>
-<junction x="127" y="63.5"/>
 <pinref part="SV1" gate="1" pin="6"/>
 <wire x1="109.22" y1="55.88" x2="101.6" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="101.6" y1="55.88" x2="101.6" y2="60.96" width="0.1524" layer="91"/>
 <label x="101.6" y="60.96" size="1.778" layer="95" rot="R90" xref="yes"/>
-<wire x1="109.22" y1="63.5" x2="109.22" y2="55.88" width="0.1524" layer="91"/>
-<junction x="109.22" y="55.88"/>
+</segment>
+</net>
+<net name="ESP32_M1_CH_B" class="0">
+<segment>
+<pinref part="SV3" gate="1" pin="5"/>
+<wire x1="43.18" y1="53.34" x2="43.18" y2="45.72" width="0.1524" layer="91"/>
+<label x="43.18" y="45.72" size="1.778" layer="95" rot="R270" xref="yes"/>
+</segment>
+</net>
+<net name="ESP32_M2_CH_B" class="0">
+<segment>
+<wire x1="129.54" y1="55.88" x2="129.54" y2="60.96" width="0.1524" layer="91"/>
+<pinref part="SV1" gate="1" pin="5"/>
+<wire x1="124.46" y1="55.88" x2="129.54" y2="55.88" width="0.1524" layer="91"/>
+<label x="129.54" y="60.96" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+</net>
+<net name="ESP32_M1_CH_A" class="0">
+<segment>
+<pinref part="SV3" gate="1" pin="6"/>
+<wire x1="58.42" y1="53.34" x2="66.04" y2="53.34" width="0.1524" layer="91"/>
+<label x="66.04" y="48.26" size="1.778" layer="95" rot="R270" xref="yes"/>
+<wire x1="66.04" y1="53.34" x2="66.04" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
