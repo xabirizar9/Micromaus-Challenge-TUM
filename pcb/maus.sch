@@ -15112,6 +15112,7 @@ LED</description>
 <part name="D7" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" deviceset="LED-RED" device="0603" package3d_urn="urn:adsk.eagle:package:39354/1" value="LED_TX"/>
 <part name="GND40" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
+<part name="+3V10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15680,6 +15681,9 @@ DTR  RTS  EN  IO0
 <attribute name="NAME" x="300.99" y="142.875" size="1.778" layer="95"/>
 <attribute name="VALUE" x="300.99" y="121.92" size="1.778" layer="96"/>
 </instance>
+<instance part="+3V10" gate="G$1" x="213.36" y="63.5" smashed="yes">
+<attribute name="VALUE" x="210.82" y="58.42" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -15876,13 +15880,6 @@ DTR  RTS  EN  IO0
 <pinref part="JP4" gate="A" pin="2"/>
 </segment>
 </net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="U2" gate="G$1" pin="V3"/>
-<pinref part="C3" gate="G$1" pin="1"/>
-<wire x1="195.58" y1="55.88" x2="213.36" y2="55.88" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="ESP32_TX" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="RXD"/>
@@ -15977,6 +15974,14 @@ DTR  RTS  EN  IO0
 <wire x1="304.8" y1="129.54" x2="292.1" y2="129.54" width="0.1524" layer="91"/>
 <pinref part="+3V1" gate="G$1" pin="+3V3"/>
 <pinref part="JP4" gate="A" pin="5"/>
+</segment>
+<segment>
+<pinref part="U2" gate="G$1" pin="V3"/>
+<pinref part="C3" gate="G$1" pin="1"/>
+<wire x1="195.58" y1="55.88" x2="213.36" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="+3V10" gate="G$1" pin="+3V3"/>
+<wire x1="213.36" y1="55.88" x2="213.36" y2="60.96" width="0.1524" layer="91"/>
+<junction x="213.36" y="55.88"/>
 </segment>
 </net>
 <net name="N$8" class="0">
@@ -16150,6 +16155,7 @@ DTR  RTS  EN  IO0
 </nets>
 </sheet>
 <sheet>
+<description>H-bridge motor driver</description>
 <plain>
 <text x="40.64" y="109.22" size="1.778" layer="91">Left Motor connector</text>
 <text x="121.92" y="109.22" size="1.778" layer="91">Right Motor connector</text>
@@ -16163,9 +16169,9 @@ DTR  RTS  EN  IO0
 <attribute name="NAME" x="123.444" y="20.701" size="1.778" layer="95"/>
 <attribute name="VALUE" x="123.444" y="15.621" size="1.778" layer="96"/>
 </instance>
-<instance part="C9" gate="G$1" x="60.96" y="35.56" smashed="yes" rot="R180">
-<attribute name="NAME" x="67.056" y="37.719" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="69.596" y="35.179" size="1.778" layer="96" rot="R180"/>
+<instance part="C9" gate="G$1" x="53.34" y="35.56" smashed="yes" rot="R180">
+<attribute name="NAME" x="59.436" y="37.719" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="61.976" y="35.179" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND31" gate="1" x="121.92" y="10.16" smashed="yes">
 <attribute name="VALUE" x="119.38" y="7.62" size="1.778" layer="96"/>
@@ -16280,15 +16286,15 @@ DTR  RTS  EN  IO0
 <segment>
 <pinref part="CR1" gate="A" pin="SENSEA"/>
 <wire x1="73.66" y1="40.64" x2="71.12" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="40.64" x2="60.96" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="71.12" y1="40.64" x2="53.34" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="CR1" gate="A" pin="GND_2"/>
 <wire x1="73.66" y1="43.18" x2="71.12" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="71.12" y1="40.64" x2="71.12" y2="43.18" width="0.1524" layer="91"/>
 <junction x="71.12" y="40.64"/>
 <pinref part="C9" gate="G$1" pin="2"/>
-<junction x="60.96" y="40.64"/>
+<junction x="53.34" y="40.64"/>
 <pinref part="GND34" gate="1" pin="GND"/>
-<wire x1="60.96" y1="40.64" x2="35.56" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="40.64" x2="35.56" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="CR1" gate="A" pin="GND_3"/>
@@ -16299,12 +16305,12 @@ DTR  RTS  EN  IO0
 <net name="VBAT" class="0">
 <segment>
 <pinref part="CR1" gate="A" pin="VS"/>
-<wire x1="73.66" y1="30.48" x2="60.96" y2="30.48" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="30.48" x2="60.96" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="30.48" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="30.48" x2="53.34" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="C9" gate="G$1" pin="1"/>
-<junction x="60.96" y="30.48"/>
+<junction x="53.34" y="30.48"/>
 <label x="22.86" y="30.48" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="60.96" y1="30.48" x2="22.86" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="30.48" x2="22.86" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
