@@ -16317,8 +16317,6 @@ DTR  RTS  EN  IO0
 <sheet>
 <description>description</description>
 <plain>
-<text x="76.2" y="83.82" size="1.778" layer="97">todo hier einen p-kanal mosfet aussuchen
-muss das ein depletion type sein?</text>
 <text x="251.46" y="50.8" size="1.778" layer="97">es soll die 3v3-Leitung an gehen, wenn das Gerät über USB
 (VBUS_EN) betrieben wird oder der Buck stabil ist (PGOOD)
 
