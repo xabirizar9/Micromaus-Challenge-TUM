@@ -14835,6 +14835,9 @@ www.irf.com&lt;p&gt;
 <part name="JP5" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X10" device="" package3d_urn="urn:adsk.eagle:package:22406/2"/>
 <part name="U$5" library="mosfet" deviceset="SI3499DV-T1-BE3" device="" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
 <part name="U$6" library="mosfet" deviceset="SI3499DV-T1-BE3" device="" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
+<part name="Q3" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" deviceset="BSS123" device="" package3d_urn="urn:adsk.eagle:package:28738/2"/>
+<part name="R25" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
+<part name="GND41" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15894,12 +15897,23 @@ DTR  RTS  EN  IO0
 <attribute name="NAME" x="181.61" y="33.655" size="1.778" layer="95"/>
 <attribute name="VALUE" x="181.61" y="20.32" size="1.778" layer="96"/>
 </instance>
-<instance part="P+1" gate="1" x="22.86" y="76.2" smashed="yes" rot="R90">
-<attribute name="VALUE" x="27.94" y="73.66" size="1.778" layer="96" rot="R180"/>
+<instance part="P+1" gate="1" x="40.64" y="127" smashed="yes">
+<attribute name="VALUE" x="38.1" y="121.92" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="U$5" gate="T$1" x="63.5" y="91.44" smashed="yes" rot="MR180">
-<attribute name="VALUE" x="52.07" y="95.25" size="1.778" layer="96" rot="MR180"/>
-<attribute name="NAME" x="52.07" y="92.71" size="1.778" layer="95" rot="MR180"/>
+<instance part="U$5" gate="T$1" x="60.96" y="104.14" smashed="yes">
+<attribute name="VALUE" x="49.53" y="100.33" size="1.778" layer="96"/>
+<attribute name="NAME" x="49.53" y="102.87" size="1.778" layer="95"/>
+</instance>
+<instance part="Q3" gate="G$1" x="40.64" y="99.06" smashed="yes">
+<attribute name="NAME" x="43.18" y="99.06" size="1.778" layer="95"/>
+<attribute name="VALUE" x="43.18" y="96.52" size="1.778" layer="96"/>
+</instance>
+<instance part="R25" gate="G$1" x="40.64" y="114.3" smashed="yes" rot="R90">
+<attribute name="NAME" x="39.1414" y="110.49" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="43.942" y="110.49" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="GND41" gate="1" x="40.64" y="91.44" smashed="yes">
+<attribute name="VALUE" x="38.1" y="88.9" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -15915,7 +15929,7 @@ DTR  RTS  EN  IO0
 <wire x1="165.1" y1="58.42" x2="152.4" y2="58.42" width="0.1524" layer="91"/>
 <junction x="144.78" y="58.42"/>
 <wire x1="152.4" y1="58.42" x2="144.78" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="144.78" y1="99.06" x2="66.04" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="99.06" x2="63.5" y2="99.06" width="0.1524" layer="91"/>
 <junction x="144.78" y="99.06"/>
 <pinref part="C1" gate="G$1" pin="2"/>
 <wire x1="152.4" y1="101.6" x2="152.4" y2="99.06" width="0.1524" layer="91"/>
@@ -15937,7 +15951,6 @@ DTR  RTS  EN  IO0
 <wire x1="165.1" y1="58.42" x2="165.1" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="66.04" x2="182.88" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="U$5" gate="T$1" pin="D"/>
-<wire x1="66.04" y1="96.52" x2="66.04" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -15974,20 +15987,16 @@ DTR  RTS  EN  IO0
 <pinref part="SENSOR_LEFT" gate="A" pin="2"/>
 <wire x1="165.1" y1="68.58" x2="182.88" y2="68.58" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="Q3" gate="G$1" pin="S"/>
+<pinref part="GND41" gate="1" pin="GND"/>
+</segment>
 </net>
 <net name="SENSOR_EN" class="0">
 <segment>
-<wire x1="60.96" y1="88.9" x2="33.02" y2="88.9" width="0.1524" layer="91"/>
-<label x="33.02" y="88.9" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="U$5" gate="T$1" pin="G"/>
-</segment>
-</net>
-<net name="+5V" class="0">
-<segment>
-<wire x1="25.4" y1="76.2" x2="66.04" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="P+1" gate="1" pin="+5V"/>
-<pinref part="U$5" gate="T$1" pin="S"/>
-<wire x1="66.04" y1="86.36" x2="66.04" y2="76.2" width="0.1524" layer="91"/>
+<label x="33.02" y="96.52" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="Q3" gate="G$1" pin="G"/>
+<wire x1="33.02" y1="96.52" x2="35.56" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SENSOR_FRONT" class="0">
@@ -16015,6 +16024,29 @@ DTR  RTS  EN  IO0
 <wire x1="185.42" y1="30.48" x2="170.18" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="170.18" y1="30.48" x2="170.18" y2="40.64" width="0.1524" layer="91"/>
 <label x="101.6" y="40.64" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="+5V" class="0">
+<segment>
+<pinref part="P+1" gate="1" pin="+5V"/>
+<pinref part="R25" gate="G$1" pin="2"/>
+<wire x1="40.64" y1="124.46" x2="40.64" y2="121.92" width="0.1524" layer="91"/>
+<pinref part="U$5" gate="T$1" pin="S"/>
+<wire x1="40.64" y1="121.92" x2="40.64" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="121.92" x2="63.5" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="121.92" x2="63.5" y2="109.22" width="0.1524" layer="91"/>
+<junction x="40.64" y="121.92"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="R25" gate="G$1" pin="1"/>
+<pinref part="Q3" gate="G$1" pin="D"/>
+<wire x1="40.64" y1="109.22" x2="40.64" y2="106.68" width="0.1524" layer="91"/>
+<pinref part="U$5" gate="T$1" pin="G"/>
+<wire x1="40.64" y1="106.68" x2="40.64" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="106.68" x2="58.42" y2="106.68" width="0.1524" layer="91"/>
+<junction x="40.64" y="106.68"/>
 </segment>
 </net>
 </nets>
