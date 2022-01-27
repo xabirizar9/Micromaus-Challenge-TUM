@@ -168,16 +168,16 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="SI3499DV-T1-BE3">
+<deviceset name="SI3499DV-T1-BE3" prefix="Q">
 <gates>
-<gate name="T$1" symbol="P-MOSFET" x="0" y="0"/>
+<gate name="G$1" symbol="P-MOSFET" x="0" y="0"/>
 </gates>
 <devices>
 <device name="TSOP-6" package="SOT95P255X110-6N">
 <connects>
-<connect gate="T$1" pin="D" pad="1 2 5 6" route="any"/>
-<connect gate="T$1" pin="G" pad="3"/>
-<connect gate="T$1" pin="S" pad="4"/>
+<connect gate="G$1" pin="D" pad="1 2 5 6" route="any"/>
+<connect gate="G$1" pin="G" pad="3"/>
+<connect gate="G$1" pin="S" pad="4"/>
 </connects>
 <package3dinstances>
 <package3dinstance package3d_urn="urn:adsk.eagle:package:33743404/1"/>
@@ -188,9 +188,9 @@
 </device>
 <device name="" package="TSOP-6-FOR-MOSFET">
 <connects>
-<connect gate="T$1" pin="D" pad="1 2 5 6" route="any"/>
-<connect gate="T$1" pin="G" pad="3"/>
-<connect gate="T$1" pin="S" pad="4"/>
+<connect gate="G$1" pin="D" pad="1 2 5 6" route="any"/>
+<connect gate="G$1" pin="G" pad="3"/>
+<connect gate="G$1" pin="S" pad="4"/>
 </connects>
 <package3dinstances>
 <package3dinstance package3d_urn="urn:adsk.eagle:package:33743404/1"/>
