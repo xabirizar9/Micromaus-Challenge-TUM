@@ -13312,181 +13312,6 @@ Low profile connectors, straight&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="analog-devices" urn="urn:adsk.eagle:library:102">
-<description>&lt;b&gt;Analog Devices Components&lt;/b&gt;&lt;p&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="DIL08" urn="urn:adsk.eagle:footprint:29416/1" library_version="6">
-<description>&lt;b&gt;Dual In Line Package&lt;/b&gt;</description>
-<wire x1="5.08" y1="2.921" x2="-5.08" y2="2.921" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="-2.921" x2="5.08" y2="-2.921" width="0.1524" layer="21"/>
-<wire x1="5.08" y1="2.921" x2="5.08" y2="-2.921" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="2.921" x2="-5.08" y2="1.016" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="-2.921" x2="-5.08" y2="-1.016" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="1.016" x2="-5.08" y2="-1.016" width="0.1524" layer="21" curve="-180"/>
-<pad name="1" x="-3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="2" x="-1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="7" x="-1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="8" x="-3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="3" x="1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="4" x="3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="6" x="1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<pad name="5" x="3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
-<text x="-5.334" y="-2.921" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<text x="-3.556" y="-0.635" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-</package>
-<package name="SO8" urn="urn:adsk.eagle:footprint:30958/1" library_version="6">
-<description>&lt;b&gt;SMALL OUTLINE INTEGRATED CIRCUIT&lt;/b&gt; SOP-8L&lt;p&gt;
-Source: http://www.diodes.com/datasheets/ds31262.pdf</description>
-<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.4" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.4" x2="2.4" y2="-1.9" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.9" x2="-2.4" y2="-1.9" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="-1.4" x2="-2.4" y2="1.9" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="1.9" x2="2.4" y2="1.9" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.4" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
-<smd name="2" x="-0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="7" x="-0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="1" x="-1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="3" x="0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="4" x="1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="8" x="-1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="6" x="0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="5" x="1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<text x="-3.175" y="-1.905" size="1.27" layer="25" rot="R90">&gt;NAME</text>
-<text x="4.445" y="-1.905" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
-<rectangle x1="-2.1501" y1="-3.1001" x2="-1.6599" y2="-2" layer="51"/>
-<rectangle x1="-0.8801" y1="-3.1001" x2="-0.3899" y2="-2" layer="51"/>
-<rectangle x1="0.3899" y1="-3.1001" x2="0.8801" y2="-2" layer="51"/>
-<rectangle x1="1.6599" y1="-3.1001" x2="2.1501" y2="-2" layer="51"/>
-<rectangle x1="1.6599" y1="2" x2="2.1501" y2="3.1001" layer="51"/>
-<rectangle x1="0.3899" y1="2" x2="0.8801" y2="3.1001" layer="51"/>
-<rectangle x1="-0.8801" y1="2" x2="-0.3899" y2="3.1001" layer="51"/>
-<rectangle x1="-2.1501" y1="2" x2="-1.6599" y2="3.1001" layer="51"/>
-</package>
-</packages>
-<packages3d>
-<package3d name="DIL08" urn="urn:adsk.eagle:package:29519/2" type="model" library_version="6">
-<description>Dual In Line Package</description>
-<packageinstances>
-<packageinstance name="DIL08"/>
-</packageinstances>
-</package3d>
-<package3d name="SO8" urn="urn:adsk.eagle:package:30987/2" type="model" library_version="6">
-<description>SMALL OUTLINE INTEGRATED CIRCUIT SOP-8L
-Source: http://www.diodes.com/datasheets/ds31262.pdf</description>
-<packageinstances>
-<packageinstance name="SO8"/>
-</packageinstances>
-</package3d>
-</packages3d>
-<symbols>
-<symbol name="OP" urn="urn:adsk.eagle:symbol:3727/1" library_version="6">
-<wire x1="-2.54" y1="5.08" x2="-2.54" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="-5.08" x2="7.62" y2="0" width="0.254" layer="94"/>
-<wire x1="7.62" y1="0" x2="-2.54" y2="5.08" width="0.254" layer="94"/>
-<wire x1="-2.032" y1="2.54" x2="-1.016" y2="2.54" width="0.1524" layer="94"/>
-<wire x1="-1.524" y1="3.048" x2="-1.524" y2="2.032" width="0.1524" layer="94"/>
-<wire x1="-2.032" y1="-2.54" x2="-1.016" y2="-2.54" width="0.1524" layer="94"/>
-<text x="3.81" y="3.81" size="1.778" layer="95">&gt;NAME</text>
-<text x="3.81" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="IN+" x="-5.08" y="2.54" visible="pad" length="short" direction="in"/>
-<pin name="IN-" x="-5.08" y="-2.54" visible="pad" length="short" direction="in"/>
-<pin name="OUT" x="10.16" y="0" visible="pad" length="short" direction="out" rot="R180"/>
-</symbol>
-<symbol name="PWR+-" urn="urn:adsk.eagle:symbol:3726/1" library_version="6">
-<text x="1.27" y="3.81" size="1.778" layer="95">&gt;NAME</text>
-<text x="1.27" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="V+" x="0" y="7.62" visible="pad" length="middle" direction="pwr" rot="R270"/>
-<pin name="V-" x="0" y="-7.62" visible="pad" length="middle" direction="pwr" rot="R90"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="AD712" urn="urn:adsk.eagle:component:4003/4" prefix="IC" library_version="6">
-<description>&lt;b&gt;Dual Precision, Low Cost, High Speed BiFET Op Amp&lt;/b&gt;&lt;p&gt;
-Source: http://www.analog.com/static/imported-files/data_sheets/AD712.pdf</description>
-<gates>
-<gate name="A" symbol="OP" x="-7.62" y="7.62" addlevel="always"/>
-<gate name="B" symbol="OP" x="-7.62" y="-7.62" addlevel="always"/>
-<gate name="P" symbol="PWR+-" x="10.16" y="0" addlevel="always"/>
-</gates>
-<devices>
-<device name="N" package="DIL08">
-<connects>
-<connect gate="A" pin="IN+" pad="3"/>
-<connect gate="A" pin="IN-" pad="2"/>
-<connect gate="A" pin="OUT" pad="1"/>
-<connect gate="B" pin="IN+" pad="5"/>
-<connect gate="B" pin="IN-" pad="6"/>
-<connect gate="B" pin="OUT" pad="7"/>
-<connect gate="P" pin="V+" pad="8"/>
-<connect gate="P" pin="V-" pad="4"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:29519/2"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="MF" value="ALTERA CORPORATION" constant="no"/>
-<attribute name="MPN" value="AD712JNZ" constant="no"/>
-<attribute name="OC_FARNELL" value="9604898" constant="no"/>
-<attribute name="OC_NEWARK" value="59K4554" constant="no"/>
-<attribute name="POPULARITY" value="0" constant="no"/>
-</technology>
-</technologies>
-</device>
-<device name="R" package="SO8">
-<connects>
-<connect gate="A" pin="IN+" pad="3"/>
-<connect gate="A" pin="IN-" pad="2"/>
-<connect gate="A" pin="OUT" pad="1"/>
-<connect gate="B" pin="IN+" pad="5"/>
-<connect gate="B" pin="IN-" pad="6"/>
-<connect gate="B" pin="OUT" pad="7"/>
-<connect gate="P" pin="V+" pad="8"/>
-<connect gate="P" pin="V-" pad="4"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:30987/2"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="MF" value="ALTERA CORPORATION" constant="no"/>
-<attribute name="MPN" value="AD712KRZ" constant="no"/>
-<attribute name="OC_FARNELL" value="1263975" constant="no"/>
-<attribute name="OC_NEWARK" value="59K4556" constant="no"/>
-<attribute name="POPULARITY" value="0" constant="no"/>
-</technology>
-</technologies>
-</device>
-<device name="Q" package="DIL08">
-<connects>
-<connect gate="A" pin="IN+" pad="3"/>
-<connect gate="A" pin="IN-" pad="2"/>
-<connect gate="A" pin="OUT" pad="1"/>
-<connect gate="B" pin="IN+" pad="5"/>
-<connect gate="B" pin="IN-" pad="6"/>
-<connect gate="B" pin="OUT" pad="7"/>
-<connect gate="P" pin="V+" pad="8"/>
-<connect gate="P" pin="V-" pad="4"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:29519/2"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="MF" value="ALTERA CORPORATION" constant="no"/>
-<attribute name="MPN" value="AD712AQ" constant="no"/>
-<attribute name="OC_FARNELL" value="9604898" constant="no"/>
-<attribute name="OC_NEWARK" value="05F7274" constant="no"/>
-<attribute name="POPULARITY" value="0" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="LP3965EMP-3.3">
 <packages>
 <package name="SOT150P696X180-5N">
@@ -14681,6 +14506,98 @@ www.irf.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="LM358DR">
+<packages>
+<package name="SOIC127P610X175-8N" urn="urn:adsk.eagle:footprint:33744364/1">
+<description>8-SOIC, 1.27 mm pitch, 6.10 mm span, 4.91 X 3.90 X 1.75 mm body
+&lt;p&gt;8-pin SOIC package with 1.27 mm pitch, 6.10 mm span with body size 4.91 X 3.90 X 1.75 mm&lt;/p&gt;</description>
+<circle x="-2.7726" y="2.7086" radius="0.25" width="0" layer="21"/>
+<wire x1="-1.99" y1="2.4586" x2="-1.99" y2="2.5" width="0.12" layer="21"/>
+<wire x1="-1.99" y1="2.5" x2="1.99" y2="2.5" width="0.12" layer="21"/>
+<wire x1="1.99" y1="2.5" x2="1.99" y2="2.4586" width="0.12" layer="21"/>
+<wire x1="-1.99" y1="-2.4586" x2="-1.99" y2="-2.5" width="0.12" layer="21"/>
+<wire x1="-1.99" y1="-2.5" x2="1.99" y2="-2.5" width="0.12" layer="21"/>
+<wire x1="1.99" y1="-2.5" x2="1.99" y2="-2.4586" width="0.12" layer="21"/>
+<wire x1="1.99" y1="-2.5" x2="-1.99" y2="-2.5" width="0.12" layer="51"/>
+<wire x1="-1.99" y1="-2.5" x2="-1.99" y2="2.5" width="0.12" layer="51"/>
+<wire x1="-1.99" y1="2.5" x2="1.99" y2="2.5" width="0.12" layer="51"/>
+<wire x1="1.99" y1="2.5" x2="1.99" y2="-2.5" width="0.12" layer="51"/>
+<smd name="1" x="-2.5378" y="1.905" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="2" x="-2.5378" y="0.635" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="3" x="-2.5378" y="-0.635" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="4" x="-2.5378" y="-1.905" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="5" x="2.5378" y="-1.905" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="6" x="2.5378" y="-0.635" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="7" x="2.5378" y="0.635" dx="2.0347" dy="0.5991" layer="1"/>
+<smd name="8" x="2.5378" y="1.905" dx="2.0347" dy="0.5991" layer="1"/>
+<text x="0" y="3.5936" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-3.135" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
+</package>
+</packages>
+<packages3d>
+<package3d name="SOIC127P610X175-8N" urn="urn:adsk.eagle:package:33744331/1" type="model">
+<description>8-SOIC, 1.27 mm pitch, 6.10 mm span, 4.91 X 3.90 X 1.75 mm body
+&lt;p&gt;8-pin SOIC package with 1.27 mm pitch, 6.10 mm span with body size 4.91 X 3.90 X 1.75 mm&lt;/p&gt;</description>
+<packageinstances>
+<packageinstance name="SOIC127P610X175-8N"/>
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="OP">
+<wire x1="-2.54" y1="5.08" x2="-2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-5.08" x2="7.62" y2="0" width="0.254" layer="94"/>
+<wire x1="7.62" y1="0" x2="-2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-2.032" y1="2.54" x2="-1.016" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="-1.524" y1="3.048" x2="-1.524" y2="2.032" width="0.1524" layer="94"/>
+<wire x1="-2.032" y1="-2.54" x2="-1.016" y2="-2.54" width="0.1524" layer="94"/>
+<text x="3.81" y="3.81" size="1.778" layer="95">&gt;NAME</text>
+<text x="3.81" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="IN+" x="-5.08" y="2.54" visible="pad" length="short" direction="in"/>
+<pin name="IN-" x="-5.08" y="-2.54" visible="pad" length="short" direction="in"/>
+<pin name="OUT" x="10.16" y="0" visible="pad" length="short" direction="out" rot="R180"/>
+</symbol>
+<symbol name="TLC450P">
+<description>OP-AMP power pins</description>
+<pin name="V+" x="0" y="7.62" visible="pad" length="short" direction="pwr" rot="R270"/>
+<pin name="V-" x="0" y="-7.62" visible="pad" length="short" direction="pwr" rot="R90"/>
+<text x="-0.889" y="3.175" size="1.27" layer="95">V+</text>
+<text x="-0.762" y="-4.445" size="1.27" layer="95">V-</text>
+<text x="-3.937" y="-0.762" size="1.778" layer="95">&gt;NAME</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="LM358DR" prefix="U">
+<description>LM358DR
+dual op-amp</description>
+<gates>
+<gate name="A" symbol="OP" x="7.62" y="7.62" swaplevel="1"/>
+<gate name="B" symbol="OP" x="7.62" y="-10.16" swaplevel="1"/>
+<gate name="P" symbol="TLC450P" x="-15.24" y="0" addlevel="must"/>
+</gates>
+<devices>
+<device name="" package="SOIC127P610X175-8N">
+<connects>
+<connect gate="A" pin="IN+" pad="3"/>
+<connect gate="A" pin="IN-" pad="2"/>
+<connect gate="A" pin="OUT" pad="1"/>
+<connect gate="B" pin="IN+" pad="5"/>
+<connect gate="B" pin="IN-" pad="6"/>
+<connect gate="B" pin="OUT" pad="7"/>
+<connect gate="P" pin="V+" pad="8"/>
+<connect gate="P" pin="V-" pad="4"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:33744331/1"/>
+</package3dinstances>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -14706,7 +14623,6 @@ www.irf.com&lt;p&gt;
 <part name="SENSOR_RIGHT" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X3" device="" package3d_urn="urn:adsk.eagle:package:22458/2"/>
 <part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
-<part name="IC1" library="analog-devices" library_urn="urn:adsk.eagle:library:102" deviceset="AD712" device="R" package3d_urn="urn:adsk.eagle:package:30987/2"/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -14838,6 +14754,8 @@ www.irf.com&lt;p&gt;
 <part name="GND41" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="Q6" library="mosfet" deviceset="SI3499DV-T1-BE3" device="" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
 <part name="Q7" library="mosfet" deviceset="SI3499DV-T1-BE3" device="" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
+<part name="U6" library="LM358DR" deviceset="LM358DR" device="" package3d_urn="urn:adsk.eagle:package:33744331/1"/>
+<part name="GND42" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -16347,18 +16265,6 @@ auflösung</text>
 <text x="246.38" y="111.76" size="1.778" layer="97">paranoia cap</text>
 </plain>
 <instances>
-<instance part="IC1" gate="A" x="73.66" y="119.38" smashed="yes">
-<attribute name="NAME" x="77.47" y="123.19" size="1.778" layer="95"/>
-<attribute name="VALUE" x="77.47" y="114.3" size="1.778" layer="96"/>
-</instance>
-<instance part="IC1" gate="B" x="73.66" y="137.16" smashed="yes">
-<attribute name="NAME" x="77.47" y="140.97" size="1.778" layer="95"/>
-<attribute name="VALUE" x="77.47" y="132.08" size="1.778" layer="96"/>
-</instance>
-<instance part="IC1" gate="P" x="30.48" y="132.08" smashed="yes">
-<attribute name="NAME" x="31.75" y="135.89" size="1.778" layer="95"/>
-<attribute name="VALUE" x="31.75" y="127" size="1.778" layer="96"/>
-</instance>
 <instance part="P+2" gate="1" x="30.48" y="142.24" smashed="yes">
 <attribute name="VALUE" x="27.94" y="137.16" size="1.778" layer="96" rot="R90"/>
 </instance>
@@ -16545,6 +16451,20 @@ auflösung</text>
 <attribute name="VALUE" x="92.71" y="107.95" size="1.778" layer="96" rot="R270"/>
 <attribute name="NAME" x="95.25" y="107.95" size="1.778" layer="95" rot="R270"/>
 </instance>
+<instance part="U6" gate="A" x="73.66" y="119.38" smashed="yes">
+<attribute name="NAME" x="77.47" y="123.19" size="1.778" layer="95"/>
+<attribute name="VALUE" x="77.47" y="114.3" size="1.778" layer="96"/>
+</instance>
+<instance part="U6" gate="P" x="30.48" y="132.08" smashed="yes">
+<attribute name="NAME" x="26.543" y="131.318" size="1.778" layer="95"/>
+</instance>
+<instance part="U6" gate="B" x="81.28" y="142.24" smashed="yes">
+<attribute name="NAME" x="85.09" y="146.05" size="1.778" layer="95"/>
+<attribute name="VALUE" x="85.09" y="137.16" size="1.778" layer="96"/>
+</instance>
+<instance part="GND42" gate="1" x="66.04" y="139.7" smashed="yes">
+<attribute name="VALUE" x="63.5" y="137.16" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -16561,9 +16481,9 @@ auflösung</text>
 <junction x="147.32" y="109.22"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="P" pin="V-"/>
 <wire x1="30.48" y1="121.92" x2="30.48" y2="124.46" width="0.1524" layer="91"/>
 <pinref part="GND3" gate="1" pin="GND"/>
+<pinref part="U6" gate="P" pin="V-"/>
 </segment>
 <segment>
 <pinref part="R6" gate="G$1" pin="1"/>
@@ -16645,12 +16565,14 @@ auflösung</text>
 <wire x1="15.24" y1="86.36" x2="17.78" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="86.36" x2="17.78" y2="83.82" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="GND42" gate="1" pin="GND"/>
+<pinref part="U6" gate="B" pin="IN+"/>
+<wire x1="66.04" y1="142.24" x2="66.04" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="144.78" x2="76.2" y2="144.78" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="+5V" class="0">
-<segment>
-<pinref part="IC1" gate="P" pin="V+"/>
-<pinref part="P+2" gate="1" pin="+5V"/>
-</segment>
 <segment>
 <pinref part="P+3" gate="1" pin="+5V"/>
 <wire x1="101.6" y1="93.98" x2="111.76" y2="93.98" width="0.1524" layer="91"/>
@@ -16689,14 +16611,18 @@ auflösung</text>
 <wire x1="233.68" y1="81.28" x2="233.68" y2="83.82" width="0.1524" layer="91"/>
 <pinref part="P+6" gate="1" pin="+5V"/>
 </segment>
+<segment>
+<pinref part="P+2" gate="1" pin="+5V"/>
+<pinref part="U6" gate="P" pin="V+"/>
+</segment>
 </net>
 <net name="/VBUS_EN" class="0">
 <segment>
-<pinref part="IC1" gate="A" pin="OUT"/>
 <wire x1="83.82" y1="119.38" x2="99.06" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="99.06" y1="119.38" x2="99.06" y2="99.06" width="0.1524" layer="91"/>
 <label x="88.9" y="119.38" size="1.778" layer="95"/>
 <pinref part="Q7" gate="G$1" pin="G"/>
+<pinref part="U6" gate="A" pin="OUT"/>
 </segment>
 <segment>
 <pinref part="R12" gate="G$1" pin="2"/>
@@ -16715,9 +16641,9 @@ auflösung</text>
 <net name="+3V3" class="0">
 <segment>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
-<pinref part="IC1" gate="A" pin="IN-"/>
 <wire x1="60.96" y1="119.38" x2="60.96" y2="116.84" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="116.84" x2="68.58" y2="116.84" width="0.1524" layer="91"/>
+<pinref part="U6" gate="A" pin="IN-"/>
 </segment>
 <segment>
 <pinref part="U4" gate="A" pin="VOUT"/>
@@ -16741,12 +16667,12 @@ auflösung</text>
 <pinref part="R5" gate="G$1" pin="1"/>
 <pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="53.34" y1="127" x2="53.34" y2="124.46" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="A" pin="IN+"/>
 <wire x1="53.34" y1="124.46" x2="53.34" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="68.58" y1="121.92" x2="63.5" y2="121.92" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="121.92" x2="63.5" y2="124.46" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="124.46" x2="53.34" y2="124.46" width="0.1524" layer="91"/>
 <junction x="53.34" y="124.46"/>
+<pinref part="U6" gate="A" pin="IN+"/>
 </segment>
 </net>
 <net name="VBAT" class="0">
@@ -16924,6 +16850,17 @@ auflösung</text>
 <wire x1="241.3" y1="121.92" x2="241.3" y2="127" width="0.1524" layer="91"/>
 <junction x="241.3" y="127"/>
 <label x="248.92" y="127" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="N$9" class="0">
+<segment>
+<pinref part="U6" gate="B" pin="IN-"/>
+<wire x1="76.2" y1="139.7" x2="73.66" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="139.7" x2="73.66" y2="134.62" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="134.62" x2="93.98" y2="134.62" width="0.1524" layer="91"/>
+<wire x1="93.98" y1="134.62" x2="93.98" y2="142.24" width="0.1524" layer="91"/>
+<pinref part="U6" gate="B" pin="OUT"/>
+<wire x1="93.98" y1="142.24" x2="91.44" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
