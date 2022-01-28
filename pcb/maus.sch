@@ -14411,6 +14411,7 @@ www.irf.com&lt;p&gt;
 &lt;p&gt;6-pin SOT23 package with 0.95 mm pitch, 2.55 mm span with body size 3.02 X 1.63 X 1.10 mm&lt;/p&gt;</description>
 <packageinstances>
 <packageinstance name="SOT95P255X110-6N"/>
+<packageinstance name="TSOP-6-FOR-MOSFET"/>
 </packageinstances>
 </package3d>
 </packages3d>
@@ -14454,14 +14455,14 @@ www.irf.com&lt;p&gt;
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="SI3499DV-T1-BE3" prefix="Q">
+<deviceset name="PMN30XPEA" prefix="Q">
 <gates>
-<gate name="G$1" symbol="P-MOSFET" x="0" y="0"/>
+<gate name="G$1" symbol="P-MOSFET" x="-2.54" y="0"/>
 </gates>
 <devices>
-<device name="TSOP-6" package="SOT95P255X110-6N">
+<device name="" package="SOT95P255X110-6N">
 <connects>
-<connect gate="G$1" pin="D" pad="1 2 5 6" route="any"/>
+<connect gate="G$1" pin="D" pad="1 2 5 6"/>
 <connect gate="G$1" pin="G" pad="3"/>
 <connect gate="G$1" pin="S" pad="4"/>
 </connects>
@@ -14472,9 +14473,9 @@ www.irf.com&lt;p&gt;
 <technology name=""/>
 </technologies>
 </device>
-<device name="" package="TSOP-6-FOR-MOSFET">
+<device name="HEATSINK" package="TSOP-6-FOR-MOSFET">
 <connects>
-<connect gate="G$1" pin="D" pad="1 2 5 6" route="any"/>
+<connect gate="G$1" pin="D" pad="1 2 5 6"/>
 <connect gate="G$1" pin="G" pad="3"/>
 <connect gate="G$1" pin="S" pad="4"/>
 </connects>
@@ -14725,8 +14726,8 @@ dual op-amp</description>
 <part name="Q3" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" deviceset="BSS123" device="" package3d_urn="urn:adsk.eagle:package:28738/2"/>
 <part name="R25" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k"/>
 <part name="GND41" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="Q6" library="mosfet" deviceset="SI3499DV-T1-BE3" device="" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
-<part name="Q7" library="mosfet" deviceset="SI3499DV-T1-BE3" device="" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
+<part name="Q6" library="mosfet" deviceset="PMN30XPEA" device="HEATSINK" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
+<part name="Q7" library="mosfet" deviceset="PMN30XPEA" device="HEATSINK" package3d_urn="urn:adsk.eagle:package:33743404/1"/>
 <part name="U6" library="LM358DR" deviceset="LM358DR" device="" package3d_urn="urn:adsk.eagle:package:33744331/1"/>
 <part name="GND42" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R26" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k"/>
@@ -15417,6 +15418,7 @@ dual op-amp</description>
 </nets>
 </sheet>
 <sheet>
+<description>UART/Prog</description>
 <plain>
 <text x="40.64" y="7.62" size="1.778" layer="115">Auto program table
 ----------------
@@ -15871,6 +15873,7 @@ high and low levels both work
 </nets>
 </sheet>
 <sheet>
+<description>IR</description>
 <plain>
 </plain>
 <instances>
@@ -16319,7 +16322,7 @@ high and low levels both work
 </nets>
 </sheet>
 <sheet>
-<description>description</description>
+<description>power</description>
 <plain>
 <text x="251.46" y="50.8" size="1.778" layer="97">es soll die 3v3-Leitung an gehen, wenn das Gerät über USB
 (VBUS_EN) betrieben wird oder der Buck stabil ist (PGOOD)
@@ -16655,7 +16658,12 @@ auflösung</text>
 <pinref part="GND42" gate="1" pin="GND"/>
 <pinref part="U6" gate="B" pin="IN+"/>
 <wire x1="66.04" y1="142.24" x2="66.04" y2="144.78" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="144.78" x2="76.2" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="144.78" x2="73.66" y2="144.78" width="0.1524" layer="91"/>
+<pinref part="U6" gate="B" pin="IN-"/>
+<wire x1="73.66" y1="144.78" x2="76.2" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="139.7" x2="73.66" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="139.7" x2="73.66" y2="144.78" width="0.1524" layer="91"/>
+<junction x="73.66" y="144.78"/>
 </segment>
 </net>
 <net name="+5V" class="0">
@@ -16936,17 +16944,6 @@ auflösung</text>
 <wire x1="241.3" y1="121.92" x2="241.3" y2="127" width="0.1524" layer="91"/>
 <junction x="241.3" y="127"/>
 <label x="248.92" y="127" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
-<net name="N$9" class="0">
-<segment>
-<pinref part="U6" gate="B" pin="IN-"/>
-<wire x1="76.2" y1="139.7" x2="73.66" y2="139.7" width="0.1524" layer="91"/>
-<wire x1="73.66" y1="139.7" x2="73.66" y2="134.62" width="0.1524" layer="91"/>
-<wire x1="73.66" y1="134.62" x2="93.98" y2="134.62" width="0.1524" layer="91"/>
-<wire x1="93.98" y1="134.62" x2="93.98" y2="142.24" width="0.1524" layer="91"/>
-<pinref part="U6" gate="B" pin="OUT"/>
-<wire x1="93.98" y1="142.24" x2="91.44" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
