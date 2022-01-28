@@ -14742,11 +14742,11 @@ dual op-amp</description>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="GND40" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
-<part name="P+8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="GND43" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="J1" library="shared" deviceset="SS-52300-001" device=""/>
 <part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="+3V15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
+<part name="+3V16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -14858,9 +14858,6 @@ dual op-amp</description>
 <attribute name="NAME" x="227.33" y="97.155" size="1.778" layer="95"/>
 <attribute name="VALUE" x="227.33" y="78.74" size="1.778" layer="96"/>
 </instance>
-<instance part="P+8" gate="1" x="226.06" y="104.14" smashed="yes">
-<attribute name="VALUE" x="223.52" y="99.06" size="1.778" layer="96" rot="R90"/>
-</instance>
 <instance part="GND43" gate="1" x="226.06" y="78.74" smashed="yes">
 <attribute name="VALUE" x="223.52" y="76.2" size="1.778" layer="96"/>
 </instance>
@@ -14870,6 +14867,9 @@ dual op-amp</description>
 </instance>
 <instance part="+3V15" gate="G$1" x="182.88" y="38.1" smashed="yes">
 <attribute name="VALUE" x="180.34" y="33.02" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="+3V16" gate="G$1" x="226.06" y="104.14" smashed="yes">
+<attribute name="VALUE" x="223.52" y="99.06" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -14909,6 +14909,12 @@ dual op-amp</description>
 <pinref part="+3V15" gate="G$1" pin="+3V3"/>
 <pinref part="R28" gate="G$1" pin="2"/>
 <wire x1="182.88" y1="35.56" x2="182.88" y2="33.02" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="A" pin="1"/>
+<wire x1="231.14" y1="96.52" x2="226.06" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="96.52" x2="226.06" y2="101.6" width="0.1524" layer="91"/>
+<pinref part="+3V16" gate="G$1" pin="+3V3"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -15406,14 +15412,6 @@ dual op-amp</description>
 <pinref part="JP5" gate="A" pin="10"/>
 <wire x1="233.68" y1="38.1" x2="218.44" y2="38.1" width="0.1524" layer="91"/>
 <label x="218.44" y="38.1" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
-<net name="+5V" class="0">
-<segment>
-<pinref part="JP1" gate="A" pin="1"/>
-<pinref part="P+8" gate="1" pin="+5V"/>
-<wire x1="231.14" y1="96.52" x2="226.06" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="226.06" y1="96.52" x2="226.06" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
