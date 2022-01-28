@@ -14697,10 +14697,6 @@ dual op-amp</description>
 <part name="D4" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" deviceset="LED-RED" device="1206" value="RED"/>
 <part name="R20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k"/>
 <part name="D5" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" deviceset="LED-RED" device="1206" value="RED"/>
-<part name="C27" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1uF/16V"/>
-<part name="C28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF/25V"/>
-<part name="GND36" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="GND37" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="SV2" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" deviceset="ML6" device="" package3d_urn="urn:adsk.eagle:package:6988/1"/>
 <part name="GND35" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -14820,20 +14816,6 @@ dual op-amp</description>
 <attribute name="NAME" x="49.911" y="168.148" size="1.778" layer="95" font="vector" rot="R90"/>
 <attribute name="VALUE" x="50.165" y="173.228" size="1.778" layer="96" font="vector" rot="R90" align="top-left"/>
 </instance>
-<instance part="C27" gate="G$1" x="129.54" y="106.68" smashed="yes">
-<attribute name="NAME" x="131.064" y="107.061" size="1.778" layer="95"/>
-<attribute name="VALUE" x="131.064" y="101.981" size="1.778" layer="96"/>
-</instance>
-<instance part="C28" gate="G$1" x="147.32" y="106.68" smashed="yes">
-<attribute name="NAME" x="148.844" y="107.061" size="1.778" layer="95"/>
-<attribute name="VALUE" x="148.844" y="101.981" size="1.778" layer="96"/>
-</instance>
-<instance part="GND36" gate="1" x="129.54" y="96.52" smashed="yes">
-<attribute name="VALUE" x="127" y="93.98" size="1.778" layer="96"/>
-</instance>
-<instance part="GND37" gate="1" x="147.32" y="96.52" smashed="yes">
-<attribute name="VALUE" x="144.78" y="93.98" size="1.778" layer="96"/>
-</instance>
 <instance part="R23" gate="G$1" x="88.9" y="190.5" smashed="yes" rot="R90">
 <attribute name="NAME" x="87.4014" y="186.69" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="92.202" y="186.69" size="1.778" layer="96" rot="R90"/>
@@ -14875,16 +14857,8 @@ dual op-amp</description>
 <segment>
 <pinref part="U1" gate="G$1" pin="3V3"/>
 <wire x1="116.84" y1="93.98" x2="116.84" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="111.76" x2="129.54" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="+3V6" gate="G$1" pin="+3V3"/>
-<wire x1="129.54" y1="111.76" x2="147.32" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="147.32" y1="111.76" x2="165.1" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="129.54" y1="111.76" x2="129.54" y2="109.22" width="0.1524" layer="91"/>
-<junction x="129.54" y="111.76"/>
-<pinref part="C27" gate="G$1" pin="1"/>
-<pinref part="C28" gate="G$1" pin="1"/>
-<wire x1="147.32" y1="111.76" x2="147.32" y2="109.22" width="0.1524" layer="91"/>
-<junction x="147.32" y="111.76"/>
+<wire x1="116.84" y1="111.76" x2="165.1" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="R23" gate="G$1" pin="2"/>
@@ -14921,16 +14895,6 @@ dual op-amp</description>
 <junction x="45.72" y="162.56"/>
 <pinref part="D5" gate="G$1" pin="C"/>
 <wire x1="53.34" y1="167.64" x2="53.34" y2="162.56" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="GND36" gate="1" pin="GND"/>
-<pinref part="C27" gate="G$1" pin="2"/>
-<wire x1="129.54" y1="99.06" x2="129.54" y2="101.6" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="GND37" gate="1" pin="GND"/>
-<pinref part="C28" gate="G$1" pin="2"/>
-<wire x1="147.32" y1="99.06" x2="147.32" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="S2" gate="1" pin="P"/>
