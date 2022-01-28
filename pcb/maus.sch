@@ -14759,6 +14759,9 @@ dual op-amp</description>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="4.7uF"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="GND40" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
+<part name="P+8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
+<part name="GND43" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -14866,6 +14869,16 @@ dual op-amp</description>
 <instance part="+3V12" gate="G$1" x="139.7" y="200.66" smashed="yes">
 <attribute name="VALUE" x="137.16" y="195.58" size="1.778" layer="96" rot="R90"/>
 </instance>
+<instance part="JP1" gate="A" x="233.68" y="88.9" smashed="yes">
+<attribute name="NAME" x="227.33" y="97.155" size="1.778" layer="95"/>
+<attribute name="VALUE" x="227.33" y="78.74" size="1.778" layer="96"/>
+</instance>
+<instance part="P+8" gate="1" x="226.06" y="104.14" smashed="yes">
+<attribute name="VALUE" x="223.52" y="99.06" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="GND43" gate="1" x="226.06" y="78.74" smashed="yes">
+<attribute name="VALUE" x="223.52" y="76.2" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -14955,6 +14968,12 @@ dual op-amp</description>
 <wire x1="142.24" y1="170.18" x2="142.24" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="142.24" y1="167.64" x2="139.7" y2="167.64" width="0.1524" layer="91"/>
 <junction x="139.7" y="167.64"/>
+</segment>
+<segment>
+<pinref part="GND43" gate="1" pin="GND"/>
+<wire x1="226.06" y1="88.9" x2="226.06" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="JP1" gate="A" pin="4"/>
+<wire x1="226.06" y1="88.9" x2="231.14" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ESP32_EN" class="0">
@@ -15129,6 +15148,11 @@ dual op-amp</description>
 <wire x1="116.84" y1="58.42" x2="119.38" y2="58.42" width="0.1524" layer="91"/>
 <label x="119.38" y="58.42" size="1.778" layer="95" xref="yes"/>
 </segment>
+<segment>
+<pinref part="JP1" gate="A" pin="5"/>
+<wire x1="231.14" y1="86.36" x2="208.28" y2="86.36" width="0.1524" layer="91"/>
+<label x="208.28" y="86.36" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="SDO" class="0">
 <segment>
@@ -15136,12 +15160,22 @@ dual op-amp</description>
 <wire x1="116.84" y1="55.88" x2="137.16" y2="55.88" width="0.1524" layer="91"/>
 <label x="137.16" y="55.88" size="1.778" layer="95" xref="yes"/>
 </segment>
+<segment>
+<pinref part="JP1" gate="A" pin="3"/>
+<wire x1="231.14" y1="91.44" x2="208.28" y2="91.44" width="0.1524" layer="91"/>
+<label x="208.28" y="91.44" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="SDI" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="IO35"/>
 <wire x1="116.84" y1="60.96" x2="137.16" y2="60.96" width="0.1524" layer="91"/>
 <label x="137.16" y="60.96" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="A" pin="2"/>
+<wire x1="231.14" y1="93.98" x2="223.52" y2="93.98" width="0.1524" layer="91"/>
+<label x="223.52" y="93.98" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="INT" class="0">
@@ -15209,6 +15243,11 @@ dual op-amp</description>
 <pinref part="JP5" gate="A" pin="2"/>
 <label x="203.2" y="58.42" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="233.68" y1="58.42" x2="203.2" y2="58.42" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="A" pin="6"/>
+<wire x1="231.14" y1="83.82" x2="223.52" y2="83.82" width="0.1524" layer="91"/>
+<label x="223.52" y="83.82" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$23" class="0">
@@ -15354,6 +15393,14 @@ dual op-amp</description>
 <pinref part="JP5" gate="A" pin="10"/>
 <wire x1="233.68" y1="38.1" x2="218.44" y2="38.1" width="0.1524" layer="91"/>
 <label x="218.44" y="38.1" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="+5V" class="0">
+<segment>
+<pinref part="JP1" gate="A" pin="1"/>
+<pinref part="P+8" gate="1" pin="+5V"/>
+<wire x1="231.14" y1="96.52" x2="226.06" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="96.52" x2="226.06" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
