@@ -15602,15 +15602,6 @@ high and low levels both work
 <wire x1="5.08" y1="127" x2="5.08" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U3" gate="G$1" pin="VBUS"/>
-<wire x1="162.56" y1="129.54" x2="144.78" y2="129.54" width="0.1524" layer="91"/>
-<wire x1="144.78" y1="129.54" x2="144.78" y2="137.16" width="0.1524" layer="91"/>
-<pinref part="R22" gate="G$1" pin="2"/>
-<pinref part="R27" gate="G$1" pin="1"/>
-<wire x1="144.78" y1="127" x2="144.78" y2="129.54" width="0.1524" layer="91"/>
-<junction x="144.78" y="129.54"/>
-</segment>
-<segment>
 <pinref part="R22" gate="G$1" pin="1"/>
 <wire x1="144.78" y1="147.32" x2="144.78" y2="152.4" width="0.1524" layer="91"/>
 <label x="144.78" y="154.94" size="1.778" layer="95" rot="R180"/>
@@ -15654,6 +15645,17 @@ high and low levels both work
 <wire x1="205.74" y1="149.86" x2="210.82" y2="149.86" width="0.1524" layer="91"/>
 <wire x1="205.74" y1="147.32" x2="205.74" y2="149.86" width="0.1524" layer="91"/>
 <junction x="205.74" y="149.86"/>
+</segment>
+<segment>
+<pinref part="J1" gate="G$1" pin="4"/>
+<wire x1="5.08" y1="104.14" x2="5.08" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="5.08" y1="101.6" x2="55.88" y2="101.6" width="0.1524" layer="91"/>
+<pinref part="D1" gate="G$1" pin="1"/>
+<wire x1="53.34" y1="111.76" x2="55.88" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="55.88" y1="111.76" x2="55.88" y2="101.6" width="0.1524" layer="91"/>
+<pinref part="GND29" gate="1" pin="GND"/>
+<wire x1="5.08" y1="99.06" x2="5.08" y2="101.6" width="0.1524" layer="91"/>
+<junction x="5.08" y="101.6"/>
 </segment>
 </net>
 <net name="DTR" class="0">
@@ -15860,14 +15862,13 @@ high and low levels both work
 </net>
 <net name="N$4" class="0">
 <segment>
-<pinref part="J1" gate="G$1" pin="4"/>
-<wire x1="5.08" y1="104.14" x2="5.08" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="5.08" y1="101.6" x2="55.88" y2="101.6" width="0.1524" layer="91"/>
-<pinref part="D1" gate="G$1" pin="1"/>
-<wire x1="53.34" y1="111.76" x2="55.88" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="55.88" y1="111.76" x2="55.88" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="5.08" y1="99.06" x2="5.08" y2="101.6" width="0.1524" layer="91"/>
-<pinref part="GND29" gate="1" pin="GND"/>
+<pinref part="R22" gate="G$1" pin="2"/>
+<pinref part="R27" gate="G$1" pin="1"/>
+<wire x1="144.78" y1="137.16" x2="144.78" y2="134.62" width="0.1524" layer="91"/>
+<pinref part="U3" gate="G$1" pin="!RST"/>
+<wire x1="144.78" y1="134.62" x2="144.78" y2="127" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="134.62" x2="162.56" y2="134.62" width="0.1524" layer="91"/>
+<junction x="144.78" y="134.62"/>
 </segment>
 </net>
 </nets>
@@ -17203,8 +17204,6 @@ auflösung</text>
 </sheet>
 </sheets>
 <errors>
-<approved hash="202,5,68.58,139.7,IC1B,IN+,,,,"/>
-<approved hash="202,5,68.58,134.62,IC1B,IN-,,,,"/>
 <approved hash="206,6,195.58,38.1,SDO,,,,,"/>
 <approved hash="206,6,195.58,27.94,SDO,,,,,"/>
 </errors>
