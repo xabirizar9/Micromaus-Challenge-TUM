@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
@@ -14671,7 +14671,18 @@ dual op-amp</description>
 <part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="+3V15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
+<part name="D10" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="D11" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="GND27" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="GND39" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="D8" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="D9" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="D12" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="D13" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="GND40" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="GND44" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="D14" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="D15" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15903,9 +15914,49 @@ high and low levels both work
 <instance part="GND30" gate="1" x="73.66" y="12.7" smashed="yes">
 <attribute name="VALUE" x="71.12" y="10.16" size="1.778" layer="96"/>
 </instance>
-<instance part="D8" gate="G$1" x="106.68" y="58.42" smashed="yes">
-<attribute name="NAME" x="118.11" y="63.5" size="1.778" layer="95" align="center-left"/>
-<attribute name="VALUE" x="118.11" y="60.96" size="1.778" layer="96" align="center-left"/>
+<instance part="D10" gate="G$1" x="7.62" y="45.72" smashed="yes" rot="R270">
+<attribute name="NAME" x="12.7" y="34.29" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="10.16" y="34.29" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D11" gate="G$1" x="20.32" y="45.72" smashed="yes" rot="R270">
+<attribute name="NAME" x="25.4" y="34.29" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="22.86" y="34.29" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="GND27" gate="1" x="20.32" y="27.94" smashed="yes">
+<attribute name="VALUE" x="17.78" y="25.4" size="1.778" layer="96"/>
+</instance>
+<instance part="GND39" gate="1" x="7.62" y="27.94" smashed="yes">
+<attribute name="VALUE" x="5.08" y="25.4" size="1.778" layer="96"/>
+</instance>
+<instance part="D8" gate="G$1" x="20.32" y="66.04" smashed="yes" rot="R270">
+<attribute name="NAME" x="25.4" y="54.61" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="22.86" y="54.61" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D9" gate="G$1" x="7.62" y="66.04" smashed="yes" rot="R270">
+<attribute name="NAME" x="12.7" y="54.61" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="10.16" y="54.61" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D12" gate="G$1" x="195.58" y="45.72" smashed="yes" rot="MR270">
+<attribute name="NAME" x="190.5" y="34.29" size="1.778" layer="95" rot="MR270" align="center-left"/>
+<attribute name="VALUE" x="193.04" y="34.29" size="1.778" layer="96" rot="MR270" align="center-left"/>
+</instance>
+<instance part="D13" gate="G$1" x="182.88" y="45.72" smashed="yes" rot="MR270">
+<attribute name="NAME" x="177.8" y="34.29" size="1.778" layer="95" rot="MR270" align="center-left"/>
+<attribute name="VALUE" x="180.34" y="34.29" size="1.778" layer="96" rot="MR270" align="center-left"/>
+</instance>
+<instance part="GND40" gate="1" x="182.88" y="27.94" smashed="yes" rot="MR0">
+<attribute name="VALUE" x="185.42" y="25.4" size="1.778" layer="96" rot="MR0"/>
+</instance>
+<instance part="GND44" gate="1" x="195.58" y="27.94" smashed="yes" rot="MR0">
+<attribute name="VALUE" x="198.12" y="25.4" size="1.778" layer="96" rot="MR0"/>
+</instance>
+<instance part="D14" gate="G$1" x="182.88" y="66.04" smashed="yes" rot="MR270">
+<attribute name="NAME" x="177.8" y="54.61" size="1.778" layer="95" rot="MR270" align="center-left"/>
+<attribute name="VALUE" x="180.34" y="54.61" size="1.778" layer="96" rot="MR270" align="center-left"/>
+</instance>
+<instance part="D15" gate="G$1" x="195.58" y="66.04" smashed="yes" rot="MR270">
+<attribute name="NAME" x="190.5" y="54.61" size="1.778" layer="95" rot="MR270" align="center-left"/>
+<attribute name="VALUE" x="193.04" y="54.61" size="1.778" layer="96" rot="MR270" align="center-left"/>
 </instance>
 </instances>
 <busses>
@@ -15926,15 +15977,15 @@ high and low levels both work
 <net name="ESP32_M1_1" class="0">
 <segment>
 <pinref part="CR1" gate="A" pin="INPUT1"/>
-<label x="48.26" y="27.94" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="48.26" y1="27.94" x2="73.66" y2="27.94" width="0.1524" layer="91"/>
+<label x="50.8" y="27.94" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="50.8" y1="27.94" x2="73.66" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ESP32_M1_2" class="0">
 <segment>
 <pinref part="CR1" gate="A" pin="INPUT2"/>
-<label x="48.26" y="22.86" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="48.26" y1="22.86" x2="73.66" y2="22.86" width="0.1524" layer="91"/>
+<label x="53.34" y="22.86" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="53.34" y1="22.86" x2="73.66" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ESP32_M2_2" class="0">
@@ -16000,16 +16051,49 @@ high and low levels both work
 <wire x1="73.66" y1="20.32" x2="73.66" y2="15.24" width="0.1524" layer="91"/>
 <pinref part="GND30" gate="1" pin="GND"/>
 </segment>
+<segment>
+<pinref part="D11" gate="G$1" pin="A"/>
+<pinref part="GND27" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="GND39" gate="1" pin="GND"/>
+<pinref part="D10" gate="G$1" pin="A"/>
+</segment>
+<segment>
+<pinref part="D13" gate="G$1" pin="A"/>
+<pinref part="GND40" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="GND44" gate="1" pin="GND"/>
+<pinref part="D12" gate="G$1" pin="A"/>
+</segment>
 </net>
 <net name="VBAT" class="1">
 <segment>
+<wire x1="53.34" y1="17.78" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
+<pinref part="C9" gate="G$1" pin="1"/>
+<label x="-10.16" y="17.78" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="53.34" y1="30.48" x2="53.34" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="17.78" x2="-5.08" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="17.78" x2="-10.16" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="17.78" x2="-5.08" y2="66.04" width="0.1524" layer="91"/>
+<junction x="-5.08" y="17.78"/>
+<wire x1="-5.08" y1="66.04" x2="7.62" y2="66.04" width="0.1524" layer="91"/>
+<pinref part="D9" gate="G$1" pin="K"/>
+<pinref part="D8" gate="G$1" pin="K"/>
+<wire x1="7.62" y1="66.04" x2="20.32" y2="66.04" width="0.1524" layer="91"/>
+<junction x="7.62" y="66.04"/>
+<wire x1="-5.08" y1="17.78" x2="-5.08" y2="0" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="0" x2="208.28" y2="0" width="0.1524" layer="91"/>
+<wire x1="208.28" y1="0" x2="208.28" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="208.28" y1="66.04" x2="195.58" y2="66.04" width="0.1524" layer="91"/>
+<pinref part="D15" gate="G$1" pin="K"/>
+<pinref part="D14" gate="G$1" pin="K"/>
+<wire x1="195.58" y1="66.04" x2="182.88" y2="66.04" width="0.1524" layer="91"/>
+<junction x="195.58" y="66.04"/>
 <pinref part="CR1" gate="A" pin="VS"/>
 <wire x1="73.66" y1="30.48" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
-<wire x1="53.34" y1="30.48" x2="53.34" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="C9" gate="G$1" pin="1"/>
 <junction x="53.34" y="30.48"/>
-<label x="22.86" y="30.48" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="53.34" y1="30.48" x2="22.86" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+3V3" class="1">
@@ -16064,8 +16148,16 @@ high and low levels both work
 </segment>
 <segment>
 <pinref part="CR1" gate="A" pin="OUT1"/>
-<wire x1="73.66" y1="35.56" x2="71.12" y2="35.56" width="0.1524" layer="91"/>
 <label x="71.12" y="35.56" size="1.778" layer="95" rot="R180"/>
+<wire x1="73.66" y1="35.56" x2="27.94" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="35.56" x2="27.94" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="D11" gate="G$1" pin="K"/>
+<wire x1="27.94" y1="45.72" x2="20.32" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="45.72" x2="20.32" y2="50.8" width="0.1524" layer="91"/>
+<junction x="20.32" y="45.72"/>
+<pinref part="D8" gate="G$1" pin="A"/>
+<wire x1="20.32" y1="45.72" x2="17.78" y2="45.72" width="0.1524" layer="91"/>
+<label x="12.7" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_M-" class="0">
@@ -16076,8 +16168,18 @@ high and low levels both work
 </segment>
 <segment>
 <pinref part="CR1" gate="A" pin="OUT2"/>
-<wire x1="73.66" y1="33.02" x2="71.12" y2="33.02" width="0.1524" layer="91"/>
 <label x="71.12" y="33.02" size="1.778" layer="95" rot="R180"/>
+<wire x1="73.66" y1="33.02" x2="27.94" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="33.02" x2="27.94" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="22.86" x2="0" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="0" y1="22.86" x2="0" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="D10" gate="G$1" pin="K"/>
+<wire x1="0" y1="45.72" x2="7.62" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="45.72" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
+<junction x="7.62" y="45.72"/>
+<pinref part="D9" gate="G$1" pin="A"/>
+<wire x1="7.62" y1="45.72" x2="10.16" y2="45.72" width="0.1524" layer="91"/>
+<label x="10.16" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2_M+" class="0">
@@ -16088,8 +16190,18 @@ high and low levels both work
 </segment>
 <segment>
 <pinref part="CR1" gate="A" pin="OUT3"/>
-<wire x1="119.38" y1="33.02" x2="121.92" y2="33.02" width="0.1524" layer="91"/>
 <label x="121.92" y="33.02" size="1.778" layer="95"/>
+<wire x1="175.26" y1="33.02" x2="175.26" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="175.26" y1="22.86" x2="203.2" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="203.2" y1="22.86" x2="203.2" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="D12" gate="G$1" pin="K"/>
+<wire x1="203.2" y1="45.72" x2="195.58" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="45.72" x2="195.58" y2="50.8" width="0.1524" layer="91"/>
+<junction x="195.58" y="45.72"/>
+<pinref part="D15" gate="G$1" pin="A"/>
+<wire x1="119.38" y1="33.02" x2="175.26" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="45.72" x2="193.04" y2="45.72" width="0.1524" layer="91"/>
+<label x="187.96" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2_M-" class="0">
@@ -16100,8 +16212,16 @@ high and low levels both work
 </segment>
 <segment>
 <pinref part="CR1" gate="A" pin="OUT4"/>
-<wire x1="119.38" y1="35.56" x2="121.92" y2="35.56" width="0.1524" layer="91"/>
 <label x="121.92" y="35.56" size="1.778" layer="95"/>
+<wire x1="119.38" y1="35.56" x2="175.26" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="175.26" y1="35.56" x2="175.26" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="D13" gate="G$1" pin="K"/>
+<wire x1="175.26" y1="45.72" x2="182.88" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="182.88" y1="45.72" x2="182.88" y2="50.8" width="0.1524" layer="91"/>
+<junction x="182.88" y="45.72"/>
+<pinref part="D14" gate="G$1" pin="A"/>
+<wire x1="182.88" y1="45.72" x2="185.42" y2="45.72" width="0.1524" layer="91"/>
+<label x="182.88" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="+5V" class="1">
