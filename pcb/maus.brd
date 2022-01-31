@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mm" style="dots" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm"/>
@@ -2361,18 +2361,18 @@ Low profile connectors, straight&lt;p&gt;
 <library name="ICM-20948">
 <packages>
 <package name="ICM_20948-F">
-<pad name="P1" x="-6.35" y="6.35" drill="0.6" rot="R90"/>
-<pad name="P2" x="-6.35" y="3.81" drill="0.6"/>
-<pad name="P3" x="-6.35" y="1.27" drill="0.6"/>
-<pad name="P4" x="-6.35" y="-1.27" drill="0.6"/>
-<pad name="P5" x="-6.35" y="-3.81" drill="0.6"/>
-<pad name="P6" x="-6.35" y="-6.35" drill="0.6"/>
-<pad name="P7" x="6.35" y="-6.35" drill="0.6"/>
-<pad name="P8" x="6.35" y="-3.81" drill="0.6"/>
-<pad name="P9" x="6.35" y="-1.27" drill="0.6"/>
-<pad name="P10" x="6.35" y="1.27" drill="0.6"/>
-<pad name="P11" x="6.35" y="3.81" drill="0.6"/>
-<pad name="P12" x="6.35" y="6.35" drill="0.6"/>
+<pad name="P1" x="-6.35" y="6.35" drill="1.016" shape="square" rot="R90" first="yes"/>
+<pad name="P2" x="-6.35" y="3.81" drill="1.016" shape="octagon"/>
+<pad name="P3" x="-6.35" y="1.27" drill="1.016" shape="octagon"/>
+<pad name="P4" x="-6.35" y="-1.27" drill="1.016" shape="octagon"/>
+<pad name="P5" x="-6.35" y="-3.81" drill="1.016" shape="octagon"/>
+<pad name="P6" x="-6.35" y="-6.35" drill="1.016" shape="octagon"/>
+<pad name="P7" x="6.35" y="-6.35" drill="1.016" shape="octagon"/>
+<pad name="P8" x="6.35" y="-3.81" drill="1.016" shape="octagon"/>
+<pad name="P9" x="6.35" y="-1.27" drill="1.016" shape="octagon"/>
+<pad name="P10" x="6.35" y="1.27" drill="1.016" shape="octagon"/>
+<pad name="P11" x="6.35" y="3.81" drill="1.016" shape="octagon"/>
+<pad name="P12" x="6.35" y="6.35" drill="1.016" shape="octagon"/>
 <wire x1="-7.458" y1="12.538" x2="7.458" y2="12.538" width="0.127" layer="21"/>
 <wire x1="7.458" y1="12.538" x2="7.458" y2="-12.538" width="0.127" layer="21"/>
 <wire x1="7.458" y1="-12.538" x2="-7.458" y2="-12.538" width="0.127" layer="21"/>
@@ -2980,11 +2980,11 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="C" x="121.92" y="-13.97" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="58.42" y="68.58" size="1.27" layer="27"/>
 </element>
-<element name="C23" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="73.66" y="63.5" smashed="yes">
-<attribute name="NAME" x="72.39" y="64.77" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="88" x="148.59" y="-15.24" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="148.59" y="-15.24" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="72.39" y="60.96" size="1.27" layer="27"/>
+<element name="C23" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="73.66" y="64.77" smashed="yes">
+<attribute name="NAME" x="72.39" y="66.04" size="1.27" layer="25"/>
+<attribute name="POPULARITY" value="88" x="148.59" y="-13.97" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="148.59" y="-13.97" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="72.39" y="62.23" size="1.27" layer="27"/>
 </element>
 <element name="C24" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10nF" x="73.66" y="71.12" smashed="yes">
 <attribute name="NAME" x="72.39" y="72.39" size="1.27" layer="25"/>
@@ -3034,14 +3034,14 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="C" x="111.76" y="-21.59" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="54.61" y="54.61" size="1.27" layer="27"/>
 </element>
-<element name="CR1" library="shared" package="POWERSO-20_STM" value="L298P" x="67.31" y="50.8" smashed="yes" grouprefs="XXXX XXX MAUS">
+<element name="CR1" library="shared" package="POWERSO-20_STM" value="L298P" x="67.31" y="50.8" smashed="yes" grouprefs="MAUS XXX XXXX">
 <attribute name="COPYRIGHT" value="Copyright (C) 2022 Ultra Librarian. All rights reserved." x="116.84" y="29.21" size="1.778" layer="27" display="off"/>
 <attribute name="MANUFACTURER_PART_NUMBER" value="L298P" x="116.84" y="29.21" size="1.778" layer="27" display="off"/>
 <attribute name="MFR_NAME" value="STMicroelectronics" x="116.84" y="29.21" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="65.3034" y="53.975" size="1.27" layer="27" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="64.3128" y="46.355" size="1.27" layer="21" ratio="6" rot="SR0"/>
 </element>
-<element name="D1" library="SP0503BAHTG" package="SOT143" value="SP0503BAHTG" x="111.76" y="20.32" smashed="yes" grouprefs="XXXX XXX MAUS">
+<element name="D1" library="SP0503BAHTG" package="SOT143" value="SP0503BAHTG" x="111.76" y="20.32" smashed="yes" grouprefs="MAUS XXX XXXX">
 <attribute name="AVAILABILITY" value="In Stock" x="207.01" y="-49.53" size="1.778" layer="27" display="off"/>
 <attribute name="DESCRIPTION" value=" 8.5V Clamp - Ipp Tvs Diode Surface Mount SOT-143-4 " x="207.01" y="-49.53" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="Littelfuse Inc." x="207.01" y="-49.53" size="1.778" layer="27" display="off"/>
@@ -3082,7 +3082,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="PROD_ID" value="DIO-09912" x="134.62" y="-72.39" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="93.98" y="35.8775" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
 </element>
-<element name="J1" library="shared" package="SS52300001" value="SS-52300-001" x="96.52" y="21.59" smashed="yes" grouprefs="XXXX XXX MAUS">
+<element name="J1" library="shared" package="SS52300001" value="SS-52300-001" x="96.52" y="21.59" smashed="yes" grouprefs="MAUS XXX XXXX">
 <attribute name="ARROW_PART_NUMBER" value="" x="190.5" y="5.08" size="1.778" layer="27" display="off"/>
 <attribute name="ARROW_PRICE-STOCK" value="" x="190.5" y="5.08" size="1.778" layer="27" display="off"/>
 <attribute name="DESCRIPTION" value="USB Connectors USB 2.0 RA Receptacle Type B" x="190.5" y="5.08" size="1.778" layer="27" display="off"/>
@@ -3109,7 +3109,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="35" x="143.51" y="-16.51" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="54.61" y="76.835" size="1.27" layer="27"/>
 </element>
-<element name="L1" library="rcl" library_urn="urn:adsk.eagle:library:334" package="PIS2816" package3d_urn="urn:adsk.eagle:package:23515/1" value="2.2u" x="40.64" y="52.07" smashed="yes" rot="R90" grouprefs="XXXX XXX MAUS">
+<element name="L1" library="rcl" library_urn="urn:adsk.eagle:library:334" package="PIS2816" package3d_urn="urn:adsk.eagle:package:23515/1" value="2.2u" x="40.64" y="52.07" smashed="yes" rot="R90" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="36.14" y="48.445" size="1.778" layer="25" rot="R90"/>
 <attribute name="POPULARITY" value="5" x="85.09" y="77.47" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="SPICEPREFIX" value="L" x="85.09" y="77.47" size="1.778" layer="27" rot="R90" display="off"/>
@@ -3178,11 +3178,11 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="R" x="115.57" y="-45.72" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="33.655" y="36.83" size="1.27" layer="27"/>
 </element>
-<element name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" value="470k" x="21.59" y="21.59" smashed="yes">
-<attribute name="NAME" x="20.955" y="22.86" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="86" x="45.72" y="-63.5" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="45.72" y="-63.5" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="20.955" y="19.05" size="1.27" layer="27"/>
+<element name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" value="470k" x="21.59" y="24.13" smashed="yes">
+<attribute name="NAME" x="20.955" y="25.4" size="1.27" layer="25"/>
+<attribute name="POPULARITY" value="86" x="45.72" y="-60.96" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="45.72" y="-60.96" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="20.955" y="21.59" size="1.27" layer="27"/>
 </element>
 <element name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" value="100k" x="22.86" y="27.94" smashed="yes" rot="R270">
 <attribute name="NAME" x="24.13" y="28.575" size="1.27" layer="25" rot="R270"/>
@@ -3325,22 +3325,22 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="72" x="88.9" y="167.64" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="36.83" y="90.932" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="SENSOR_FRONT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="67.31" y="111.76" smashed="yes" rot="R180" grouprefs="XXXX XXX MAUS">
+<element name="SENSOR_FRONT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="67.31" y="111.76" smashed="yes" rot="R180" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="71.1962" y="109.9312" size="1.27" layer="25" ratio="10" rot="R180"/>
 <attribute name="POPULARITY" value="92" x="8.89" y="214.63" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="71.12" y="114.935" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="SENSOR_LEFT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="23.231971875" y="110.861975" smashed="yes" rot="R225" grouprefs="XXXX XXX MAUS">
+<element name="SENSOR_LEFT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="23.231971875" y="110.861975" smashed="yes" rot="R225" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="27.2730875" y="112.316778125" size="1.27" layer="25" ratio="10" rot="R225"/>
 <attribute name="POPULARITY" value="92" x="-113.267915625" y="119.84223125" size="1.778" layer="27" rot="R225" display="off"/>
 <attribute name="VALUE" x="23.680984375" y="115.801115625" size="1.27" layer="27" rot="R225"/>
 </element>
-<element name="SENSOR_RIGHT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="109.22" y="107.95" smashed="yes" rot="R135" grouprefs="XXXX XXX MAUS">
+<element name="SENSOR_RIGHT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="109.22" y="107.95" smashed="yes" rot="R135" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="110.674803125" y="103.908884375" size="1.27" layer="25" ratio="10" rot="R135"/>
 <attribute name="POPULARITY" value="92" x="128.976565625" y="233.673584375" size="1.778" layer="27" rot="R135" display="off"/>
 <attribute name="VALUE" x="114.15914375" y="107.500984375" size="1.27" layer="27" rot="R135"/>
 </element>
-<element name="SV2" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="110.49" y="67.31" smashed="yes" rot="R270" grouprefs="XXXX XXX MAUS">
+<element name="SV2" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="110.49" y="67.31" smashed="yes" rot="R270" grouprefs="MAUS XXX XXXX">
 <attribute name="MF" value="" x="68.58" y="-19.05" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="68.58" y="-19.05" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="115.57" y="74.93" size="1.778" layer="25" ratio="10" rot="R270"/>
@@ -3349,7 +3349,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="5" x="68.58" y="-19.05" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="115.57" y="66.675" size="1.778" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="SV4" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="21.59" y="67.31" smashed="yes" rot="R90" grouprefs="XXXX XXX MAUS">
+<element name="SV4" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="21.59" y="67.31" smashed="yes" rot="R90" grouprefs="MAUS XXX XXXX">
 <attribute name="MF" value="" x="80.01" y="88.9" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MPN" value="" x="80.01" y="88.9" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="NAME" x="16.51" y="59.69" size="1.778" layer="25" ratio="10" rot="R90"/>
@@ -3358,19 +3358,19 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="5" x="80.01" y="88.9" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="16.51" y="67.945" size="1.778" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="U$2" library="ICM-20948" package="ICM_20948-F" value="ICM_20948" x="67.31" y="68.58" smashed="yes" rot="R270" grouprefs="XXXX XXX MAUS">
+<element name="U$2" library="ICM-20948" package="ICM_20948-F" value="ICM_20948" x="67.31" y="68.58" smashed="yes" rot="R270" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="74.979665625" y="76.038" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="58.370334375" y="76.038" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="U$3" library="MP2333H" package="SOTFL50P175X60-8N" package3d_urn="urn:adsk.eagle:package:33645631/1" value="MP2333HSOT583" x="49.53" y="35.56" smashed="yes" grouprefs="XXXX XXX MAUS">
+<element name="U$3" library="MP2333H" package="SOTFL50P175X60-8N" package3d_urn="urn:adsk.eagle:package:33645631/1" value="MP2333HSOT583" x="49.53" y="35.56" smashed="yes" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="49.53" y="37.8675" size="1.27" layer="25" align="bottom-center"/>
 <attribute name="VALUE" x="49.53" y="33.6925" size="1.27" layer="27" align="top-center"/>
 </element>
-<element name="U$4" library="xt60" package="XT60-UPRIGHT" value="XT60" x="35.56" y="19.05" smashed="yes" rot="R180" grouprefs="XXXX XXX MAUS">
+<element name="U$4" library="xt60" package="XT60-UPRIGHT" value="XT60" x="35.56" y="19.05" smashed="yes" rot="R180" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="41.56" y="14.65" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="41.96" y="24.75" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="U1" library="ESP32-S2-WROOM" package="XCVR_ESP32-S2-WROOM" value="ESP32-S2-WROOM" x="67.31" y="24.13" smashed="yes" rot="R180" grouprefs="XXXX XXX MAUS">
+<element name="U1" library="ESP32-S2-WROOM" package="XCVR_ESP32-S2-WROOM" value="ESP32-S2-WROOM" x="67.31" y="24.13" smashed="yes" rot="R180" grouprefs="MAUS XXX XXXX">
 <attribute name="AVAILABILITY" value="In Stock" x="44.45" y="43.18" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="DESCRIPTION" value=" WiFi 802.11b/g/n Transceiver Module 2.4GHz Antenna Not Included, I-PEX Surface Mount " x="44.45" y="43.18" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MF" value="Espressif Systems" x="44.45" y="43.18" size="1.778" layer="27" rot="R180" display="off"/>
@@ -3381,7 +3381,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/ESP32-S2-WROOM/?ref=eda" x="44.45" y="43.18" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="76.31" y="41.83" size="1.2738" layer="27" rot="R180"/>
 </element>
-<element name="U2" library="CH340C" package="SOIC127P600X180-16N" value="CH340C" x="99.06" y="27.94" smashed="yes" rot="R90" grouprefs="XXXX XXX MAUS">
+<element name="U2" library="CH340C" package="SOIC127P600X180-16N" value="CH340C" x="99.06" y="27.94" smashed="yes" rot="R90" grouprefs="MAUS XXX XXXX">
 <attribute name="AVAILABILITY" value="Not in stock" x="144.78" y="44.45" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="DESCRIPTION" value=" USB to serial chip CH340 " x="144.78" y="44.45" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="WCH" x="144.78" y="44.45" size="1.778" layer="27" rot="R90" display="off"/>
@@ -3391,7 +3391,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="PRICE" value="None" x="144.78" y="44.45" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="105.31" y="24.285" size="1.27" layer="27" rot="R90" align="top-left"/>
 </element>
-<element name="U4" library="LP3965EMP-3.3" package="SOT150P696X180-5N" value="LP3965EMP-3.3" x="21.59" y="41.91" smashed="yes" rot="R180" grouprefs="XXXX XXX MAUS">
+<element name="U4" library="LP3965EMP-3.3" package="SOT150P696X180-5N" value="LP3965EMP-3.3" x="21.59" y="41.91" smashed="yes" rot="R180" grouprefs="MAUS XXX XXXX">
 <attribute name="AVAILABILITY" value="In Stock" x="-25.4" y="86.36" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="DESCRIPTION" value=" 1.5-A, low-dropout voltage regulator with sense &amp; enable 5-SOT-223 -40 to 125 " x="-25.4" y="86.36" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MF" value="Texas Instruments" x="-25.4" y="86.36" size="1.778" layer="27" rot="R180" display="off"/>
@@ -3402,18 +3402,18 @@ Covered vias can be set in Masks (Limit).
 <attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/LP3965EMP-3.3/NOPB/?ref=eda" x="-25.4" y="86.36" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="27.086240625" y="47.81336875" size="2.086540625" layer="27" ratio="10" rot="SR180"/>
 </element>
-<element name="U5" library="LSM9DS1TR" package="PQFN43P300X350X102-24N" value="LSM9DS1TR" x="67.31" y="68.58" smashed="yes" rot="R180" grouprefs="XXXX XXX MAUS">
-<attribute name="AVAILABILITY" value="In Stock" x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="DESCRIPTION" value=" Accelerometer, Gyroscope, Magnetometer, Temperature, 9 Axis Sensor I²C, SPI Output " x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MF" value="STMicroelectronics" x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MP" value="LSM9DS1TR" x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="69.31321875" y="66.676940625" size="0.40705625" layer="25" rot="R180"/>
-<attribute name="PACKAGE" value="TFLGA-24 STMicroelectronics" x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="PRICE" value="None" x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/LSM9DS1TR/?ref=eda" x="-30.48" y="172.72" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="69.3116" y="70.781759375" size="0.406725" layer="27" rot="R180"/>
+<element name="U5" library="LSM9DS1TR" package="PQFN43P300X350X102-24N" value="LSM9DS1TR" x="64.77" y="71.12" smashed="yes" rot="R180" grouprefs="MAUS XXX XXXX">
+<attribute name="AVAILABILITY" value="In Stock" x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="DESCRIPTION" value=" Accelerometer, Gyroscope, Magnetometer, Temperature, 9 Axis Sensor I²C, SPI Output " x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MF" value="STMicroelectronics" x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MP" value="LSM9DS1TR" x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="66.77321875" y="69.216940625" size="0.40705625" layer="25" rot="R180"/>
+<attribute name="PACKAGE" value="TFLGA-24 STMicroelectronics" x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="PRICE" value="None" x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/LSM9DS1TR/?ref=eda" x="-33.02" y="175.26" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="66.7716" y="73.321759375" size="0.406725" layer="27" rot="R180"/>
 </element>
-<element name="U6" library="LM358DR" package="SOIC127P610X175-8N" package3d_urn="urn:adsk.eagle:package:33744331/1" value="LM358DR" x="38.1" y="27.94" smashed="yes" rot="R90" grouprefs="XXXX XXX MAUS">
+<element name="U6" library="LM358DR" package="SOIC127P610X175-8N" package3d_urn="urn:adsk.eagle:package:33744331/1" value="LM358DR" x="38.1" y="27.94" smashed="yes" rot="R90" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="34.5064" y="27.94" size="1.27" layer="25" rot="R90" align="bottom-center"/>
 <attribute name="VALUE" x="41.235" y="27.94" size="1.27" layer="27" rot="R90" align="top-center"/>
 </element>
@@ -3459,14 +3459,14 @@ Covered vias can be set in Masks (Limit).
 <wire x1="81.6" y1="17.78" x2="81.6" y2="21.59" width="0" layer="19" extent="1-1"/>
 <wire x1="76.06" y1="17.63" x2="81.6" y2="17.78" width="0" layer="19" extent="1-1"/>
 <wire x1="85.09" y1="62.23" x2="80.96" y2="43.18" width="0" layer="19" extent="1-1"/>
-<wire x1="74.61" y1="63.5" x2="85.09" y2="62.23" width="0" layer="19" extent="1-1"/>
-<wire x1="68.815" y1="67.36" x2="74.61" y2="63.5" width="0" layer="19" extent="1-1"/>
-<wire x1="67.955" y1="67.36" x2="68.815" y2="67.36" width="0" layer="19" extent="1-1"/>
-<wire x1="67.525" y1="67.36" x2="67.955" y2="67.36" width="0" layer="19" extent="1-1"/>
-<wire x1="68.78" y1="68.365" x2="68.815" y2="67.36" width="0" layer="19" extent="1-1"/>
-<wire x1="60.64" y1="67.31" x2="67.525" y2="67.36" width="0" layer="19" extent="1-1"/>
-<wire x1="60.64" y1="71.12" x2="60.64" y2="67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="73.66" y1="74.93" x2="68.78" y2="68.365" width="0" layer="19" extent="1-1"/>
+<wire x1="74.61" y1="64.77" x2="85.09" y2="62.23" width="0" layer="19" extent="1-1"/>
+<wire x1="66.275" y1="69.9" x2="74.61" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="65.415" y1="69.9" x2="66.275" y2="69.9" width="0" layer="19" extent="1-1"/>
+<wire x1="64.985" y1="69.9" x2="65.415" y2="69.9" width="0" layer="19" extent="1-1"/>
+<wire x1="66.24" y1="70.905" x2="66.275" y2="69.9" width="0" layer="19" extent="1-1"/>
+<wire x1="60.64" y1="71.12" x2="64.985" y2="69.9" width="0" layer="19" extent="1-1"/>
+<wire x1="60.64" y1="67.31" x2="60.64" y2="71.12" width="0" layer="19" extent="1-1"/>
+<wire x1="73.66" y1="74.93" x2="66.24" y2="70.905" width="0" layer="19" extent="1-1"/>
 <wire x1="58.42" y1="86.04" x2="60.64" y2="71.12" width="0" layer="19" extent="1-1"/>
 <wire x1="43.18" y1="86.04" x2="58.42" y2="86.04" width="0" layer="19" extent="1-1"/>
 <wire x1="34.0106" y1="90.7288" x2="43.18" y2="86.04" width="0" layer="19" extent="1-1"/>
@@ -3573,16 +3573,16 @@ Covered vias can be set in Masks (Limit).
 <wire x1="46.7106" y1="97.2312" x2="63.2206" y2="97.2312" width="0" layer="19" extent="1-1"/>
 <wire x1="46.7106" y1="90.7288" x2="46.7106" y2="97.2312" width="0" layer="19" extent="1-1"/>
 <wire x1="68.58" y1="74.93" x2="63.2206" y2="90.7288" width="0" layer="19" extent="1-1"/>
+<wire x1="64.125" y1="69.9" x2="68.58" y2="74.93" width="0" layer="19" extent="1-1"/>
+<wire x1="63.695" y1="69.9" x2="64.125" y2="69.9" width="0" layer="19" extent="1-1"/>
+<wire x1="58.74" y1="71.12" x2="63.695" y2="69.9" width="0" layer="19" extent="1-1"/>
+<wire x1="58.74" y1="67.31" x2="58.74" y2="71.12" width="0" layer="19" extent="1-1"/>
 <wire x1="74.61" y1="71.12" x2="68.58" y2="74.93" width="0" layer="19" extent="1-1"/>
 <wire x1="74.61" y1="67.31" x2="74.61" y2="71.12" width="0" layer="19" extent="1-1"/>
-<wire x1="72.71" y1="63.5" x2="74.61" y2="67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="66.04" y1="62.23" x2="72.71" y2="63.5" width="0" layer="19" extent="1-1"/>
-<wire x1="66.235" y1="67.36" x2="66.04" y2="62.23" width="0" layer="19" extent="1-1"/>
-<wire x1="66.665" y1="67.36" x2="66.235" y2="67.36" width="0" layer="19" extent="1-1"/>
-<wire x1="74.0156" y1="56.515" x2="72.71" y2="63.5" width="0" layer="19" extent="1-1"/>
+<wire x1="72.71" y1="64.77" x2="74.61" y2="67.31" width="0" layer="19" extent="1-1"/>
+<wire x1="66.04" y1="62.23" x2="72.71" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="74.0156" y1="56.515" x2="72.71" y2="64.77" width="0" layer="19" extent="1-1"/>
 <wire x1="74.0156" y1="55.245" x2="74.0156" y2="56.515" width="0" layer="19" extent="1-1"/>
-<wire x1="58.74" y1="67.31" x2="66.235" y2="67.36" width="0" layer="19" extent="1-1"/>
-<wire x1="58.74" y1="71.12" x2="58.74" y2="67.31" width="0" layer="19" extent="1-1"/>
 <wire x1="60.6044" y1="56.515" x2="66.04" y2="62.23" width="0" layer="19" extent="1-1"/>
 <wire x1="60.6044" y1="55.245" x2="60.6044" y2="56.515" width="0" layer="19" extent="1-1"/>
 <wire x1="56.83" y1="57.15" x2="60.6044" y2="56.515" width="0" layer="19" extent="1-1"/>
@@ -3771,7 +3771,7 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U1" pad="28"/>
 <contactref element="U5" pad="7"/>
 <contactref element="U$2" pad="P7"/>
-<wire x1="60.96" y1="62.23" x2="68.385" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="60.96" y1="62.23" x2="65.845" y2="72.34" width="0" layer="19" extent="1-1"/>
 <wire x1="58.56" y1="37.13" x2="60.96" y2="62.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SCK">
@@ -3779,9 +3779,9 @@ Covered vias can be set in Masks (Limit).
 <contactref element="JP1" pad="5"/>
 <contactref element="U$2" pad="P4"/>
 <contactref element="U5" pad="2"/>
-<wire x1="68.78" y1="67.935" x2="85.09" y2="72.39" width="0" layer="19" extent="1-1"/>
-<wire x1="66.04" y1="74.93" x2="68.78" y2="67.935" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="34.13" x2="68.78" y2="67.935" width="0" layer="19" extent="1-1"/>
+<wire x1="66.24" y1="70.475" x2="85.09" y2="72.39" width="0" layer="19" extent="1-1"/>
+<wire x1="66.04" y1="74.93" x2="66.24" y2="70.475" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="34.13" x2="66.24" y2="70.475" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SDO">
 <contactref element="U1" pad="31"/>
@@ -3789,9 +3789,9 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U$2" pad="P8"/>
 <contactref element="U5" pad="5"/>
 <contactref element="U5" pad="6"/>
-<wire x1="68.78" y1="69.225" x2="85.09" y2="67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="68.815" y1="69.8" x2="68.78" y2="69.225" width="0" layer="19" extent="1-1"/>
-<wire x1="63.5" y1="62.23" x2="68.78" y2="69.225" width="0" layer="19" extent="1-1"/>
+<wire x1="66.24" y1="71.765" x2="85.09" y2="67.31" width="0" layer="19" extent="1-1"/>
+<wire x1="66.275" y1="72.34" x2="66.24" y2="71.765" width="0" layer="19" extent="1-1"/>
+<wire x1="63.5" y1="62.23" x2="66.24" y2="71.765" width="0" layer="19" extent="1-1"/>
 <wire x1="58.56" y1="32.63" x2="63.5" y2="62.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SDI">
@@ -3799,53 +3799,53 @@ Covered vias can be set in Masks (Limit).
 <contactref element="JP1" pad="2"/>
 <contactref element="U$2" pad="P5"/>
 <contactref element="U5" pad="4"/>
-<wire x1="68.78" y1="68.795" x2="85.09" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="63.5" y1="74.93" x2="68.78" y2="68.795" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="35.63" x2="68.78" y2="68.795" width="0" layer="19" extent="1-1"/>
+<wire x1="66.24" y1="71.335" x2="85.09" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="63.5" y1="74.93" x2="66.24" y2="71.335" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="35.63" x2="66.24" y2="71.335" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="INT">
 <contactref element="U1" pad="33"/>
 <contactref element="U$2" pad="P6"/>
 <contactref element="U5" pad="12"/>
-<wire x1="66.235" y1="69.8" x2="60.96" y2="74.93" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="29.63" x2="66.235" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="63.695" y1="72.34" x2="60.96" y2="74.93" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="29.63" x2="63.695" y2="72.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="INT_M">
 <contactref element="U1" pad="34"/>
 <contactref element="JP5" pad="4"/>
 <contactref element="U5" pad="10"/>
-<wire x1="67.095" y1="69.8" x2="63.5" y2="80.01" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="28.13" x2="67.095" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="64.555" y1="72.34" x2="63.5" y2="80.01" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="28.13" x2="64.555" y2="72.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DRDY_A/G">
 <contactref element="U1" pad="36"/>
 <contactref element="JP5" pad="1"/>
 <contactref element="U5" pad="13"/>
-<wire x1="65.805" y1="69.8" x2="55.88" y2="80.01" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="25.13" x2="65.805" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="63.265" y1="72.34" x2="55.88" y2="80.01" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="25.13" x2="63.265" y2="72.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="INT_A/G">
 <contactref element="U1" pad="35"/>
 <contactref element="JP5" pad="3"/>
 <contactref element="U5" pad="11"/>
-<wire x1="66.665" y1="69.8" x2="60.96" y2="80.01" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="26.63" x2="66.665" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="64.125" y1="72.34" x2="60.96" y2="80.01" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="26.63" x2="64.125" y2="72.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DRDY_M">
 <contactref element="U1" pad="32"/>
 <contactref element="JP5" pad="5"/>
 <contactref element="U5" pad="9"/>
-<wire x1="67.525" y1="69.8" x2="66.04" y2="80.01" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="31.13" x2="67.525" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="64.985" y1="72.34" x2="66.04" y2="80.01" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="31.13" x2="64.985" y2="72.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="CS_M">
 <contactref element="U1" pad="27"/>
 <contactref element="JP5" pad="2"/>
 <contactref element="JP1" pad="6"/>
 <contactref element="U5" pad="8"/>
-<wire x1="67.955" y1="69.8" x2="85.09" y2="74.93" width="0" layer="19" extent="1-1"/>
-<wire x1="58.42" y1="80.01" x2="67.955" y2="69.8" width="0" layer="19" extent="1-1"/>
-<wire x1="58.56" y1="38.63" x2="67.955" y2="69.8" width="0" layer="19" extent="1-1"/>
+<wire x1="65.415" y1="72.34" x2="85.09" y2="74.93" width="0" layer="19" extent="1-1"/>
+<wire x1="58.42" y1="80.01" x2="65.415" y2="72.34" width="0" layer="19" extent="1-1"/>
+<wire x1="58.56" y1="38.63" x2="65.415" y2="72.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$23">
 <contactref element="R1" pad="2"/>
@@ -4055,8 +4055,8 @@ Covered vias can be set in Masks (Limit).
 <wire x1="50.8" y1="30.16" x2="48.7389" y2="35.81" width="0" layer="19" extent="1-1"/>
 <wire x1="43.18" y1="26.35" x2="50.8" y2="30.16" width="0" layer="19" extent="1-1"/>
 <wire x1="31.96" y1="19.05" x2="43.18" y2="26.35" width="0" layer="19" extent="1-1"/>
-<wire x1="22.54" y1="21.59" x2="31.96" y2="19.05" width="0" layer="19" extent="1-1"/>
-<wire x1="20.64" y1="33.02" x2="22.54" y2="21.59" width="0" layer="19" extent="1-1"/>
+<wire x1="22.54" y1="24.13" x2="31.96" y2="19.05" width="0" layer="19" extent="1-1"/>
+<wire x1="20.64" y1="33.02" x2="22.54" y2="24.13" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M1_M+">
 <contactref element="SV2" pad="1"/>
@@ -4149,7 +4149,7 @@ Covered vias can be set in Masks (Limit).
 <contactref element="C19" pad="1"/>
 <wire x1="22.86" y1="26.99" x2="50.3211" y2="35.31" width="0" layer="19" extent="1-1"/>
 <wire x1="20.32" y1="26.99" x2="22.86" y2="26.99" width="0" layer="19" extent="1-1"/>
-<wire x1="20.64" y1="21.59" x2="20.32" y2="26.99" width="0" layer="19" extent="1-1"/>
+<wire x1="20.64" y1="24.13" x2="20.32" y2="26.99" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$20">
 <contactref element="R12" pad="1"/>
@@ -4161,12 +4161,12 @@ Covered vias can be set in Masks (Limit).
 <signal name="N$27">
 <contactref element="U5" pad="24"/>
 <contactref element="C20" pad="1"/>
-<wire x1="68.385" y1="67.36" x2="72.71" y2="67.31" width="0" layer="19" extent="1-1"/>
+<wire x1="65.845" y1="69.9" x2="72.71" y2="67.31" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$1">
 <contactref element="U5" pad="21"/>
 <contactref element="C24" pad="1"/>
-<wire x1="67.095" y1="67.36" x2="72.71" y2="71.12" width="0" layer="19" extent="1-1"/>
+<wire x1="64.555" y1="69.9" x2="72.71" y2="71.12" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
