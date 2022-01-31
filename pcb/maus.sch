@@ -15368,7 +15368,7 @@ high and low levels both work
 <busses>
 </busses>
 <nets>
-<net name="D-" class="0">
+<net name="D_N" class="0">
 <segment>
 <wire x1="7.62" y1="132.08" x2="33.02" y2="132.08" width="0.1524" layer="91"/>
 <pinref part="D1" gate="G$1" pin="3"/>
@@ -15385,7 +15385,7 @@ high and low levels both work
 <label x="198.12" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="D+" class="0">
+<net name="D_P" class="0">
 <segment>
 <label x="66.04" y="129.54" size="1.778" layer="95" xref="yes"/>
 <pinref part="D1" gate="G$1" pin="4"/>
