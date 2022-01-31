@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -15026,14 +15026,6 @@ dual op-amp</description>
 <label x="83.82" y="35.56" size="1.778" layer="95" rot="R270" xref="yes"/>
 </segment>
 </net>
-<net name="H_EN" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO13"/>
-<label x="73.66" y="35.56" size="1.778" layer="95" rot="R270" xref="yes"/>
-<wire x1="86.36" y1="43.18" x2="73.66" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="73.66" y1="43.18" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="ESP32_M1_CH_A" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="IO16"/>
@@ -15303,11 +15295,6 @@ dual op-amp</description>
 </net>
 <net name="IO7" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="IO7"/>
-<wire x1="86.36" y1="58.42" x2="81.28" y2="58.42" width="0.1524" layer="91"/>
-<label x="81.28" y="58.42" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
 <pinref part="JP5" gate="A" pin="10"/>
 <wire x1="233.68" y1="38.1" x2="218.44" y2="38.1" width="0.1524" layer="91"/>
 <label x="218.44" y="38.1" size="1.778" layer="95" rot="R180" xref="yes"/>
@@ -15344,6 +15331,21 @@ dual op-amp</description>
 <pinref part="JP1" gate="A" pin="3"/>
 <wire x1="231.14" y1="91.44" x2="215.9" y2="91.44" width="0.1524" layer="91"/>
 <label x="215.9" y="91.44" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="H_EN_A" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="IO7"/>
+<wire x1="86.36" y1="58.42" x2="40.64" y2="58.42" width="0.1524" layer="91"/>
+<label x="40.64" y="58.42" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="H_EN_B" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="IO13"/>
+<label x="73.66" y="35.56" size="1.778" layer="95" rot="R270" xref="yes"/>
+<wire x1="86.36" y1="43.18" x2="73.66" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="43.18" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
@@ -15962,12 +15964,7 @@ high and low levels both work
 <busses>
 </busses>
 <nets>
-<net name="H_EN" class="0">
-<segment>
-<pinref part="CR1" gate="A" pin="ENABLEA"/>
-<wire x1="73.66" y1="25.4" x2="71.12" y2="25.4" width="0.1524" layer="91"/>
-<label x="71.12" y="25.4" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
+<net name="H_EN_B" class="0">
 <segment>
 <pinref part="CR1" gate="A" pin="ENABLEB"/>
 <wire x1="121.92" y1="27.94" x2="119.38" y2="27.94" width="0.1524" layer="91"/>
@@ -16232,6 +16229,13 @@ high and low levels both work
 <pinref part="C8" gate="G$1" pin="1"/>
 <wire x1="121.92" y1="22.86" x2="132.08" y2="22.86" width="0.1524" layer="91"/>
 <junction x="121.92" y="22.86"/>
+</segment>
+</net>
+<net name="H_EN_A" class="0">
+<segment>
+<pinref part="CR1" gate="A" pin="ENABLEA"/>
+<wire x1="73.66" y1="25.4" x2="71.12" y2="25.4" width="0.1524" layer="91"/>
+<label x="71.12" y="25.4" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 </nets>

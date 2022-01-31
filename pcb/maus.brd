@@ -3846,13 +3846,6 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U1" pad="18"/>
 <wire x1="60.6044" y1="46.355" x2="72.56" y2="39.38" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="H_EN">
-<contactref element="CR1" pad="8"/>
-<contactref element="CR1" pad="14"/>
-<contactref element="U1" pad="16"/>
-<wire x1="76.06" y1="38.63" x2="74.0156" y2="48.895" width="0" layer="19" extent="1-1"/>
-<wire x1="60.6044" y1="47.625" x2="74.0156" y2="48.895" width="0" layer="19" extent="1-1"/>
-</signal>
 <signal name="ESP32_M1_CH_A">
 <contactref element="SV2" pad="6"/>
 <contactref element="U1" pad="19"/>
@@ -4010,8 +4003,6 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="IO7">
 <contactref element="JP5" pad="10"/>
-<contactref element="U1" pad="10"/>
-<wire x1="76.06" y1="29.63" x2="78.74" y2="80.01" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="D_N">
 <contactref element="D1" pad="3"/>
@@ -4316,6 +4307,16 @@ Covered vias can be set in Masks (Limit).
 <wire x1="66.98" y1="71.335" x2="85.09" y2="64.77" width="0" layer="19" extent="1-1"/>
 <wire x1="63.5" y1="74.93" x2="66.24" y2="71.335" width="0" layer="19" extent="1-1"/>
 <wire x1="58.56" y1="35.63" x2="66.24" y2="71.335" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="H_EN_A">
+<contactref element="U1" pad="10"/>
+<contactref element="CR1" pad="8"/>
+<wire x1="76.06" y1="29.63" x2="60.6044" y2="47.625" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="H_EN_B">
+<contactref element="U1" pad="16"/>
+<contactref element="CR1" pad="14"/>
+<wire x1="76.06" y1="38.63" x2="74.0156" y2="48.895" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
