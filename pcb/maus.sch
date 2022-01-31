@@ -14463,6 +14463,8 @@ dual op-amp</description>
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
+<class number="1" name="power" width="0" drill="0">
+</class>
 </classes>
 <parts>
 <part name="U1" library="ESP32-S2-WROOM" deviceset="ESP32-S2-WROOM" device=""/>
@@ -14750,7 +14752,7 @@ dual op-amp</description>
 </bus>
 </busses>
 <nets>
-<net name="+3V3" class="0">
+<net name="+3V3" class="1">
 <segment>
 <pinref part="S3" gate="1" pin="P"/>
 <wire x1="45.72" y1="35.56" x2="40.64" y2="35.56" width="0.1524" layer="91"/>
@@ -14792,7 +14794,7 @@ dual op-amp</description>
 <pinref part="+3V16" gate="G$1" pin="+3V3"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="U1" gate="G$1" pin="GND"/>
 <wire x1="116.84" y1="33.02" x2="119.38" y2="33.02" width="0.1524" layer="91"/>
@@ -15403,7 +15405,7 @@ high and low levels both work
 <label x="198.12" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="USB_VBUS" class="0">
+<net name="USB_VBUS" class="1">
 <segment>
 <pinref part="D1" gate="G$1" pin="2"/>
 <wire x1="5.08" y1="134.62" x2="53.34" y2="134.62" width="0.1524" layer="91"/>
@@ -15415,7 +15417,7 @@ high and low levels both work
 <wire x1="5.08" y1="127" x2="5.08" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="C3" gate="G$1" pin="2"/>
 <wire x1="213.36" y1="48.26" x2="213.36" y2="25.4" width="0.1524" layer="91"/>
@@ -15557,7 +15559,7 @@ high and low levels both work
 <pinref part="Q4" gate="G$1" pin="D"/>
 </segment>
 </net>
-<net name="+3V3" class="0">
+<net name="+3V3" class="1">
 <segment>
 <wire x1="304.8" y1="129.54" x2="292.1" y2="129.54" width="0.1524" layer="91"/>
 <pinref part="+3V1" gate="G$1" pin="+3V3"/>
@@ -15690,7 +15692,7 @@ high and low levels both work
 <pinref part="Q6" gate="G$1" pin="D"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <wire x1="137.16" y1="114.3" x2="152.4" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="152.4" y1="114.3" x2="165.1" y2="114.3" width="0.1524" layer="91"/>
@@ -15763,7 +15765,7 @@ high and low levels both work
 <label x="101.6" y="40.64" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="+5V" class="0">
+<net name="+5V" class="1">
 <segment>
 <pinref part="P+1" gate="1" pin="+5V"/>
 <pinref part="R25" gate="G$1" pin="2"/>
@@ -15886,7 +15888,7 @@ high and low levels both work
 <label x="139.7" y="25.4" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="GND31" gate="1" pin="GND"/>
 <pinref part="C8" gate="G$1" pin="2"/>
@@ -15936,7 +15938,7 @@ high and low levels both work
 <pinref part="GND30" gate="1" pin="GND"/>
 </segment>
 </net>
-<net name="VBAT" class="0">
+<net name="VBAT" class="1">
 <segment>
 <pinref part="CR1" gate="A" pin="VS"/>
 <wire x1="73.66" y1="30.48" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
@@ -15947,7 +15949,7 @@ high and low levels both work
 <wire x1="53.34" y1="30.48" x2="22.86" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="+3V3" class="0">
+<net name="+3V3" class="1">
 <segment>
 <pinref part="SV2" gate="1" pin="4"/>
 <wire x1="55.88" y1="86.36" x2="68.58" y2="86.36" width="0.1524" layer="91"/>
@@ -16039,7 +16041,7 @@ high and low levels both work
 <label x="121.92" y="35.56" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="+5V" class="0">
+<net name="+5V" class="1">
 <segment>
 <pinref part="CR1" gate="A" pin="VSS"/>
 <wire x1="119.38" y1="22.86" x2="121.92" y2="22.86" width="0.1524" layer="91"/>
@@ -16288,7 +16290,7 @@ auflösung</text>
 <busses>
 </busses>
 <nets>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="GND2" gate="1" pin="GND"/>
 <pinref part="U4" gate="A" pin="GND"/>
@@ -16396,7 +16398,7 @@ auflösung</text>
 <junction x="73.66" y="144.78"/>
 </segment>
 </net>
-<net name="+5V" class="0">
+<net name="+5V" class="1">
 <segment>
 <pinref part="P+3" gate="1" pin="+5V"/>
 <wire x1="101.6" y1="93.98" x2="111.76" y2="93.98" width="0.1524" layer="91"/>
@@ -16455,14 +16457,14 @@ auflösung</text>
 <label x="190.5" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="USB_VBUS" class="0">
+<net name="USB_VBUS" class="1">
 <segment>
 <wire x1="91.44" y1="93.98" x2="66.04" y2="93.98" width="0.1524" layer="91"/>
 <label x="66.04" y="93.98" size="1.778" layer="95"/>
 <pinref part="Q7" gate="G$1" pin="D"/>
 </segment>
 </net>
-<net name="+3V3" class="0">
+<net name="+3V3" class="1">
 <segment>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
 <wire x1="60.96" y1="119.38" x2="60.96" y2="116.84" width="0.1524" layer="91"/>
@@ -16499,7 +16501,7 @@ auflösung</text>
 <pinref part="U6" gate="A" pin="IN+"/>
 </segment>
 </net>
-<net name="VBAT" class="0">
+<net name="VBAT" class="1">
 <segment>
 <pinref part="R5" gate="G$1" pin="2"/>
 <wire x1="53.34" y1="137.16" x2="53.34" y2="139.7" width="0.1524" layer="91"/>
@@ -16777,7 +16779,7 @@ auflösung</text>
 <label x="152.4" y="38.1" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="+3V3" class="0">
+<net name="+3V3" class="1">
 <segment>
 <pinref part="U5" gate="G$1" pin="VDD"/>
 <wire x1="195.58" y1="53.34" x2="228.6" y2="53.34" width="0.1524" layer="91"/>
@@ -16814,7 +16816,7 @@ auflösung</text>
 <pinref part="C20" gate="G$1" pin="1"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="U5" gate="G$1" pin="GND"/>
 <wire x1="195.58" y1="10.16" x2="218.44" y2="10.16" width="0.1524" layer="91"/>
