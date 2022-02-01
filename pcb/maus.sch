@@ -12906,13 +12906,6 @@ dual op-amp</description>
 <label x="228.6" y="40.64" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="IO7" class="0">
-<segment>
-<pinref part="JP5" gate="A" pin="10"/>
-<wire x1="233.68" y1="38.1" x2="218.44" y2="38.1" width="0.1524" layer="91"/>
-<label x="218.44" y="38.1" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
 <net name="MOSI" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="IO35"/>
@@ -13490,9 +13483,9 @@ high and low levels both work
 <attribute name="NAME" x="123.444" y="20.701" size="1.778" layer="95"/>
 <attribute name="VALUE" x="123.444" y="15.621" size="1.778" layer="96"/>
 </instance>
-<instance part="C9" gate="G$1" x="53.34" y="35.56" smashed="yes" rot="R180">
-<attribute name="NAME" x="59.436" y="37.719" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="61.976" y="35.179" size="1.778" layer="96" rot="R180"/>
+<instance part="C9" gate="G$1" x="53.34" y="40.64" smashed="yes" rot="R180">
+<attribute name="NAME" x="59.436" y="42.799" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="61.976" y="40.259" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND31" gate="1" x="121.92" y="10.16" smashed="yes">
 <attribute name="VALUE" x="119.38" y="7.62" size="1.778" layer="96"/>
@@ -13565,9 +13558,9 @@ high and low levels both work
 <attribute name="NAME" x="191.77" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
 <attribute name="VALUE" x="189.23" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
-<instance part="D18" gate="G$1" x="195.58" y="45.72" smashed="yes" rot="R270">
-<attribute name="NAME" x="204.47" y="33.02" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="201.93" y="33.02" size="1.778" layer="96" rot="R270" align="center-left"/>
+<instance part="D18" gate="G$1" x="195.58" y="48.26" smashed="yes" rot="R270">
+<attribute name="NAME" x="204.47" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="201.93" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D19" gate="G$1" x="182.88" y="48.26" smashed="yes" rot="R270">
 <attribute name="NAME" x="191.77" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
@@ -13594,8 +13587,8 @@ high and low levels both work
 <net name="ESP32_M1_2" class="0">
 <segment>
 <pinref part="CR1" gate="A" pin="INPUT2"/>
-<label x="53.34" y="22.86" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="53.34" y1="22.86" x2="73.66" y2="22.86" width="0.1524" layer="91"/>
+<label x="50.8" y="22.86" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="50.8" y1="22.86" x2="73.66" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ESP32_M2_2" class="0">
@@ -13646,15 +13639,18 @@ high and low levels both work
 <segment>
 <pinref part="CR1" gate="A" pin="SENSEA"/>
 <wire x1="73.66" y1="40.64" x2="71.12" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="40.64" x2="53.34" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="71.12" y1="43.18" x2="71.12" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="71.12" y1="45.72" x2="53.34" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="CR1" gate="A" pin="GND_2"/>
 <wire x1="73.66" y1="43.18" x2="71.12" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="71.12" y1="40.64" x2="71.12" y2="43.18" width="0.1524" layer="91"/>
 <junction x="71.12" y="40.64"/>
 <pinref part="C9" gate="G$1" pin="2"/>
-<junction x="53.34" y="40.64"/>
+<junction x="53.34" y="45.72"/>
 <pinref part="GND34" gate="1" pin="GND"/>
-<wire x1="53.34" y1="40.64" x2="35.56" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="45.72" x2="35.56" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="45.72" x2="35.56" y2="40.64" width="0.1524" layer="91"/>
+<junction x="71.12" y="43.18"/>
 </segment>
 <segment>
 <pinref part="CR1" gate="A" pin="GND_3"/>
@@ -13673,13 +13669,17 @@ high and low levels both work
 <pinref part="GND40" gate="1" pin="GND"/>
 <pinref part="D19" gate="G$1" pin="A"/>
 </segment>
+<segment>
+<pinref part="D18" gate="G$1" pin="A"/>
+<pinref part="GND44" gate="1" pin="GND"/>
+</segment>
 </net>
 <net name="VBAT" class="1">
 <segment>
 <wire x1="53.34" y1="17.78" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="C9" gate="G$1" pin="1"/>
 <label x="-10.16" y="17.78" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="53.34" y1="30.48" x2="53.34" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="30.48" x2="53.34" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="17.78" x2="-5.08" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="17.78" x2="-10.16" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="17.78" x2="-5.08" y2="66.04" width="0.1524" layer="91"/>
@@ -13807,6 +13807,7 @@ high and low levels both work
 <wire x1="195.58" y1="45.72" x2="193.04" y2="45.72" width="0.1524" layer="91"/>
 <label x="187.96" y="43.18" size="1.778" layer="95"/>
 <pinref part="D16" gate="G$1" pin="A"/>
+<pinref part="D18" gate="G$1" pin="K"/>
 </segment>
 </net>
 <net name="M2_M-" class="0">
@@ -14539,10 +14540,6 @@ auflösung</text>
 </nets>
 </sheet>
 </sheets>
-<errors>
-<approved hash="206,6,195.58,38.1,SDO,,,,,"/>
-<approved hash="206,6,195.58,27.94,SDO,,,,,"/>
-</errors>
 </schematic>
 </drawing>
 <compatibility>
