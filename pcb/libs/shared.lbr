@@ -1837,6 +1837,51 @@
   <wire x2="0.1" x1="0.1" y1="-1.8" layer="21" y2="-1.8" width="0.2"/>
   <wire x2="-0.100" curve="180.0" x1="0.100" y1="-1.800" layer="21" y2="-1.800" width="0.2"/>
  </package>
+ <package name="WE-PD_1260/1245/1280/121054">
+  <description>&lt;b>WE-PD_1260/1245/1280/121054&lt;/b>&lt;br>&#xd;
+</description>
+  <smd dx="5.4" x="-4.95" y="0" name="1" rot="R90" layer="1" dy="2.9"/>
+  <smd dx="5.4" x="4.95" y="0" name="2" rot="R90" layer="1" dy="2.9"/>
+  <text x="-6.31" y="-8.12" align="center" rot="R0" layer="25" size="1.27">>NAME</text>
+  <text x="-5.81" y="7.35" align="center" rot="R0" layer="27" size="1.27">>VALUE</text>
+  <wire x2="-4.95" x1="4.95" y1="0" layer="51" y2="0" width="0.3048"/>
+  <wire x2="6" x1="-6" y1="-6" layer="21" y2="-6" width="0.127"/>
+  <wire x2="6" x1="6" y1="-6" layer="51" y2="6" width="0.127"/>
+  <wire x2="-6" x1="6" y1="6" layer="21" y2="6" width="0.127"/>
+  <wire x2="-6" x1="-6" y1="6" layer="51" y2="-6" width="0.127"/>
+  <wire x2="-7" x1="-7" y1="6.5" layer="51" y2="-6.5" width="0.127"/>
+  <wire x2="7" x1="-7" y1="-6.5" layer="51" y2="-6.5" width="0.127"/>
+  <wire x2="7" x1="7" y1="-6.5" layer="51" y2="6.5" width="0.127"/>
+  <wire x2="-7" x1="7" y1="6.5" layer="51" y2="6.5" width="0.127"/>
+ </package>
+ <package name="SOIC127P600X175-8N">
+  <description>&lt;b>SOP-8L&lt;/b>&lt;br>&#xd;
+</description>
+  <smd dx="1.5" x="-2.7" y="1.905" name="1" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="-2.7" y="0.635" name="2" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="-2.7" y="-0.635" name="3" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="-2.7" y="-1.905" name="4" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="2.7" y="-1.905" name="5" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="2.7" y="-0.635" name="6" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="2.7" y="0.635" name="7" rot="R0" layer="1" dy="0.65"/>
+  <smd dx="1.5" x="2.7" y="1.905" name="8" rot="R0" layer="1" dy="0.65"/>
+  <text x="0" y="0" align="center" rot="R0" layer="25" size="1.27">>NAME</text>
+  <text x="0" y="0" align="center" rot="R0" layer="27" size="1.27">>VALUE</text>
+  <wire x2="3.7" x1="-3.7" y1="2.725" layer="51" y2="2.725" width="0.05"/>
+  <wire x2="3.7" x1="3.7" y1="2.725" layer="51" y2="-2.725" width="0.05"/>
+  <wire x2="-3.7" x1="3.7" y1="-2.725" layer="51" y2="-2.725" width="0.05"/>
+  <wire x2="-3.7" x1="-3.7" y1="-2.725" layer="51" y2="2.725" width="0.05"/>
+  <wire x2="1.95" x1="-1.95" y1="2.45" layer="51" y2="2.45" width="0.1"/>
+  <wire x2="1.95" x1="1.95" y1="2.45" layer="51" y2="-2.45" width="0.1"/>
+  <wire x2="-1.95" x1="1.95" y1="-2.45" layer="51" y2="-2.45" width="0.1"/>
+  <wire x2="-1.95" x1="-1.95" y1="-2.45" layer="51" y2="2.45" width="0.1"/>
+  <wire x2="-0.68" x1="-1.95" y1="1.18" layer="51" y2="2.45" width="0.1"/>
+  <wire x2="1.6" x1="-1.6" y1="2.45" layer="21" y2="2.45" width="0.2"/>
+  <wire x2="1.6" x1="1.6" y1="2.45" layer="21" y2="-2.45" width="0.2"/>
+  <wire x2="-1.6" x1="1.6" y1="-2.45" layer="21" y2="-2.45" width="0.2"/>
+  <wire x2="-1.6" x1="-1.6" y1="-2.45" layer="21" y2="2.45" width="0.2"/>
+  <wire x2="-1.95" x1="-3.45" y1="2.58" layer="21" y2="2.58" width="0.2"/>
+ </package>
 </packages>
 <symbols>
  <symbol name="L298P">
@@ -1947,6 +1992,32 @@
    <vertex x="12.7" y="2.54"/>
    <vertex x="12.7" y="-2.54"/>
   </polygon>
+ </symbol>
+ <symbol name="744770147">
+  <wire x2="7.62" curve="-175.4" x1="5.08" y1="0" layer="94" y2="0" width="0.254"/>
+  <wire x2="10.16" curve="-175.4" x1="7.62" y1="0" layer="94" y2="0" width="0.254"/>
+  <wire x2="12.7" curve="-175.4" x1="10.16" y1="0" layer="94" y2="0" width="0.254"/>
+  <wire x2="15.24" curve="-175.4" x1="12.7" y1="0" layer="94" y2="0" width="0.254"/>
+  <text x="16.51" y="6.35" align="center-left" layer="95" size="1.778">>NAME</text>
+  <text x="16.51" y="3.81" align="center-left" layer="96" size="1.778">>VALUE</text>
+  <pin x="0" y="0" name="1" direction="io" rot="R0" visible="pad" length="middle"/>
+  <pin x="20.32" y="0" name="2" direction="io" rot="R180" visible="pad" length="middle"/>
+ </symbol>
+ <symbol name="AP1509-50SG-13">
+  <wire x2="27.94" x1="5.08" y1="2.54" layer="94" y2="2.54" width="0.254"/>
+  <wire x2="27.94" x1="27.94" y1="-10.16" layer="94" y2="2.54" width="0.254"/>
+  <wire x2="5.08" x1="27.94" y1="-10.16" layer="94" y2="-10.16" width="0.254"/>
+  <wire x2="5.08" x1="5.08" y1="2.54" layer="94" y2="-10.16" width="0.254"/>
+  <text x="29.21" y="7.62" align="center-left" layer="95" size="1.778">>NAME</text>
+  <text x="29.21" y="5.08" align="center-left" layer="96" size="1.778">>VALUE</text>
+  <pin x="0" y="0" name="VIN" direction="io" rot="R0" length="middle"/>
+  <pin x="0" y="-2.54" name="OUTPUT" direction="io" rot="R0" length="middle"/>
+  <pin x="0" y="-5.08" name="FB" direction="io" rot="R0" length="middle"/>
+  <pin x="0" y="-7.62" name="SD" direction="io" rot="R0" length="middle"/>
+  <pin x="33.02" y="0" name="GND_4" direction="io" rot="R180" length="middle"/>
+  <pin x="33.02" y="-2.54" name="GND_3" direction="io" rot="R180" length="middle"/>
+  <pin x="33.02" y="-5.08" name="GND_2" direction="io" rot="R180" length="middle"/>
+  <pin x="33.02" y="-7.62" name="GND_1" direction="io" rot="R180" length="middle"/>
  </symbol>
 </symbols>
 <devicesets>
@@ -2162,6 +2233,66 @@ Source: &lt;a href="https://fscdn.rohm.com/en/products/databook/datasheet/discre
       <attribute name="Arrow_Price-Stock" value="" constant="no"/>
       <attribute name="Description" value="Low V&lt;sub>F&lt;/sub>, 40V, 2A, Schottky Barrier Diode for Automoive" constant="no"/>
       <attribute name="Height" value="0.95mm" constant="no"/>
+     </technology>
+    </technologies>
+   </device>
+  </devices>
+ </deviceset>
+ <deviceset name="744770147" prefix="L">
+  <description>&lt;b>SMD-Shielded Power Inductors WE-PD&lt;/b>&lt;p>&#xd;
+Source: &lt;a href=""> Datasheet &lt;/a></description>
+  <gates>
+   <gate x="0" y="0" name="G$1" symbol="744770147"/>
+  </gates>
+  <devices>
+   <device name="" package="WE-PD_1260/1245/1280/121054">
+    <connects>
+     <connect pad="1" pin="1" gate="G$1"/>
+     <connect pad="2" pin="2" gate="G$1"/>
+    </connects>
+    <technologies>
+     <technology name="">
+      <attribute name="Manufacturer_Name" value="Wurth Elektronik" constant="no"/>
+      <attribute name="Manufacturer_Part_Number" value="744770147" constant="no"/>
+      <attribute name="Mouser_Part_Number" value="710-744770147" constant="no"/>
+      <attribute name="Mouser_Price-Stock" value="https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/744770147?qs=E%2F%2FhvbtCqpOiGvqyq%252BELzg%3D%3D" constant="no"/>
+      <attribute name="Arrow_Part_Number" value="" constant="no"/>
+      <attribute name="Arrow_Price-Stock" value="" constant="no"/>
+      <attribute name="Description" value="SMD-Shielded Power Inductors WE-PD" constant="no"/>
+      <attribute name="Height" value="mm" constant="no"/>
+     </technology>
+    </technologies>
+   </device>
+  </devices>
+ </deviceset>
+ <deviceset name="AP1509-50SG-13" prefix="IC">
+  <description>&lt;b>DiodesZetex, AP1509-50SG-13 DC-DC Converter 2A 8-Pin, SOP&lt;/b>&lt;p>&#xd;
+Source: &lt;a href="https://www.diodes.com/assets/Datasheets/AP1509.pdf"> Datasheet &lt;/a></description>
+  <gates>
+   <gate x="0" y="0" name="G$1" symbol="AP1509-50SG-13"/>
+  </gates>
+  <devices>
+   <device name="" package="SOIC127P600X175-8N">
+    <connects>
+     <connect pad="1" pin="VIN" gate="G$1"/>
+     <connect pad="2" pin="OUTPUT" gate="G$1"/>
+     <connect pad="3" pin="FB" gate="G$1"/>
+     <connect pad="4" pin="SD" gate="G$1"/>
+     <connect pad="5" pin="GND_1" gate="G$1"/>
+     <connect pad="6" pin="GND_2" gate="G$1"/>
+     <connect pad="7" pin="GND_3" gate="G$1"/>
+     <connect pad="8" pin="GND_4" gate="G$1"/>
+    </connects>
+    <technologies>
+     <technology name="">
+      <attribute name="Manufacturer_Name" value="Diodes Inc." constant="no"/>
+      <attribute name="Manufacturer_Part_Number" value="AP1509-50SG-13" constant="no"/>
+      <attribute name="Mouser_Part_Number" value="621-AP1509-50SG-13" constant="no"/>
+      <attribute name="Mouser_Price-Stock" value="https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/AP1509-50SG-13?qs=EJYhozv%252BYpwbI10CpTvwPw%3D%3D" constant="no"/>
+      <attribute name="Arrow_Part_Number" value="AP1509-50SG-13" constant="no"/>
+      <attribute name="Arrow_Price-Stock" value="https://www.arrow.com/en/products/ap1509-50sg-13/diodes-incorporated?region=nac" constant="no"/>
+      <attribute name="Description" value="DiodesZetex, AP1509-50SG-13 DC-DC Converter 2A 8-Pin, SOP" constant="no"/>
+      <attribute name="Height" value="1.75mm" constant="no"/>
      </technology>
     </technologies>
    </device>
