@@ -12150,6 +12150,7 @@ dual op-amp</description>
 <class number="0" name="default" width="0.254" drill="0">
 </class>
 <class number="1" name="power" width="1.016" drill="0">
+<clearance class="1" value="0.254"/>
 </class>
 </classes>
 <parts>
