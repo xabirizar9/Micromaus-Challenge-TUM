@@ -554,6 +554,16 @@
   <text y="-11.049" rot="SR0" size="0.635" x="-10.7442" ratio="4" layer="47">0.043in/1.092mm</text>
   <text y="-0.635" rot="SR0" size="1.27" x="-3.2766" ratio="6" layer="27">>Name</text>
  </package>
+ <package name="MOTOR_HALTERUNG">
+ <rectangle x1="0" y1="0" x2="50" y2="10" layer="21"/>
+ <hole x="5" y="5" drill="2.4"/>
+ <hole x="45" y="5" drill="2.4"/>
+ </package>
+ <package name="SENSOR_HALTERUNG">
+ <rectangle x1="0" y1="0" x2="27" y2="12" layer="21"/>
+ <hole x="4" y="4" drill="2.4"/>
+ <hole x="23" y="4" drill="2.4"/>
+ </package>
  <package name="POWERSO-20_STM-L">
   <smd y="5.715" x="-6.6548" dx="1.4986" name="1" dy="0.5334" layer="1"/>
   <smd y="4.445" x="-6.6548" dx="1.4986" name="2" dy="0.5334" layer="1"/>
