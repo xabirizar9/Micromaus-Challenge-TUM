@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.7.0">
+<eagle version="9.6.2">
 <drawing>
  <settings>
   <setting alwaysvectorfont="no"/>
@@ -1899,18 +1899,6 @@
   <pin direction="io" length="middle" y="0" rot="R180" x="22.86" name="4"/>
   <pin direction="io" length="middle" y="-2.54" rot="R180" x="22.86" name="MH1"/>
   <pin direction="io" length="middle" y="-5.08" rot="R180" x="22.86" name="MH2"/>
- </symbol>
- <symbol name="VS-MBRS360-M3_9AT">
-  <wire y2="-2.54" x1="5.08" y1="2.54" width="0.254" x2="5.08" layer="94"/>
-  <text y="5.08" size="1.778" x="11.43" align="center-left" layer="95">>NAME</text>
-  <text y="2.54" size="1.778" x="11.43" align="center-left" layer="96">>VALUE</text>
-  <pin direction="io" length="middle" y="0" visible="pad" rot="R0" x="0" name="K"/>
-  <pin direction="io" length="middle" y="0" visible="pad" rot="R180" x="15.24" name="A"/>
-  <polygon width="0.254" layer="94">
-   <vertex y="0" x="5.08"/>
-   <vertex y="2.54" x="10.16"/>
-   <vertex y="-2.54" x="10.16"/>
-  </polygon>
  </symbol>
 </symbols>
 <devicesets>
