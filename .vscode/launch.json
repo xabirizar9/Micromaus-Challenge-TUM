@@ -29,6 +29,16 @@
             "projectEnvName": "esp32-s2-maus",
             "toolchainBinDir": "/Users/wlad/.platformio/packages/toolchain-xtensa-esp32s2/bin",
             "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "/Users/wlad/Desktop/micromaus-best/.pio/build/esp32-s2-maus/firmware.elf",
+            "projectEnvName": "esp32-s2-maus",
+            "toolchainBinDir": "/Users/wlad/.platformio/packages/toolchain-xtensa-esp32s2/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "loadMode": "manual"
         }
     ]
 }
