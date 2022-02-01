@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -12330,24 +12330,25 @@ Source: www.bourns.com .. 6000_series.pdf</description>
 <wire x1="-4.77" y1="1.51" x2="7.25" y2="1.51" width="0.1" layer="21"/>
 <wire x1="7.25" y1="1.51" x2="7.27" y2="-1.99" width="0.1" layer="21"/>
 </package>
-<package name="DIOM7959X262N">
-<description>&lt;b&gt;SMC&lt;/b&gt;&lt;br&gt;
+<package name="RB068VWM100">
+<description>&lt;b&gt;PMDE_2022&lt;/b&gt;&lt;br&gt;
 </description>
-<smd name="1" x="-3.5" y="0" dx="3.05" dy="2.2" layer="1" rot="R90"/>
-<smd name="2" x="3.5" y="0" dx="3.05" dy="2.2" layer="1" rot="R90"/>
+<smd name="1" x="0" y="-0.65" dx="1.45" dy="1.1" layer="1" rot="R90"/>
+<smd name="2" x="0" y="0.975" dx="0.8" dy="0.8" layer="1" rot="R90"/>
 <text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
 <text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
-<wire x1="-4.85" y1="3.36" x2="4.85" y2="3.36" width="0.05" layer="51"/>
-<wire x1="4.85" y1="3.36" x2="4.85" y2="-3.36" width="0.05" layer="51"/>
-<wire x1="4.85" y1="-3.36" x2="-4.85" y2="-3.36" width="0.05" layer="51"/>
-<wire x1="-4.85" y1="-3.36" x2="-4.85" y2="3.36" width="0.05" layer="51"/>
-<wire x1="-3.97" y1="2.952" x2="3.97" y2="2.952" width="0.1" layer="51"/>
-<wire x1="3.97" y1="2.952" x2="3.97" y2="-2.952" width="0.1" layer="51"/>
-<wire x1="3.97" y1="-2.952" x2="-3.97" y2="-2.952" width="0.1" layer="51"/>
-<wire x1="-3.97" y1="-2.952" x2="-3.97" y2="2.952" width="0.1" layer="51"/>
-<wire x1="-3.97" y1="1.852" x2="-2.87" y2="2.952" width="0.1" layer="51"/>
-<wire x1="3.97" y1="2.952" x2="-4.6" y2="2.952" width="0.2" layer="21"/>
-<wire x1="-3.97" y1="-2.952" x2="3.97" y2="-2.952" width="0.2" layer="21"/>
+<wire x1="-0.65" y1="1.1" x2="0.65" y2="1.1" width="0.1" layer="51"/>
+<wire x1="0.65" y1="1.1" x2="0.65" y2="-1.1" width="0.1" layer="51"/>
+<wire x1="0.65" y1="-1.1" x2="-0.65" y2="-1.1" width="0.1" layer="51"/>
+<wire x1="-0.65" y1="-1.1" x2="-0.65" y2="1.1" width="0.1" layer="51"/>
+<wire x1="-1.65" y1="2.375" x2="1.65" y2="2.375" width="0.1" layer="51"/>
+<wire x1="1.65" y1="2.375" x2="1.65" y2="-2.375" width="0.1" layer="51"/>
+<wire x1="1.65" y1="-2.375" x2="-1.65" y2="-2.375" width="0.1" layer="51"/>
+<wire x1="-1.65" y1="-2.375" x2="-1.65" y2="2.375" width="0.1" layer="51"/>
+<wire x1="-0.1" y1="-1.8" x2="-0.1" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="-0.1" y1="-1.8" x2="0.1" y2="-1.8" width="0.2" layer="21" curve="180"/>
+<wire x1="0.1" y1="-1.8" x2="0.1" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="0.1" y1="-1.8" x2="-0.1" y2="-1.8" width="0.2" layer="21" curve="180"/>
 </package>
 </packages>
 <symbols>
@@ -12393,16 +12394,22 @@ Source: www.bourns.com .. 6000_series.pdf</description>
 <pin name="MH1" x="22.86" y="-2.54" length="middle" rot="R180"/>
 <pin name="MH2" x="22.86" y="-5.08" length="middle" rot="R180"/>
 </symbol>
-<symbol name="VS-MBRS360-M3_9AT">
-<wire x1="5.08" y1="2.54" x2="5.08" y2="-2.54" width="0.254" layer="94"/>
-<text x="11.43" y="5.08" size="1.778" layer="95" align="center-left">&gt;NAME</text>
-<text x="11.43" y="2.54" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
-<pin name="K" x="0" y="0" visible="pad" length="middle"/>
-<pin name="A" x="15.24" y="0" visible="pad" length="middle" rot="R180"/>
+<symbol name="RBR2VWM40ATF">
+<wire x1="7.62" y1="2.54" x2="7.62" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="8.636" y2="2.54" width="0.254" layer="94"/>
+<wire x1="8.636" y1="1.524" x2="8.636" y2="2.54" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-2.54" x2="6.604" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="6.604" y1="-1.524" x2="6.604" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="5.08" y1="0" x2="7.62" y2="0" width="0.254" layer="94"/>
+<wire x1="12.7" y1="0" x2="15.24" y2="0" width="0.254" layer="94"/>
+<text x="12.7" y="8.89" size="1.778" layer="95" align="center-left">&gt;NAME</text>
+<text x="12.7" y="6.35" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
+<pin name="K" x="2.54" y="0" visible="pad" length="short"/>
+<pin name="A" x="17.78" y="0" visible="pad" length="short" rot="R180"/>
 <polygon width="0.254" layer="94">
-<vertex x="5.08" y="0"/>
-<vertex x="10.16" y="2.54"/>
-<vertex x="10.16" y="-2.54"/>
+<vertex x="7.62" y="0"/>
+<vertex x="12.7" y="2.54"/>
+<vertex x="12.7" y="-2.54"/>
 </polygon>
 </symbol>
 </symbols>
@@ -12538,28 +12545,28 @@ Source: &lt;a href="https://belfuse.com/resources/datasheets/stewartconnector/ds
 </device>
 </devices>
 </deviceset>
-<deviceset name="VS-MBRS360-M3_9AT" prefix="D">
-<description>&lt;b&gt;Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier&lt;/b&gt;&lt;p&gt;
-Source: &lt;a href="https://datasheet.datasheetarchive.com/originals/distributors/DKDS-23/459231.pdf"&gt; Datasheet &lt;/a&gt;</description>
+<deviceset name="RBR2VWM40ATF" prefix="D">
+<description>&lt;b&gt;Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive&lt;/b&gt;&lt;p&gt;
+Source: &lt;a href="https://fscdn.rohm.com/en/products/databook/datasheet/discrete/diode/schottky_barrier/rbr2vwm40atftr-e.pdf"&gt; Datasheet &lt;/a&gt;</description>
 <gates>
-<gate name="G$1" symbol="VS-MBRS360-M3_9AT" x="0" y="0"/>
+<gate name="G$1" symbol="RBR2VWM40ATF" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="DIOM7959X262N">
+<device name="" package="RB068VWM100">
 <connects>
 <connect gate="G$1" pin="A" pad="2"/>
 <connect gate="G$1" pin="K" pad="1"/>
 </connects>
 <technologies>
 <technology name="">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" constant="no"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" constant="no"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" constant="no"/>
-<attribute name="HEIGHT" value="2.62mm" constant="no"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" constant="no"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" constant="no"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" constant="no"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" constant="no"/>
+<attribute name="ARROW_PART_NUMBER" value="" constant="no"/>
+<attribute name="ARROW_PRICE-STOCK" value="" constant="no"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" constant="no"/>
+<attribute name="HEIGHT" value="0.95mm" constant="no"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" constant="no"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" constant="no"/>
+<attribute name="MOUSER_PART_NUMBER" value="" constant="no"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -14671,18 +14678,18 @@ dual op-amp</description>
 <part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="+3V15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="D10" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
-<part name="D11" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
 <part name="GND27" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND39" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="D8" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
-<part name="D9" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
-<part name="D12" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
-<part name="D13" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
 <part name="GND40" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND44" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="D14" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
-<part name="D15" library="shared" deviceset="VS-MBRS360-M3_9AT" device=""/>
+<part name="D8" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D9" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D10" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D11" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D16" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D17" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D18" library="shared" deviceset="RBR2VWM40ATF" device=""/>
+<part name="D19" library="shared" deviceset="RBR2VWM40ATF" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15916,35 +15923,11 @@ high and low levels both work
 <instance part="GND30" gate="1" x="73.66" y="12.7" smashed="yes">
 <attribute name="VALUE" x="71.12" y="10.16" size="1.778" layer="96"/>
 </instance>
-<instance part="D10" gate="G$1" x="7.62" y="45.72" smashed="yes" rot="R270">
-<attribute name="NAME" x="12.7" y="34.29" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="10.16" y="34.29" size="1.778" layer="96" rot="R270" align="center-left"/>
-</instance>
-<instance part="D11" gate="G$1" x="20.32" y="45.72" smashed="yes" rot="R270">
-<attribute name="NAME" x="25.4" y="34.29" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="22.86" y="34.29" size="1.778" layer="96" rot="R270" align="center-left"/>
-</instance>
 <instance part="GND27" gate="1" x="20.32" y="27.94" smashed="yes">
 <attribute name="VALUE" x="17.78" y="25.4" size="1.778" layer="96"/>
 </instance>
 <instance part="GND39" gate="1" x="7.62" y="27.94" smashed="yes">
 <attribute name="VALUE" x="5.08" y="25.4" size="1.778" layer="96"/>
-</instance>
-<instance part="D8" gate="G$1" x="20.32" y="66.04" smashed="yes" rot="R270">
-<attribute name="NAME" x="25.4" y="54.61" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="22.86" y="54.61" size="1.778" layer="96" rot="R270" align="center-left"/>
-</instance>
-<instance part="D9" gate="G$1" x="7.62" y="66.04" smashed="yes" rot="R270">
-<attribute name="NAME" x="12.7" y="54.61" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="10.16" y="54.61" size="1.778" layer="96" rot="R270" align="center-left"/>
-</instance>
-<instance part="D12" gate="G$1" x="195.58" y="45.72" smashed="yes" rot="MR270">
-<attribute name="NAME" x="190.5" y="34.29" size="1.778" layer="95" rot="MR270" align="center-left"/>
-<attribute name="VALUE" x="193.04" y="34.29" size="1.778" layer="96" rot="MR270" align="center-left"/>
-</instance>
-<instance part="D13" gate="G$1" x="182.88" y="45.72" smashed="yes" rot="MR270">
-<attribute name="NAME" x="177.8" y="34.29" size="1.778" layer="95" rot="MR270" align="center-left"/>
-<attribute name="VALUE" x="180.34" y="34.29" size="1.778" layer="96" rot="MR270" align="center-left"/>
 </instance>
 <instance part="GND40" gate="1" x="182.88" y="27.94" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="185.42" y="25.4" size="1.778" layer="96" rot="MR0"/>
@@ -15952,13 +15935,37 @@ high and low levels both work
 <instance part="GND44" gate="1" x="195.58" y="27.94" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="198.12" y="25.4" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="D14" gate="G$1" x="182.88" y="66.04" smashed="yes" rot="MR270">
-<attribute name="NAME" x="177.8" y="54.61" size="1.778" layer="95" rot="MR270" align="center-left"/>
-<attribute name="VALUE" x="180.34" y="54.61" size="1.778" layer="96" rot="MR270" align="center-left"/>
+<instance part="D8" gate="G$1" x="7.62" y="68.58" smashed="yes" rot="R270">
+<attribute name="NAME" x="16.51" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="13.97" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
-<instance part="D15" gate="G$1" x="195.58" y="66.04" smashed="yes" rot="MR270">
-<attribute name="NAME" x="190.5" y="54.61" size="1.778" layer="95" rot="MR270" align="center-left"/>
-<attribute name="VALUE" x="193.04" y="54.61" size="1.778" layer="96" rot="MR270" align="center-left"/>
+<instance part="D9" gate="G$1" x="20.32" y="68.58" smashed="yes" rot="R270">
+<attribute name="NAME" x="29.21" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="26.67" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D10" gate="G$1" x="7.62" y="48.26" smashed="yes" rot="R270">
+<attribute name="NAME" x="16.51" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="13.97" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D11" gate="G$1" x="20.32" y="48.26" smashed="yes" rot="R270">
+<attribute name="NAME" x="29.21" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="26.67" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D16" gate="G$1" x="195.58" y="68.58" smashed="yes" rot="R270">
+<attribute name="NAME" x="204.47" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="201.93" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D17" gate="G$1" x="182.88" y="68.58" smashed="yes" rot="R270">
+<attribute name="NAME" x="191.77" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="189.23" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D18" gate="G$1" x="195.58" y="45.72" smashed="yes" rot="R270">
+<attribute name="NAME" x="204.47" y="33.02" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="201.93" y="33.02" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="D19" gate="G$1" x="182.88" y="48.26" smashed="yes" rot="R270">
+<attribute name="NAME" x="191.77" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="189.23" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 </instances>
 <busses>
@@ -16049,20 +16056,16 @@ high and low levels both work
 <pinref part="GND30" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="D11" gate="G$1" pin="A"/>
-<pinref part="GND27" gate="1" pin="GND"/>
-</segment>
-<segment>
 <pinref part="GND39" gate="1" pin="GND"/>
 <pinref part="D10" gate="G$1" pin="A"/>
 </segment>
 <segment>
-<pinref part="D13" gate="G$1" pin="A"/>
-<pinref part="GND40" gate="1" pin="GND"/>
+<pinref part="GND27" gate="1" pin="GND"/>
+<pinref part="D11" gate="G$1" pin="A"/>
 </segment>
 <segment>
-<pinref part="GND44" gate="1" pin="GND"/>
-<pinref part="D12" gate="G$1" pin="A"/>
+<pinref part="GND40" gate="1" pin="GND"/>
+<pinref part="D19" gate="G$1" pin="A"/>
 </segment>
 </net>
 <net name="VBAT" class="1">
@@ -16076,21 +16079,21 @@ high and low levels both work
 <wire x1="-5.08" y1="17.78" x2="-5.08" y2="66.04" width="0.1524" layer="91"/>
 <junction x="-5.08" y="17.78"/>
 <wire x1="-5.08" y1="66.04" x2="7.62" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="D9" gate="G$1" pin="K"/>
-<pinref part="D8" gate="G$1" pin="K"/>
 <wire x1="7.62" y1="66.04" x2="20.32" y2="66.04" width="0.1524" layer="91"/>
-<junction x="7.62" y="66.04"/>
 <wire x1="-5.08" y1="17.78" x2="-5.08" y2="0" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="0" x2="208.28" y2="0" width="0.1524" layer="91"/>
 <wire x1="208.28" y1="0" x2="208.28" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="208.28" y1="66.04" x2="195.58" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="D15" gate="G$1" pin="K"/>
-<pinref part="D14" gate="G$1" pin="K"/>
-<wire x1="195.58" y1="66.04" x2="182.88" y2="66.04" width="0.1524" layer="91"/>
-<junction x="195.58" y="66.04"/>
 <pinref part="CR1" gate="A" pin="VS"/>
+<wire x1="195.58" y1="66.04" x2="182.88" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="30.48" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
 <junction x="53.34" y="30.48"/>
+<pinref part="D8" gate="G$1" pin="K"/>
+<junction x="7.62" y="66.04"/>
+<pinref part="D9" gate="G$1" pin="K"/>
+<pinref part="D16" gate="G$1" pin="K"/>
+<junction x="195.58" y="66.04"/>
+<pinref part="D17" gate="G$1" pin="K"/>
 </segment>
 </net>
 <net name="+3V3" class="1">
@@ -16148,13 +16151,13 @@ high and low levels both work
 <label x="71.12" y="35.56" size="1.778" layer="95" rot="R180"/>
 <wire x1="73.66" y1="35.56" x2="27.94" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="27.94" y1="35.56" x2="27.94" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="D11" gate="G$1" pin="K"/>
 <wire x1="27.94" y1="45.72" x2="20.32" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="20.32" y1="45.72" x2="20.32" y2="50.8" width="0.1524" layer="91"/>
 <junction x="20.32" y="45.72"/>
-<pinref part="D8" gate="G$1" pin="A"/>
 <wire x1="20.32" y1="45.72" x2="17.78" y2="45.72" width="0.1524" layer="91"/>
 <label x="12.7" y="48.26" size="1.778" layer="95"/>
+<pinref part="D9" gate="G$1" pin="A"/>
+<pinref part="D11" gate="G$1" pin="K"/>
 </segment>
 </net>
 <net name="M1_M-" class="0">
@@ -16170,13 +16173,13 @@ high and low levels both work
 <wire x1="27.94" y1="33.02" x2="27.94" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="27.94" y1="22.86" x2="0" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="0" y1="22.86" x2="0" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="D10" gate="G$1" pin="K"/>
 <wire x1="0" y1="45.72" x2="7.62" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="7.62" y1="45.72" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
 <junction x="7.62" y="45.72"/>
-<pinref part="D9" gate="G$1" pin="A"/>
 <wire x1="7.62" y1="45.72" x2="10.16" y2="45.72" width="0.1524" layer="91"/>
 <label x="10.16" y="45.72" size="1.778" layer="95"/>
+<pinref part="D8" gate="G$1" pin="A"/>
+<pinref part="D10" gate="G$1" pin="K"/>
 </segment>
 </net>
 <net name="M2_M+" class="0">
@@ -16191,14 +16194,13 @@ high and low levels both work
 <wire x1="175.26" y1="33.02" x2="175.26" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="175.26" y1="22.86" x2="203.2" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="203.2" y1="22.86" x2="203.2" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="D12" gate="G$1" pin="K"/>
 <wire x1="203.2" y1="45.72" x2="195.58" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="195.58" y1="45.72" x2="195.58" y2="50.8" width="0.1524" layer="91"/>
 <junction x="195.58" y="45.72"/>
-<pinref part="D15" gate="G$1" pin="A"/>
 <wire x1="119.38" y1="33.02" x2="175.26" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="195.58" y1="45.72" x2="193.04" y2="45.72" width="0.1524" layer="91"/>
 <label x="187.96" y="43.18" size="1.778" layer="95"/>
+<pinref part="D16" gate="G$1" pin="A"/>
 </segment>
 </net>
 <net name="M2_M-" class="0">
@@ -16212,13 +16214,13 @@ high and low levels both work
 <label x="121.92" y="35.56" size="1.778" layer="95"/>
 <wire x1="119.38" y1="35.56" x2="175.26" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="175.26" y1="35.56" x2="175.26" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="D13" gate="G$1" pin="K"/>
 <wire x1="175.26" y1="45.72" x2="182.88" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="182.88" y1="45.72" x2="182.88" y2="50.8" width="0.1524" layer="91"/>
 <junction x="182.88" y="45.72"/>
-<pinref part="D14" gate="G$1" pin="A"/>
 <wire x1="182.88" y1="45.72" x2="185.42" y2="45.72" width="0.1524" layer="91"/>
 <label x="182.88" y="48.26" size="1.778" layer="95"/>
+<pinref part="D17" gate="G$1" pin="A"/>
+<pinref part="D19" gate="G$1" pin="K"/>
 </segment>
 </net>
 <net name="+5V" class="1">

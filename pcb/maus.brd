@@ -1815,24 +1815,25 @@ Source: http://www.stetco.com/products/inductors/pdf/PIS2816.pdf</description>
 <wire x1="-4.77" y1="1.51" x2="7.25" y2="1.51" width="0.1" layer="21"/>
 <wire x1="7.25" y1="1.51" x2="7.27" y2="-1.99" width="0.1" layer="21"/>
 </package>
-<package name="DIOM7959X262N">
-<description>&lt;b&gt;SMC&lt;/b&gt;&lt;br&gt;
+<package name="RB068VWM100">
+<description>&lt;b&gt;PMDE_2022&lt;/b&gt;&lt;br&gt;
 </description>
-<smd name="1" x="-3.5" y="0" dx="3.05" dy="2.2" layer="1" rot="R90"/>
-<smd name="2" x="3.5" y="0" dx="3.05" dy="2.2" layer="1" rot="R90"/>
+<smd name="1" x="0" y="-0.65" dx="1.45" dy="1.1" layer="1" rot="R90"/>
+<smd name="2" x="0" y="0.975" dx="0.8" dy="0.8" layer="1" rot="R90"/>
 <text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
 <text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
-<wire x1="-4.85" y1="3.36" x2="4.85" y2="3.36" width="0.05" layer="51"/>
-<wire x1="4.85" y1="3.36" x2="4.85" y2="-3.36" width="0.05" layer="51"/>
-<wire x1="4.85" y1="-3.36" x2="-4.85" y2="-3.36" width="0.05" layer="51"/>
-<wire x1="-4.85" y1="-3.36" x2="-4.85" y2="3.36" width="0.05" layer="51"/>
-<wire x1="-3.97" y1="2.952" x2="3.97" y2="2.952" width="0.1" layer="51"/>
-<wire x1="3.97" y1="2.952" x2="3.97" y2="-2.952" width="0.1" layer="51"/>
-<wire x1="3.97" y1="-2.952" x2="-3.97" y2="-2.952" width="0.1" layer="51"/>
-<wire x1="-3.97" y1="-2.952" x2="-3.97" y2="2.952" width="0.1" layer="51"/>
-<wire x1="-3.97" y1="1.852" x2="-2.87" y2="2.952" width="0.1" layer="51"/>
-<wire x1="3.97" y1="2.952" x2="-4.6" y2="2.952" width="0.2" layer="21"/>
-<wire x1="-3.97" y1="-2.952" x2="3.97" y2="-2.952" width="0.2" layer="21"/>
+<wire x1="-0.65" y1="1.1" x2="0.65" y2="1.1" width="0.1" layer="51"/>
+<wire x1="0.65" y1="1.1" x2="0.65" y2="-1.1" width="0.1" layer="51"/>
+<wire x1="0.65" y1="-1.1" x2="-0.65" y2="-1.1" width="0.1" layer="51"/>
+<wire x1="-0.65" y1="-1.1" x2="-0.65" y2="1.1" width="0.1" layer="51"/>
+<wire x1="-1.65" y1="2.375" x2="1.65" y2="2.375" width="0.1" layer="51"/>
+<wire x1="1.65" y1="2.375" x2="1.65" y2="-2.375" width="0.1" layer="51"/>
+<wire x1="1.65" y1="-2.375" x2="-1.65" y2="-2.375" width="0.1" layer="51"/>
+<wire x1="-1.65" y1="-2.375" x2="-1.65" y2="2.375" width="0.1" layer="51"/>
+<wire x1="-0.1" y1="-1.8" x2="-0.1" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="-0.1" y1="-1.8" x2="0.1" y2="-1.8" width="0.2" layer="21" curve="180"/>
+<wire x1="0.1" y1="-1.8" x2="0.1" y2="-1.8" width="0.2" layer="21"/>
+<wire x1="0.1" y1="-1.8" x2="-0.1" y2="-1.8" width="0.2" layer="21" curve="180"/>
 </package>
 <package name="MOTOR_HALTERUNG">
 <rectangle x1="0" y1="0" x2="50" y2="10" layer="21"/>
@@ -3448,101 +3449,101 @@ Covered vias can be set in Masks (Limit).
 <attribute name="NAME" x="34.5064" y="27.94" size="1.27" layer="25" rot="R90" align="bottom-center"/>
 <attribute name="VALUE" x="41.235" y="27.94" size="1.27" layer="27" rot="R90" align="top-center"/>
 </element>
-<element name="D10" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-54.61" y="-13.97" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-54.61" y="-13.97" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-54.61" y="-13.97" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-54.61" y="-13.97" size="1.27" layer="27" align="center"/>
+<element name="D8" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-71.12" y="-73.66" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-71.12" y="-73.66" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-71.12" y="-73.66" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-71.12" y="-73.66" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D11" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-58.42" y="-21.59" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-58.42" y="-21.59" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-58.42" y="-21.59" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-58.42" y="-21.59" size="1.27" layer="27" align="center"/>
+<element name="D9" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-74.93" y="-78.74" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-74.93" y="-78.74" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-74.93" y="-78.74" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-74.93" y="-78.74" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D8" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-62.23" y="-29.21" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-62.23" y="-29.21" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-62.23" y="-29.21" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-62.23" y="-29.21" size="1.27" layer="27" align="center"/>
+<element name="D10" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-78.74" y="-83.82" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-78.74" y="-83.82" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-78.74" y="-83.82" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-78.74" y="-83.82" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D9" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-66.04" y="-36.83" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-66.04" y="-36.83" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-66.04" y="-36.83" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-66.04" y="-36.83" size="1.27" layer="27" align="center"/>
+<element name="D11" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-82.55" y="-88.9" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-82.55" y="-88.9" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-82.55" y="-88.9" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-82.55" y="-88.9" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D12" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-66.04" y="-44.45" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-69.85" y="-44.45" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-66.04" y="-44.45" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-66.04" y="-44.45" size="1.27" layer="27" align="center"/>
+<element name="D16" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-86.36" y="-93.98" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-86.36" y="-93.98" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-86.36" y="-93.98" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-86.36" y="-93.98" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D13" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-66.04" y="-52.07" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-73.66" y="-52.07" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-66.04" y="-52.07" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-66.04" y="-52.07" size="1.27" layer="27" align="center"/>
+<element name="D17" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-90.17" y="-99.06" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-90.17" y="-99.06" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-90.17" y="-99.06" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-90.17" y="-99.06" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D14" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-66.04" y="-59.69" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-77.47" y="-59.69" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-66.04" y="-59.69" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-66.04" y="-59.69" size="1.27" layer="27" align="center"/>
+<element name="D18" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-93.98" y="-104.14" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-93.98" y="-104.14" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-93.98" y="-104.14" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-93.98" y="-104.14" size="1.27" layer="27" align="center"/>
 </element>
-<element name="D15" library="shared" package="DIOM7959X262N" value="VS-MBRS360-M3_9AT" x="-66.04" y="-67.31" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/vs-mbrs360-m39at/vishay?region=nac" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Schottky Diodes &amp; Rectifiers 3A 60V Single Die Schottky Rectifier" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="2.62mm" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Vishay" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="VS-MBRS360-M3/9AT" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="78-VS-MBRS360-M39AT" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/VS-MBRS360-M3-9AT?qs=nc3S1USEIbvRKNPK58xwrQ%3D%3D" x="-81.28" y="-67.31" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="-66.04" y="-67.31" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="-66.04" y="-67.31" size="1.27" layer="27" align="center"/>
+<element name="D19" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="-97.79" y="-109.22" smashed="yes">
+<attribute name="ARROW_PART_NUMBER" value="" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="-97.79" y="-109.22" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="-97.79" y="-109.22" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="-97.79" y="-109.22" size="1.27" layer="27" align="center"/>
 </element>
 <element name="U$1" library="shared" package="MOTOR_HALTERUNG" value="" x="25.67" y="24.45" smashed="yes" rot="R90"/>
 <element name="U$5" library="shared" package="MOTOR_HALTERUNG" value="" x="115.57" y="23.72" smashed="yes" rot="R90"/>
@@ -3696,10 +3697,9 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U5" pad="20"/>
 <contactref element="U$2" pad="P3"/>
 <contactref element="U$2" pad="P9"/>
-<contactref element="D11" pad="2"/>
 <contactref element="D10" pad="2"/>
-<contactref element="D13" pad="2"/>
-<contactref element="D12" pad="2"/>
+<contactref element="D11" pad="2"/>
+<contactref element="D19" pad="2"/>
 <wire x1="107.35175" y1="106.008246875" x2="109.22" y2="107.95" width="0" layer="19" extent="1-1"/>
 <wire x1="73.83" y1="104.46" x2="107.35175" y2="106.008246875" width="0" layer="19" extent="1-1"/>
 <wire x1="68.26" y1="107.95" x2="73.83" y2="104.46" width="0" layer="19" extent="1-1"/>
@@ -3786,10 +3786,9 @@ Covered vias can be set in Masks (Limit).
 <wire x1="-45.2411" y1="43.7" x2="-37.15" y2="45.72" width="0" layer="19" extent="1-1"/>
 <wire x1="-49.53" y1="43.5" x2="-45.2411" y2="43.7" width="0" layer="19" extent="1-1"/>
 <wire x1="-49.21" y1="50.8" x2="-49.53" y2="43.5" width="0" layer="19" extent="1-1"/>
-<wire x1="-51.11" y1="-13.97" x2="-39.37" y2="36.51" width="0" layer="19" extent="1-1"/>
-<wire x1="-54.92" y1="-21.59" x2="-51.11" y2="-13.97" width="0" layer="19" extent="1-1"/>
-<wire x1="-62.54" y1="-44.45" x2="-54.92" y2="-21.59" width="0" layer="19" extent="1-1"/>
-<wire x1="-62.54" y1="-52.07" x2="-62.54" y2="-44.45" width="0" layer="19" extent="1-1"/>
+<wire x1="-78.74" y1="-82.845" x2="-39.37" y2="36.51" width="0" layer="19" extent="1-1"/>
+<wire x1="-82.55" y1="-87.925" x2="-78.74" y2="-82.845" width="0" layer="19" extent="1-1"/>
+<wire x1="-97.79" y1="-108.245" x2="-82.55" y2="-87.925" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_EN">
 <contactref element="R24" pad="1"/>
@@ -4148,15 +4147,15 @@ Covered vias can be set in Masks (Limit).
 <contactref element="R14" pad="2"/>
 <contactref element="R16" pad="2"/>
 <contactref element="U$4" pad="P+"/>
-<contactref element="D9" pad="1"/>
-<contactref element="D8" pad="1"/>
-<contactref element="D15" pad="1"/>
-<contactref element="D14" pad="1"/>
 <contactref element="CR1" pad="6"/>
-<wire x1="-69.54" y1="-59.69" x2="-69.54" y2="-67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="-69.54" y1="-36.83" x2="-69.54" y2="-59.69" width="0" layer="19" extent="1-1"/>
-<wire x1="-65.73" y1="-29.21" x2="-69.54" y2="-36.83" width="0" layer="19" extent="1-1"/>
-<wire x1="-49.53" y1="45.4" x2="-65.73" y2="-29.21" width="0" layer="19" extent="1-1"/>
+<contactref element="D8" pad="1"/>
+<contactref element="D9" pad="1"/>
+<contactref element="D16" pad="1"/>
+<contactref element="D17" pad="1"/>
+<wire x1="-86.36" y1="-94.63" x2="-90.17" y2="-99.71" width="0" layer="19" extent="1-1"/>
+<wire x1="-74.93" y1="-79.39" x2="-86.36" y2="-94.63" width="0" layer="19" extent="1-1"/>
+<wire x1="-71.12" y1="-74.31" x2="-74.93" y2="-79.39" width="0" layer="19" extent="1-1"/>
+<wire x1="-49.53" y1="45.4" x2="-71.12" y2="-74.31" width="0" layer="19" extent="1-1"/>
 <wire x1="-49.21" y1="48.26" x2="-49.53" y2="45.4" width="0" layer="19" extent="1-1"/>
 <wire x1="-45.2411" y1="44.7" x2="-49.53" y2="45.4" width="0" layer="19" extent="1-1"/>
 <wire x1="22.54" y1="24.13" x2="-45.2411" y2="44.7" width="0" layer="19" extent="1-1"/>
@@ -4169,38 +4168,36 @@ Covered vias can be set in Masks (Limit).
 <signal name="M1_M+">
 <contactref element="SV2" pad="1"/>
 <contactref element="CR1" pad="4"/>
+<contactref element="D9" pad="2"/>
 <contactref element="D11" pad="1"/>
-<contactref element="D8" pad="2"/>
 <wire x1="60.6044" y1="52.705" x2="109.22" y2="69.85" width="0" layer="19" extent="1-1"/>
-<wire x1="-61.92" y1="-21.59" x2="60.6044" y2="52.705" width="0" layer="19" extent="1-1"/>
-<wire x1="-58.73" y1="-29.21" x2="-61.92" y2="-21.59" width="0" layer="19" extent="1-1"/>
+<wire x1="-74.93" y1="-77.765" x2="60.6044" y2="52.705" width="0" layer="19" extent="1-1"/>
+<wire x1="-82.55" y1="-89.55" x2="-74.93" y2="-77.765" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M1_M-">
 <contactref element="SV2" pad="2"/>
 <contactref element="CR1" pad="5"/>
+<contactref element="D8" pad="2"/>
 <contactref element="D10" pad="1"/>
-<contactref element="D9" pad="2"/>
 <wire x1="60.6044" y1="51.435" x2="111.76" y2="69.85" width="0" layer="19" extent="1-1"/>
-<wire x1="-58.11" y1="-13.97" x2="60.6044" y2="51.435" width="0" layer="19" extent="1-1"/>
-<wire x1="-62.54" y1="-36.83" x2="-58.11" y2="-13.97" width="0" layer="19" extent="1-1"/>
+<wire x1="-71.12" y1="-72.685" x2="60.6044" y2="51.435" width="0" layer="19" extent="1-1"/>
+<wire x1="-78.74" y1="-84.47" x2="-71.12" y2="-72.685" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M2_M+">
 <contactref element="SV4" pad="1"/>
 <contactref element="CR1" pad="16"/>
-<contactref element="D12" pad="1"/>
-<contactref element="D15" pad="2"/>
-<wire x1="-69.54" y1="-44.45" x2="-62.54" y2="-67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="22.86" y1="64.77" x2="-69.54" y2="-44.45" width="0" layer="19" extent="1-1"/>
+<contactref element="D16" pad="2"/>
+<wire x1="22.86" y1="64.77" x2="-86.36" y2="-93.005" width="0" layer="19" extent="1-1"/>
 <wire x1="74.0156" y1="51.435" x2="22.86" y2="64.77" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M2_M-">
 <contactref element="SV4" pad="2"/>
 <contactref element="CR1" pad="17"/>
-<contactref element="D13" pad="1"/>
-<contactref element="D14" pad="2"/>
-<wire x1="20.32" y1="64.77" x2="74.0156" y2="52.705" width="0" layer="19" extent="1-1"/>
-<wire x1="-69.54" y1="-52.07" x2="20.32" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="-62.54" y1="-59.69" x2="-69.54" y2="-52.07" width="0" layer="19" extent="1-1"/>
+<contactref element="D17" pad="2"/>
+<contactref element="D19" pad="1"/>
+<wire x1="-90.17" y1="-98.085" x2="-97.79" y2="-109.87" width="0" layer="19" extent="1-1"/>
+<wire x1="20.32" y1="64.77" x2="-90.17" y2="-98.085" width="0" layer="19" extent="1-1"/>
+<wire x1="74.0156" y1="52.705" x2="20.32" y2="64.77" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="/VBUS_EN">
 <contactref element="Q7" pad="3"/>
