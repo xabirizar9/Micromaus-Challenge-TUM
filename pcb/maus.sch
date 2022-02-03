@@ -13143,9 +13143,9 @@ high and low levels both work
 <pinref part="Q4" gate="G$1" pin="S"/>
 </segment>
 <segment>
-<pinref part="JP4" gate="A" pin="1"/>
-<wire x1="304.8" y1="139.7" x2="297.18" y2="139.7" width="0.1524" layer="91"/>
-<label x="292.1" y="139.7" size="1.778" layer="95"/>
+<wire x1="304.8" y1="137.16" x2="297.18" y2="137.16" width="0.1524" layer="91"/>
+<label x="292.1" y="137.16" size="1.778" layer="95"/>
+<pinref part="JP4" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="RTS" class="0">
@@ -13166,9 +13166,9 @@ high and low levels both work
 <pinref part="Q2" gate="G$1" pin="S"/>
 </segment>
 <segment>
-<wire x1="304.8" y1="137.16" x2="297.18" y2="137.16" width="0.1524" layer="91"/>
-<label x="292.1" y="137.16" size="1.778" layer="95"/>
-<pinref part="JP4" gate="A" pin="2"/>
+<pinref part="JP4" gate="A" pin="1"/>
+<wire x1="304.8" y1="139.7" x2="297.18" y2="139.7" width="0.1524" layer="91"/>
+<label x="292.1" y="139.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ESP32_TX" class="0">
