@@ -12147,7 +12147,7 @@ dual op-amp</description>
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="default" width="0.381" drill="0">
+<class number="0" name="default" width="0.127" drill="0">
 <clearance class="0" value="0.254"/>
 </class>
 <class number="1" name="power" width="1.016" drill="0">
