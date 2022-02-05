@@ -13537,36 +13537,36 @@ high and low levels both work
 <attribute name="VALUE" x="198.12" y="25.4" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="D8" gate="G$1" x="7.62" y="68.58" smashed="yes" rot="R270">
-<attribute name="NAME" x="16.51" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="13.97" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="3.81" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="1.27" y="71.12" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D9" gate="G$1" x="20.32" y="68.58" smashed="yes" rot="R270">
-<attribute name="NAME" x="29.21" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="26.67" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="16.51" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="26.67" y="71.12" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D10" gate="G$1" x="7.62" y="48.26" smashed="yes" rot="R270">
-<attribute name="NAME" x="16.51" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="13.97" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="3.81" y="38.1" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="1.27" y="45.72" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D11" gate="G$1" x="20.32" y="48.26" smashed="yes" rot="R270">
-<attribute name="NAME" x="29.21" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="26.67" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="16.51" y="38.1" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="26.67" y="48.26" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D16" gate="G$1" x="195.58" y="68.58" smashed="yes" rot="R270">
-<attribute name="NAME" x="204.47" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="201.93" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="199.39" y="63.5" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="204.47" y="68.58" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D17" gate="G$1" x="182.88" y="68.58" smashed="yes" rot="R270">
-<attribute name="NAME" x="191.77" y="55.88" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="189.23" y="55.88" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="186.69" y="63.5" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="176.53" y="68.58" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D18" gate="G$1" x="195.58" y="48.26" smashed="yes" rot="R270">
-<attribute name="NAME" x="204.47" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="201.93" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="199.39" y="43.18" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="204.47" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="D19" gate="G$1" x="182.88" y="48.26" smashed="yes" rot="R270">
-<attribute name="NAME" x="191.77" y="35.56" size="1.778" layer="95" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="189.23" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
+<attribute name="NAME" x="186.69" y="43.18" size="1.778" layer="95" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="176.53" y="35.56" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 </instances>
 <busses>
@@ -13785,7 +13785,7 @@ high and low levels both work
 <wire x1="7.62" y1="45.72" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
 <junction x="7.62" y="45.72"/>
 <wire x1="7.62" y1="45.72" x2="10.16" y2="45.72" width="0.1524" layer="91"/>
-<label x="10.16" y="45.72" size="1.778" layer="95"/>
+<label x="10.16" y="43.18" size="1.778" layer="95"/>
 <pinref part="D8" gate="G$1" pin="A"/>
 <pinref part="D10" gate="G$1" pin="K"/>
 </segment>
