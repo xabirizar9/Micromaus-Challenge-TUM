@@ -25,6 +25,6 @@
     "require_upload_port": true,
     "speed": 460800
   },
-  "url": "https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/hw-reference/esp32s2/user-guide-esp32-s2-kaluga-1-kit.html",
-  "vendor": "Espressif"
+  "url": "https://gitlab.lrz.de/wlad/micromaus-best.git",
+  "vendor": "TUM/MicroMaus2022"
 }
