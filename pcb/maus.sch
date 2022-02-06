@@ -12153,6 +12153,8 @@ dual op-amp</description>
 <class number="1" name="power" width="1.016" drill="0">
 <clearance class="1" value="0.254"/>
 </class>
+<class number="2" name="motorpower" width="1.016" drill="0">
+</class>
 </classes>
 <parts>
 <part name="U1" library="ESP32-S2-WROOM" deviceset="ESP32-S2-WROOM" device=""/>
@@ -13748,7 +13750,7 @@ high and low levels both work
 <label x="58.42" y="83.82" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="M1_M+" class="0">
+<net name="M1_M+" class="2">
 <segment>
 <pinref part="SV2" gate="1" pin="1"/>
 <wire x1="40.64" y1="88.9" x2="38.1" y2="88.9" width="0.1524" layer="91"/>
@@ -13768,7 +13770,7 @@ high and low levels both work
 <pinref part="D11" gate="G$1" pin="K"/>
 </segment>
 </net>
-<net name="M1_M-" class="0">
+<net name="M1_M-" class="2">
 <segment>
 <pinref part="SV2" gate="1" pin="2"/>
 <wire x1="55.88" y1="88.9" x2="58.42" y2="88.9" width="0.1524" layer="91"/>
@@ -13790,7 +13792,7 @@ high and low levels both work
 <pinref part="D10" gate="G$1" pin="K"/>
 </segment>
 </net>
-<net name="M2_M+" class="0">
+<net name="M2_M+" class="2">
 <segment>
 <pinref part="SV4" gate="1" pin="1"/>
 <wire x1="116.84" y1="88.9" x2="114.3" y2="88.9" width="0.1524" layer="91"/>
@@ -13812,7 +13814,7 @@ high and low levels both work
 <pinref part="D18" gate="G$1" pin="K"/>
 </segment>
 </net>
-<net name="M2_M-" class="0">
+<net name="M2_M-" class="2">
 <segment>
 <pinref part="SV4" gate="1" pin="2"/>
 <wire x1="132.08" y1="88.9" x2="134.62" y2="88.9" width="0.1524" layer="91"/>
