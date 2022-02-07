@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
@@ -8805,12 +8805,6 @@ Source: AVX .. aphvc.pdf</description>
 <vertex x="2.9988" y="-7.901"/>
 <vertex x="2.9988" y="-6.7675"/>
 </polygon>
-<polygon width="0.1524" layer="41">
-<vertex x="-8.2423" y="-8.636"/>
-<vertex x="-8.2423" y="8.636"/>
-<vertex x="8.2423" y="8.636"/>
-<vertex x="8.2423" y="-8.636"/>
-</polygon>
 <wire x1="-5.5372" y1="0" x2="-5.5372" y2="9.906" width="0.1524" layer="47"/>
 <wire x1="-5.5372" y1="9.906" x2="-5.5372" y2="10.287" width="0.1524" layer="47"/>
 <wire x1="5.5372" y1="0" x2="5.5372" y2="9.906" width="0.1524" layer="47"/>
@@ -8878,6 +8872,7 @@ Source: AVX .. aphvc.pdf</description>
 <text x="-16.6878" y="4.7752" size="0.635" layer="47" ratio="4" rot="SR0">0.05in/1.27mm</text>
 <text x="-10.7442" y="-11.049" size="0.635" layer="47" ratio="4" rot="SR0">0.043in/1.092mm</text>
 <text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<rectangle x1="-6.35" y1="-8.89" x2="6.35" y2="8.89" layer="42"/>
 </package>
 <package name="POWERSO-20_STM-M">
 <smd name="1" x="-6.7564" y="5.715" dx="2.1082" dy="0.5842" layer="1"/>
@@ -12087,7 +12082,6 @@ dual op-amp</description>
 <part name="S2" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
 <part name="GND25" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="S3" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
-<part name="+3V7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND29" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND31" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND32" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -12173,6 +12167,7 @@ dual op-amp</description>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="GND47" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -12209,9 +12204,6 @@ dual op-amp</description>
 <instance part="S3" gate="1" x="50.8" y="35.56" smashed="yes" rot="R270">
 <attribute name="NAME" x="48.26" y="41.91" size="1.778" layer="95"/>
 <attribute name="VALUE" x="53.975" y="39.37" size="1.778" layer="96"/>
-</instance>
-<instance part="+3V7" gate="G$1" x="40.64" y="38.1" smashed="yes">
-<attribute name="VALUE" x="38.1" y="33.02" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="D2" gate="G$1" x="30.48" y="172.72" smashed="yes">
 <attribute name="NAME" x="27.051" y="168.148" size="1.778" layer="95" font="vector" rot="R90"/>
@@ -12297,6 +12289,9 @@ dual op-amp</description>
 <instance part="+3V16" gate="G$1" x="226.06" y="104.14" smashed="yes">
 <attribute name="VALUE" x="223.52" y="99.06" size="1.778" layer="96" rot="R90"/>
 </instance>
+<instance part="GND6" gate="1" x="45.72" y="27.94" smashed="yes">
+<attribute name="VALUE" x="43.18" y="25.4" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 <bus name="SPI:CLK,CS,CS_M,DRDY_A/G,DRDY_M,INT,INT_A/G,INT_M,MISO,MOSI">
@@ -12313,11 +12308,6 @@ dual op-amp</description>
 </busses>
 <nets>
 <net name="+3V3" class="1">
-<segment>
-<pinref part="S3" gate="1" pin="P"/>
-<wire x1="45.72" y1="35.56" x2="40.64" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="+3V7" gate="G$1" pin="+3V3"/>
-</segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="3V3"/>
 <wire x1="116.84" y1="93.98" x2="116.84" y2="111.76" width="0.1524" layer="91"/>
@@ -12414,6 +12404,14 @@ dual op-amp</description>
 <wire x1="226.06" y1="88.9" x2="226.06" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="4"/>
 <wire x1="226.06" y1="88.9" x2="231.14" y2="88.9" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND6" gate="1" pin="GND"/>
+<pinref part="S3" gate="1" pin="P"/>
+<wire x1="45.72" y1="30.48" x2="45.72" y2="33.02" width="0.1524" layer="91"/>
+<pinref part="S3" gate="1" pin="P1"/>
+<wire x1="45.72" y1="33.02" x2="45.72" y2="35.56" width="0.1524" layer="91"/>
+<junction x="45.72" y="33.02"/>
 </segment>
 </net>
 <net name="ESP32_EN" class="0">
@@ -12681,15 +12679,6 @@ dual op-amp</description>
 <label x="53.34" y="66.04" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="N$21" class="0">
-<segment>
-<pinref part="S3" gate="1" pin="S"/>
-<wire x1="55.88" y1="35.56" x2="58.42" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="35.56" x2="58.42" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="IO8"/>
-<wire x1="58.42" y1="55.88" x2="86.36" y2="55.88" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="IO18" class="0">
 <segment>
 <pinref part="JP5" gate="A" pin="6"/>
@@ -12831,6 +12820,18 @@ dual op-amp</description>
 <wire x1="116.84" y1="71.12" x2="116.9924" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="S3" gate="1" pin="S1"/>
+<wire x1="55.88" y1="33.02" x2="60.96" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="33.02" x2="60.96" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="U1" gate="G$1" pin="IO8"/>
+<wire x1="60.96" y1="55.88" x2="86.36" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="S3" gate="1" pin="S"/>
+<wire x1="55.88" y1="35.56" x2="55.88" y2="33.02" width="0.1524" layer="91"/>
+<junction x="55.88" y="33.02"/>
+</segment>
+</net>
 </nets>
 </sheet>
 <sheet>
@@ -12960,7 +12961,7 @@ high and low levels both work
 <label x="198.12" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="USB_VBUS" class="1">
+<net name="USB_VBUS" class="0">
 <segment>
 <pinref part="D1" gate="G$1" pin="2"/>
 <wire x1="5.08" y1="134.62" x2="53.34" y2="134.62" width="0.1524" layer="91"/>
@@ -14030,7 +14031,7 @@ auflösung</text>
 <pinref part="U6" gate="A" pin="OUT"/>
 </segment>
 </net>
-<net name="USB_VBUS" class="1">
+<net name="USB_VBUS" class="0">
 <segment>
 <wire x1="-38.1" y1="15.24" x2="-40.64" y2="15.24" width="0.1524" layer="91"/>
 <label x="-40.64" y="15.24" size="1.778" layer="95" rot="R180" xref="yes"/>

@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -481,12 +481,6 @@
 <vertex x="2.9988" y="-7.901"/>
 <vertex x="2.9988" y="-6.7675"/>
 </polygon>
-<polygon width="0.1524" layer="41">
-<vertex x="-8.2423" y="-8.636"/>
-<vertex x="-8.2423" y="8.636"/>
-<vertex x="8.2423" y="8.636"/>
-<vertex x="8.2423" y="-8.636"/>
-</polygon>
 <wire x1="-5.5372" y1="0" x2="-5.5372" y2="9.906" width="0.1524" layer="47"/>
 <wire x1="-5.5372" y1="9.906" x2="-5.5372" y2="10.287" width="0.1524" layer="47"/>
 <wire x1="5.5372" y1="0" x2="5.5372" y2="9.906" width="0.1524" layer="47"/>
@@ -554,6 +548,7 @@
 <text x="-16.6878" y="4.7752" size="0.635" layer="47" ratio="4" rot="SR0">0.05in/1.27mm</text>
 <text x="-10.7442" y="-11.049" size="0.635" layer="47" ratio="4" rot="SR0">0.043in/1.092mm</text>
 <text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<rectangle x1="-6.35" y1="-8.89" x2="6.35" y2="8.89" layer="42"/>
 </package>
 <package name="MOTOR_HALTERUNG">
 <hole x="5" y="5" drill="2.4"/>
