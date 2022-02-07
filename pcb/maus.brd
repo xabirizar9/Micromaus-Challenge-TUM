@@ -3,10 +3,10 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm"/>
+<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -34,7 +34,7 @@
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
@@ -2637,52 +2637,6 @@ Low profile connectors, straight&lt;p&gt;
 </package>
 </packages>
 </library>
-<library name="LSM9DS1TR">
-<packages>
-<package name="PQFN43P300X350X102-24N">
-<wire x1="-1.83" y1="-1.58" x2="-1.83" y2="1.58" width="0.127" layer="51"/>
-<wire x1="-1.83" y1="1.58" x2="1.83" y2="1.58" width="0.127" layer="51"/>
-<wire x1="1.83" y1="1.58" x2="1.83" y2="-1.58" width="0.127" layer="51"/>
-<wire x1="1.83" y1="-1.58" x2="-1.83" y2="-1.58" width="0.127" layer="51"/>
-<wire x1="-1.99" y1="-1.74" x2="-1.99" y2="1.74" width="0.05" layer="39"/>
-<wire x1="-1.99" y1="1.74" x2="1.99" y2="1.74" width="0.05" layer="39"/>
-<wire x1="1.99" y1="1.74" x2="1.99" y2="-1.74" width="0.05" layer="39"/>
-<wire x1="1.99" y1="-1.74" x2="-1.99" y2="-1.74" width="0.05" layer="39"/>
-<circle x="-2.4" y="1.2" radius="0.1" width="0.2" layer="21"/>
-<circle x="-2.4" y="1.2" radius="0.1" width="0.2" layer="51"/>
-<text x="-2.00321875" y="1.903059375" size="0.40705625" layer="25">&gt;NAME</text>
-<text x="-2.0016" y="-2.201759375" size="0.406725" layer="27">&gt;VALUE</text>
-<wire x1="-1.86" y1="1.58" x2="-1.86" y2="0.94" width="0.127" layer="21"/>
-<wire x1="1.86" y1="1.58" x2="1.86" y2="0.94" width="0.127" layer="21"/>
-<wire x1="-1.86" y1="-1.58" x2="-1.86" y2="-0.94" width="0.127" layer="21"/>
-<wire x1="1.86" y1="-1.58" x2="1.86" y2="-0.94" width="0.127" layer="21"/>
-<smd name="1" x="-1.505" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="2" x="-1.47" y="0.645" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R180"/>
-<smd name="3" x="-1.47" y="0.215" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R180"/>
-<smd name="4" x="-1.47" y="-0.215" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R180"/>
-<smd name="5" x="-1.47" y="-0.645" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R180"/>
-<smd name="6" x="-1.505" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="7" x="-1.075" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="8" x="-0.645" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="9" x="-0.215" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="10" x="0.215" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="11" x="0.645" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="12" x="1.075" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="13" x="1.505" y="-1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R270"/>
-<smd name="14" x="1.47" y="-0.645" dx="0.53" dy="0.28" layer="1" roundness="7"/>
-<smd name="15" x="1.47" y="-0.215" dx="0.53" dy="0.28" layer="1" roundness="7"/>
-<smd name="16" x="1.47" y="0.215" dx="0.53" dy="0.28" layer="1" roundness="7"/>
-<smd name="17" x="1.47" y="0.645" dx="0.53" dy="0.28" layer="1" roundness="7"/>
-<smd name="18" x="1.505" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="19" x="1.075" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="20" x="0.645" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="21" x="0.215" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="22" x="-0.215" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="23" x="-0.645" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-<smd name="24" x="-1.075" y="1.22" dx="0.53" dy="0.28" layer="1" roundness="7" rot="R90"/>
-</package>
-</packages>
-</library>
 <library name="LM358DR">
 <packages>
 <package name="SOIC127P610X175-8N" urn="urn:adsk.eagle:footprint:33744364/1">
@@ -2931,6 +2885,7 @@ Covered vias can be set in Masks (Limit).
 <board_group name="USB"/>
 <board_group name="MOTOR_LINKS"/>
 <board_group name="POWER_BAT"/>
+<board_group name="GYRO"/>
 </groups>
 <elements>
 <element name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF" x="61.5385125" y="98.564571875" smashed="yes" rot="R270">
@@ -2939,53 +2894,23 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="C" x="-23.551484375" y="55.38456875" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="58.9985125" y="99.83456875" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" value="22u" x="48.672" y="51.618" smashed="yes" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="47.402" y="52.888" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="88" x="63.912" y="-46.172" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="63.912" y="-46.172" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="47.402" y="49.078" size="1.27" layer="27"/>
+<element name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" value="22u" x="42.322" y="50.348" smashed="yes" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="41.052" y="51.618" size="1.27" layer="25"/>
+<attribute name="POPULARITY" value="88" x="57.562" y="-47.442" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="57.562" y="-47.442" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="41.052" y="47.808" size="1.27" layer="27"/>
 </element>
-<element name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" value="33u" x="53.498" y="56.952" smashed="yes" rot="R90" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="52.228" y="55.682" size="1.27" layer="25" rot="R90"/>
-<attribute name="POPULARITY" value="88" x="151.288" y="112.832" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="151.288" y="112.832" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="VALUE" x="56.038" y="55.682" size="1.27" layer="27" rot="R90"/>
+<element name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" value="33u" x="47.148" y="55.682" smashed="yes" rot="R90" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="45.878" y="54.412" size="1.27" layer="25" rot="R90"/>
+<attribute name="POPULARITY" value="88" x="144.938" y="111.562" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="144.938" y="111.562" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="49.688" y="54.412" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="C18" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" value="1n" x="85.09" y="-30.48" smashed="yes" rot="R270">
 <attribute name="NAME" x="85.09" y="-33.02" size="1.27" layer="25" rot="R270"/>
 <attribute name="POPULARITY" value="88" x="-12.7" y="-76.2" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="SPICEPREFIX" value="C" x="-12.7" y="-76.2" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="82.55" y="-29.21" size="1.27" layer="27" rot="R270"/>
-</element>
-<element name="C20" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="153.84" y="25.09" smashed="yes" rot="MR180">
-<attribute name="NAME" x="152.57" y="23.82" size="1.27" layer="26" rot="MR180"/>
-<attribute name="POPULARITY" value="88" x="216.07" y="103.83" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="216.07" y="103.83" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="VALUE" x="152.57" y="27.63" size="1.27" layer="28" rot="MR180"/>
-</element>
-<element name="C21" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="158.57" y="25.36" smashed="yes" rot="MR90">
-<attribute name="NAME" x="159.84" y="24.09" size="1.27" layer="26" rot="MR90"/>
-<attribute name="POPULARITY" value="88" x="79.83" y="93.94" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="79.83" y="93.94" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="VALUE" x="156.03" y="24.09" size="1.27" layer="28" rot="MR90"/>
-</element>
-<element name="C22" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF" x="162.65" y="23.55" smashed="yes" rot="MR90">
-<attribute name="NAME" x="163.92" y="22.28" size="1.27" layer="26" rot="MR90"/>
-<attribute name="POPULARITY" value="88" x="77.56" y="85.78" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="77.56" y="85.78" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="VALUE" x="160.11" y="22.28" size="1.27" layer="28" rot="MR90"/>
-</element>
-<element name="C23" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="158.38" y="20.28" smashed="yes" rot="MR90">
-<attribute name="NAME" x="159.65" y="17.74" size="1.27" layer="26" rot="MR90"/>
-<attribute name="POPULARITY" value="88" x="79.64" y="95.21" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="79.64" y="95.21" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="VALUE" x="155.84" y="19.01" size="1.27" layer="28" rot="MR90"/>
-</element>
-<element name="C24" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10nF" x="153.11" y="20.01" smashed="yes" rot="MR180">
-<attribute name="NAME" x="154.38" y="17.47" size="1.27" layer="26" rot="MR180"/>
-<attribute name="POPULARITY" value="88" x="221.69" y="105.1" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="221.69" y="105.1" size="1.778" layer="28" rot="MR180" display="off"/>
-<attribute name="VALUE" x="151.84" y="22.55" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="C27" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1uF/16V" x="94.25" y="18.78" smashed="yes" rot="MR270">
 <attribute name="NAME" x="94.25" y="16.24" size="1.27" layer="25" rot="R270"/>
@@ -2999,11 +2924,11 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="C" x="170.45" y="-11.7" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="94.25" y="20.05" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="70.898" y="36.904" smashed="yes" grouprefs="USB">
-<attribute name="NAME" x="69.628" y="38.174" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="88" x="114.078" y="-41.836" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="114.078" y="-41.836" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="69.628" y="34.364" size="1.27" layer="27"/>
+<element name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="65.818" y="36.904" smashed="yes" grouprefs="USB">
+<attribute name="NAME" x="64.548" y="38.174" size="1.27" layer="25"/>
+<attribute name="POPULARITY" value="88" x="108.998" y="-41.836" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="108.998" y="-41.836" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="64.548" y="34.364" size="1.27" layer="27"/>
 </element>
 <element name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF" x="78.024" y="95.588" smashed="yes" rot="R270">
 <attribute name="NAME" x="79.294" y="96.858" size="1.27" layer="25" rot="R270"/>
@@ -3017,35 +2942,35 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="C" x="180.93331875" y="165.57720625" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="98.383321875" y="108.42720625" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="77.47" y="65.72" smashed="yes" rot="R270">
-<attribute name="NAME" x="166.01" y="27.74" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="88" x="-1.27" y="16.19" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="-1.27" y="16.19" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="74.93" y="66.99" size="1.27" layer="27" rot="R270"/>
+<element name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="76.2" y="65.72" smashed="yes" rot="R270">
+<attribute name="NAME" x="83.46" y="59.49" size="1.27" layer="25"/>
+<attribute name="POPULARITY" value="88" x="-2.54" y="16.19" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="-2.54" y="16.19" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="73.66" y="66.99" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="59.88" y="61.15" smashed="yes">
-<attribute name="NAME" x="58.61" y="62.42" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="88" x="115.76" y="-17.59" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="115.76" y="-17.59" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="58.61" y="58.61" size="1.27" layer="27"/>
+<element name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF" x="56.07" y="72.58" smashed="yes" rot="R90">
+<attribute name="NAME" x="54.8" y="71.31" size="1.27" layer="25" rot="R90"/>
+<attribute name="POPULARITY" value="88" x="134.81" y="128.46" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="134.81" y="128.46" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="58.61" y="71.31" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="CR1" library="shared" package="POWERSO-20_STM" value="L298P" x="66.31" y="71.8" smashed="yes" grouprefs="XXX MAUS XXXX">
+<element name="CR1" library="shared" package="POWERSO-20_STM" value="L298P" x="66.31" y="71.8" smashed="yes" grouprefs="XXXX MAUS XXX">
 <attribute name="COPYRIGHT" value="Copyright (C) 2022 Ultra Librarian. All rights reserved." x="115.84" y="50.21" size="1.778" layer="27" display="off"/>
 <attribute name="MANUFACTURER_PART_NUMBER" value="L298P" x="115.84" y="50.21" size="1.778" layer="27" display="off"/>
 <attribute name="MFR_NAME" value="STMicroelectronics" x="115.84" y="50.21" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="64.3034" y="74.975" size="1.27" layer="27" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="63.3128" y="67.355" size="1.27" layer="21" ratio="6" rot="SR0"/>
 </element>
-<element name="D1" library="SP0503BAHTG" package="SOT143" value="SP0503BAHTG" x="64.294" y="28.014" smashed="yes" rot="MR0" grouprefs="XXX MAUS XXXX USB">
-<attribute name="AVAILABILITY" value="In Stock" x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="DESCRIPTION" value=" 8.5V Clamp - Ipp Tvs Diode Surface Mount SOT-143-4 " x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MF" value="Littelfuse Inc." x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="MP" value="SP0503BAHTG" x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="NAME" x="66.202490625" y="30.17695" size="0.651190625" layer="26" rot="MR0"/>
-<attribute name="PACKAGE" value="None" x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="PRICE" value="None" x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/SP0503BAHTG/?ref=eda" x="-30.956" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="VALUE" x="66.19933125" y="24.96546875" size="0.6501125" layer="28" rot="MR0"/>
+<element name="D1" library="SP0503BAHTG" package="SOT143" value="SP0503BAHTG" x="59.214" y="28.014" smashed="yes" rot="MR0" grouprefs="XXXX USB MAUS XXX">
+<attribute name="AVAILABILITY" value="In Stock" x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="DESCRIPTION" value=" 8.5V Clamp - Ipp Tvs Diode Surface Mount SOT-143-4 " x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MF" value="Littelfuse Inc." x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="MP" value="SP0503BAHTG" x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="NAME" x="61.122490625" y="30.17695" size="0.651190625" layer="26" rot="MR0"/>
+<attribute name="PACKAGE" value="None" x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="PRICE" value="None" x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/SP0503BAHTG/?ref=eda" x="-36.036" y="-41.836" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="VALUE" x="61.11933125" y="24.96546875" size="0.6501125" layer="28" rot="MR0"/>
 </element>
 <element name="D2" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" package="LED-1206" package3d_urn="urn:adsk.eagle:package:39352/1" value="RED" x="113.03" y="17.78" smashed="yes" rot="R270">
 <attribute name="NAME" x="113.9825" y="17.78" size="0.6096" layer="25" font="vector" ratio="20" rot="R270" align="bottom-center"/>
@@ -3067,65 +2992,65 @@ Covered vias can be set in Masks (Limit).
 <attribute name="PROD_ID" value="DIO-09912" x="-3.81" y="-12.7" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="104.4575" y="17.78" size="0.6096" layer="27" font="vector" ratio="20" rot="R270" align="top-center"/>
 </element>
-<element name="D6" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" package="LED-1206" value="RED" x="66.834" y="41.73" smashed="yes" grouprefs="USB">
-<attribute name="NAME" x="66.834" y="42.6825" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
-<attribute name="PROD_ID" value="DIO-09912" x="102.394" y="-67.49" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="66.834" y="40.7775" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
+<element name="D6" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" package="LED-1206" value="RED" x="61.754" y="41.73" smashed="yes" grouprefs="USB">
+<attribute name="NAME" x="61.754" y="42.6825" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
+<attribute name="PROD_ID" value="DIO-09912" x="97.314" y="-67.49" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="61.754" y="40.7775" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
 </element>
-<element name="D7" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" package="LED-1206" value="RED" x="66.834" y="39.698" smashed="yes" grouprefs="USB">
-<attribute name="NAME" x="66.834" y="40.6505" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
-<attribute name="PROD_ID" value="DIO-09912" x="107.474" y="-69.522" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="66.834" y="38.7455" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
+<element name="D7" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" package="LED-1206" value="RED" x="61.754" y="39.698" smashed="yes" grouprefs="USB">
+<attribute name="NAME" x="61.754" y="40.6505" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
+<attribute name="PROD_ID" value="DIO-09912" x="102.394" y="-69.522" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="61.754" y="38.7455" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
 </element>
-<element name="J1" library="shared" package="SS52300001" value="SS-52300-001" x="63.024" y="22.934" smashed="yes" grouprefs="XXX MAUS XXXX USB">
-<attribute name="ARROW_PART_NUMBER" value="" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="USB Connectors USB 2.0 RA Receptacle Type B" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="10.82mm" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Bel" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="SS-52300-001" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="530-SS-52300-001" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="157.004" y="6.424" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="64.274" y="16.194" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="64.274" y="13.654" size="1.27" layer="27" align="center"/>
+<element name="J1" library="shared" package="SS52300001" value="SS-52300-001" x="57.944" y="22.934" smashed="yes" grouprefs="USB XXXX MAUS XXX">
+<attribute name="ARROW_PART_NUMBER" value="" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="USB Connectors USB 2.0 RA Receptacle Type B" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="10.82mm" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Bel" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="SS-52300-001" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="530-SS-52300-001" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="151.924" y="6.424" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="59.194" y="16.194" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="59.194" y="13.654" size="1.27" layer="27" align="center"/>
 </element>
 <element name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X06" package3d_urn="urn:adsk.eagle:package:22472/2" value="" x="67.09" y="88.58" smashed="yes" rot="R180">
 <attribute name="NAME" x="74.7862" y="86.7512" size="1.27" layer="25" ratio="10" rot="R180"/>
 <attribute name="POPULARITY" value="79" x="45.5" y="191.45" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="74.71" y="91.755" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X06" package3d_urn="urn:adsk.eagle:package:22472/2" value="" x="56.674" y="34.618" smashed="yes" rot="R270" grouprefs="USB">
-<attribute name="NAME" x="58.5028" y="42.3142" size="1.27" layer="25" ratio="10" rot="R270"/>
-<attribute name="POPULARITY" value="79" x="-46.196" y="-3.482" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="53.499" y="42.238" size="1.27" layer="27" rot="R270"/>
+<element name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X06" package3d_urn="urn:adsk.eagle:package:22472/2" value="" x="46.514" y="23.188" smashed="yes" rot="R270" grouprefs="USB">
+<attribute name="NAME" x="48.3428" y="30.8842" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="POPULARITY" value="79" x="-56.356" y="-14.912" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="43.339" y="30.808" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="JP5" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X10" package3d_urn="urn:adsk.eagle:package:22406/2" value="" x="65.31" y="85.01" smashed="yes">
 <attribute name="NAME" x="52.5338" y="86.8388" size="1.27" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="35" x="141.51" y="-11.51" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="52.61" y="81.835" size="1.27" layer="27"/>
 </element>
-<element name="Q2" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="BSS123" x="73.946" y="28.776" smashed="yes" rot="R270" grouprefs="USB">
-<attribute name="NAME" x="75.851" y="30.681" size="1.27" layer="25" rot="R270"/>
-<attribute name="POPULARITY" value="21" x="4.096" y="-35.994" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="70.771" y="30.681" size="1.27" layer="27" rot="R270"/>
+<element name="Q2" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="BSS123" x="68.866" y="28.776" smashed="yes" rot="R270" grouprefs="USB">
+<attribute name="NAME" x="70.771" y="30.681" size="1.27" layer="25" rot="R270"/>
+<attribute name="POPULARITY" value="21" x="-0.984" y="-35.994" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="65.691" y="30.681" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="Q3" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="BSS123" x="86.914" y="97.286" smashed="yes">
 <attribute name="NAME" x="83.469" y="96.381" size="1.27" layer="25" rot="R90"/>
 <attribute name="POPULARITY" value="21" x="159.304" y="27.436" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="85.009" y="94.111" size="1.27" layer="27"/>
 </element>
-<element name="Q4" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="BSS123" x="73.946" y="33.348" smashed="yes" rot="R270" grouprefs="USB">
-<attribute name="NAME" x="75.851" y="35.253" size="1.27" layer="25" rot="R270"/>
-<attribute name="POPULARITY" value="21" x="4.096" y="-46.662" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="70.771" y="35.253" size="1.27" layer="27" rot="R270"/>
+<element name="Q4" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="BSS123" x="68.866" y="33.348" smashed="yes" rot="R270" grouprefs="USB">
+<attribute name="NAME" x="70.771" y="35.253" size="1.27" layer="25" rot="R270"/>
+<attribute name="POPULARITY" value="21" x="-0.984" y="-46.662" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="65.691" y="35.253" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="Q6" library="mosfet" package="TSOP-6-FOR-MOSFET" package3d_urn="urn:adsk.eagle:package:33743404/1" value="PMN30XPEAHEATSINK" x="91.294" y="102.016" smashed="yes">
 <attribute name="NAME" x="88.3715" y="73.294" size="1.27" layer="25" rot="R90" align="bottom-center"/>
 <attribute name="VALUE" x="91.294" y="99.831" size="1.27" layer="27" align="top-center"/>
 </element>
-<element name="Q7" library="mosfet" package="TSOP-6-FOR-MOSFET" package3d_urn="urn:adsk.eagle:package:33743404/1" value="PMN30XPEAHEATSINK" x="30.638" y="58.984" smashed="yes" rot="R90" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="28.0255" y="58.984" size="1.27" layer="25" rot="R90" align="bottom-center"/>
-<attribute name="VALUE" x="32.823" y="58.984" size="1.27" layer="27" rot="R90" align="top-center"/>
+<element name="Q7" library="mosfet" package="TSOP-6-FOR-MOSFET" package3d_urn="urn:adsk.eagle:package:33743404/1" value="PMN30XPEAHEATSINK" x="24.288" y="58.984" smashed="yes" rot="MR270" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="21.6755" y="58.984" size="1.27" layer="26" rot="MR270" align="bottom-center"/>
+<attribute name="VALUE" x="26.473" y="58.984" size="1.27" layer="28" rot="MR270" align="top-center"/>
 </element>
 <element name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k" x="113.03" y="21.59" smashed="yes" rot="MR270">
 <attribute name="NAME" x="111.76" y="22.224996875" size="1.27" layer="26" rot="MR270"/>
@@ -3133,11 +3058,11 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="R" x="210.819996875" y="-39.369996875" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="115.57" y="22.224996875" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" value="10k" x="43.338" y="52.888" smashed="yes" rot="R270" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="44.608" y="53.523" size="1.27" layer="25" rot="R270"/>
-<attribute name="POPULARITY" value="86" x="-41.752" y="-28.392" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="-41.752" y="-28.392" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="40.798" y="53.523" size="1.27" layer="27" rot="R270"/>
+<element name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" value="10k" x="36.988" y="51.618" smashed="yes" rot="R270" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="38.258" y="52.253" size="1.27" layer="25" rot="R270"/>
+<attribute name="POPULARITY" value="86" x="-48.102" y="-29.662" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="-48.102" y="-29.662" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="34.448" y="52.253" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" value="100k" x="80.01" y="-30.48" smashed="yes" rot="R270">
 <attribute name="NAME" x="80.01" y="-32.385" size="1.27" layer="25" rot="R270"/>
@@ -3169,11 +3094,11 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="R" x="196.849996875" y="5.08" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="107.95" y="22.224996875" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="R21" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k" x="62.516" y="41.73" smashed="yes" rot="R180" grouprefs="USB">
-<attribute name="NAME" x="63.151" y="40.46" size="1.27" layer="25" rot="R180"/>
-<attribute name="POPULARITY" value="86" x="39.656" y="133.17" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="39.656" y="133.17" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="63.151" y="44.27" size="1.27" layer="27" rot="R180"/>
+<element name="R21" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k" x="57.436" y="41.73" smashed="yes" rot="R180" grouprefs="USB">
+<attribute name="NAME" x="58.071" y="40.46" size="1.27" layer="25" rot="R180"/>
+<attribute name="POPULARITY" value="86" x="34.576" y="133.17" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="34.576" y="133.17" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="58.071" y="44.27" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R23" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="36.18" y="101.09" smashed="yes" rot="R90">
 <attribute name="NAME" x="34.91" y="100.455" size="1.27" layer="25" rot="R90"/>
@@ -3193,11 +3118,11 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="R" x="133.854" y="4.846" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="91.309" y="93.746" size="1.27" layer="27"/>
 </element>
-<element name="R26" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k" x="62.516" y="39.698" smashed="yes" rot="R180" grouprefs="USB">
-<attribute name="NAME" x="63.151" y="38.428" size="1.27" layer="25" rot="R180"/>
-<attribute name="POPULARITY" value="86" x="14.256" y="131.138" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="14.256" y="131.138" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="63.151" y="42.238" size="1.27" layer="27" rot="R180"/>
+<element name="R26" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k" x="57.436" y="39.698" smashed="yes" rot="R180" grouprefs="USB">
+<attribute name="NAME" x="58.071" y="38.428" size="1.27" layer="25" rot="R180"/>
+<attribute name="POPULARITY" value="86" x="9.176" y="131.138" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="9.176" y="131.138" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="58.071" y="42.238" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="88.9" y="38.1" smashed="yes" rot="MR0">
 <attribute name="NAME" x="89.535" y="39.37" size="1.27" layer="26" rot="MR0"/>
@@ -3205,29 +3130,29 @@ Covered vias can be set in Masks (Limit).
 <attribute name="SPICEPREFIX" value="R" x="34.29" y="-53.34" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="VALUE" x="89.535" y="35.56" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="69.882" y="28.776" smashed="yes" rot="R270" grouprefs="USB">
-<attribute name="NAME" x="71.152" y="29.411" size="1.27" layer="25" rot="R270"/>
-<attribute name="POPULARITY" value="86" x="-21.558" y="-41.074" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="-21.558" y="-41.074" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="67.342" y="29.411" size="1.27" layer="27" rot="R270"/>
+<element name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="64.802" y="28.776" smashed="yes" rot="R270" grouprefs="USB">
+<attribute name="NAME" x="66.072" y="29.411" size="1.27" layer="25" rot="R270"/>
+<attribute name="POPULARITY" value="86" x="-26.638" y="-41.074" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="-26.638" y="-41.074" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="62.262" y="29.411" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="69.882" y="33.348" smashed="yes" rot="R90" grouprefs="USB">
-<attribute name="NAME" x="68.612" y="32.713" size="1.27" layer="25" rot="R90"/>
-<attribute name="POPULARITY" value="86" x="161.322" y="108.278" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="161.322" y="108.278" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="VALUE" x="72.422" y="32.713" size="1.27" layer="27" rot="R90"/>
+<element name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="64.802" y="33.348" smashed="yes" rot="R90" grouprefs="USB">
+<attribute name="NAME" x="63.532" y="32.713" size="1.27" layer="25" rot="R90"/>
+<attribute name="POPULARITY" value="86" x="156.242" y="108.278" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="156.242" y="108.278" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="67.342" y="32.713" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k" x="29.114" y="53.904" smashed="yes" rot="R270" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="30.384" y="54.539" size="1.27" layer="25" rot="R270"/>
-<attribute name="POPULARITY" value="86" x="-62.326" y="-26.106" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="-62.326" y="-26.106" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="26.574" y="54.539" size="1.27" layer="27" rot="R270"/>
+<element name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k" x="22.764" y="53.904" smashed="yes" rot="MR270" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="21.494" y="54.539" size="1.27" layer="26" rot="MR270"/>
+<attribute name="POPULARITY" value="86" x="114.204" y="-26.106" size="1.778" layer="28" rot="MR270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="114.204" y="-26.106" size="1.778" layer="28" rot="MR270" display="off"/>
+<attribute name="VALUE" x="25.304" y="54.539" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k" x="31.4" y="53.904" smashed="yes" rot="R90" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="30.13" y="53.269" size="1.27" layer="25" rot="R90"/>
-<attribute name="POPULARITY" value="86" x="122.84" y="138.994" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="122.84" y="138.994" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="VALUE" x="33.94" y="53.269" size="1.27" layer="27" rot="R90"/>
+<element name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="22k" x="25.05" y="53.904" smashed="yes" rot="MR90" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="26.32" y="53.269" size="1.27" layer="26" rot="MR90"/>
+<attribute name="POPULARITY" value="86" x="-66.39" y="138.994" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="-66.39" y="138.994" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="VALUE" x="22.51" y="53.269" size="1.27" layer="28" rot="MR90"/>
 </element>
 <element name="S1" library="switch-omron" library_urn="urn:adsk.eagle:library:377" package="B3F-10XX" package3d_urn="urn:adsk.eagle:package:27496/1" value="" x="47.96" y="109.98" smashed="yes" rot="R90">
 <attribute name="MF" value="" x="105.11" y="163.32" size="1.778" layer="27" rot="R90" display="off"/>
@@ -3256,22 +3181,22 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="72" x="88.44" y="183.83" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="36.37" y="107.122" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="SENSOR_FRONT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="73.294" y="96.636" smashed="yes" rot="R270" grouprefs="XXXX XXX MAUS">
+<element name="SENSOR_FRONT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="73.294" y="96.636" smashed="yes" rot="R270" grouprefs="MAUS XXX XXXX">
 <attribute name="NAME" x="76.1228" y="100.5222" size="1.27" layer="25" ratio="10" rot="R270"/>
 <attribute name="POPULARITY" value="92" x="-29.576" y="38.216" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="70.119" y="100.446" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="SENSOR_LEFT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="54.664828125" y="98.809040625" smashed="yes" rot="R270" grouprefs="XXX MAUS XXXX">
+<element name="SENSOR_LEFT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="54.664828125" y="98.809040625" smashed="yes" rot="R270" grouprefs="XXXX MAUS XXX">
 <attribute name="NAME" x="56.493628125" y="102.69524375" size="1.27" layer="25" ratio="10" rot="R270"/>
 <attribute name="POPULARITY" value="92" x="-48.205165625" y="8.639046875" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="51.489828125" y="102.619040625" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="SENSOR_RIGHT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="101.5374" y="108.79918125" smashed="yes" rot="R90" grouprefs="XXX MAUS XXXX">
+<element name="SENSOR_RIGHT" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="101.5374" y="108.79918125" smashed="yes" rot="R90" grouprefs="XXXX MAUS XXX">
 <attribute name="NAME" x="99.7086" y="104.912978125" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="POPULARITY" value="92" x="204.4074" y="183.729178125" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="104.7124" y="104.989175" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="SV2" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="42.31" y="82.41" smashed="yes" grouprefs="MOTOR_LINKS XXX MAUS XXXX">
+<element name="SV2" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="42.31" y="82.41" smashed="yes" grouprefs="XXXX XXX MAUS MOTOR_LINKS">
 <attribute name="MF" value="" x="128.67" y="40.5" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="128.67" y="40.5" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="34.69" y="87.49" size="1.778" layer="25" ratio="10"/>
@@ -3280,7 +3205,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="5" x="128.67" y="40.5" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="42.945" y="87.49" size="1.778" layer="27" ratio="10"/>
 </element>
-<element name="SV4" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="91.69" y="83.49" smashed="yes" grouprefs="XXX MAUS XXXX">
+<element name="SV4" library="con-harting-ml" library_urn="urn:adsk.eagle:library:149" package="ML6" package3d_urn="urn:adsk.eagle:package:6988/1" value="" x="91.69" y="83.49" smashed="yes" grouprefs="XXXX MAUS XXX">
 <attribute name="MF" value="" x="113.28" y="25.07" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="113.28" y="25.07" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="84.07" y="88.57" size="1.778" layer="25" ratio="10"/>
@@ -3289,15 +3214,14 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="5" x="113.28" y="25.07" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="92.325" y="88.57" size="1.778" layer="27" ratio="10"/>
 </element>
-<element name="U$2" library="ICM-20948" package="ICM_20948-F" value="ICM_20948" x="151.84" y="22.55" smashed="yes" rot="R270" grouprefs="XXXX XXX MAUS">
-<attribute name="NAME" x="173.992" y="33.509665625" size="1.27" layer="25"/>
-<attribute name="VALUE" x="142.900334375" y="30.008" size="1.27" layer="27" rot="R270"/>
+<element name="U$2" library="ICM-20948" package="ICM_20948-F" value="ICM_20948" x="70.56" y="54.3" smashed="yes" rot="R270" grouprefs="XXX GYRO MAUS XXXX">
+<attribute name="VALUE" x="62.890334375" y="59.218" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="U$4" library="xt60" package="XT60-UPRIGHT" value="XT60" x="28.876" y="19.378" smashed="yes" rot="R180" grouprefs="POWER_BAT XXXX XXX MAUS POWER">
+<element name="U$4" library="xt60" package="XT60-UPRIGHT" value="XT60" x="28.876" y="19.378" smashed="yes" rot="R180" grouprefs="POWER XXX XXXX MAUS POWER_BAT">
 <attribute name="NAME" x="34.876" y="14.978" size="1.27" layer="25" rot="R180"/>
-<attribute name="VALUE" x="35.276" y="25.078" size="1.27" layer="27" rot="R180"/>
+<attribute name="VALUE" x="27.656" y="23.808" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="U1" library="ESP32-S2-WROOM" package="XCVR_ESP32-S2-WROOM" value="ESP32-S2-WROOM" x="88.9" y="25.4" smashed="yes" rot="R180" grouprefs="XXXX MAUS XXX">
+<element name="U1" library="ESP32-S2-WROOM" package="XCVR_ESP32-S2-WROOM" value="ESP32-S2-WROOM" x="88.9" y="25.4" smashed="yes" rot="R180" grouprefs="XXX MAUS XXXX">
 <attribute name="AVAILABILITY" value="In Stock" x="66.04" y="44.45" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="DESCRIPTION" value=" WiFi 802.11b/g/n Transceiver Module 2.4GHz Antenna Not Included, I-PEX Surface Mount " x="66.04" y="44.45" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MF" value="Espressif Systems" x="66.04" y="44.45" size="1.778" layer="27" rot="R180" display="off"/>
@@ -3308,88 +3232,77 @@ Covered vias can be set in Masks (Limit).
 <attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/ESP32-S2-WROOM/?ref=eda" x="66.04" y="44.45" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="97.9" y="43.1" size="1.2738" layer="27" rot="R180"/>
 </element>
-<element name="U2" library="CH340C" package="SOIC127P600X180-16N" value="CH340C" x="64.294" y="32.332" smashed="yes" grouprefs="XXX MAUS XXXX USB">
-<attribute name="AVAILABILITY" value="Not in stock" x="80.804" y="-13.388" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value=" USB to serial chip CH340 " x="80.804" y="-13.388" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="WCH" x="80.804" y="-13.388" size="1.778" layer="27" display="off"/>
-<attribute name="MP" value="CH340C" x="80.804" y="-13.388" size="1.778" layer="27" display="off"/>
-<attribute name="PACKAGE" value="None" x="80.804" y="-13.388" size="1.778" layer="27" display="off"/>
-<attribute name="PRICE" value="None" x="80.804" y="-13.388" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="60.639" y="26.082" size="1.27" layer="27" align="top-left"/>
+<element name="U2" library="CH340C" package="SOIC127P600X180-16N" value="CH340C" x="59.214" y="32.332" smashed="yes" grouprefs="XXXX USB MAUS XXX">
+<attribute name="AVAILABILITY" value="Not in stock" x="75.724" y="-13.388" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value=" USB to serial chip CH340 " x="75.724" y="-13.388" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="WCH" x="75.724" y="-13.388" size="1.778" layer="27" display="off"/>
+<attribute name="MP" value="CH340C" x="75.724" y="-13.388" size="1.778" layer="27" display="off"/>
+<attribute name="PACKAGE" value="None" x="75.724" y="-13.388" size="1.778" layer="27" display="off"/>
+<attribute name="PRICE" value="None" x="75.724" y="-13.388" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="55.559" y="26.082" size="1.27" layer="27" align="top-left"/>
 </element>
-<element name="U4" library="LP3965EMP-3.3" package="SOT150P696X180-5N" value="LP3965EMP-3.3" x="48.418" y="56.952" smashed="yes" rot="R90" grouprefs="POWER_BAT XXXX XXX MAUS POWER">
-<attribute name="AVAILABILITY" value="In Stock" x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="DESCRIPTION" value=" 1.5-A, low-dropout voltage regulator with sense &amp; enable 5-SOT-223 -40 to 125 " x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MF" value="Texas Instruments" x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MP" value="LP3965EMP-3.3/NOPB" x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="44.733359375" y="52.2255" size="2.08371875" layer="25" ratio="10" rot="SR90"/>
-<attribute name="PACKAGE" value="SOT-223-5 Texas Instruments" x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="PRICE" value="None" x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/LP3965EMP-3.3/NOPB/?ref=eda" x="92.868" y="103.942" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="VALUE" x="54.32136875" y="51.455759375" size="2.086540625" layer="27" ratio="10" rot="SR90"/>
+<element name="U4" library="LP3965EMP-3.3" package="SOT150P696X180-5N" value="LP3965EMP-3.3" x="42.068" y="55.682" smashed="yes" rot="R90" grouprefs="POWER XXX XXXX MAUS POWER_BAT">
+<attribute name="AVAILABILITY" value="In Stock" x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="DESCRIPTION" value=" 1.5-A, low-dropout voltage regulator with sense &amp; enable 5-SOT-223 -40 to 125 " x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MF" value="Texas Instruments" x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MP" value="LP3965EMP-3.3/NOPB" x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="NAME" x="38.383359375" y="50.9555" size="2.08371875" layer="25" ratio="10" rot="SR90"/>
+<attribute name="PACKAGE" value="SOT-223-5 Texas Instruments" x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="PRICE" value="None" x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/LP3965EMP-3.3/NOPB/?ref=eda" x="86.518" y="102.672" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="47.97136875" y="50.185759375" size="2.086540625" layer="27" ratio="10" rot="SR90"/>
 </element>
-<element name="U5" library="LSM9DS1TR" package="PQFN43P300X350X102-24N" value="LSM9DS1TR" x="145.3" y="22.55" smashed="yes" rot="R270" grouprefs="XXXX XXX MAUS">
-<attribute name="AVAILABILITY" value="In Stock" x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="DESCRIPTION" value=" Accelerometer, Gyroscope, Magnetometer, Temperature, 9 Axis Sensor I²C, SPI Output " x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MF" value="STMicroelectronics" x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="MP" value="LSM9DS1TR" x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="147.203059375" y="24.55321875" size="0.40705625" layer="25" rot="R270"/>
-<attribute name="PACKAGE" value="TFLGA-24 STMicroelectronics" x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="PRICE" value="None" x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="PURCHASE-URL" value="https://pricing.snapeda.com/search/part/LSM9DS1TR/?ref=eda" x="41.16" y="-75.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="143.098240625" y="24.5516" size="0.406725" layer="27" rot="R270"/>
+<element name="U6" library="LM358DR" package="SOIC127P610X175-8N" package3d_urn="urn:adsk.eagle:package:33744331/1" value="LM358DR" x="30.13" y="54.666" smashed="yes" grouprefs="POWER XXX XXXX MAUS POWER_BAT">
+<attribute name="NAME" x="30.13" y="58.2596" size="1.27" layer="25" align="bottom-center"/>
+<attribute name="VALUE" x="30.13" y="51.531" size="1.27" layer="27" align="top-center"/>
 </element>
-<element name="U6" library="LM358DR" package="SOIC127P610X175-8N" package3d_urn="urn:adsk.eagle:package:33744331/1" value="LM358DR" x="36.48" y="55.936" smashed="yes" grouprefs="POWER_BAT XXXX XXX MAUS POWER">
-<attribute name="NAME" x="36.48" y="59.5296" size="1.27" layer="25" align="bottom-center"/>
-<attribute name="VALUE" x="36.48" y="52.801" size="1.27" layer="27" align="top-center"/>
+<element name="D8" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="30.4" y="71.12" smashed="yes" rot="R270" grouprefs="MOTOR_LINKS">
+<attribute name="ARROW_PART_NUMBER" value="" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="30.4" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="30.4" y="73.66" size="1.27" layer="25" rot="R270" align="center"/>
+<attribute name="VALUE" x="30.4" y="71.12" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="D8" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="45.64" y="71.12" smashed="yes" rot="R90" grouprefs="MOTOR_LINKS">
-<attribute name="ARROW_PART_NUMBER" value="" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="HEIGHT" value="0.95mm" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="45.64" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="45.64" y="68.58" size="1.27" layer="25" rot="R90" align="center"/>
-<attribute name="VALUE" x="45.64" y="71.12" size="1.27" layer="27" rot="R90" align="center"/>
+<element name="D9" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="30.4" y="64.77" smashed="yes" rot="R270" grouprefs="MOTOR_LINKS">
+<attribute name="ARROW_PART_NUMBER" value="" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="30.4" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="41.75" y="70.58" size="1.27" layer="25" rot="R270" align="center"/>
+<attribute name="VALUE" x="30.4" y="64.77" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="D9" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="45.64" y="64.77" smashed="yes" rot="R90" grouprefs="MOTOR_LINKS">
-<attribute name="ARROW_PART_NUMBER" value="" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="HEIGHT" value="0.95mm" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="45.64" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="40.64" y="60.23" size="1.27" layer="25" rot="R90" align="center"/>
-<attribute name="VALUE" x="45.64" y="64.77" size="1.27" layer="27" rot="R90" align="center"/>
+<element name="D10" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="38.02" y="71.12" smashed="yes" rot="R270" grouprefs="MOTOR_LINKS">
+<attribute name="ARROW_PART_NUMBER" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="38.02" y="73.66" size="1.27" layer="25" rot="R270" align="center"/>
+<attribute name="VALUE" x="38.02" y="71.12" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="D10" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="38.02" y="71.12" smashed="yes" rot="R90" grouprefs="MOTOR_LINKS">
-<attribute name="ARROW_PART_NUMBER" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="HEIGHT" value="0.95mm" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="38.02" y="71.12" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="38.02" y="68.58" size="1.27" layer="25" rot="R90" align="center"/>
-<attribute name="VALUE" x="38.02" y="71.12" size="1.27" layer="27" rot="R90" align="center"/>
-</element>
-<element name="D11" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="38.02" y="64.77" smashed="yes" rot="R90" grouprefs="MOTOR_LINKS">
-<attribute name="ARROW_PART_NUMBER" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="HEIGHT" value="0.95mm" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="38.02" y="62.23" size="1.27" layer="25" rot="R90" align="center"/>
-<attribute name="VALUE" x="38.02" y="64.77" size="1.27" layer="27" rot="R90" align="center"/>
+<element name="D11" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="38.02" y="64.77" smashed="yes" rot="R270" grouprefs="MOTOR_LINKS">
+<attribute name="ARROW_PART_NUMBER" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="38.02" y="64.77" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="NAME" x="38.02" y="67.31" size="1.27" layer="25" rot="R270" align="center"/>
+<attribute name="VALUE" x="38.02" y="64.77" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
 <element name="D16" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="86.55" y="73.24" smashed="yes" rot="R270">
 <attribute name="ARROW_PART_NUMBER" value="" x="86.55" y="71.97" size="1.778" layer="27" rot="R270" display="off"/>
@@ -3439,70 +3352,70 @@ Covered vias can be set in Masks (Limit).
 <attribute name="NAME" x="95.74" y="70.44" size="1.27" layer="25" rot="R270" align="center"/>
 <attribute name="VALUE" x="94.47" y="66.63" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="U$1" library="shared" package="MOTOR_HALTERUNG" value="" x="26" y="25" smashed="yes" rot="R90"/>
+<element name="U$1" library="shared" package="MOTOR_HALTERUNG" value="" x="26" y="25" locked="yes" smashed="yes" rot="R90"/>
 <element name="U$5" library="shared" package="MOTOR_HALTERUNG" value="" x="116" y="25" smashed="yes" rot="R90"/>
 <element name="U$6" library="shared" package="SENSOR_HALTERUNG" value="" x="116" y="77" smashed="yes" rot="R90"/>
 <element name="U$7" library="shared" package="SENSOR_HALTERUNG" value="" x="79.5" y="116" smashed="yes" rot="R180"/>
 <element name="U$8" library="shared" package="SENSOR_HALTERUNG" value="" x="16" y="104" smashed="yes" rot="R270"/>
-<element name="IC1" library="shared" package="SOIC127P600X175-8N" value="AP1509-50SG-13" x="44.1" y="44.76" smashed="yes" rot="R90" grouprefs="POWER_BAT POWER">
-<attribute name="ARROW_PART_NUMBER" value="AP1509-50SG-13" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/ap1509-50sg-13/diodes-incorporated?region=nac" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="DESCRIPTION" value="DiodesZetex, AP1509-50SG-13 DC-DC Converter 2A 8-Pin, SOP" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="HEIGHT" value="1.75mm" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Diodes Inc." x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="AP1509-50SG-13" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="621-AP1509-50SG-13" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/AP1509-50SG-13?qs=EJYhozv%252BYpwbI10CpTvwPw%3D%3D" x="44.1" y="44.76" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="45.1" y="44.76" size="1.27" layer="25" rot="R90" align="center"/>
-<attribute name="VALUE" x="44.1" y="44.76" size="1.27" layer="27" rot="R90" align="center"/>
+<element name="IC1" library="shared" package="SOIC127P600X175-8N" value="AP1509-50SG-13" x="37.75" y="43.49" smashed="yes" rot="R90" grouprefs="POWER POWER_BAT">
+<attribute name="ARROW_PART_NUMBER" value="AP1509-50SG-13" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/ap1509-50sg-13/diodes-incorporated?region=nac" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="DESCRIPTION" value="DiodesZetex, AP1509-50SG-13 DC-DC Converter 2A 8-Pin, SOP" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="1.75mm" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Diodes Inc." x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="AP1509-50SG-13" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="621-AP1509-50SG-13" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/AP1509-50SG-13?qs=EJYhozv%252BYpwbI10CpTvwPw%3D%3D" x="37.75" y="43.49" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="NAME" x="38.75" y="43.49" size="1.27" layer="25" rot="R90" align="center"/>
+<attribute name="VALUE" x="37.75" y="43.49" size="1.27" layer="27" rot="R90" align="center"/>
 </element>
-<element name="L2" library="shared" package="WE-PD_1260/1245/1280/121054" value="744770147" x="43.846" y="33.838" smashed="yes" grouprefs="POWER_BAT POWER">
-<attribute name="ARROW_PART_NUMBER" value="" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="SMD-Shielded Power Inductors WE-PD" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="mm" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Wurth Elektronik" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="744770147" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="710-744770147" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/744770147?qs=E%2F%2FhvbtCqpOiGvqyq%252BELzg%3D%3D" x="43.846" y="33.838" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="37.536" y="25.718" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="38.036" y="41.188" size="1.27" layer="27" align="center"/>
+<element name="L2" library="shared" package="WE-PD_1260/1245/1280/121054" value="744770147" x="37.496" y="32.568" smashed="yes" grouprefs="POWER POWER_BAT">
+<attribute name="ARROW_PART_NUMBER" value="" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="SMD-Shielded Power Inductors WE-PD" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="mm" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Wurth Elektronik" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="744770147" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="710-744770147" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/744770147?qs=E%2F%2FhvbtCqpOiGvqyq%252BELzg%3D%3D" x="37.496" y="32.568" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="31.186" y="24.448" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="31.686" y="39.918" size="1.27" layer="27" align="center"/>
 </element>
-<element name="C13" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u" x="54.006" y="48.824" smashed="yes" rot="R90" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="52.736" y="47.554" size="1.27" layer="25" rot="R90"/>
-<attribute name="POPULARITY" value="88" x="54.006" y="48.824" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="54.006" y="48.824" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="VALUE" x="56.546" y="47.554" size="1.27" layer="27" rot="R90"/>
+<element name="C13" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u" x="47.656" y="47.554" smashed="yes" rot="R90" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="46.386" y="46.284" size="1.27" layer="25" rot="R90"/>
+<attribute name="POPULARITY" value="88" x="47.656" y="47.554" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="47.656" y="47.554" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="50.196" y="46.284" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="C14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u" x="51.466" y="48.824" smashed="yes" rot="R90" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="50.196" y="47.554" size="1.27" layer="25" rot="R90"/>
-<attribute name="POPULARITY" value="88" x="51.466" y="48.824" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="51.466" y="48.824" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="VALUE" x="54.006" y="47.554" size="1.27" layer="27" rot="R90"/>
+<element name="C14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u" x="45.116" y="47.554" smashed="yes" rot="R90" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="43.846" y="46.284" size="1.27" layer="25" rot="R90"/>
+<attribute name="POPULARITY" value="88" x="45.116" y="47.554" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="45.116" y="47.554" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="47.656" y="46.284" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="D12" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="38.766" y="44.76" smashed="yes" grouprefs="POWER_BAT POWER">
-<attribute name="ARROW_PART_NUMBER" value="" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="0.95mm" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="" x="38.766" y="44.76" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="39.766" y="45.76" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="38.766" y="44.76" size="1.27" layer="27" align="center"/>
+<element name="D12" library="shared" package="RB068VWM100" value="RBR2VWM40ATF" x="32.416" y="43.49" smashed="yes" grouprefs="POWER POWER_BAT">
+<attribute name="ARROW_PART_NUMBER" value="" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Low V&lt;sub&gt;F&lt;/sub&gt;, 40V, 2A, Schottky Barrier Diode for Automoive" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="0.95mm" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="ROHM Semiconductor" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="RBR2VWM40ATF" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="" x="32.416" y="43.49" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="33.416" y="44.49" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="32.416" y="43.49" size="1.27" layer="27" align="center"/>
 </element>
-<element name="C12" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u" x="38.766" y="49.84" smashed="yes" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="37.496" y="51.11" size="1.27" layer="25"/>
-<attribute name="POPULARITY" value="88" x="38.766" y="49.84" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="38.766" y="49.84" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="37.496" y="47.3" size="1.27" layer="27"/>
+<element name="C12" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="22u" x="32.416" y="48.57" smashed="yes" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="31.146" y="49.84" size="1.27" layer="25"/>
+<attribute name="POPULARITY" value="88" x="32.416" y="48.57" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="32.416" y="48.57" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="31.146" y="46.03" size="1.27" layer="27"/>
 </element>
-<element name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="48.926" y="44.76" smashed="yes" rot="R270" grouprefs="POWER_BAT POWER">
-<attribute name="NAME" x="50.196" y="45.395" size="1.27" layer="25" rot="R270"/>
-<attribute name="POPULARITY" value="86" x="48.926" y="44.76" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="48.926" y="44.76" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="46.386" y="45.395" size="1.27" layer="27" rot="R270"/>
+<element name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k" x="42.576" y="43.49" smashed="yes" rot="R270" grouprefs="POWER POWER_BAT">
+<attribute name="NAME" x="43.846" y="44.125" size="1.27" layer="25" rot="R270"/>
+<attribute name="POPULARITY" value="86" x="42.576" y="43.49" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="42.576" y="43.49" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="40.036" y="44.125" size="1.27" layer="27" rot="R270"/>
 </element>
 </elements>
 <signals>
@@ -3525,50 +3438,36 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U4" pad="3"/>
 <contactref element="C11" pad="1"/>
 <contactref element="U4" pad="4"/>
-<contactref element="C21" pad="2"/>
-<contactref element="C22" pad="2"/>
-<contactref element="C23" pad="2"/>
 <contactref element="JP1" pad="1"/>
 <contactref element="U1" pad="2"/>
-<contactref element="U5" pad="1"/>
-<contactref element="U5" pad="3"/>
-<contactref element="U5" pad="22"/>
-<contactref element="U5" pad="23"/>
 <contactref element="U$2" pad="P1"/>
-<wire x1="49.18" y1="53.9294" x2="50.6786" y2="53.9294" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="50.6786" y1="53.9294" x2="51.4254" y2="53.9294" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="51.4254" y1="53.9294" x2="53.498" y2="56.002" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="53.498" y1="56.002" x2="53.686" y2="56.19" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="53.686" y1="56.19" x2="54.768" y2="56.19" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<via x="54.768" y="56.19" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="54.768" y1="56.19" x2="36.734" y2="56.19" width="1.016" layer="16" grouprefs="POWER_BAT POWER"/>
-<via x="36.734" y="56.19" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="36.734" y1="56.19" x2="36.353" y2="56.571" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="36.353" y1="56.571" x2="33.9422" y2="56.571" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="61.566" y1="41.73" x2="61.566" y2="39.698" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="61.544" y1="32.967" x2="61.742" y2="33.165" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="61.742" y1="33.165" x2="62.46923125" y2="33.165" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="66.08123125" y1="36.777" x2="67.044" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="62.46923125" y1="33.165" x2="66.08123125" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="67.044" y1="36.777" x2="67.171" y2="36.904" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="67.171" y1="36.904" x2="69.948" y2="36.904" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="61.544" y1="32.967" x2="61.346" y2="32.769" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="61.346" y1="32.769" x2="60.61876875" y2="32.769" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="58.65776875" y1="30.808" x2="56.674" y2="30.808" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="60.61876875" y1="32.769" x2="58.65776875" y2="30.808" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="61.566" y1="39.698" x2="61.566" y2="38.87" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="61.566" y1="38.87" x2="62.262" y2="38.174" width="1.016" layer="1" grouprefs="USB"/>
-<via x="62.262" y="38.174" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="62.262" y1="38.174" x2="63.659" y2="36.777" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="63.659" y1="36.777" x2="66.08123125" y2="36.777" width="1.016" layer="16" grouprefs="USB"/>
-<via x="66.08123125" y="36.777" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="158.19" y1="28.9" x2="158.57" y2="28.52" width="1.016" layer="16"/>
-<wire x1="158.57" y1="28.52" x2="158.57" y2="26.31" width="1.016" layer="16"/>
-<wire x1="158.57" y1="26.31" x2="160.84" y2="26.31" width="1.016" layer="16"/>
-<wire x1="162.65" y1="24.5" x2="160.84" y2="26.31" width="1.016" layer="16"/>
-<wire x1="160.84" y1="26.31" x2="160.73" y2="26.2" width="1.016" layer="16"/>
-<wire x1="160.73" y1="26.2" x2="160.73" y2="21.28" width="1.016" layer="16"/>
-<wire x1="160.73" y1="21.28" x2="158.19" y2="21.28" width="1.016" layer="16"/>
+<wire x1="42.83" y1="52.6594" x2="44.3286" y2="52.6594" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="44.3286" y1="52.6594" x2="45.0754" y2="52.6594" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="45.0754" y1="52.6594" x2="47.148" y2="54.732" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="47.148" y1="54.732" x2="47.336" y2="54.92" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="48.418" y1="54.92" x2="47.336" y2="54.92" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<via x="48.418" y="54.92" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="48.418" y1="54.92" x2="30.384" y2="54.92" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<via x="30.384" y="54.92" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="30.384" y1="54.92" x2="30.003" y2="55.301" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="30.003" y1="55.301" x2="27.5922" y2="55.301" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="56.486" y1="41.73" x2="56.486" y2="39.698" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="56.464" y1="32.967" x2="56.662" y2="33.165" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="56.662" y1="33.165" x2="57.38923125" y2="33.165" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="61.00123125" y1="36.777" x2="61.964" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="57.38923125" y1="33.165" x2="61.00123125" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="61.964" y1="36.777" x2="62.091" y2="36.904" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="62.091" y1="36.904" x2="64.868" y2="36.904" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="56.464" y1="32.967" x2="56.266" y2="32.769" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="56.266" y1="32.769" x2="55.53876875" y2="32.769" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="46.514" y1="23.74423125" x2="46.514" y2="19.378" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="55.53876875" y1="32.769" x2="46.514" y2="23.74423125" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="56.486" y1="39.698" x2="56.486" y2="38.87" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="56.486" y1="38.87" x2="57.182" y2="38.174" width="1.016" layer="1" grouprefs="USB"/>
+<via x="57.182" y="38.174" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="57.182" y1="38.174" x2="58.579" y2="36.777" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="58.579" y1="36.777" x2="61.00123125" y2="36.777" width="1.016" layer="16" grouprefs="USB"/>
+<via x="61.00123125" y="36.777" extent="1-16" drill="0.3" grouprefs="USB"/>
 <via x="97.79" y="19.05" extent="1-16" drill="0.35"/>
 <wire x1="94.25" y1="19.73" x2="91.71" y2="19.73" width="0.6096" layer="16"/>
 <wire x1="97.79" y1="19.05" x2="96.05" y2="19.05" width="0.6096" layer="16"/>
@@ -3577,21 +3476,16 @@ Covered vias can be set in Masks (Limit).
 <wire x1="95" y1="20" x2="94.52" y2="20" width="0.6096" layer="16"/>
 <wire x1="94.52" y1="20" x2="94.25" y2="19.73" width="0.6096" layer="16"/>
 <wire x1="73.44" y1="88.58" x2="91.69" y2="84.76" width="0" layer="19" extent="1-1"/>
-<wire x1="158.19" y1="28.9" x2="91.69" y2="84.76" width="0" layer="19" extent="1-1"/>
-<wire x1="158.38" y1="21.23" x2="158.19" y2="21.28" width="0" layer="19" extent="16-16"/>
-<wire x1="146.52" y1="22.765" x2="158.19" y2="21.28" width="0" layer="19" extent="1-16"/>
-<wire x1="146.52" y1="23.195" x2="146.52" y2="22.765" width="0" layer="19" extent="1-1"/>
-<wire x1="146.52" y1="24.055" x2="146.52" y2="23.195" width="0" layer="19" extent="1-1"/>
-<wire x1="145.515" y1="24.02" x2="146.52" y2="24.055" width="0" layer="19" extent="1-1"/>
-<wire x1="87.95" y1="38.1" x2="158.38" y2="21.23" width="0" layer="19" extent="16-16"/>
-<wire x1="61.566" y1="41.73" x2="146.52" y2="22.765" width="0" layer="19" extent="1-1"/>
+<wire x1="76.91" y1="60.65" x2="73.44" y2="88.58" width="0" layer="19" extent="1-1"/>
+<wire x1="87.95" y1="38.1" x2="76.91" y2="60.65" width="0" layer="19" extent="16-16"/>
 <wire x1="91.71" y1="19.73" x2="87.95" y2="38.1" width="0" layer="19" extent="16-16"/>
 <wire x1="97.65" y1="18.9" x2="97.79" y2="19.05" width="0" layer="19" extent="1-1"/>
-<wire x1="46.42" y1="102.04" x2="73.44" y2="88.58" width="0" layer="19" extent="1-1"/>
+<wire x1="64.868" y1="36.904" x2="87.95" y2="38.1" width="0" layer="19" extent="1-16"/>
+<wire x1="48.418" y1="54.92" x2="56.486" y2="41.73" width="0" layer="19" extent="1-1"/>
+<wire x1="42.31" y1="83.68" x2="47.148" y2="54.732" width="0" layer="19" extent="1-1"/>
+<wire x1="46.42" y1="102.04" x2="42.31" y2="83.68" width="0" layer="19" extent="1-1"/>
 <wire x1="36.18" y1="102.04" x2="46.42" y2="102.04" width="0" layer="19" extent="1-1"/>
 <wire x1="33.5506" y1="106.9188" x2="36.18" y2="102.04" width="0" layer="19" extent="1-1"/>
-<wire x1="42.31" y1="83.68" x2="46.42" y2="102.04" width="0" layer="19" extent="1-1"/>
-<wire x1="54.768" y1="56.19" x2="56.674" y2="30.808" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND" class="1">
 <contactref element="D2" pad="C"/>
@@ -3636,11 +3530,6 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U$4" pad="P-"/>
 <contactref element="U6" pad="5"/>
 <contactref element="U6" pad="6"/>
-<contactref element="C20" pad="2"/>
-<contactref element="C24" pad="2"/>
-<contactref element="C21" pad="1"/>
-<contactref element="C22" pad="1"/>
-<contactref element="C23" pad="1"/>
 <contactref element="JP1" pad="4"/>
 <contactref element="U1" pad="43.1"/>
 <contactref element="U1" pad="1"/>
@@ -3666,8 +3555,6 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U1" pad="43.19"/>
 <contactref element="U1" pad="43.20"/>
 <contactref element="U1" pad="43.21"/>
-<contactref element="U5" pad="19"/>
-<contactref element="U5" pad="20"/>
 <contactref element="U$2" pad="P3"/>
 <contactref element="U$2" pad="P9"/>
 <contactref element="D10" pad="2"/>
@@ -3683,108 +3570,97 @@ Covered vias can be set in Masks (Limit).
 <contactref element="C12" pad="2"/>
 <contactref element="R2" pad="1"/>
 <contactref element="D18" pad="2"/>
-<wire x1="42.195" y1="47.46" x2="43.465" y2="47.46" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="43.465" y1="47.46" x2="44.735" y2="47.46" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="44.735" y1="47.46" x2="46.005" y2="47.46" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.766" y1="45.735" x2="38.766" y2="47.046" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<via x="38.766" y="47.046" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.766" y1="47.046" x2="41.052" y2="47.046" width="1.016" layer="16" grouprefs="POWER_BAT POWER"/>
-<wire x1="41.052" y1="47.046" x2="41.306" y2="47.3" width="1.016" layer="16" grouprefs="POWER_BAT POWER"/>
-<via x="41.306" y="47.3" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="41.306" y1="47.3" x2="41.466" y2="47.46" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="41.466" y1="47.46" x2="42.195" y2="47.46" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.716" y1="49.84" x2="41.306" y2="48.25" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="41.306" y1="48.25" x2="41.306" y2="47.3" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="53.498" y1="57.902" x2="51.4254" y2="59.9746" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="51.4254" y1="59.9746" x2="48.418" y2="59.9746" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<via x="51.974" y="59.492" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.0178" y1="55.301" x2="39.0178" y2="54.031" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="33.9422" y1="54.031" x2="32.8652" y2="52.954" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="32.8652" y1="52.954" x2="31.4" y2="52.954" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="33.9422" y1="54.031" x2="39.0178" y2="54.031" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<polygon width="0.381" layer="1" grouprefs="POWER_BAT POWER">
-<vertex x="41.306" y="43.236"/>
-<vertex x="46.64" y="43.236"/>
-<vertex x="46.64" y="47.808"/>
-<vertex x="40.036" y="47.808"/>
-<vertex x="40.036" y="44.506"/>
+<wire x1="37.115" y1="46.19" x2="38.385" y2="46.19" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.416" y1="44.465" x2="32.416" y2="45.776" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<via x="32.416" y="45.776" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.416" y1="45.776" x2="34.702" y2="45.776" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<wire x1="34.702" y1="45.776" x2="34.956" y2="46.03" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<via x="34.956" y="46.03" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="34.956" y1="46.03" x2="35.116" y2="46.19" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="35.116" y1="46.19" x2="35.845" y2="46.19" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="33.366" y1="48.57" x2="34.956" y2="46.98" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="34.956" y1="46.98" x2="34.956" y2="46.03" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="47.148" y1="56.632" x2="45.0754" y2="58.7046" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="45.0754" y1="58.7046" x2="42.068" y2="58.7046" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<via x="45.624" y="58.222" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.6678" y1="54.031" x2="32.6678" y2="52.761" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="27.5922" y1="52.761" x2="27.3992" y2="52.954" width="1.016" layer="1"/>
+<wire x1="27.3992" y1="52.954" x2="26.5152" y2="52.954" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="25.05" y1="52.954" x2="26.5152" y2="52.954" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<wire x1="27.5922" y1="52.761" x2="32.6678" y2="52.761" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<polygon width="0.381" layer="1" grouprefs="POWER POWER_BAT">
+<vertex x="34.956" y="41.966"/>
+<vertex x="40.29" y="41.966"/>
+<vertex x="40.29" y="46.538"/>
+<vertex x="33.686" y="46.538"/>
+<vertex x="33.686" y="43.236"/>
 </polygon>
-<wire x1="54.006" y1="49.774" x2="52.736" y2="49.774" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.716" y1="49.84" x2="39.228" y2="50.328" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.228" y1="50.328" x2="39.228" y2="50.90563125" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.228" y1="50.90563125" x2="39.0178" y2="51.11583125" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.0178" y1="51.11583125" x2="39.0178" y2="54.031" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<polygon width="0.254" layer="1" grouprefs="POWER_BAT POWER">
-<vertex x="44.862" y="60.508"/>
-<vertex x="44.862" y="54.666"/>
-<vertex x="54.26" y="54.666"/>
-<vertex x="54.26" y="57.206"/>
-<vertex x="50.958" y="60.508"/>
+<wire x1="47.656" y1="48.504" x2="46.386" y2="48.504" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="33.366" y1="48.57" x2="32.878" y2="49.058" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.878" y1="49.058" x2="32.878" y2="49.63563125" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.878" y1="49.63563125" x2="32.6678" y2="49.84583125" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.6678" y1="49.84583125" x2="32.6678" y2="52.761" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<polygon width="0.254" layer="1" grouprefs="POWER POWER_BAT">
+<vertex x="38.512" y="60.508"/>
+<vertex x="38.512" y="53.396"/>
+<vertex x="50.45" y="53.396"/>
+<vertex x="50.45" y="58.476"/>
+<vertex x="48.418" y="60.508"/>
 </polygon>
-<via x="42.068" y="43.744" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="42.068" y="45.522" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="43.338" y="45.522" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="44.608" y="45.522" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="45.878" y="45.522" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="45.878" y="43.998" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="44.608" y="43.998" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="43.338" y="43.998" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="45.37" y="58.476" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="48.418" y="58.476" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="51.212" y="58.476" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="49.942" y="57.46" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<via x="46.894" y="57.46" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="32.476" y1="19.378" x2="38.766" y2="25.668" width="1.016" layer="16"/>
-<wire x1="38.766" y1="47.046" x2="38.766" y2="25.668" width="1.016" layer="16"/>
-<wire x1="48.926" y1="45.71" x2="48.926" y2="46.792" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<via x="48.926" y="46.792" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.926" y1="46.792" x2="47.148" y2="48.57" width="1.016" layer="16" grouprefs="POWER_BAT POWER"/>
-<via x="47.148" y="48.57" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="47.148" y1="48.57" x2="47.115" y2="48.57" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="46.005" y1="47.46" x2="47.115" y2="48.57" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="51.466" y1="49.774" x2="52.736" y2="49.774" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<via x="52.736" y="49.774" extent="1-16" drill="0.35" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.926" y1="46.792" x2="51.908" y2="49.774" width="1.016" layer="16" grouprefs="POWER_BAT POWER"/>
-<wire x1="51.908" y1="49.774" x2="52.736" y2="49.774" width="1.016" layer="16" grouprefs="POWER_BAT POWER"/>
-<wire x1="49.622" y1="51.618" x2="51.466" y2="49.774" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="66.13600625" y1="21.4565" x2="67.0015" y2="22.32199375" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="67.0015" y1="22.32199375" x2="67.0015" y2="23.54600625" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="65.054" y1="25.49350625" x2="65.054" y2="26.989" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="67.0015" y1="23.54600625" x2="65.054" y2="25.49350625" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="65.524" y1="20.934" x2="66.0465" y2="21.4565" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="66.0465" y1="21.4565" x2="66.13600625" y2="21.4565" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="56.674" y1="28.268" x2="57.744" y2="29.338" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="57.744" y1="29.338" x2="57.9909" y2="29.338" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="57.9909" y1="29.338" x2="59.468" y2="30.8151" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="59.468" y1="30.8151" x2="59.468" y2="36.396" width="1.016" layer="16" grouprefs="USB"/>
-<via x="59.468" y="36.396" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="59.468" y1="36.396" x2="59.849" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
-<wire x1="59.849" y1="36.777" x2="61.544" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
+<via x="35.718" y="42.474" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="35.718" y="44.252" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="36.988" y="44.252" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="38.258" y="44.252" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="39.528" y="44.252" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="39.528" y="42.728" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="38.258" y="42.728" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="36.988" y="42.728" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="39.02" y="57.206" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="42.068" y="57.206" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="44.862" y="57.206" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="43.592" y="56.19" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<via x="40.544" y="56.19" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.416" y1="45.776" x2="31.206" y2="44.566" width="1.016" layer="16"/>
+<wire x1="31.206" y1="44.566" x2="31.206" y2="20.648" width="1.016" layer="16"/>
+<wire x1="31.206" y1="20.648" x2="32.476" y2="19.378" width="1.016" layer="16"/>
+<wire x1="42.576" y1="44.44" x2="42.576" y2="45.522" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<via x="42.576" y="45.522" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="42.576" y1="45.522" x2="40.798" y2="47.3" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<via x="40.798" y="47.3" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="40.798" y1="47.3" x2="40.765" y2="47.3" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="39.655" y1="46.19" x2="40.765" y2="47.3" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="45.116" y1="48.504" x2="46.386" y2="48.504" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<via x="46.386" y="48.504" extent="1-16" drill="0.35" grouprefs="POWER POWER_BAT"/>
+<wire x1="42.576" y1="45.522" x2="45.558" y2="48.504" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<wire x1="45.558" y1="48.504" x2="46.386" y2="48.504" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<wire x1="43.272" y1="50.348" x2="45.116" y2="48.504" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="61.05600625" y1="21.4565" x2="61.9215" y2="22.32199375" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="61.9215" y1="22.32199375" x2="61.9215" y2="23.54600625" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="59.974" y1="25.49350625" x2="59.974" y2="26.989" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="61.9215" y1="23.54600625" x2="59.974" y2="25.49350625" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="60.444" y1="20.934" x2="60.9665" y2="21.4565" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="60.9665" y1="21.4565" x2="61.05600625" y2="21.4565" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="46.514" y1="16.838" x2="46.514" y2="22.9411" width="1.016" layer="16"/>
+<wire x1="54.388" y1="30.8151" x2="46.514" y2="22.9411" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="54.388" y1="30.8151" x2="54.388" y2="36.396" width="1.016" layer="16" grouprefs="USB"/>
+<via x="54.388" y="36.396" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="54.388" y1="36.396" x2="54.769" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
+<wire x1="54.769" y1="36.777" x2="56.464" y2="36.777" width="1.016" layer="1" grouprefs="USB"/>
 <wire x1="101.5374" y1="108.79918125" x2="101.485425" y2="108.74720625" width="1.016" layer="1"/>
 <wire x1="101.485425" y1="108.74720625" x2="95.843321875" y2="108.74720625" width="1.016" layer="1"/>
 <wire x1="54.664828125" y1="98.809040625" x2="55.370353125" y2="99.514565625" width="1.016" layer="1"/>
 <wire x1="61.5385125" y1="99.514571875" x2="55.370353125" y2="99.514565625" width="1.016" layer="1"/>
-<wire x1="37.045" y1="71.12" x2="37.045" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="38.995" y1="71.12" x2="38.995" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="95.445" y1="66.63" x2="95.445" y2="73.24" width="1.016" layer="1"/>
 <wire x1="95.445" y1="73.24" x2="95.445" y2="78.465" width="1.016" layer="1"/>
 <wire x1="95.445" y1="78.465" x2="91.729871875" y2="82.180128125" width="1.016" layer="1"/>
 <wire x1="73.294" y1="96.636" x2="78.122" y2="96.636" width="1.016" layer="1"/>
 <wire x1="78.122" y1="96.636" x2="78.024" y2="96.538" width="1.016" layer="1"/>
-<wire x1="154.79" y1="25.09" x2="154.302" y2="25.578" width="1.016" layer="16"/>
-<wire x1="154.302" y1="25.578" x2="154.302" y2="26.15563125" width="1.016" layer="16"/>
-<wire x1="153.11" y1="27.34763125" x2="153.11" y2="28.9" width="1.016" layer="16"/>
-<wire x1="154.302" y1="26.15563125" x2="153.11" y2="27.34763125" width="1.016" layer="16"/>
-<wire x1="154.79" y1="25.09" x2="155.47" y2="24.41" width="1.016" layer="16"/>
-<wire x1="155.47" y1="24.41" x2="158.57" y2="24.41" width="1.016" layer="16"/>
-<wire x1="155.855" y1="24.025" x2="155.855" y2="21.485" width="1.016" layer="16"/>
-<wire x1="155.855" y1="21.485" x2="155.65" y2="21.28" width="1.016" layer="16"/>
-<wire x1="155.65" y1="21.28" x2="154.38" y2="20.01" width="1.016" layer="16"/>
-<wire x1="158.38" y1="19.33" x2="157.6" y2="19.33" width="1.016" layer="16"/>
-<wire x1="157.6" y1="19.33" x2="155.65" y2="21.28" width="1.016" layer="16"/>
 <wire x1="97.79" y1="17.78" x2="97.74" y2="17.83" width="0.6096" layer="16"/>
 <wire x1="97.74" y1="17.83" x2="94.25" y2="17.83" width="0.6096" layer="16"/>
 <via x="97.79" y="17.78" extent="1-16" drill="0.35"/>
 <wire x1="94.25" y1="17.83" x2="91.71" y2="17.83" width="0.6096" layer="16"/>
+<via x="26.5152" y="52.954" extent="1-16" drill="0.35"/>
 <wire x1="87.864" y1="96.186" x2="95.843321875" y2="108.74720625" width="0" layer="19" extent="1-1"/>
 <wire x1="78.024" y1="96.538" x2="87.864" y2="96.186" width="0" layer="19" extent="1-1"/>
 <wire x1="65.82" y1="88.58" x2="73.294" y2="96.636" width="0" layer="19" extent="1-1"/>
@@ -3795,33 +3671,29 @@ Covered vias can be set in Masks (Limit).
 <wire x1="41.7106" y1="106.7288" x2="41.7106" y2="113.2312" width="0" layer="19" extent="1-1"/>
 <wire x1="59.6044" y1="77.515" x2="65.82" y2="88.58" width="0" layer="19" extent="1-1"/>
 <wire x1="59.6044" y1="76.245" x2="59.6044" y2="77.515" width="0" layer="19" extent="1-1"/>
-<wire x1="59.6044" y1="66.085" x2="59.6044" y2="76.245" width="0" layer="19" extent="1-1"/>
-<wire x1="60.83" y1="61.15" x2="59.6044" y2="66.085" width="0" layer="19" extent="1-1"/>
-<wire x1="73.0156" y1="66.085" x2="60.83" y2="61.15" width="0" layer="19" extent="1-1"/>
-<wire x1="77.47" y1="64.77" x2="73.0156" y2="66.085" width="0" layer="19" extent="1-1"/>
-<wire x1="153.11" y1="28.9" x2="77.47" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="155.855" y1="24.025" x2="154.79" y2="25.09" width="0" layer="19" extent="16-16"/>
-<wire x1="154.06" y1="20.01" x2="154.38" y2="20.01" width="0" layer="19" extent="16-16"/>
-<wire x1="162.65" y1="22.6" x2="158.57" y2="24.41" width="0" layer="19" extent="16-16"/>
-<wire x1="150.57" y1="16.2" x2="154.06" y2="20.01" width="0" layer="19" extent="16-16"/>
-<wire x1="146.52" y1="21.475" x2="150.57" y2="16.2" width="0" layer="19" extent="1-1"/>
-<wire x1="146.52" y1="21.905" x2="146.52" y2="21.475" width="0" layer="19" extent="1-1"/>
-<wire x1="82.15" y1="40.65" x2="158.38" y2="19.33" width="0" layer="19" extent="1-16"/>
-<wire x1="71.848" y1="36.904" x2="150.57" y2="16.2" width="0" layer="19" extent="1-1"/>
-<wire x1="73.0156" y1="76.245" x2="73.0156" y2="66.085" width="0" layer="19" extent="1-1"/>
-<wire x1="73.0156" y1="77.515" x2="73.0156" y2="76.245" width="0" layer="19" extent="1-1"/>
-<wire x1="61.544" y1="36.777" x2="71.848" y2="36.904" width="0" layer="19" extent="1-1"/>
-<wire x1="65.054" y1="26.989" x2="56.674" y2="28.268" width="0" layer="19" extent="16-16"/>
+<wire x1="56.07" y1="73.53" x2="59.6044" y2="76.245" width="0" layer="19" extent="1-1"/>
+<wire x1="59.6044" y1="66.085" x2="56.07" y2="73.53" width="0" layer="19" extent="1-1"/>
+<wire x1="73.0156" y1="77.515" x2="65.82" y2="88.58" width="0" layer="19" extent="1-1"/>
+<wire x1="73.0156" y1="76.245" x2="73.0156" y2="77.515" width="0" layer="19" extent="1-1"/>
+<wire x1="73.0156" y1="66.085" x2="73.0156" y2="76.245" width="0" layer="19" extent="1-1"/>
+<wire x1="76.2" y1="64.77" x2="73.0156" y2="66.085" width="0" layer="19" extent="1-1"/>
+<wire x1="71.83" y1="60.65" x2="73.0156" y2="66.085" width="0" layer="19" extent="1-1"/>
+<wire x1="69.29" y1="47.95" x2="71.83" y2="60.65" width="0" layer="19" extent="1-1"/>
+<wire x1="66.768" y1="36.904" x2="69.29" y2="47.95" width="0" layer="19" extent="1-1"/>
+<wire x1="56.464" y1="36.777" x2="66.768" y2="36.904" width="0" layer="19" extent="1-1"/>
+<wire x1="59.974" y1="26.989" x2="56.464" y2="36.777" width="0" layer="19" extent="1-16"/>
+<wire x1="47.656" y1="48.504" x2="54.388" y2="36.396" width="0" layer="19" extent="1-1"/>
+<wire x1="43.592" y1="56.19" x2="43.272" y2="50.348" width="0" layer="19" extent="1-1"/>
+<wire x1="38.995" y1="64.77" x2="42.068" y2="58.7046" width="0" layer="19" extent="1-1"/>
+<wire x1="42.31" y1="81.14" x2="38.995" y2="71.12" width="0" layer="19" extent="1-1"/>
 <wire x1="91.69" y1="82.22" x2="87.864" y2="96.186" width="0" layer="19" extent="1-1"/>
 <wire x1="91.729871875" y1="82.180128125" x2="91.69" y2="82.22" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="17.4" x2="65.524" y2="20.934" width="0" layer="19" extent="1-1"/>
-<wire x1="88.59" y1="23.95" x2="80.15" y2="17.4" width="0" layer="19" extent="1-1"/>
-<wire x1="89.34" y1="23.95" x2="88.59" y2="23.95" width="0" layer="19" extent="1-1"/>
-<wire x1="90.09" y1="23.95" x2="89.34" y2="23.95" width="0" layer="19" extent="1-1"/>
-<wire x1="90.09" y1="24.7" x2="90.09" y2="23.95" width="0" layer="19" extent="1-1"/>
-<wire x1="90.09" y1="25.45" x2="90.09" y2="24.7" width="0" layer="19" extent="1-1"/>
-<wire x1="90.09" y1="26.2" x2="90.09" y2="25.45" width="0" layer="19" extent="1-1"/>
-<wire x1="90.09" y1="26.95" x2="90.09" y2="26.2" width="0" layer="19" extent="1-1"/>
+<wire x1="82.15" y1="40.65" x2="69.29" y2="47.95" width="0" layer="19" extent="1-1"/>
+<wire x1="88.59" y1="26.95" x2="82.15" y2="40.65" width="0" layer="19" extent="1-1"/>
+<wire x1="89.34" y1="26.95" x2="88.59" y2="26.95" width="0" layer="19" extent="1-1"/>
+<wire x1="90.09" y1="26.95" x2="89.34" y2="26.95" width="0" layer="19" extent="1-1"/>
+<wire x1="90.09" y1="26.2" x2="90.09" y2="26.95" width="0" layer="19" extent="1-1"/>
+<wire x1="90.09" y1="25.45" x2="90.09" y2="26.2" width="0" layer="19" extent="1-1"/>
 <wire x1="90.84" y1="25.45" x2="90.09" y2="25.45" width="0" layer="19" extent="1-1"/>
 <wire x1="91.59" y1="25.45" x2="90.84" y2="25.45" width="0" layer="19" extent="1-1"/>
 <wire x1="91.59" y1="26.2" x2="91.59" y2="25.45" width="0" layer="19" extent="1-1"/>
@@ -3830,37 +3702,22 @@ Covered vias can be set in Masks (Limit).
 <wire x1="91.59" y1="23.95" x2="91.59" y2="24.7" width="0" layer="19" extent="1-1"/>
 <wire x1="89.34" y1="25.45" x2="90.09" y2="25.45" width="0" layer="19" extent="1-1"/>
 <wire x1="90.84" y1="26.95" x2="90.09" y2="26.95" width="0" layer="19" extent="1-1"/>
-<wire x1="89.34" y1="26.95" x2="90.09" y2="26.95" width="0" layer="19" extent="1-1"/>
 <wire x1="88.59" y1="25.45" x2="89.34" y2="25.45" width="0" layer="19" extent="1-1"/>
-<wire x1="88.59" y1="26.95" x2="89.34" y2="26.95" width="0" layer="19" extent="1-1"/>
-<wire x1="88.59" y1="26.2" x2="88.59" y2="25.45" width="0" layer="19" extent="1-1"/>
-<wire x1="90.84" y1="23.95" x2="90.09" y2="23.95" width="0" layer="19" extent="1-1"/>
-<wire x1="88.59" y1="24.7" x2="88.59" y2="23.95" width="0" layer="19" extent="1-1"/>
+<wire x1="90.09" y1="24.7" x2="90.09" y2="25.45" width="0" layer="19" extent="1-1"/>
+<wire x1="90.09" y1="23.95" x2="90.09" y2="24.7" width="0" layer="19" extent="1-1"/>
+<wire x1="88.59" y1="26.2" x2="88.59" y2="26.95" width="0" layer="19" extent="1-1"/>
+<wire x1="90.84" y1="23.95" x2="91.59" y2="23.95" width="0" layer="19" extent="1-1"/>
+<wire x1="89.34" y1="23.95" x2="90.09" y2="23.95" width="0" layer="19" extent="1-1"/>
+<wire x1="88.59" y1="23.95" x2="89.34" y2="23.95" width="0" layer="19" extent="1-1"/>
+<wire x1="88.59" y1="24.7" x2="88.59" y2="25.45" width="0" layer="19" extent="1-1"/>
 <wire x1="91.71" y1="17.83" x2="91.59" y2="23.95" width="0" layer="19" extent="1-16"/>
 <wire x1="97.65" y1="17.4" x2="97.79" y2="17.78" width="0" layer="19" extent="1-1"/>
 <wire x1="105.41" y1="16.28" x2="97.79" y2="17.78" width="0" layer="19" extent="1-1"/>
 <wire x1="107.95" y1="16.28" x2="105.41" y2="16.28" width="0" layer="19" extent="1-1"/>
 <wire x1="110.49" y1="16.28" x2="107.95" y2="16.28" width="0" layer="19" extent="1-1"/>
 <wire x1="113.03" y1="16.28" x2="110.49" y2="16.28" width="0" layer="19" extent="1-1"/>
-<wire x1="42.31" y1="81.14" x2="59.6044" y2="77.515" width="0" layer="19" extent="1-1"/>
-<wire x1="37.045" y1="71.12" x2="42.31" y2="81.14" width="0" layer="19" extent="1-1"/>
-<wire x1="51.974" y1="59.492" x2="65.524" y2="20.934" width="0" layer="19" extent="1-1"/>
-<wire x1="51.212" y1="58.476" x2="51.974" y2="59.492" width="0" layer="19" extent="1-1"/>
-<wire x1="49.942" y1="57.46" x2="51.212" y2="58.476" width="0" layer="19" extent="1-1"/>
-<wire x1="48.418" y1="58.476" x2="49.942" y2="57.46" width="0" layer="19" extent="1-1"/>
-<wire x1="48.418" y1="59.9746" x2="48.418" y2="58.476" width="0" layer="19" extent="1-1"/>
-<wire x1="46.894" y1="57.46" x2="48.418" y2="58.476" width="0" layer="19" extent="1-1"/>
-<wire x1="45.37" y1="58.476" x2="46.894" y2="57.46" width="0" layer="19" extent="1-1"/>
-<wire x1="49.622" y1="51.618" x2="49.942" y2="57.46" width="0" layer="19" extent="1-1"/>
-<wire x1="44.608" y1="45.522" x2="44.735" y2="47.46" width="0" layer="19" extent="1-1"/>
-<wire x1="45.878" y1="45.522" x2="44.608" y2="45.522" width="0" layer="19" extent="1-1"/>
-<wire x1="43.338" y1="45.522" x2="44.608" y2="45.522" width="0" layer="19" extent="1-1"/>
-<wire x1="42.068" y1="45.522" x2="43.338" y2="45.522" width="0" layer="19" extent="1-1"/>
-<wire x1="45.878" y1="43.998" x2="45.878" y2="45.522" width="0" layer="19" extent="1-1"/>
-<wire x1="44.608" y1="43.998" x2="45.878" y2="43.998" width="0" layer="19" extent="1-1"/>
-<wire x1="43.338" y1="43.998" x2="44.608" y2="43.998" width="0" layer="19" extent="1-1"/>
-<wire x1="42.068" y1="43.744" x2="43.338" y2="43.998" width="0" layer="19" extent="1-1"/>
-<wire x1="82.55" y1="-31.43" x2="54.006" y2="49.774" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="17.4" x2="88.59" y2="23.95" width="0" layer="19" extent="1-1"/>
+<wire x1="82.55" y1="-31.43" x2="80.15" y2="17.4" width="0" layer="19" extent="1-1"/>
 <wire x1="85.09" y1="-31.43" x2="82.55" y2="-31.43" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_EN">
@@ -3871,38 +3728,40 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U1" pad="41"/>
 <wire x1="45.6994" y1="106.7288" x2="45.6994" y2="113.2312" width="0" layer="19" extent="1-1"/>
 <wire x1="46.42" y1="100.14" x2="45.6994" y2="106.7288" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="18.9" x2="46.42" y2="100.14" width="0" layer="19" extent="1-1"/>
-<wire x1="75.046" y1="28.776" x2="80.15" y2="18.9" width="0" layer="19" extent="1-1"/>
+<wire x1="69.966" y1="28.776" x2="46.42" y2="100.14" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="18.9" x2="69.966" y2="28.776" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_RX">
 <contactref element="U2" pad="2"/>
 <contactref element="JP4" pad="3"/>
 <contactref element="D6" pad="C"/>
 <contactref element="U1" pad="38"/>
-<wire x1="56.674" y1="35.888" x2="57.055" y2="35.507" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="57.055" y1="35.507" x2="61.544" y2="35.507" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="61.544" y1="35.507" x2="62.111" y2="35.507" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="62.111" y1="35.507" x2="65.1575" y2="38.5535" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="65.1575" y1="38.5535" x2="66.11811875" y2="38.5535" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="66.11811875" y1="38.5535" x2="66.3785" y2="38.81388125" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="66.3785" y1="38.81388125" x2="66.3785" y2="39.7745" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="66.3785" y1="39.7745" x2="68.334" y2="41.73" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.334" y1="41.73" x2="80.15" y2="23.4" width="0" layer="19" extent="1-1"/>
+<wire x1="46.514" y1="24.458" x2="46.133" y2="24.077" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="46.895" y1="25.938" x2="46.133" y2="24.077" width="0.381" layer="1"/>
+<wire x1="46.895" y1="25.938" x2="56.464" y2="35.507" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="56.464" y1="35.507" x2="57.031" y2="35.507" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="57.031" y1="35.507" x2="60.0775" y2="38.5535" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="60.0775" y1="38.5535" x2="61.03811875" y2="38.5535" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="61.03811875" y1="38.5535" x2="61.2985" y2="38.81388125" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="61.2985" y1="38.81388125" x2="61.2985" y2="39.7745" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="61.2985" y1="39.7745" x2="63.254" y2="41.73" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.254" y1="41.73" x2="80.15" y2="23.4" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_TX">
 <contactref element="U2" pad="3"/>
 <contactref element="JP4" pad="4"/>
 <contactref element="D7" pad="C"/>
 <contactref element="U1" pad="37"/>
-<wire x1="56.674" y1="33.348" x2="57.563" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="57.563" y1="34.237" x2="61.544" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.334" y1="39.22478125" x2="68.334" y2="39.444" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.334" y1="39.444" x2="68.334" y2="39.698" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="61.544" y1="34.237" x2="62.1941875" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="62.1941875" y1="34.237" x2="65.6866875" y2="37.7295" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="66.6195" y1="37.7295" x2="68.334" y2="39.444" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="65.6866875" y1="37.7295" x2="66.6195" y2="37.7295" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.334" y1="39.698" x2="80.15" y2="24.9" width="0" layer="19" extent="1-1"/>
+<wire x1="46.514" y1="21.918" x2="47.403" y2="22.807" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="47.403" y1="25.176" x2="47.403" y2="22.807" width="0.381" layer="1"/>
+<wire x1="47.403" y1="25.176" x2="56.464" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.254" y1="39.22478125" x2="63.254" y2="39.444" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.254" y1="39.444" x2="63.254" y2="39.698" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="56.464" y1="34.237" x2="57.1141875" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="57.1141875" y1="34.237" x2="60.6066875" y2="37.7295" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="61.5395" y1="37.7295" x2="63.254" y2="39.444" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="60.6066875" y1="37.7295" x2="61.5395" y2="37.7295" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.254" y1="39.22478125" x2="80.15" y2="24.9" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_IO0">
 <contactref element="R23" pad="1"/>
@@ -3912,8 +3771,8 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U1" pad="3"/>
 <wire x1="37.1894" y1="106.7288" x2="37.1894" y2="113.2312" width="0" layer="19" extent="1-1"/>
 <wire x1="36.18" y1="100.14" x2="37.1894" y2="106.7288" width="0" layer="19" extent="1-1"/>
-<wire x1="97.65" y1="20.4" x2="36.18" y2="100.14" width="0" layer="19" extent="1-1"/>
-<wire x1="75.046" y1="33.348" x2="97.65" y2="20.4" width="0" layer="19" extent="1-1"/>
+<wire x1="69.966" y1="33.348" x2="36.18" y2="100.14" width="0" layer="19" extent="1-1"/>
+<wire x1="97.65" y1="20.4" x2="69.966" y2="33.348" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SENSOR_EN">
 <contactref element="Q3" pad="1"/>
@@ -3947,13 +3806,13 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="ESP32_M1_CH_A">
 <contactref element="SV2" pad="6"/>
-<contactref element="U1" pad="19"/>
-<wire x1="44.85" y1="83.68" x2="92.65" y2="40.65" width="0" layer="19" extent="1-1"/>
+<contactref element="U1" pad="24"/>
+<wire x1="85.15" y1="40.65" x2="44.85" y2="83.68" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_M1_CH_B">
 <contactref element="SV2" pad="5"/>
-<contactref element="U1" pad="20"/>
-<wire x1="44.85" y1="81.14" x2="91.15" y2="40.65" width="0" layer="19" extent="1-1"/>
+<contactref element="U1" pad="25"/>
+<wire x1="83.65" y1="40.65" x2="44.85" y2="81.14" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_M2_1">
 <contactref element="CR1" pad="13"/>
@@ -3967,13 +3826,13 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="ESP32_M2_CH_A">
 <contactref element="SV4" pad="6"/>
-<contactref element="U1" pad="24"/>
-<wire x1="85.15" y1="40.65" x2="94.23" y2="84.76" width="0" layer="19" extent="1-1"/>
+<contactref element="U1" pad="19"/>
+<wire x1="92.65" y1="40.65" x2="94.23" y2="84.76" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ESP32_M2_CH_B">
 <contactref element="SV4" pad="5"/>
-<contactref element="U1" pad="25"/>
-<wire x1="83.65" y1="40.65" x2="94.23" y2="82.22" width="0" layer="19" extent="1-1"/>
+<contactref element="U1" pad="20"/>
+<wire x1="91.15" y1="40.65" x2="94.23" y2="82.22" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="VSENSE_BAT">
 <contactref element="R17" pad="2"/>
@@ -3986,76 +3845,38 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="CS">
 <contactref element="U1" pad="28"/>
-<contactref element="U5" pad="7"/>
 <contactref element="U$2" pad="P7"/>
-<wire x1="144.08" y1="23.625" x2="143.145" y2="23.625" width="0.254" layer="1"/>
-<wire x1="143.145" y1="23.625" x2="142.95" y2="23.82" width="0.254" layer="1"/>
-<wire x1="142.95" y1="23.82" x2="142.95" y2="24.81991875" width="0.254" layer="1"/>
-<wire x1="145.03891875" y1="29.989" x2="139.902" y2="24.85208125" width="0.254" layer="1"/>
-<wire x1="146.579" y1="28.44891875" x2="146.579" y2="29.35108125" width="0.254" layer="1"/>
-<wire x1="146.579" y1="29.35108125" x2="145.94108125" y2="29.989" width="0.254" layer="1"/>
-<wire x1="145.94108125" y1="29.989" x2="145.03891875" y2="29.989" width="0.254" layer="1"/>
-<wire x1="142.95" y1="24.81991875" x2="146.579" y2="28.44891875" width="0.254" layer="1"/>
-<wire x1="139.902" y1="24.85208125" x2="139.902" y2="19.248" width="0.254" layer="1"/>
-<wire x1="142.95" y1="16.2" x2="139.902" y2="19.248" width="0.254" layer="1"/>
-<wire x1="142.95" y1="16.2" x2="145.49" y2="16.2" width="0.254" layer="1"/>
-<wire x1="145.49" y1="16.2" x2="80.15" y2="38.4" width="0" layer="19" extent="1-1"/>
+<wire x1="64.21" y1="47.95" x2="80.15" y2="38.4" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="INT">
 <contactref element="U1" pad="33"/>
-<contactref element="U5" pad="11"/>
 <contactref element="U$2" pad="P6"/>
-<wire x1="140.7692125" y1="24.1792125" x2="145.49" y2="28.9" width="0.254" layer="1"/>
-<wire x1="140.7692125" y1="22.1707875" x2="140.7692125" y2="22.55" width="0.254" layer="1"/>
-<wire x1="140.7692125" y1="22.55" x2="140.7692125" y2="24.1792125" width="0.254" layer="1"/>
-<wire x1="141.17375" y1="19.71625" x2="143.3625" y2="21.905" width="0.2032" layer="1"/>
-<wire x1="144.08" y1="21.905" x2="143.3625" y2="21.905" width="0.2032" layer="1"/>
-<wire x1="140.7692125" y1="20.1207875" x2="141.17375" y2="19.71625" width="0.2032" layer="1"/>
-<wire x1="140.7692125" y1="22.55" x2="140.7692125" y2="20.1207875" width="0.2032" layer="1"/>
-<wire x1="80.15" y1="30.9" x2="144.08" y2="21.905" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="30.9" x2="64.21" y2="60.65" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="INT_M">
 <contactref element="JP5" pad="4"/>
 <contactref element="U1" pad="34"/>
-<contactref element="U5" pad="10"/>
-<via x="141.68" y="21.28" extent="1-16" drill="0.35"/>
-<wire x1="144.08" y1="22.335" x2="142.735" y2="22.335" width="0.1524" layer="1"/>
-<wire x1="142.735" y1="22.335" x2="141.68" y2="21.28" width="0.1524" layer="1"/>
-<wire x1="141.68" y1="21.28" x2="61.5" y2="85.01" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="29.4" x2="144.08" y2="22.335" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="29.4" x2="61.5" y2="85.01" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DRDY_A/G">
 <contactref element="JP5" pad="1"/>
 <contactref element="U1" pad="36"/>
-<contactref element="U5" pad="13"/>
-<wire x1="144.08" y1="21.045" x2="53.88" y2="85.01" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="26.4" x2="144.08" y2="21.045" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="26.4" x2="53.88" y2="85.01" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="INT_A/G">
 <contactref element="JP5" pad="3"/>
 <contactref element="U1" pad="35"/>
-<contactref element="U5" pad="12"/>
-<wire x1="144.08" y1="21.475" x2="58.96" y2="85.01" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="27.9" x2="144.08" y2="21.475" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="27.9" x2="58.96" y2="85.01" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DRDY_M">
 <contactref element="JP5" pad="5"/>
 <contactref element="U1" pad="32"/>
-<contactref element="U5" pad="9"/>
-<wire x1="144.08" y1="22.765" x2="141.895" y2="22.765" width="0.1524" layer="1"/>
-<wire x1="141.895" y1="22.765" x2="141.68" y2="22.55" width="0.1524" layer="1"/>
-<wire x1="141.68" y1="22.55" x2="64.04" y2="85.01" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="32.4" x2="144.08" y2="22.765" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="32.4" x2="64.04" y2="85.01" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="CS_M">
 <contactref element="JP1" pad="6"/>
 <contactref element="U1" pad="27"/>
-<contactref element="U5" pad="8"/>
-<via x="141.68" y="23.82" extent="1-16" drill="0.35"/>
-<wire x1="144.08" y1="23.195" x2="142.305" y2="23.195" width="0.1524" layer="1"/>
-<wire x1="142.305" y1="23.195" x2="141.68" y2="23.82" width="0.1524" layer="1"/>
-<wire x1="141.68" y1="23.82" x2="60.74" y2="88.58" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="39.9" x2="144.08" y2="23.195" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="39.9" x2="60.74" y2="88.58" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$23">
 <contactref element="R1" pad="2"/>
@@ -4140,30 +3961,30 @@ Covered vias can be set in Masks (Limit).
 <contactref element="D1" pad="3"/>
 <contactref element="J1" pad="2"/>
 <contactref element="U2" pad="6"/>
-<wire x1="63.334" y1="29.039" x2="63.334" y2="29.736" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="63.334" y1="29.736" x2="62.77" y2="30.3" width="0.381" layer="16" grouprefs="USB"/>
-<via x="62.77" y="30.3" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="62.77" y1="30.3" x2="62.643" y2="30.427" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="62.643" y1="30.427" x2="61.544" y2="30.427" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="63.334" y1="29.039" x2="61.754" y2="27.459" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="61.754" y1="27.459" x2="61.754" y2="22.172" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="61.754" y1="22.172" x2="62.992" y2="20.934" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="62.992" y1="20.934" x2="63.024" y2="20.934" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="58.254" y1="29.039" x2="58.254" y2="29.736" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="58.254" y1="29.736" x2="57.69" y2="30.3" width="0.381" layer="16" grouprefs="USB"/>
+<via x="57.69" y="30.3" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="57.69" y1="30.3" x2="57.563" y2="30.427" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="57.563" y1="30.427" x2="56.464" y2="30.427" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="58.254" y1="29.039" x2="56.674" y2="27.459" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="56.674" y1="27.459" x2="56.674" y2="22.172" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="56.674" y1="22.172" x2="57.912" y2="20.934" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="57.912" y1="20.934" x2="57.944" y2="20.934" width="0.381" layer="16" grouprefs="USB"/>
 </signal>
 <signal name="D_P">
 <contactref element="D1" pad="4"/>
 <contactref element="J1" pad="3"/>
 <contactref element="U2" pad="5"/>
-<wire x1="61.544" y1="31.697" x2="63.913" y2="31.697" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="63.913" y1="31.697" x2="64.548" y2="31.062" width="0.381" layer="1" grouprefs="USB"/>
-<via x="64.548" y="31.062" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="64.548" y1="31.062" x2="65.254" y2="30.356" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="65.254" y1="30.356" x2="65.254" y2="29.039" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="65.524" y1="22.934" x2="65.524" y2="27.546" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="65.524" y1="27.546" x2="64.548" y2="28.522" width="0.381" layer="1" grouprefs="USB"/>
-<via x="64.548" y="28.522" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="64.548" y1="28.522" x2="65.065" y2="29.039" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="65.065" y1="29.039" x2="65.254" y2="29.039" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="56.464" y1="31.697" x2="58.833" y2="31.697" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="58.833" y1="31.697" x2="59.468" y2="31.062" width="0.381" layer="1" grouprefs="USB"/>
+<via x="59.468" y="31.062" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="59.468" y1="31.062" x2="60.174" y2="30.356" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="60.174" y1="30.356" x2="60.174" y2="29.039" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="60.444" y1="22.934" x2="60.444" y2="27.546" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="60.444" y1="27.546" x2="59.468" y2="28.522" width="0.381" layer="1" grouprefs="USB"/>
+<via x="59.468" y="28.522" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="59.468" y1="28.522" x2="59.985" y2="29.039" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="59.985" y1="29.039" x2="60.174" y2="29.039" width="0.381" layer="16" grouprefs="USB"/>
 </signal>
 <signal name="USB_VBUS" class="1">
 <contactref element="D1" pad="2"/>
@@ -4174,81 +3995,79 @@ Covered vias can be set in Masks (Limit).
 <contactref element="Q7" pad="6"/>
 <contactref element="R2" pad="2"/>
 <contactref element="IC1" pad="4"/>
-<wire x1="48.926" y1="43.81" x2="47.176" y2="42.06" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="47.176" y1="42.06" x2="46.005" y2="42.06" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="63.024" y1="22.934" x2="63.024" y2="26.679" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="63.024" y1="26.679" x2="63.334" y2="26.989" width="1.016" layer="16" grouprefs="USB"/>
-<wire x1="48.926" y1="43.81" x2="63.024" y2="22.934" width="0" layer="19" extent="1-1"/>
-<wire x1="30.638" y1="57.8213" x2="46.005" y2="42.06" width="0" layer="19" extent="1-1"/>
-<wire x1="29.688" y1="57.8213" x2="30.638" y2="57.8213" width="0" layer="19" extent="1-1"/>
-<wire x1="30.638" y1="60.1467" x2="30.638" y2="57.8213" width="0" layer="19" extent="1-1"/>
-<wire x1="29.688" y1="60.1467" x2="30.638" y2="60.1467" width="0" layer="19" extent="1-1"/>
+<wire x1="42.576" y1="42.54" x2="40.826" y2="40.79" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="40.826" y1="40.79" x2="39.655" y2="40.79" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="57.944" y1="22.934" x2="57.944" y2="26.679" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="57.944" y1="26.679" x2="58.254" y2="26.989" width="1.016" layer="16" grouprefs="USB"/>
+<wire x1="24.288" y1="60.1467" x2="23.338" y2="60.1467" width="0" layer="19" extent="16-16"/>
+<wire x1="24.288" y1="57.8213" x2="24.288" y2="60.1467" width="0" layer="19" extent="16-16"/>
+<wire x1="23.338" y1="57.8213" x2="24.288" y2="57.8213" width="0" layer="19" extent="16-16"/>
+<wire x1="39.655" y1="40.79" x2="24.288" y2="57.8213" width="0" layer="19" extent="1-16"/>
+<wire x1="58.254" y1="26.989" x2="42.576" y2="42.54" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="DTR">
 <contactref element="U2" pad="13"/>
 <contactref element="R3" pad="1"/>
 <contactref element="Q4" pad="2"/>
-<wire x1="69.882" y1="29.726" x2="72.554" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="72.554" y1="32.398" x2="72.846" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="67.83771875" y1="32.4515" x2="68.1435" y2="32.14571875" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.1435" y1="32.14571875" x2="68.1435" y2="31.4645" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.1435" y1="31.4645" x2="69.882" y2="29.726" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="67.044" y1="32.967" x2="67.5595" y2="32.4515" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="67.5595" y1="32.4515" x2="67.83771875" y2="32.4515" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="64.802" y1="29.726" x2="67.474" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="67.474" y1="32.398" x2="67.766" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="62.75771875" y1="32.4515" x2="63.0635" y2="32.14571875" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.0635" y1="32.14571875" x2="63.0635" y2="31.4645" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.0635" y1="31.4645" x2="64.802" y2="29.726" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="61.964" y1="32.967" x2="62.4795" y2="32.4515" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="62.4795" y1="32.4515" x2="62.75771875" y2="32.4515" width="0.381" layer="1" grouprefs="USB"/>
 <contactref element="JP4" pad="2"/>
-<wire x1="56.674" y1="38.428" x2="59.214" y2="38.428" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="64.548" y1="33.094" x2="59.214" y2="38.428" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="64.548" y1="33.094" x2="65.818" y2="33.094" width="0.381" layer="16" grouprefs="USB"/>
-<via x="65.818" y="33.094" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="65.818" y1="33.094" x2="65.945" y2="32.967" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="65.945" y1="32.967" x2="67.044" y2="32.967" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="46.514" y1="26.998" x2="52.61" y2="33.094" width="0.381" layer="16"/>
+<wire x1="60.738" y1="33.094" x2="52.61" y2="33.094" width="0.381" layer="16" grouprefs="USB"/>
+<via x="60.738" y="33.094" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="60.738" y1="33.094" x2="60.865" y2="32.967" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="60.865" y1="32.967" x2="61.964" y2="32.967" width="0.381" layer="1" grouprefs="USB"/>
 </signal>
 <signal name="RTS">
 <contactref element="U2" pad="14"/>
 <contactref element="R4" pad="1"/>
 <contactref element="Q2" pad="2"/>
-<wire x1="69.882" y1="32.398" x2="70.832" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="70.832" y1="32.398" x2="71.14888125" y2="32.08111875" width="0.381" layer="1" grouprefs="USB"/>
-<via x="71.14888125" y="32.08111875" extent="1-16" drill="0.35" grouprefs="USB"/>
-<wire x1="71.14888125" y1="32.08111875" x2="71.14888125" y2="28.52511875" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="71.14888125" y1="28.52511875" x2="71.66" y2="28.014" width="0.381" layer="16" grouprefs="USB"/>
-<via x="71.66" y="28.014" extent="1-16" drill="0.35" grouprefs="USB"/>
-<wire x1="71.66" y1="28.014" x2="72.658" y2="28.014" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="72.658" y1="28.014" x2="72.846" y2="27.826" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="68.94788125" y1="33.2035" x2="69.0765" y2="33.2035" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="69.0765" y1="33.2035" x2="69.882" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="67.044" y1="34.237" x2="67.91438125" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="67.91438125" y1="34.237" x2="68.94788125" y2="33.2035" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="64.802" y1="32.398" x2="65.752" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="65.752" y1="32.398" x2="66.06888125" y2="32.08111875" width="0.381" layer="1" grouprefs="USB"/>
+<via x="66.06888125" y="32.08111875" extent="1-16" drill="0.35" grouprefs="USB"/>
+<wire x1="66.06888125" y1="32.08111875" x2="66.06888125" y2="28.52511875" width="0.381" layer="16" grouprefs="USB"/>
+<wire x1="66.06888125" y1="28.52511875" x2="66.58" y2="28.014" width="0.381" layer="16" grouprefs="USB"/>
+<via x="66.58" y="28.014" extent="1-16" drill="0.35" grouprefs="USB"/>
+<wire x1="66.58" y1="28.014" x2="67.578" y2="28.014" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="67.578" y1="28.014" x2="67.766" y2="27.826" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.86788125" y1="33.2035" x2="63.9965" y2="33.2035" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="63.9965" y1="33.2035" x2="64.802" y2="32.398" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="61.964" y1="34.237" x2="62.83438125" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="62.83438125" y1="34.237" x2="63.86788125" y2="33.2035" width="0.381" layer="1" grouprefs="USB"/>
 <contactref element="JP4" pad="1"/>
-<wire x1="56.674" y1="40.968" x2="57.944" y2="40.968" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="64.548" y1="34.364" x2="57.944" y2="40.968" width="0.381" layer="16" grouprefs="USB"/>
-<wire x1="64.548" y1="34.364" x2="65.818" y2="34.364" width="0.381" layer="16" grouprefs="USB"/>
-<via x="65.818" y="34.364" extent="1-16" drill="0.3" grouprefs="USB"/>
-<wire x1="65.818" y1="34.364" x2="65.945" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="65.945" y1="34.237" x2="67.044" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="60.738" y1="34.364" x2="51.34" y2="34.364" width="0.381" layer="16"/>
+<wire x1="46.514" y1="29.538" x2="51.34" y2="34.364" width="0.381" layer="16" grouprefs="USB"/>
+<via x="60.738" y="34.364" extent="1-16" drill="0.3" grouprefs="USB"/>
+<wire x1="60.738" y1="34.364" x2="60.865" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="60.865" y1="34.237" x2="61.964" y2="34.237" width="0.381" layer="1" grouprefs="USB"/>
 </signal>
 <signal name="N$5">
 <contactref element="R3" pad="2"/>
 <contactref element="Q2" pad="1"/>
-<wire x1="71.3412625" y1="28.7835" x2="71.9035" y2="28.7835" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="71.9035" y1="28.7835" x2="72.846" y2="29.726" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="69.882" y1="27.826" x2="70.3837625" y2="27.826" width="0.381" layer="1" grouprefs="USB"/>
-<wire x1="70.3837625" y1="27.826" x2="71.3412625" y2="28.7835" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="66.2612625" y1="28.7835" x2="66.8235" y2="28.7835" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="66.8235" y1="28.7835" x2="67.766" y2="29.726" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="64.802" y1="27.826" x2="65.3037625" y2="27.826" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="65.3037625" y1="27.826" x2="66.2612625" y2="28.7835" width="0.381" layer="1" grouprefs="USB"/>
 </signal>
 <signal name="N$6">
 <contactref element="R4" pad="2"/>
 <contactref element="Q4" pad="1"/>
-<wire x1="69.882" y1="34.298" x2="72.846" y2="34.298" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="64.802" y1="34.298" x2="67.766" y2="34.298" width="0.381" layer="1" grouprefs="USB"/>
 </signal>
 <signal name="N$8">
 <contactref element="R21" pad="1"/>
 <contactref element="D6" pad="A"/>
-<wire x1="63.466" y1="41.73" x2="65.334" y2="41.73" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="58.386" y1="41.73" x2="60.254" y2="41.73" width="0.381" layer="1" grouprefs="USB"/>
 </signal>
 <signal name="N$22">
 <contactref element="R26" pad="1"/>
 <contactref element="D7" pad="A"/>
-<wire x1="63.466" y1="39.698" x2="65.334" y2="39.698" width="0.381" layer="1" grouprefs="USB"/>
+<wire x1="58.386" y1="39.698" x2="60.254" y2="39.698" width="0.381" layer="1" grouprefs="USB"/>
 </signal>
 <signal name="N$7">
 <contactref element="C1" pad="2"/>
@@ -4300,44 +4119,44 @@ Covered vias can be set in Masks (Limit).
 <contactref element="C14" pad="1"/>
 <contactref element="L2" pad="2"/>
 <contactref element="IC1" pad="3"/>
-<wire x1="48.796" y1="33.838" x2="48.796" y2="36.06" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.0178" y1="57.841" x2="36.33673125" y2="57.841" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="36.33673125" y1="57.841" x2="35.27518125" y2="58.90255" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="35.27518125" y1="58.90255" x2="33.04415" y2="58.90255" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="33.04415" y1="58.90255" x2="31.8" y2="60.1467" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="51.466" y1="47.874" x2="50.438" y2="46.846" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="50.438" y1="46.846" x2="50.438" y2="42.84436875" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="45.36436875" y1="40.548" x2="44.735" y2="41.17736875" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="44.735" y1="41.17736875" x2="44.735" y2="42.06" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="50.438" y1="42.84436875" x2="48.14163125" y2="40.548" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.14163125" y1="40.548" x2="45.36436875" y2="40.548" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="54.006" y1="47.874" x2="51.466" y2="47.874" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="43.338" y1="51.938" x2="42.85" y2="52.426" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="42.85" y1="52.426" x2="42.27236875" y2="52.426" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="42.27236875" y1="52.426" x2="41.306" y2="53.39236875" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="41.306" y1="56.67733125" x2="40.14233125" y2="57.841" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="40.14233125" y1="57.841" x2="39.0178" y2="57.841" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="41.306" y1="53.39236875" x2="41.306" y2="56.67733125" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.796" y1="33.838" x2="54.006" y2="39.048" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="54.006" y1="39.048" x2="54.006" y2="47.874" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="47.722" y1="51.618" x2="47.656" y2="51.684" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="47.656" y1="51.684" x2="47.656" y2="53.9294" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="43.338" y1="51.938" x2="47.402" y2="51.938" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="47.402" y1="51.938" x2="47.722" y2="51.618" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="47.722" y1="51.618" x2="48.21" y2="51.13" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.21" y1="51.13" x2="48.21" y2="50.55236875" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.21" y1="50.55236875" x2="48.65636875" y2="50.106" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.65636875" y1="50.106" x2="48.66" y2="50.106" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="49.954" y1="48.812" x2="49.954" y2="48.80836875" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="49.954" y1="48.80836875" x2="50.88836875" y2="47.874" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="50.88836875" y1="47.874" x2="51.466" y2="47.874" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="48.66" y1="50.106" x2="49.954" y2="48.812" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
+<wire x1="42.446" y1="32.568" x2="42.446" y2="34.79" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.6678" y1="56.571" x2="29.98673125" y2="56.571" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="29.98673125" y1="56.571" x2="28.92518125" y2="57.63255" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="28.92518125" y1="57.63255" x2="29.23415" y2="57.63255" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="29.23415" y1="57.63255" x2="26.72" y2="60.1467" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="45.116" y1="46.604" x2="44.088" y2="45.576" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="44.088" y1="45.576" x2="44.088" y2="41.57436875" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="39.01436875" y1="39.278" x2="38.385" y2="39.90736875" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="38.385" y1="39.90736875" x2="38.385" y2="40.79" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="44.088" y1="41.57436875" x2="41.79163125" y2="39.278" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.79163125" y1="39.278" x2="39.01436875" y2="39.278" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="47.656" y1="46.604" x2="45.116" y2="46.604" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="36.988" y1="50.668" x2="36.5" y2="51.156" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="36.5" y1="51.156" x2="35.92236875" y2="51.156" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="35.92236875" y1="51.156" x2="34.956" y2="52.12236875" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="34.956" y1="55.40733125" x2="33.79233125" y2="56.571" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="33.79233125" y1="56.571" x2="32.6678" y2="56.571" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="34.956" y1="52.12236875" x2="34.956" y2="55.40733125" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="42.446" y1="32.568" x2="47.656" y2="37.778" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="47.656" y1="37.778" x2="47.656" y2="46.604" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.372" y1="50.348" x2="41.306" y2="50.414" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.306" y1="50.414" x2="41.306" y2="52.6594" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="36.988" y1="50.668" x2="41.052" y2="50.668" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.052" y1="50.668" x2="41.372" y2="50.348" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.372" y1="50.348" x2="41.86" y2="49.86" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.86" y1="49.86" x2="41.86" y2="49.28236875" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="41.86" y1="49.28236875" x2="42.30636875" y2="48.836" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="42.30636875" y1="48.836" x2="42.31" y2="48.836" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="43.604" y1="47.542" x2="43.604" y2="47.53836875" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="43.604" y1="47.53836875" x2="44.53836875" y2="46.604" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="44.53836875" y1="46.604" x2="45.116" y2="46.604" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="42.31" y1="48.836" x2="43.604" y2="47.542" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
 <wire x1="92.4567" y1="101.066" x2="92.894" y2="100.6287" width="1.016" layer="1"/>
 <wire x1="92.894" y1="100.6287" x2="92.894" y2="96.286" width="1.016" layer="1"/>
-<wire x1="77.47" y1="66.67" x2="92.894" y2="96.286" width="0" layer="19" extent="1-1"/>
-<wire x1="73.0156" y1="67.355" x2="77.47" y2="66.67" width="0" layer="19" extent="1-1"/>
-<wire x1="47.656" y1="53.9294" x2="73.0156" y2="67.355" width="0" layer="19" extent="1-1"/>
-<wire x1="31.588" y1="60.1467" x2="31.8" y2="60.1467" width="0" layer="19" extent="1-1"/>
+<wire x1="76.2" y1="66.67" x2="92.894" y2="96.286" width="0" layer="19" extent="1-1"/>
+<wire x1="73.0156" y1="67.355" x2="76.2" y2="66.67" width="0" layer="19" extent="1-1"/>
+<wire x1="47.656" y1="46.604" x2="73.0156" y2="67.355" width="0" layer="19" extent="1-1"/>
+<wire x1="25.238" y1="57.8213" x2="26.72" y2="60.1467" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="N$2">
 <contactref element="R25" pad="1"/>
@@ -4363,28 +4182,33 @@ Covered vias can be set in Masks (Limit).
 <contactref element="D17" pad="1"/>
 <contactref element="IC1" pad="1"/>
 <contactref element="C12" pad="1"/>
-<wire x1="40.29" y1="42.474" x2="40.704" y2="42.06" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="40.704" y1="42.06" x2="42.195" y2="42.06" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="37.816" y1="49.84" x2="38.304" y2="49.352" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.304" y1="49.352" x2="38.304" y2="48.77436875" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.304" y1="48.77436875" x2="38.75036875" y2="48.328" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="40.036" y1="46.77394375" x2="40.29" y2="46.51994375" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="40.29" y1="46.51994375" x2="40.29" y2="42.474" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.75036875" y1="48.328" x2="39.28005625" y2="48.328" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="39.28005625" y1="48.328" x2="40.036" y2="47.57205625" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="40.036" y1="47.57205625" x2="40.036" y2="46.77394375" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="29.876" y1="46.284" x2="29.876" y2="52.192" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="29.876" y1="52.192" x2="29.114" y2="52.954" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="29.876" y1="46.284" x2="33.432" y2="49.84" width="1.016" layer="1"/>
-<wire x1="46.29" y1="71.12" x2="46.29" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="33.94" y1="41.204" x2="34.354" y2="40.79" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="34.354" y1="40.79" x2="35.845" y2="40.79" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="31.466" y1="48.57" x2="31.954" y2="48.082" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="31.954" y1="48.082" x2="31.954" y2="47.50436875" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="31.954" y1="47.50436875" x2="32.40036875" y2="47.058" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="33.686" y1="45.50394375" x2="33.94" y2="45.24994375" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="33.94" y1="45.24994375" x2="33.94" y2="41.204" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.40036875" y1="47.058" x2="32.93005625" y2="47.058" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.93005625" y1="47.058" x2="33.686" y2="46.30205625" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="33.686" y1="46.30205625" x2="33.686" y2="45.50394375" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="23.526" y1="52.192" x2="22.764" y2="52.954" width="1.016" layer="16" grouprefs="POWER POWER_BAT"/>
+<wire x1="29.75" y1="71.12" x2="29.75" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="85.9" y1="66.65" x2="85.9" y2="73.24" width="1.016" layer="1"/>
-<wire x1="25.276" y1="19.378" x2="29.876" y2="23.978" width="1.016" layer="1"/>
-<wire x1="29.876" y1="23.978" x2="29.876" y2="46.284" width="1.016" layer="1"/>
-<wire x1="33.432" y1="49.84" x2="37.816" y2="49.84" width="1.016" layer="1"/>
+<wire x1="22.764" y1="52.954" x2="22.86" y2="52.858" width="1.016" layer="16"/>
+<wire x1="22.86" y1="52.858" x2="22.86" y2="48.26" width="1.016" layer="16"/>
+<wire x1="22.86" y1="48.26" x2="22.86" y2="34.29" width="1.016" layer="16"/>
+<wire x1="22.86" y1="34.29" x2="25.4" y2="31.75" width="1.016" layer="16"/>
+<wire x1="25.4" y1="19.502" x2="25.4" y2="31.75" width="1.016" layer="16"/>
+<wire x1="25.276" y1="19.378" x2="25.4" y2="19.502" width="1.016" layer="16"/>
+<wire x1="22.86" y1="48.26" x2="27.94" y2="48.26" width="1.016" layer="16"/>
+<via x="27.94" y="48.26" extent="1-16" drill="0.35"/>
+<wire x1="27.94" y1="48.26" x2="28.25" y2="48.57" width="1.016" layer="1"/>
+<wire x1="28.25" y1="48.57" x2="31.466" y2="48.57" width="1.016" layer="1"/>
 <wire x1="59.6044" y1="71.165" x2="85.9" y2="73.24" width="0" layer="19" extent="1-1"/>
-<wire x1="58.93" y1="61.15" x2="59.6044" y2="71.165" width="0" layer="19" extent="1-1"/>
-<wire x1="46.29" y1="64.77" x2="58.93" y2="61.15" width="0" layer="19" extent="1-1"/>
-<wire x1="37.816" y1="49.84" x2="46.29" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="56.07" y1="71.63" x2="59.6044" y2="71.165" width="0" layer="19" extent="1-1"/>
+<wire x1="29.75" y1="71.12" x2="56.07" y2="71.63" width="0" layer="19" extent="1-1"/>
+<wire x1="22.764" y1="52.954" x2="29.75" y2="64.77" width="0" layer="19" extent="1-16"/>
 <wire x1="80.01" y1="-31.43" x2="25.276" y2="19.378" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M1_M+" class="2">
@@ -4392,17 +4216,15 @@ Covered vias can be set in Masks (Limit).
 <contactref element="CR1" pad="4"/>
 <contactref element="D9" pad="2"/>
 <contactref element="D11" pad="1"/>
-<wire x1="44.665" y1="64.77" x2="42" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="38.67" y1="64.77" x2="42" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="38.311975" y1="64.77" x2="38.67" y2="64.77" width="0.1524" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="42" y1="64.77" x2="43" y2="63.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="43" y1="63.77" x2="43" y2="62" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="43" y1="62" x2="49" y2="62" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="49" y1="62" x2="49" y2="75" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="49" y1="75" x2="47" y2="77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="47" y1="77" x2="42" y2="77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="42" y1="77" x2="39.77" y2="79.23" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="31.375" y1="64.77" x2="34.29" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="34.29" y1="64.77" x2="37.37" y2="64.77" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="41.38" y1="77.62" x2="41.38" y2="62" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="41.38" y1="77.62" x2="39.77" y2="79.23" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="39.77" y1="79.23" x2="39.77" y2="81.14" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="34.52" y1="62" x2="34.29" y2="62.23" width="1.016" layer="1"/>
+<wire x1="34.29" y1="62.23" x2="34.29" y2="64.77" width="1.016" layer="1"/>
+<wire x1="41.38" y1="62" x2="34.52" y2="62" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<via x="34.29" y="64.77" extent="1-16" drill="0.55"/>
 <wire x1="39.77" y1="81.14" x2="59.6044" y2="73.705" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M1_M-" class="2">
@@ -4410,15 +4232,18 @@ Covered vias can be set in Masks (Limit).
 <contactref element="CR1" pad="5"/>
 <contactref element="D8" pad="2"/>
 <contactref element="D10" pad="1"/>
-<wire x1="44.665" y1="71.12" x2="41" y2="71.12" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="38.67" y1="71.12" x2="41" y2="71.12" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="41" y1="71.12" x2="41" y2="75.12739375" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="34.29" y1="71.12" x2="37.37" y2="71.12" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="41" y1="75.12739375" x2="41.00000625" y2="75.1274" width="0.1524" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="39.77" y1="83.5364" x2="39.77" y2="83.68" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="37.7826" y1="81.549" x2="39.77" y2="83.5364" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="41" y1="75.12739375" x2="37.7826" y2="78.34479375" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
+<wire x1="37.7826" y1="78.34479375" x2="38.46" y2="77.66739375" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
 <wire x1="37.7826" y1="78.34479375" x2="37.7826" y2="81.549" width="1.016" layer="1" grouprefs="MOTOR_LINKS"/>
-<wire x1="39.77" y1="83.68" x2="59.6044" y2="72.435" width="0" layer="19" extent="1-1"/>
+<wire x1="34.29" y1="73.49739375" x2="34.29" y2="71.12" width="1.016" layer="1"/>
+<wire x1="38.46" y1="77.66739375" x2="34.29" y2="73.49739375" width="1.016" layer="1"/>
+<wire x1="31.375" y1="71.12" x2="34.29" y2="71.12" width="1.016" layer="1"/>
+<via x="34.29" y="71.12" extent="1-16" drill="0.55"/>
+<wire x1="41" y1="75.12739375" x2="59.6044" y2="72.435" width="0" layer="19" extent="1-1"/>
+<wire x1="37.37" y1="71.12" x2="41" y2="75.12739375" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="M2_M+" class="2">
 <contactref element="SV4" pad="1"/>
@@ -4446,88 +4271,52 @@ Covered vias can be set in Masks (Limit).
 <wire x1="83.8448" y1="64.963225" x2="83.8448" y2="79.3638875" width="1.016" layer="1"/>
 <wire x1="83.8448" y1="79.3638875" x2="89.15" y2="84.6690875" width="1.016" layer="1"/>
 <wire x1="89.621975" y1="66.63" x2="87.761775" y2="64.7698" width="1.016" layer="1"/>
-<wire x1="89.15" y1="84.76" x2="73.0156" y2="73.705" width="0" layer="19" extent="1-1"/>
+<wire x1="73.0156" y1="73.705" x2="87.525" y2="66.65" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="/VBUS_EN">
 <contactref element="Q7" pad="3"/>
 <contactref element="U6" pad="1"/>
-<wire x1="33.9422" y1="57.841" x2="31.6077" y2="57.841" width="0.381" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="31.6077" y1="57.841" x2="31.588" y2="57.8213" width="0.254" layer="1" grouprefs="POWER_BAT POWER"/>
+<wire x1="26.5277" y1="56.571" x2="27.5922" y2="56.571" width="0.381" layer="1"/>
+<wire x1="26.5277" y1="56.571" x2="25.2577" y2="57.841" width="0.381" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="25.2577" y1="57.841" x2="25.238" y2="60.1467" width="0.254" layer="16" grouprefs="POWER POWER_BAT"/>
+<via x="25.2577" y="57.841" extent="1-16" drill="0.35"/>
 </signal>
 <signal name="N$13">
 <contactref element="R5" pad="1"/>
 <contactref element="R6" pad="2"/>
 <contactref element="U6" pad="3"/>
-<wire x1="29.114" y1="54.854" x2="31.4" y2="54.854" width="0.508" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="31.4" y1="54.854" x2="32.35" y2="54.854" width="0.508" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="32.797" y1="55.301" x2="33.9422" y2="55.301" width="0.508" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="32.35" y1="54.854" x2="32.797" y2="55.301" width="0.508" layer="1" grouprefs="POWER_BAT POWER"/>
+<wire x1="22.764" y1="54.854" x2="25.05" y2="54.854" width="0.508" layer="16" grouprefs="POWER POWER_BAT"/>
+<wire x1="25.05" y1="54.854" x2="26.426" y2="55.21" width="0.508" layer="16" grouprefs="POWER POWER_BAT"/>
+<via x="26.426" y="55.21" extent="1-16" drill="0.35"/>
+<wire x1="26.426" y1="55.21" x2="27.5922" y2="54.031" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="EN_3V3">
 <contactref element="U4" pad="1"/>
 <contactref element="R13" pad="1"/>
-<wire x1="43.338" y1="53.838" x2="43.4294" y2="53.9294" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="43.4294" y1="53.9294" x2="46.1574" y2="53.9294" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-</signal>
-<signal name="N$27">
-<contactref element="C20" pad="1"/>
-<contactref element="U5" pad="24"/>
-<via x="149.3" y="23.82" extent="1-16" drill="0.3"/>
-<wire x1="149.3" y1="23.82" x2="150.57" y2="25.09" width="1.016" layer="16"/>
-<wire x1="150.57" y1="25.09" x2="152.89" y2="25.09" width="1.016" layer="16"/>
-<wire x1="146.52" y1="23.625" x2="149.105" y2="23.625" width="0.254" layer="1"/>
-<wire x1="149.105" y1="23.625" x2="149.3" y2="23.82" width="0.254" layer="1"/>
-</signal>
-<signal name="N$1">
-<contactref element="C24" pad="1"/>
-<contactref element="U5" pad="21"/>
-<wire x1="146.52" y1="22.335" x2="148.245" y2="22.335" width="0.254" layer="1"/>
-<wire x1="148.245" y1="22.335" x2="149.3" y2="21.28" width="0.254" layer="1"/>
-<via x="149.3" y="21.28" extent="1-16" drill="0.35"/>
-<wire x1="152.16" y1="20.01" x2="150.57" y2="20.01" width="1.016" layer="16"/>
-<wire x1="150.57" y1="20.01" x2="149.3" y2="21.28" width="1.016" layer="16"/>
+<wire x1="36.988" y1="52.568" x2="37.0794" y2="52.6594" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="37.0794" y1="52.6594" x2="39.8074" y2="52.6594" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
 </signal>
 <signal name="MISO">
 <contactref element="JP1" pad="3"/>
 <contactref element="U1" pad="31"/>
-<contactref element="U5" pad="5"/>
-<contactref element="U5" pad="6"/>
 <contactref element="U$2" pad="P8"/>
-<via x="144.276" y="25.09" extent="1-16" drill="0.35"/>
-<wire x1="144.08" y1="24.055" x2="144.08" y2="24.894" width="0.2032" layer="1"/>
-<wire x1="144.08" y1="24.894" x2="144.248" y2="25.062" width="0.2032" layer="1"/>
-<wire x1="144.248" y1="25.062" x2="144.276" y2="25.09" width="0.2032" layer="1"/>
-<wire x1="144.655" y1="24.02" x2="144.655" y2="24.655" width="0.2032" layer="1"/>
-<wire x1="144.655" y1="24.655" x2="144.248" y2="25.062" width="0.2032" layer="1"/>
-<wire x1="144.276" y1="25.09" x2="144.276" y2="22.494" width="0.2032" layer="16"/>
-<via x="148.03" y="18.74" extent="1-16" drill="0.35"/>
-<via x="148.03" y="16.2" extent="1-16" drill="0.35"/>
-<wire x1="144.276" y1="22.494" x2="144.276" y2="19.954" width="0.1524" layer="16"/>
-<wire x1="144.276" y1="19.954" x2="148.03" y2="16.2" width="0.1524" layer="16"/>
-<wire x1="144.276" y1="25.09" x2="68.36" y2="88.58" width="0" layer="19" extent="1-1"/>
-<wire x1="148.03" y1="18.74" x2="148.03" y2="16.2" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="33.9" x2="148.03" y2="16.2" width="0" layer="19" extent="1-1"/>
+<via x="66.75" y="47.95" extent="1-16" drill="0.35" grouprefs="GYRO"/>
+<wire x1="66.75" y1="47.95" x2="68.36" y2="88.58" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="33.9" x2="66.75" y2="47.95" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="CLK">
 <contactref element="JP1" pad="5"/>
 <contactref element="U1" pad="30"/>
-<contactref element="U5" pad="2"/>
 <contactref element="U$2" pad="P4"/>
-<wire x1="145.945" y1="24.02" x2="150.57" y2="28.645" width="0.2032" layer="1"/>
-<wire x1="150.57" y1="28.645" x2="150.57" y2="28.9" width="0.2032" layer="1"/>
-<wire x1="150.57" y1="28.9" x2="63.28" y2="88.58" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="35.4" x2="145.945" y2="24.02" width="0" layer="19" extent="1-1"/>
+<wire x1="69.29" y1="60.65" x2="63.28" y2="88.58" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="35.4" x2="69.29" y2="60.65" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MOSI">
 <contactref element="U$2" pad="P5"/>
 <contactref element="U1" pad="29"/>
 <contactref element="JP1" pad="2"/>
-<contactref element="U5" pad="4"/>
-<wire x1="145.085" y1="24.02" x2="145.085" y2="24.685" width="0.254" layer="1"/>
-<wire x1="148.03" y1="27.63" x2="148.03" y2="28.9" width="0.254" layer="1"/>
-<wire x1="145.085" y1="24.685" x2="148.03" y2="27.63" width="0.254" layer="1"/>
-<wire x1="148.03" y1="28.9" x2="70.9" y2="88.58" width="0" layer="19" extent="1-1"/>
-<wire x1="80.15" y1="36.9" x2="145.085" y2="24.02" width="0" layer="19" extent="1-1"/>
+<wire x1="66.75" y1="60.65" x2="70.9" y2="88.58" width="0" layer="19" extent="1-1"/>
+<wire x1="80.15" y1="36.9" x2="66.75" y2="60.65" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="H_EN_A">
 <contactref element="U1" pad="10"/>
@@ -4543,15 +4332,12 @@ Covered vias can be set in Masks (Limit).
 <contactref element="D12" pad="1"/>
 <contactref element="L2" pad="1"/>
 <contactref element="IC1" pad="2"/>
-<wire x1="38.896" y1="33.838" x2="38.766" y2="33.968" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.766" y1="33.968" x2="38.766" y2="44.11" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.896" y1="36.75545" x2="38.896" y2="34.854" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="38.896" y1="34.854" x2="38.896" y2="33.838" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="43.465" y1="42.06" x2="43.465" y2="39.423" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-<wire x1="43.465" y1="39.423" x2="38.896" y2="34.854" width="1.016" layer="1" grouprefs="POWER_BAT POWER"/>
-</signal>
-<signal name="N$9">
-<via x="141.68" y="22.55" extent="1-16" drill="0.35"/>
+<wire x1="32.546" y1="32.568" x2="32.416" y2="32.698" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.416" y1="32.698" x2="32.416" y2="42.84" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.546" y1="35.48545" x2="32.546" y2="33.584" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="32.546" y1="33.584" x2="32.546" y2="32.568" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="37.115" y1="40.79" x2="37.115" y2="38.153" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
+<wire x1="37.115" y1="38.153" x2="32.546" y2="33.584" width="1.016" layer="1" grouprefs="POWER POWER_BAT"/>
 </signal>
 <signal name="N$4">
 <via x="99" y="26" extent="1-16" drill="0.35"/>
