@@ -12599,32 +12599,11 @@ dual op-amp</description>
 <label x="93.98" y="182.88" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="SENSOR_EN" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO1"/>
-<wire x1="86.36" y1="73.66" x2="83.82" y2="73.66" width="0.1524" layer="91"/>
-<label x="83.82" y="73.66" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
-<net name="SENSOR_FRONT" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO2"/>
-<wire x1="86.36" y1="71.12" x2="53.34" y2="71.12" width="0.1524" layer="91"/>
-<label x="53.34" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
 <net name="SENSOR_LEFT" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="IO3"/>
-<wire x1="86.36" y1="68.58" x2="81.28" y2="68.58" width="0.1524" layer="91"/>
-<label x="81.28" y="68.58" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
-<net name="SENSOR_RIGHT" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO4"/>
-<wire x1="86.36" y1="66.04" x2="53.34" y2="66.04" width="0.1524" layer="91"/>
-<label x="53.34" y="66.04" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="U1" gate="G$1" pin="IO10"/>
+<wire x1="86.36" y1="50.8" x2="83.82" y2="50.8" width="0.1524" layer="91"/>
+<label x="66.04" y="50.8" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ESP32_M1_1" class="0">
@@ -12799,50 +12778,50 @@ dual op-amp</description>
 </net>
 <net name="LED_DEBUG_4" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="IO12"/>
-<wire x1="86.36" y1="45.72" x2="83.82" y2="45.72" width="0.1524" layer="91"/>
-<label x="66.04" y="45.72" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R20" gate="G$1" pin="1"/>
 <wire x1="53.34" y1="187.96" x2="53.34" y2="190.5" width="0.1524" layer="91"/>
 <label x="53.34" y="193.04" size="1.778" layer="95" rot="R90"/>
 </segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="IO1"/>
+<wire x1="86.36" y1="73.66" x2="83.82" y2="73.66" width="0.1524" layer="91"/>
+<label x="83.82" y="73.66" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="LED_DEBUG_3" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO11"/>
-<wire x1="86.36" y1="48.26" x2="83.82" y2="48.26" width="0.1524" layer="91"/>
-<label x="66.04" y="48.26" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="R19" gate="G$1" pin="1"/>
 <wire x1="45.72" y1="187.96" x2="45.72" y2="190.5" width="0.1524" layer="91"/>
 <label x="45.72" y="193.04" size="1.778" layer="95" rot="R90"/>
 </segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="IO2"/>
+<wire x1="86.36" y1="71.12" x2="53.34" y2="71.12" width="0.1524" layer="91"/>
+<label x="53.34" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="LED_DEBUG_2" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO10"/>
-<wire x1="86.36" y1="50.8" x2="83.82" y2="50.8" width="0.1524" layer="91"/>
-<label x="66.04" y="50.8" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="R18" gate="G$1" pin="1"/>
 <wire x1="38.1" y1="187.96" x2="38.1" y2="190.5" width="0.1524" layer="91"/>
 <label x="38.1" y="193.04" size="1.778" layer="95" rot="R90"/>
 </segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="IO3"/>
+<wire x1="86.36" y1="68.58" x2="81.28" y2="68.58" width="0.1524" layer="91"/>
+<label x="81.28" y="68.58" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="LED_DEBUG_1" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IO9"/>
-<wire x1="86.36" y1="53.34" x2="83.82" y2="53.34" width="0.1524" layer="91"/>
-<label x="66.04" y="53.34" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="1"/>
 <wire x1="30.48" y1="187.96" x2="30.48" y2="190.5" width="0.1524" layer="91"/>
 <label x="30.48" y="193.04" size="1.778" layer="95" rot="R90"/>
+</segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="IO4"/>
+<wire x1="86.36" y1="66.04" x2="53.34" y2="66.04" width="0.1524" layer="91"/>
+<label x="53.34" y="66.04" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$21" class="0">
@@ -12956,6 +12935,27 @@ dual op-amp</description>
 <label x="73.66" y="35.56" size="1.778" layer="95" rot="R270" xref="yes"/>
 <wire x1="86.36" y1="43.18" x2="73.66" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="43.18" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="SENSOR_EN" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="IO12"/>
+<wire x1="86.36" y1="45.72" x2="83.82" y2="45.72" width="0.1524" layer="91"/>
+<label x="66.04" y="45.72" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="SENSOR_FRONT" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="IO11"/>
+<wire x1="86.36" y1="48.26" x2="83.82" y2="48.26" width="0.1524" layer="91"/>
+<label x="66.04" y="48.26" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="SENSOR_RIGHT" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="IO9"/>
+<wire x1="86.36" y1="53.34" x2="83.82" y2="53.34" width="0.1524" layer="91"/>
+<label x="66.04" y="53.34" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
