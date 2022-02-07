@@ -8872,7 +8872,7 @@ Source: AVX .. aphvc.pdf</description>
 <text x="-16.6878" y="4.7752" size="0.635" layer="47" ratio="4" rot="SR0">0.05in/1.27mm</text>
 <text x="-10.7442" y="-11.049" size="0.635" layer="47" ratio="4" rot="SR0">0.043in/1.092mm</text>
 <text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
-<rectangle x1="-6.35" y1="-8.89" x2="6.35" y2="8.89" layer="42"/>
+<rectangle x1="-6.35" y1="-8.89" x2="6.35" y2="8.89" layer="39"/>
 </package>
 <package name="POWERSO-20_STM-M">
 <smd name="1" x="-6.7564" y="5.715" dx="2.1082" dy="0.5842" layer="1"/>
