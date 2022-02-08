@@ -3761,6 +3761,19 @@ by exp-lbrs.ulp</description>
 <text x="-7.458" y="7.669665625" size="1.27" layer="25">&gt;NAME</text>
 <text x="-7.458" y="-8.939665625" size="1.27" layer="27">&gt;VALUE</text>
 </package>
+<package name="MOTOR_HALTERUNG">
+<hole x="5" y="5" drill="2.4"/>
+<hole x="45" y="5" drill="2.4"/>
+<wire x1="0" y1="0" x2="50" y2="0" width="0.127" layer="21"/>
+<wire x1="50" y1="0" x2="50" y2="10" width="0.127" layer="21"/>
+<wire x1="50" y1="10" x2="0" y2="10" width="0.127" layer="21"/>
+<wire x1="0" y1="10" x2="0" y2="0" width="0.127" layer="21"/>
+<circle x="5" y="5" radius="1.4142125" width="0.127" layer="41"/>
+<circle x="45" y="5" radius="1.4142125" width="0.127" layer="41"/>
+<circle x="5" y="5" radius="1.4142125" width="0.127" layer="42"/>
+<circle x="45" y="5" radius="1.4142125" width="0.127" layer="42"/>
+<rectangle x1="0" y1="0" x2="50" y2="10" layer="39"/>
+</package>
 </packages>
 </library>
 </libraries>
@@ -4440,7 +4453,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="NAME" x="97.01" y="72.98" size="1.27" layer="25" rot="R270" align="center"/>
 <attribute name="VALUE" x="95.74" y="69.17" size="1.27" layer="27" rot="R270" align="center"/>
 </element>
-<element name="U$1" library="shared" package="MOTOR_HALTERUNG" value="" x="26" y="25" locked="yes" smashed="yes" rot="R90"/>
+<element name="U$1" library="maus" package="MOTOR_HALTERUNG" value="" x="26" y="25" locked="yes" smashed="yes" rot="R90"/>
 <element name="U$5" library="shared" package="MOTOR_HALTERUNG" value="" x="116" y="25" smashed="yes" rot="R90"/>
 <element name="U$6" library="shared" package="SENSOR_HALTERUNG" value="" x="116" y="77" smashed="yes" rot="R90"/>
 <element name="U$7" library="shared" package="SENSOR_HALTERUNG" value="" x="79.5" y="116" smashed="yes" rot="R180"/>
