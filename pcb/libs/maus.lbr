@@ -271,18 +271,18 @@ by exp-lbrs.ulp</description>
 <smd name="43.7" x="-2.69" y="1.45" dx="1.1" dy="1.1" layer="1"/>
 <smd name="43.8" x="-1.19" y="1.45" dx="1.1" dy="1.1" layer="1"/>
 <smd name="43.9" x="0.31" y="1.45" dx="1.1" dy="1.1" layer="1"/>
-<pad name="43.10" x="-1.19" y="0.7" drill="0.2" diameter="0.4"/>
-<pad name="43.11" x="-2.69" y="0.7" drill="0.2" diameter="0.4"/>
-<pad name="43.12" x="0.31" y="0.7" drill="0.2" diameter="0.4"/>
-<pad name="43.13" x="-2.69" y="-0.8" drill="0.2" diameter="0.4"/>
-<pad name="43.14" x="-1.19" y="-0.8" drill="0.2" diameter="0.4"/>
-<pad name="43.15" x="0.31" y="-0.8" drill="0.2" diameter="0.4"/>
-<pad name="43.16" x="-1.94" y="1.45" drill="0.2" diameter="0.4"/>
-<pad name="43.17" x="-0.44" y="1.45" drill="0.2" diameter="0.4"/>
-<pad name="43.18" x="-1.94" y="-0.05" drill="0.2" diameter="0.4"/>
-<pad name="43.19" x="-0.44" y="-0.05" drill="0.2" diameter="0.4"/>
-<pad name="43.20" x="-1.94" y="-1.55" drill="0.2" diameter="0.4"/>
-<pad name="43.21" x="-0.44" y="-1.55" drill="0.2" diameter="0.4"/>
+<pad name="43.10" x="-1.19" y="0.7" drill="0.35" diameter="0.4064"/>
+<pad name="43.11" x="-2.69" y="0.7" drill="0.35" diameter="0.4064"/>
+<pad name="43.12" x="0.31" y="0.7" drill="0.35" diameter="0.4064"/>
+<pad name="43.13" x="-2.69" y="-0.8" drill="0.35" diameter="0.4064"/>
+<pad name="43.14" x="-1.19" y="-0.8" drill="0.35" diameter="0.4064"/>
+<pad name="43.15" x="0.31" y="-0.8" drill="0.35" diameter="0.4064"/>
+<pad name="43.16" x="-1.94" y="1.45" drill="0.35" diameter="0.4064"/>
+<pad name="43.17" x="-0.44" y="1.45" drill="0.35" diameter="0.4064"/>
+<pad name="43.18" x="-1.94" y="-0.05" drill="0.35" diameter="0.4064"/>
+<pad name="43.19" x="-0.44" y="-0.05" drill="0.35" diameter="0.4064"/>
+<pad name="43.20" x="-1.94" y="-1.55" drill="0.35" diameter="0.4064"/>
+<pad name="43.21" x="-0.44" y="-1.55" drill="0.35" diameter="0.4064"/>
 <text x="-9" y="15.9" size="1.27" layer="25">&gt;NAME</text>
 <text x="-9" y="-17.7" size="1.2738" layer="27">&gt;VALUE</text>
 <text x="-4.45471875" y="12.1707" size="1.27" layer="51">ANTENNA</text>
