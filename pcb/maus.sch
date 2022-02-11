@@ -12316,7 +12316,7 @@ dual op-amp</description>
 <label x="66.04" y="50.8" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ESP32_M1_1" class="0">
+<net name="ESP32_M2_1" class="0">
 <segment>
 <pinref part="U69" gate="G$1" pin="IO14"/>
 <wire x1="86.36" y1="40.64" x2="78.74" y2="40.64" width="0.1524" layer="91"/>
@@ -12324,39 +12324,12 @@ dual op-amp</description>
 <wire x1="78.74" y1="40.64" x2="78.74" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="ESP32_M1_2" class="0">
+<net name="ESP32_M2_2" class="0">
 <segment>
 <pinref part="U69" gate="G$1" pin="IO15"/>
 <wire x1="86.36" y1="38.1" x2="83.82" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="38.1" x2="83.82" y2="35.56" width="0.1524" layer="91"/>
 <label x="83.82" y="35.56" size="1.778" layer="95" rot="R270" xref="yes"/>
-</segment>
-</net>
-<net name="ESP32_M1_CH_B" class="0">
-<segment>
-<label x="121.92" y="68.58" size="1.778" layer="95" xref="yes"/>
-<wire x1="116.9924" y1="68.58" x2="119.38" y2="68.58" width="0.1524" layer="91"/>
-<pinref part="U69" gate="G$1" pin="IO26"/>
-<wire x1="119.38" y1="68.58" x2="121.92" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="68.58" x2="116.9924" y2="68.58" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="ESP32_M2_1" class="0">
-<segment>
-<label x="149.86" y="76.2" size="1.778" layer="95" xref="yes"/>
-<wire x1="116.9924" y1="76.2" x2="119.38" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="U69" gate="G$1" pin="IO19"/>
-<wire x1="119.38" y1="76.2" x2="149.86" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="76.2" x2="116.9924" y2="76.2" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="ESP32_M2_2" class="0">
-<segment>
-<label x="121.92" y="73.66" size="1.778" layer="95" xref="yes"/>
-<wire x1="116.9924" y1="73.66" x2="119.38" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="U69" gate="G$1" pin="IO20"/>
-<wire x1="119.38" y1="73.66" x2="121.92" y2="73.66" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="73.66" x2="116.9924" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ESP32_M2_CH_A" class="0">
@@ -12643,11 +12616,41 @@ dual op-amp</description>
 <label x="66.04" y="53.34" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="S3" gate="1" pin="S1"/>
+<wire x1="55.88" y1="33.02" x2="60.96" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="33.02" x2="60.96" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="U69" gate="G$1" pin="IO8"/>
+<wire x1="60.96" y1="55.88" x2="86.36" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="S3" gate="1" pin="S"/>
+<wire x1="55.88" y1="35.56" x2="55.88" y2="33.02" width="0.1524" layer="91"/>
+<junction x="55.88" y="33.02"/>
+</segment>
+</net>
 <net name="ESP32_M2_CH_B" class="0">
 <segment>
 <pinref part="U69" gate="G$1" pin="IO17"/>
 <wire x1="116.84" y1="81.28" x2="121.92" y2="81.28" width="0.1524" layer="91"/>
 <label x="121.92" y="81.28" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ESP32_M1_1" class="0">
+<segment>
+<label x="149.86" y="76.2" size="1.778" layer="95" xref="yes"/>
+<wire x1="116.9924" y1="76.2" x2="119.38" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="U69" gate="G$1" pin="IO19"/>
+<wire x1="119.38" y1="76.2" x2="149.86" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="76.2" x2="116.9924" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="ESP32_M1_2" class="0">
+<segment>
+<label x="121.92" y="73.66" size="1.778" layer="95" xref="yes"/>
+<wire x1="116.9924" y1="73.66" x2="119.38" y2="73.66" width="0.1524" layer="91"/>
+<pinref part="U69" gate="G$1" pin="IO20"/>
+<wire x1="119.38" y1="73.66" x2="121.92" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="73.66" x2="116.9924" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ESP32_M1_CH_A" class="0">
@@ -12659,16 +12662,13 @@ dual op-amp</description>
 <wire x1="116.84" y1="71.12" x2="116.9924" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="ESP32_M1_CH_B" class="0">
 <segment>
-<pinref part="S3" gate="1" pin="S1"/>
-<wire x1="55.88" y1="33.02" x2="60.96" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="33.02" x2="60.96" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="U69" gate="G$1" pin="IO8"/>
-<wire x1="60.96" y1="55.88" x2="86.36" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="S3" gate="1" pin="S"/>
-<wire x1="55.88" y1="35.56" x2="55.88" y2="33.02" width="0.1524" layer="91"/>
-<junction x="55.88" y="33.02"/>
+<label x="121.92" y="68.58" size="1.778" layer="95" xref="yes"/>
+<wire x1="116.9924" y1="68.58" x2="119.38" y2="68.58" width="0.1524" layer="91"/>
+<pinref part="U69" gate="G$1" pin="IO26"/>
+<wire x1="119.38" y1="68.58" x2="121.92" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="68.58" x2="116.9924" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
