@@ -12309,13 +12309,6 @@ dual op-amp</description>
 <label x="93.98" y="182.88" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="SENSOR_LEFT" class="0">
-<segment>
-<pinref part="U69" gate="G$1" pin="IO10"/>
-<wire x1="86.36" y1="50.8" x2="83.82" y2="50.8" width="0.1524" layer="91"/>
-<label x="66.04" y="50.8" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="ESP32_M2_1" class="0">
 <segment>
 <pinref part="U69" gate="G$1" pin="IO14"/>
@@ -12595,27 +12588,6 @@ dual op-amp</description>
 <wire x1="73.66" y1="43.18" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="SENSOR_EN" class="0">
-<segment>
-<pinref part="U69" gate="G$1" pin="IO12"/>
-<wire x1="86.36" y1="45.72" x2="83.82" y2="45.72" width="0.1524" layer="91"/>
-<label x="66.04" y="45.72" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="SENSOR_FRONT" class="0">
-<segment>
-<pinref part="U69" gate="G$1" pin="IO11"/>
-<wire x1="86.36" y1="48.26" x2="83.82" y2="48.26" width="0.1524" layer="91"/>
-<label x="66.04" y="48.26" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="SENSOR_RIGHT" class="0">
-<segment>
-<pinref part="U69" gate="G$1" pin="IO9"/>
-<wire x1="86.36" y1="53.34" x2="83.82" y2="53.34" width="0.1524" layer="91"/>
-<label x="66.04" y="53.34" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="N$1" class="0">
 <segment>
 <pinref part="S3" gate="1" pin="S1"/>
@@ -12669,6 +12641,34 @@ dual op-amp</description>
 <pinref part="U69" gate="G$1" pin="IO26"/>
 <wire x1="119.38" y1="68.58" x2="121.92" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="68.58" x2="116.9924" y2="68.58" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="SENSOR_EN" class="0">
+<segment>
+<pinref part="U69" gate="G$1" pin="IO12"/>
+<wire x1="86.36" y1="45.72" x2="83.82" y2="45.72" width="0.1524" layer="91"/>
+<label x="83.82" y="45.72" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="SENSOR_RIGHT" class="0">
+<segment>
+<pinref part="U69" gate="G$1" pin="IO11"/>
+<wire x1="86.36" y1="48.26" x2="83.82" y2="48.26" width="0.1524" layer="91"/>
+<label x="83.82" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="SENSOR_FRONT" class="0">
+<segment>
+<pinref part="U69" gate="G$1" pin="IO10"/>
+<wire x1="86.36" y1="50.8" x2="83.82" y2="50.8" width="0.1524" layer="91"/>
+<label x="83.82" y="50.8" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="SENSOR_LEFT" class="0">
+<segment>
+<pinref part="U69" gate="G$1" pin="IO9"/>
+<wire x1="86.36" y1="53.34" x2="83.82" y2="53.34" width="0.1524" layer="91"/>
+<label x="83.82" y="53.34" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 </nets>
