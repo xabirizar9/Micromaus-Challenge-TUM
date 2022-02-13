@@ -5892,7 +5892,7 @@ Covered vias can be set in Masks (Limit).
 <contactref element="IC1" pad="1"/>
 <contactref element="C12" pad="1"/>
 <wire x1="25.276" y1="19.378" x2="25.4" y2="19.502" width="1.016" layer="16"/>
-<via x="29.21" y="48.26" extent="1-16" drill="0.35"/>
+<via x="29.21" y="48.26" extent="1-16" drill="1.016"/>
 <wire x1="29.21" y1="48.26" x2="29.52" y2="48.57" width="2.032" layer="1"/>
 <via x="50.038" y="66.675" extent="1-16" drill="0.6"/>
 <wire x1="29.52" y1="48.57" x2="30.607" y2="48.57" width="2.032" layer="1"/>
