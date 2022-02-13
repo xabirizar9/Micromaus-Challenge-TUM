@@ -11882,8 +11882,8 @@ dual op-amp</description>
 <part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF"/>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF"/>
 <part name="CR1" library="maus" deviceset="L298P" device=""/>
-<part name="SENSOR_LEFT" library="maus" deviceset="PINHD-1X3" device=""/>
 <part name="SENSOR_FRONT" library="maus" deviceset="PINHD-1X3" device=""/>
+<part name="SENSOR_LEFT" library="maus" deviceset="PINHD-1X3" device=""/>
 <part name="SENSOR_RIGHT" library="maus" deviceset="PINHD-1X3" device=""/>
 <part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
@@ -12309,7 +12309,7 @@ dual op-amp</description>
 <label x="93.98" y="182.88" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="SENSOR_FRONT" class="0">
+<net name="SENSOR_LEFT" class="0">
 <segment>
 <pinref part="U69" gate="G$1" pin="IO10"/>
 <wire x1="86.36" y1="50.8" x2="83.82" y2="50.8" width="0.1524" layer="91"/>
@@ -12602,7 +12602,7 @@ dual op-amp</description>
 <label x="66.04" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SENSOR_LEFT" class="0">
+<net name="SENSOR_FRONT" class="0">
 <segment>
 <pinref part="U69" gate="G$1" pin="IO11"/>
 <wire x1="86.36" y1="48.26" x2="83.82" y2="48.26" width="0.1524" layer="91"/>
@@ -13019,11 +13019,11 @@ high and low levels both work
 <attribute name="NAME" x="156.464" y="23.241" size="1.778" layer="95"/>
 <attribute name="VALUE" x="156.464" y="18.161" size="1.778" layer="96"/>
 </instance>
-<instance part="SENSOR_LEFT" gate="A" x="187.96" y="109.22" smashed="yes">
+<instance part="SENSOR_FRONT" gate="A" x="187.96" y="109.22" smashed="yes">
 <attribute name="NAME" x="181.61" y="114.935" size="1.778" layer="95"/>
 <attribute name="VALUE" x="181.61" y="101.6" size="1.778" layer="96"/>
 </instance>
-<instance part="SENSOR_FRONT" gate="A" x="185.42" y="68.58" smashed="yes">
+<instance part="SENSOR_LEFT" gate="A" x="185.42" y="68.58" smashed="yes">
 <attribute name="NAME" x="179.07" y="74.295" size="1.778" layer="95"/>
 <attribute name="VALUE" x="179.07" y="60.96" size="1.778" layer="96"/>
 </instance>
@@ -13076,12 +13076,12 @@ high and low levels both work
 <junction x="154.94" y="12.7"/>
 <wire x1="152.4" y1="99.06" x2="177.8" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="177.8" y1="99.06" x2="177.8" y2="106.68" width="0.1524" layer="91"/>
-<pinref part="SENSOR_LEFT" gate="A" pin="3"/>
+<pinref part="SENSOR_FRONT" gate="A" pin="3"/>
 <wire x1="177.8" y1="106.68" x2="185.42" y2="106.68" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="12.7" x2="165.1" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="SENSOR_RIGHT" gate="A" pin="3"/>
 <wire x1="165.1" y1="25.4" x2="185.42" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="SENSOR_FRONT" gate="A" pin="3"/>
+<pinref part="SENSOR_LEFT" gate="A" pin="3"/>
 <wire x1="165.1" y1="58.42" x2="165.1" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="66.04" x2="182.88" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="Q6" gate="G$1" pin="D"/>
@@ -13111,14 +13111,14 @@ high and low levels both work
 <pinref part="C7" gate="G$1" pin="1"/>
 <wire x1="154.94" y1="25.4" x2="154.94" y2="30.48" width="0.1524" layer="91"/>
 <junction x="154.94" y="30.48"/>
-<pinref part="SENSOR_LEFT" gate="A" pin="2"/>
+<pinref part="SENSOR_FRONT" gate="A" pin="2"/>
 <wire x1="165.1" y1="114.3" x2="165.1" y2="109.22" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="109.22" x2="185.42" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="SENSOR_RIGHT" gate="A" pin="2"/>
 <wire x1="185.42" y1="27.94" x2="165.1" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="27.94" x2="165.1" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="165.1" y1="73.66" x2="165.1" y2="68.58" width="0.1524" layer="91"/>
-<pinref part="SENSOR_FRONT" gate="A" pin="2"/>
+<pinref part="SENSOR_LEFT" gate="A" pin="2"/>
 <wire x1="165.1" y1="68.58" x2="182.88" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -13133,20 +13133,20 @@ high and low levels both work
 <wire x1="33.02" y1="96.52" x2="35.56" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="SENSOR_LEFT" class="0">
+<net name="SENSOR_FRONT" class="0">
 <segment>
 <wire x1="177.8" y1="119.38" x2="144.78" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="177.8" y1="119.38" x2="177.8" y2="111.76" width="0.1524" layer="91"/>
-<pinref part="SENSOR_LEFT" gate="A" pin="1"/>
+<pinref part="SENSOR_FRONT" gate="A" pin="1"/>
 <wire x1="177.8" y1="111.76" x2="185.42" y2="111.76" width="0.1524" layer="91"/>
 <label x="144.78" y="119.38" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="SENSOR_FRONT" class="0">
+<net name="SENSOR_LEFT" class="0">
 <segment>
 <wire x1="167.64" y1="81.28" x2="99.06" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="167.64" y1="81.28" x2="167.64" y2="71.12" width="0.1524" layer="91"/>
-<pinref part="SENSOR_FRONT" gate="A" pin="1"/>
+<pinref part="SENSOR_LEFT" gate="A" pin="1"/>
 <wire x1="167.64" y1="71.12" x2="182.88" y2="71.12" width="0.1524" layer="91"/>
 <label x="99.06" y="81.28" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
