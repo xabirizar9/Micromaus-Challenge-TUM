@@ -12141,7 +12141,7 @@ dual op-amp</description>
 </segment>
 <segment>
 <label x="215.9" y="101.6" size="1.778" layer="95" rot="R90"/>
-<wire x1="215.9" y1="101.6" x2="215.9" y2="50.8" width="0.762" layer="92"/>
+<wire x1="215.9" y1="96.52" x2="215.9" y2="45.72" width="0.762" layer="92"/>
 </segment>
 </bus>
 </busses>
@@ -12392,9 +12392,9 @@ dual op-amp</description>
 <wire x1="116.84" y1="53.34" x2="121.92" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="A" pin="5"/>
-<label x="215.9" y="50.8" size="1.778" layer="95"/>
-<wire x1="215.9" y1="50.8" x2="233.68" y2="50.8" width="0.1524" layer="91"/>
+<pinref part="JP5" gate="A" pin="7"/>
+<wire x1="215.9" y1="45.72" x2="233.68" y2="45.72" width="0.1524" layer="91"/>
+<label x="215.9" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CS_M" class="0">
@@ -12486,11 +12486,6 @@ dual op-amp</description>
 </net>
 <net name="IO18" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="6"/>
-<label x="203.2" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="233.68" y1="48.26" x2="203.2" y2="48.26" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="U69" gate="G$1" pin="IO18"/>
 <wire x1="116.84" y1="78.74" x2="154.94" y2="78.74" width="0.1524" layer="91"/>
 <wire x1="154.94" y1="78.74" x2="154.94" y2="81.28" width="0.1524" layer="91"/>
@@ -12503,6 +12498,11 @@ dual op-amp</description>
 <wire x1="182.88" y1="20.32" x2="180.34" y2="20.32" width="0.1524" layer="91"/>
 <label x="180.34" y="20.32" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
+<segment>
+<pinref part="JP5" gate="A" pin="5"/>
+<wire x1="223.52" y1="50.8" x2="233.68" y2="50.8" width="0.1524" layer="91"/>
+<label x="223.52" y="50.8" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="IO45" class="0">
 <segment>
@@ -12511,9 +12511,9 @@ dual op-amp</description>
 <label x="119.38" y="40.64" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="A" pin="7"/>
-<wire x1="233.68" y1="45.72" x2="228.6" y2="45.72" width="0.1524" layer="91"/>
-<label x="228.6" y="45.72" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="JP5" gate="A" pin="6"/>
+<label x="203.2" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="233.68" y1="48.26" x2="203.2" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="IO46" class="0">
