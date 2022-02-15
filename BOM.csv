@@ -1,83 +1,33 @@
-"Part";"Value";"Device";"Package";"Description";"";
-"C1";"10uF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C2";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C3";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C4";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C5";"4.7uF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C6";"10uF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C7";"10uF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C8";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C9";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C10";"22u";"C-EUC0603";"C0603";"CAPACITOR, European symbol";"";
-"C11";"33u";"C-EUC0603";"C0603";"CAPACITOR, European symbol";"";
-"C12";"22u";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C13";"22u";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C14";"22u";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C15";"1u";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C16";"1n";"C-EUC0603";"C0603";"CAPACITOR, European symbol";"";
-"C17";"6.8n";"C-EUC0603";"C0603";"CAPACITOR, European symbol";"";
-"C18";"1n";"C-EUC0603";"C0603";"CAPACITOR, European symbol";"";
-"C19";"1n";"C-EUC0603";"C0603";"CAPACITOR, European symbol";"";
-"C20";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C21";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C22";"10uF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C23";"100nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C24";"10nF";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C27";"0.1uF/16V";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"C28";"10uF/25V";"C-EUC0805";"C0805";"CAPACITOR, European symbol";"";
-"CR1";"L298P";"L298P";"POWERSO-20_STM";"";"";
-"D1";"SP0503BAHTG";"SP0503BAHTG";"SOT143";"TVS DIODE 5.5VWM 8.5VC SOT143 Check availability";"";
-"D2";"OK";"LED-RED0603";"LED-0603";"Red SMD LED";"";
-"D3";"BAT";"LED-RED0603";"LED-0603";"Red SMD LED";"";
-"D4";"CST_1";"LED-RED0603";"LED-0603";"Red SMD LED";"";
-"D5";"RED";"LED-RED0603";"LED-0603";"Red SMD LED";"";
-"D6";"LED_RX";"LED-RED0603";"LED-0603";"Red SMD LED";"";
-"D7";"LED_TX";"LED-RED0603";"LED-0603";"Red SMD LED";"";
-"IC1";"AD712R";"AD712R";"SO8";"Dual Precision, Low Cost, High Speed BiFET Op Amp";"";
-"JP1";"";"PINHD-1X3";"1X03";"PIN HEADER";"";
-"JP2";"";"PINHD-1X3";"1X03";"PIN HEADER";"";
-"JP3";"";"PINHD-1X3";"1X03";"PIN HEADER";"";
-"JP4";"";"PINHD-1X6";"1X06";"PIN HEADER";"";
-"L1";"2.2u";"L-EUPIS2816";"PIS2816";"INDUCTOR, European symbol";"";
-"MOSFET2";"SSM3J117TU(TE85L)";"SSM3J117TU(TE85L)";"UFM_TOS";"";"";
-"Q1";"BC817";"BC817";"SOT95P230X110-3N";"Transistor, Npn, 0.5a, 45v, Sot23 Check availability";"";
-"Q2";"BC817";"BC817";"SOT95P230X110-3N";"Transistor, Npn, 0.5a, 45v, Sot23 Check availability";"";
-"Q3";"BSL307SP";"BSL307SP";"SC74_INFINEON";"OptiMOS(R)-P Small-Signal-Transistor P-Channel, Enhancement mode, Logic Level";"";
-"R1";"";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R2";"10k";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R3";"10k";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R4";"10k";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R5";"22k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R6";"22k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R7";"22k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R8";"10k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R9";"40.2k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R10";"7.68k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R11";"20";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R12";"22k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R13";"22k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R14";"470k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R15";"100k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R16";"100k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R17";"33k";"R-EU_R0603";"R0603";"RESISTOR, European symbol";"";
-"R18";"";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R19";"";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R20";"";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R21";"~250Ohm";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"R22";"~250Ohm";"R-EU_R0805";"R0805";"RESISTOR, European symbol";"";
-"S1";"";"10-XX";"B3F-10XX";"OMRON SWITCH";"";
-"S2";"";"10-XX";"B3F-10XX";"OMRON SWITCH";"";
-"S3";"";"10-XX";"B3F-10XX";"OMRON SWITCH";"";
-"SV2";"";"ML6";"ML6";"HARTING";"";
-"SV4";"";"ML6";"ML6";"HARTING";"";
-"T1";"BC847";"BC847";"SOT23";"NPN TRANSISTOR";"";
-"T2";"BC847";"BC847";"SOT23";"NPN TRANSISTOR";"";
-"U$1";"MICRO-USBV2";"MICRO-USBV2";"MICRO-USB-2";"Micro USB B connector";"";
-"U$2";"ICM_20948";"ICM_20948";"ICM_20948-F";"The ICM20948 from Invensense packs 9 Degrees of freedom into a teeny package, making it a one stop shop for all the DOFs you need! Within it’s svelte 3x3mm package there are not just one MEMS sensor die like your common sensors, but two sensor dies!";"";
-"U$3";"MP2333HSOT583";"MP2333HSOT583";"SOTFL50P175X60-8N";"MP2333H";"";
-"U$4";"XT60";"XT60";"XT60-UPRIGHT";"";"";
-"U1";"ESP32-S2-WROOM";"ESP32-S2-WROOM";"XCVR_ESP32-S2-WROOM";"WiFi 802.11b/g/n Transceiver Module 2.4GHz PCB Trace Surface Mount  Check availability";"";
-"U2";"CH340C";"CH340C";"SOIC127P600X180-16N";"USB to serial chip CH340    Check availability";"";
-"U3";"CP2102";"CP2102";"QFN50P500X500X100-29N";"USB to UART Bridge Check availability";"";
-"U4";"LP3965EMP-3.3";"LP3965EMP-3.3";"SOT150P696X180-5N";"Fast Ultra Low Dropout Linear Regulators Check availability";"";
-"U5";"LSM9DS1TR";"LSM9DS1TR";"PQFN43P300X350X102-24N";"The LSM9DS1 is a system-in-package featuring a";"";
+Qty,Value,Device,Mouser Link,Description,ARROW_PART_NUMBER,ARROW_PRICE-STOCK,AVAILABILITY,COPYRIGHT,DESCRIPTION,HEIGHT,MANUFACTURER_NAME,MANUFACTURER_PART_NUMBER,MF,MFR_NAME,MOUSER_PART_NUMBER,MOUSER_PRICE-STOCK,MP,MPN,OC_FARNELL,OC_NEWARK,PACKAGE,POPULARITY,PRICE,PROD_ID,PURCHASE-URL,SPICEPREFIX,VALUE
+3,,10-XX,(Bestand),simple button,,,,,,,,,,,,,,B3F-1000,176432,36M3542,,72,,,,,
+2,,ML6,(Bestand),HARTING wannenstecker,,,,,,,,,,,,,,,unknown,unknown,,5,,,,,
+1,,PINHD-1X10,(Bestand),PIN HEADER,,,,,,,,,,,,,,,,,,35,,,,,
+3,,PINHD-1X3,(Bestand),PIN HEADER,,,,,,,,,,,,,,,,,,92,,,,,
+2,,PINHD-1X6,(Bestand),PIN HEADER,,,,,,,,,,,,,,,,,,79,,,,,
+1,100k,R-EU_R0805,,"RESISTOR, European symbol",,,,,,,,,,,,,,,,,,86,,,,R,
+4,100nF,C-EUC0805,,"CAPACITOR, European symbol",,,,,,,,,,,,,,,,,,88,,,,C,
+7,10k,R-EU_R0805,,"RESISTOR, European symbol",,,,,,,,,,,,,,,,,,86,,,,R,
+3,10uF,C-EUC0805,,"CAPACITOR, European symbol",,,,,,,,,,,,,,,,,,88,,,,C,
+1,10uF/25V,C-EUC0805,,"CAPACITOR, European symbol",,,,,,,,,,,,,,,,,,88,,,,C,
+6,1k,R-EU_R0805,,"RESISTOR, European symbol",,,,,,,,,,,,,,,,,,86,,,,R,
+1,1n,C-EUC0805,,"CAPACITOR, European symbol",,,,,,,,,,,,,,,,,,88,,,,C,
+3,22k,R-EU_R0805,,"RESISTOR, European symbol",,,,,,,,,,,,,,,,,,86,,,,R,
+4,22u,C-EUC0805,,"CAPACITOR, European symbol",,,,,,,,,,,,,,,,,,88,,,,C,
+1,33k,R-EU_R0805,,"RESISTOR, European symbol",,,,,,,,,,,,,,,,,,86,,,,R,
+1,33u,C-EUC0805,,"CAPACITOR, European symbol",,,,,,,,,,,,,,,,,,88,,,,C,
+1,744770147,744770147,https://www.mouser.de/ProductDetail/Wurth-Elektronik/744770147?qs=E%2F%2FhvbtCqpOiGvqyq%252BELzg%3D%3D,SMD-Shielded Power Inductors WE-PD,,,,,SMD-Shielded Power Inductors WE-PD,mm,Wurth Elektronik,744770147,,,710-744770147,https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/744770147?qs=E%2F%2FhvbtCqpOiGvqyq%252BELzg%3D%3D,,,,,,,,,,,
+1,AP1509-50SG-13,AP1509-50SG-13,https://www.mouser.de/ProductDetail/Diodes-Incorporated/AP1509-50SG-13?qs=EJYhozv%252BYpwbI10CpTvwPw%3D%3D,"DiodesZetex, AP1509-50SG-13 DC-DC Converter 2A 8-Pin, SOP",AP1509-50SG-13,https://www.arrow.com/en/products/ap1509-50sg-13/diodes-incorporated?region=nac,,,"DiodesZetex, AP1509-50SG-13 DC-DC Converter 2A 8-Pin, SOP",1.75mm,Diodes Inc.,AP1509-50SG-13,,,621-AP1509-50SG-13,https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/AP1509-50SG-13?qs=EJYhozv%252BYpwbI10CpTvwPw%3D%3D,,,,,,,,,,,
+3,BSS123,BSS123,(Bestand),N-CHANNEL MOS FET,,,,,,,,,,,,,,,,,,21,,,,,
+1,CH340C,CH340C,(Bestand),USB to serial chip CH340    Check availability,,,Not in stock,, USB to serial chip CH340 ,,,,WCH,,,,CH340C,,,,None,,None,,,,
+1,ESP32-S2-WROOM,ESP32-S2-WROOM,https://www.mouser.de/ProductDetail/Espressif-Systems/ESP32-S2-WROOMM22S2H3200PH3Q0?qs=sGAEpiMZZMu3sxpa5v1qrl%2FYtpu2q02ID5v7sEbYMcM%3D,WiFi 802.11b/g/n Transceiver Module 2.4GHz PCB Trace Surface Mount  Check availability,,,In Stock,," WiFi 802.11b/g/n Transceiver Module 2.4GHz Antenna Not Included, I-PEX Surface Mount ",,,,Espressif Systems,,,,ESP32-S2-WROOM,,,,VFQFN-56 Espressif Systems,,None,,https://pricing.snapeda.com/search/part/ESP32-S2-WROOM/?ref=eda,,
+1,ICM_20948,ICM_20948,https://www.mouser.de/ProductDetail/Adafruit/4554?qs=sGAEpiMZZMv0NwlthflBi2Ra7zsOxBjz0YYmbuGtQ9s%3D,"The ICM20948 from Invensense packs 9 Degrees of freedom into a teeny package, making it a one stop shop for all the DOFs you need! Within it’s svelte 3x3mm package there are not just one MEMS sensor die like your common sensors, but two sensor dies!",,,,,,,,,,,,,,,,,,,,,,,
+1,L298P,L298P,https://www.mouser.de/ProductDetail/STMicroelectronics/L298P?qs=lDh9v96ogBZNJERYYNX11w%3D%3D,,,,,Copyright (C) 2022 Ultra Librarian. All rights reserved.,,,,L298P,,STMicroelectronics,,,,,,,,,,,,,
+1,LM358DR,LM358DR,https://www.mouser.de/ProductDetail/Texas-Instruments/LM358DR?qs=Zu35EjizYSSY6pJ37yjmHA%3D%3D,LM358DR,,,,,,,,,,,,,,,,,,,,,,,
+1,LP3965EMP-3.3,LP3965EMP-3.3,https://www.mouser.de/ProductDetail/Texas-Instruments/LP3965EMP-33?qs=1FNqv8aZn1TXdSAZeAAxyQ%3D%3D,Fast Ultra Low Dropout Linear Regulators Check availability,,,In Stock,," 1.5-A, low-dropout voltage regulator with sense & enable 5-SOT-223 -40 to 125 ",,,,Texas Instruments,,,,LP3965EMP-3.3/NOPB,,,,SOT-223-5 Texas Instruments,,None,,https://pricing.snapeda.com/search/part/LP3965EMP-3.3/NOPB/?ref=eda,,
+2,PMN40XPEA,PMN40XPEA,https://www.mouser.de/ProductDetail/Nexperia/PMN40XPEAX?qs=W%2FMpXkg%252BdQ6vgRw2BZ6GYQ%3D%3D,,,,,,,,,,,,,,,,,,,,,,,,
+9,RBR2VWM40ATF,RBR2VWM40ATF,https://www.mouser.de/ProductDetail/ROHM-Semiconductor/RBR2VWM40ATFTR?qs=%252BEew9%252B0nqrDDyH2Mna7KUg%3D%3D,"Low VF, 40V, 2A, Schottky Barrier Diode for Automoive",,,,,"Low V<sub>F</sub>, 40V, 2A, Schottky Barrier Diode for Automoive",0.95mm,ROHM Semiconductor,RBR2VWM40ATF,,,,,,,,,,,,,,,
+6,RED,LED-RED1206,,Red SMD LED,,,,,,,,,,,,,,,,,,,,DIO-09912,,,RED
+1,SP0503BAHTG,SP0503BAHTG,https://www.mouser.de/ProductDetail/Littelfuse/SP0503BAHTG?qs=uD%2FdkN7XIa0NTYXwHdELYA%3D%3D,TVS DIODE 5.5VWM 8.5VC SOT143 Check availability,,,In Stock,, 8.5V Clamp - Ipp Tvs Diode Surface Mount SOT-143-4 ,,,,Littelfuse Inc.,,,,SP0503BAHTG,,,,None,,None,,https://pricing.snapeda.com/search/part/SP0503BAHTG/?ref=eda,,
+1,SS-52300-001,SS-52300-001,https://www.mouser.de/ProductDetail/Stewart-Connector-Bel/SS-52300-001?qs=sGAEpiMZZMv0NwlthflBizQc8MJUmw91VYs0%252BiiuLK8%3D,USB Connectors USB 2.0 RA Receptacle Type B,,,,,USB Connectors USB 2.0 RA Receptacle Type B,10.82mm,Bel,SS-52300-001,,,530-SS-52300-001,,,,,,,,,,,,
+1,XT60,XT60,https://www.mouser.de/ProductDetail/DFRobot/FIT0587?qs=sGAEpiMZZMv0NwlthflBi8o32FO877DQIinOBywLkXM%3D,,,,,,,,,,,,,,,,,,,,,,,,
+1,Akku LiPo 2S,,https://www.pollin.de/p/extron-lipo-akku-x2-11-1v-1300m-ah-272169,,,,,,,,,,,,,,,,,,,,,,,,
