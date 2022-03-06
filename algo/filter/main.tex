@@ -1,0 +1,132 @@
+% use latexmk -xelatex 
+
+\documentclass{scrartcl}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+
+\usepackage{fontspec}
+\usepackage[mathbf=sym]{unicode-math}
+\setsansfont{TeX Gyre Heros}
+\setmainfont{STIX Two Text}
+\setmathfont{STIX Two Math}
+
+
+\title{Algorithmen für Micromouse}
+\author{Fuchs, Alexander}
+\date{March 2022}
+
+\newcommand{\bool}{\mathbb{B}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\TT}{\mathrm{T}}
+\newcommand{\true}{\texttt{true}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\renewcommand{\|}{\vert}
+\newcommand{\eye}[1][]{\mathbb{1}_{#1}}
+
+\begin{document}
+
+\maketitle
+
+\section{SLAM-Algorithmus}
+
+Die Map der Micromouse lässt sich darstellen als Vektor $\vec{m} \in \bool^M$, wobei jeder Eintrag des Vektors angibt ob eine Wand gesetzt ist oder nicht.
+Die Position des Roboters wird im Folgenden als $\vec{x} \in \RR^N$ bezeichnet.
+sei der $B_t(\vec{x}, \vec{m}) \in [0, 1]$ der Belief zum Zeitpunkt $t$, also die Wahrscheinlichkeitsverteilung, dass sich der Roboter und die Karte zum Zeitpunkt $t$ im Zustand $(\vec{x}, \vec{m})$ befinden.
+Es ist sinnvoll, dass der Roboter und die Welt nicht gekoppelt sind:
+$B_t(\vec{x}, \vec{m}) = B_t(\vec{x}) B_t(\vec{m})$.
+
+\subsection{Bayes Filter}
+Sei $u_t$ der Steuerbefehl zur Zeit $t$, dann lautet der
+\textbf{prediction step}:
+\begin{align}
+    \tilde B_t(\vec{x}, \vec{m}) = \tilde B_t(\vec{x}) \tilde B_t(\vec{m})
+    &= \int \int p(\vec{x}, \vec{m} \| u_t, \vec{x}', \vec{m}') B_{t-1}(\vec{x}', \vec{m}') \dd\vec{x}' \dd\vec{m}'
+    \\
+    &= \int \int p(\vec{x}, \| u_t, \vec{x}', \vec{m}') p(\vec{m} \| \vec{m}')
+    B_{t-1}(\vec{x}', \vec{m}') \dd\vec{x}' \dd\vec{m}'
+    \\
+    &= \int \int p(\vec{x}, \| u_t, \vec{x}', \vec{m}') \delta(\vec{m} - \vec{m}')
+    B_{t-1}(\vec{x}', \vec{m}') \dd\vec{x}' \dd\vec{m}'
+    \\
+    &= \int p(\vec{x}, \| u_t, \vec{x}', \vec{m}) B_{t-1}(\vec{x}', \vec{m}) \dd\vec{x}'
+    \\
+    &= \int p(\vec{x}, \| u_t, \vec{x}', \vec{m}) B_{t-1}(\vec{x}') B_{t-1}(\vec{m}) \dd\vec{x}'
+\intertext{also, da sich die Map zeitlich nicht ändern darf}
+    \tilde B_t(\vec{m}) &= B_{t-1}(\vec{m}),\\
+    \tilde B_t(\vec{x}) &= \int p(\vec{x}, \| u_t, \vec{x}', \vec{m}) B_{t-1}(\vec{x}') \dd\vec{x}'
+\end{align}
+Und das \textbf{measurement update}, mit $z_t$ die Messung:
+\[
+    B_t(\vec{x}, \vec{m}) = \eta p(z_t \| \vec{x}, \vec{m}) \tilde B_t(\vec{x}, \vec{m})
+\]
+mit dem Normalizer $\eta$.
+Daraus folgt durch Integration über $x$ bzw. Summation über Einstellmöglichkeiten von $\vec{m}$:
+\begin{align}
+    B_t(\vec{x}) &= \sum_{\vec{m}} B_t(\vec{x}) B_t(\vec{m}) = 
+    \eta \sum_{\vec{m}} p(z_t \| \vec{x}, \vec{m}) \tilde B_t(\vec{x}) \tilde B_t(\vec{m})
+    \\
+    B_t(\vec{m}) &= \int B_t(\vec{x}) B_t(\vec{m}) \dd\vec{x} = 
+    \eta \int p(z_t \| \vec{x}, \vec{m}) \tilde B_t(\vec{x}) \tilde B_t(\vec{m}) \dd\vec{x}
+\end{align}
+
+% In einem Partikelfilter könnte die Summe als Summe über mögliche Zustände der Map für jeden Partikel, das Integral als Summe über die Partikel dargestellt werden.
+Das Problem hier ist, dass das Feld mit $8 \times 7 \times 2$ Brettern schon $2^{112}$ mögliche Karten besitzt.
+Man kann die Summation vereinfachen, indem man nur Wände in der lokalen Umgebung betrachtet, die auch von den Sensoren erreichbar sind:
+
+\begin{tikzpicture}
+    \draw (0, 1) -- (3, 1) -- (3, 2) -- (2, 2) -- (2, 0) -- (1, 0) -- (1, 2) -- (0, 2) -- cycle;
+    \draw[red] (1.3, 1.7) -- (1.7, 1.7) -- (1.5, 1.2) -- cycle;
+\end{tikzpicture}
+
+Dann hat man nur noch $2^{12} = 4096$ Zustände zu summieren.
+Das ist immer noch unglaublich viel.
+Man kann noch unter den drei Sensoren die sichtbaren Wände aufteilen:
+\[
+    B_t(\vec{x}) = \sum_{\vec{m}} B_t(\vec{x}) B_t(\vec{m}) = 
+    \eta \tilde B_t(\vec{x}) \sum_{i=1}^3 \sum_{\vec{m}} p(z_{i,t} \| \vec{x}, \vec{m}_i) \tilde B_t(\vec{m}_i)
+\]
+Dann muss man $3 \times 2^4 = 48$ Zustände betrachten und das sieht schon viel realistischer aus.
+Wie viele Wände mit den IR-Sensoren in Wirklichkeit sichtbar sein könnten, wird sich bei Tests zeigen.
+
+Auch ausprobieren könnte man, einfach mit Wahrscheinlichkeit $\tilde B_t(\vec{m})$ ein paar Maps zu sampeln.
+
+\subsection{Kalman-Filter}
+Ein Kalman-Filter wird zwar unter Umständen nicht ausreichen, ich möchte ihn hier aber durchrechnen weil er einfach ist.
+
+Der Zustandsübergang ist hier linear modelliert mit $\vec{x}_t = \mat{A}_t \vec{x}_{t-1} + \mat{B}_t \vec{u}_t + \vec{\epsilon}_t$.
+Damit gilt für die prediction:
+\begin{align}
+    \tilde{\vec{x}}_t &= \mat{A}_t \vec{x}_{t-1} + \mat{B}_t \vec{u}_t,
+    \\
+    \mat{\tilde \Sigma}_t &= \mat{A}_t \mat{\Sigma}_{t-1} \mat{A}_t^\TT + \mat{R}_t.
+\end{align}
+Dabei ist $\mat R$ die durch Übergangsrauschen verursachte Kovarianz.
+
+Die Messung hat die Wahrscheinlichkeit $p(\vec{z}_t \| \vec{x}_t, \vec{m}_t)$ sei bekannt, wir brauchen aber 
+\[
+    p(\vec{z}_t \| \vec{x}_t) = \sum_{\vec{m}} p(\vec{z}_t, \vec{m} \| \vec{x}_t)
+	= \sum_{\vec{m}} p(\vec{z}_t \| \vec{x}_t, \vec{m}) B_{t-1}(\vec{m}).
+\]
+Damit wird die lineare Messung:
+\begin{align}
+	\vec{z}_t = \sum_{\vec{m}} B_{t-1}(\vec{m}) \mat{C}_t(\vec{m}) \vec{x}_t + \vec{\delta}_t
+\end{align}
+mit einem Rauschen $\vec{\delta}_t$ mit Kovarianz $\mat{Q_t} = \sum_{\vec m}
+B_{t-1}(\vec{m}) \mat{Q}_t(\vec{m})$.
+Weiter macht man dann das ganz normale Kalman measurement update:
+\begin{align}
+    \mat{K}_t &= \mat{\tilde\Sigma}_t \mat{C}_t^\TT (\mat{C}_t \mat{\tilde\Sigma} \mat{C}_t^\TT + \mat{Q}_t)^{-1}
+    \\
+    \vec{x}_t &= \tilde{\vec{x}}_t + \mat{K}_t (\vec{z}_t - \mat{C}_t \tilde{\vec{x}}_t )
+    \\
+    \mat{\Sigma}_t &= (\eye - \mat{K}_t \mat{C}_t) \mat{\tilde\Sigma}_t
+\end{align}
+
+\subsection{Filter für die Map}
+Die Map kann dargestellt werden durch einen Vektor $\vec{\pi} \in [0, 1]^M$,
+wobei $\pi_i$ die Wahrscheinlichkeit darstellt, dass $m_i = \true$.
+
+\end{document}
