@@ -1,14 +1,14 @@
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #include "sdkconfig.h"
-#include "sensors.hpp"
 #include "periph/Serial.hpp"
+
+HardwareSerial ser(1, 3);
 
 void main_task(void *pvParameter)
 {
-    Serial.begin(115200, 0);
-    // TODO: place code here
-    Sensors::someMethod();
+	while (true)
+		ser.write("hallo\n");
 }
 
 extern "C" void app_main()
