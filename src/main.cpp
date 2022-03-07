@@ -1,7 +1,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-#include "esp_log.h"
+#include <esp_log.h>
 #include "periph/Encoder.hpp"
 #include "periph/NetController.hpp"
 #include "periph/WifiCommunicator.hpp"
@@ -19,7 +19,6 @@ void navigate(void* pvParameter) {
 };
 
 void main_task(void* pvParameter) {
-	power::PowerManagement powerManagement(IO::VSENSE);
 
 	while (true) {
 		vTaskDelay(pdMS_TO_TICKS(2000));
