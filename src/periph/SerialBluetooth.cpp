@@ -37,6 +37,23 @@ static const esp_spp_role_t role_slave = ESP_SPP_ROLE_SLAVE;
  */
 QueueHandle_t cmdSenderQueue;
 
+/**
+ * Utils
+ */
+
+static char *bda2str(uint8_t *bda, char *str, size_t size)
+{
+    if (bda == NULL || str == NULL || size < 18)
+    {
+        return NULL;
+    }
+
+    uint8_t *p = bda;
+    sprintf(str, "%02x:%02x:%02x:%02x:%02x:%02x",
+            p[0], p[1], p[2], p[3], p[4], p[5]);
+    return str;
+}
+
 // TODO: for now only writes number
 void esp_write_next_packet(esp_spp_cb_param_t *param, char data)
 {
@@ -114,7 +131,7 @@ static void esp_spp_cb(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
         break;
     case ESP_SPP_SRV_OPEN_EVT:
         ESP_LOGI(SPP_TAG, "ESP_SPP_SRV_OPEN_EVT status:%d handle:%d, rem_bda:[%s]", param->srv_open.status,
-                 param->srv_open.handle, SerialBluetooth::bda2str(param->srv_open.rem_bda, bda_str, sizeof(bda_str)));
+                 param->srv_open.handle, bda2str(param->srv_open.rem_bda, bda_str, sizeof(bda_str)));
         gettimeofday(&time_old, NULL);
         break;
     case ESP_SPP_SRV_STOP_EVT:
@@ -196,19 +213,6 @@ void esp_bt_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
     return;
 }
 
-static char *SerialBluetooth::bda2str(uint8_t *bda, char *str, size_t size)
-{
-    if (bda == NULL || str == NULL || size < 18)
-    {
-        return NULL;
-    }
-
-    uint8_t *p = bda;
-    sprintf(str, "%02x:%02x:%02x:%02x:%02x:%02x",
-            p[0], p[1], p[2], p[3], p[4], p[5]);
-    return str;
-}
-
 /**
  * @brief begin bluetooth advertising with given name
  *
@@ -288,8 +292,7 @@ void SerialBluetooth::begin(std::string name)
     return;
 };
 
-void SerialBluetooth::write(uint32_t test)
+void SerialBluetooth::write(char test)
 {
-
     xQueueSend(cmdSenderQueue, &test, 0);
 };

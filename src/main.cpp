@@ -21,7 +21,7 @@ void print_sensor_data(void *pvParameter)
 
     for (;;)
     {
-        SerialBluetooth::write(10);
+        SerialBluetooth::write('c');
         vTaskDelay(xDelay);
     }
 }
@@ -32,5 +32,5 @@ extern "C" void app_main()
     // esp_log_level_set(LOG_DEFAULT_LEVEL_VERBOSE);
     SerialBluetooth::begin("test");
 
-    // xTaskCreate(&print_sensor_data, "print_sensor_data", configMINIMAL_STACK_SIZE, NULL, 5, NULL);
+    xTaskCreate(&print_sensor_data, "print_sensor_data", configMINIMAL_STACK_SIZE, NULL, 5, NULL);
 }
