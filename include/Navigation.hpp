@@ -3,4 +3,4 @@
 class PathNavigation
 {
     void begin();
-};
+}
