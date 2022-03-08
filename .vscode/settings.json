@@ -1,5 +1,23 @@
 {
   "cmake.configureOnOpen": true,
   "C_Cpp.formatting": "clangFormat",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "gopls": {
+    "experimentalWorkspaceModule": true
+  },
+  "files.associations": {
+    "*.base": "makefile",
+    "*.ts.tpl": "typescript",
+    "*.tpl": "php",
+    "*.phtml": "php",
+    "*.ipp": "cpp",
+    "*.tcc": "cpp",
+    "exception": "cpp",
+    "fstream": "cpp",
+    "iosfwd": "cpp",
+    "new": "cpp",
+    "ostream": "cpp",
+    "sstream": "cpp",
+    "streambuf": "cpp"
+  }
 }
