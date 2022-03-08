@@ -1,13 +1,15 @@
 #include "periph/Encoder.hpp"
 
+#include "support/PulseCounterResource.hpp"
+
 #include <driver/pcnt.h>
 #include <esp_log.h>
 #include <esp_compiler.h>
 
-static const pcnt_unit_t theUnit = PCNT_UNIT_0;
 static const constexpr int limit = 16*33*4;
 
-Encoder::Encoder(uint8_t pinA, uint8_t pinB)
+Encoder::Encoder(uint8_t pinA, uint8_t pinB):
+	unit(new PulseCounterResource())
 {
 	pcnt_config_t conf {
 		.pulse_gpio_num = pinA,
@@ -18,7 +20,7 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB)
 		.neg_mode = PCNT_COUNT_INC,
 		.counter_h_lim = limit,
 		.counter_l_lim = -limit,
-		.unit = theUnit,
+		.unit = *unit,
 		.channel = PCNT_CHANNEL_0,
 	};
 	ESP_ERROR_CHECK(pcnt_unit_config(&conf));
@@ -30,25 +32,30 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB)
 	conf.neg_mode = PCNT_COUNT_DEC;
 	ESP_ERROR_CHECK(pcnt_unit_config(&conf));
 
-	pcnt_counter_pause(theUnit);
-	pcnt_counter_clear(theUnit);
+	pcnt_counter_pause(*unit);
+	pcnt_counter_clear(*unit);
 
 	ESP_ERROR_CHECK(pcnt_isr_service_install(0));
 
-	pcnt_isr_handler_add(theUnit, [](void* e){
+	pcnt_isr_handler_add(*unit, [](void* e){
 			static_cast<Encoder*>(e)->onOverflow();
 		}, this);
 
-	pcnt_event_enable(theUnit, PCNT_EVT_H_LIM);
-	pcnt_event_enable(theUnit, PCNT_EVT_L_LIM);
+	pcnt_event_enable(*unit, PCNT_EVT_H_LIM);
+	pcnt_event_enable(*unit, PCNT_EVT_L_LIM);
 
-	pcnt_counter_resume(theUnit);
+	pcnt_counter_resume(*unit);
+}
+
+Encoder::~Encoder()
+{
+	delete unit;
 }
 
 int16_t Encoder::get() const
 {
 	int16_t n;
-	ESP_ERROR_CHECK(pcnt_get_counter_value(theUnit, &n));
+	ESP_ERROR_CHECK(pcnt_get_counter_value(*unit, &n));
 	return n;
 }
 
