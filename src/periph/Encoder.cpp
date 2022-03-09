@@ -3,10 +3,10 @@
 #include "support/PulseCounterResource.hpp"
 
 #include <driver/pcnt.h>
-#include <esp_log.h>
 #include <esp_compiler.h>
 
 static const constexpr int limit = 16*33*4;
+static uint8_t isrServiceRefcount = 0;
 
 Encoder::Encoder(uint8_t pinA, uint8_t pinB):
 	unit(new PulseCounterResource())
@@ -35,7 +35,10 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB):
 	pcnt_counter_pause(*unit);
 	pcnt_counter_clear(*unit);
 
-	ESP_ERROR_CHECK(pcnt_isr_service_install(0));
+	if (!isrServiceRefcount) {
+		ESP_ERROR_CHECK(pcnt_isr_service_install(0));
+	}
+	isrServiceRefcount++;
 
 	pcnt_isr_handler_add(*unit, [](void* e){
 			static_cast<Encoder*>(e)->onOverflow();
@@ -49,6 +52,12 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB):
 
 Encoder::~Encoder()
 {
+	pcnt_intr_disable(*unit);
+	pcnt_isr_handler_remove(*unit);
+	isrServiceRefcount--;
+	if (!isrServiceRefcount) {
+		pcnt_isr_service_uninstall();
+	}
 	delete unit;
 }
 

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <exception>
+extern "C" {
 #include <sys/lock.h>
+}
 #include <cstdint>
 
 class OutOfResource: public std::exception {
@@ -27,7 +29,7 @@ public:
 		_lock_acquire(&lock);
 		for (unsigned int i = 0; i < (unsigned int) max; ++i) {
 			const unsigned int mask = (1 << i);
-			if ((mask && allocated) == 0) {
+			if ((mask & allocated) == 0) {
 				// this one is free, so allocate it
 				allocated |= mask;
 				_lock_release(&lock);
@@ -53,3 +55,8 @@ private:
 	T ours; // this is the resource we allocated
 };
 
+template<typename T, T max>
+_lock_t CountedResource<T, max>::lock;
+
+template<typename T, T max>
+uint32_t CountedResource<T, max>::allocated = 0;
