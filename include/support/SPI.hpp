@@ -26,6 +26,9 @@ public:
 
 	operator spi_device_handle_t() const { return handle; }
 
+	void write8(uint8_t reg, uint8_t data);
+	uint8_t read8(uint8_t reg);
+
 private:
 	SPIBus& bus;
 	spi_device_handle_t handle;

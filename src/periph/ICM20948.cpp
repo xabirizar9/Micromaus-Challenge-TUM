@@ -5,15 +5,10 @@
 
 static const char* TAG = "icm";
 
-static const uint8_t ADDR = 0x69;
-
-ICM20948::ICM20948(uint8_t sclPin, uint8_t mosiPin, uint8_t misoPin):
-	i2c(sclPin, mosiPin)
+ICM20948::ICM20948(SPIBus& bus, uint8_t csPin):
+	// todo set higher freq
+	spi(SPIDevice(bus, csPin, 100'000, 0b00))
 {
-	uint8_t who = i2c.readByteRegister(ADDR, 0x00);
-	if (who != 0xea)
-		ESP_LOGE(TAG, "whoami register of icm at 0x69 should read 0xea, reads 0x%02x", who);
-
 }
 
 ICM20948::~ICM20948()
@@ -23,5 +18,4 @@ ICM20948::~ICM20948()
 
 void ICM20948::switchBank(uint8_t bank)
 {
-	i2c.writeByteRegister(ADDR, 0x7f, bank);
 }
