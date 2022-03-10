@@ -6,8 +6,7 @@
 
 Encoder e(22, 23);
 
-
-static const char* TAG = "test";
+static const char *TAG = "test";
 
 void print_sensor_data(void *pvParameter)
 {
@@ -32,16 +31,19 @@ void navigate(void *pvParameter)
 
 void main_task(void *pvParameter)
 {
-	esp_log_level_set(TAG, ESP_LOG_INFO);
-	while (true) {
-		int i = e.get();
-		ESP_LOGI("x", "%d", i);
-		vTaskDelay(pdMS_TO_TICKS(100));
-	}
+    while (true)
+    {
+        int i = e.get();
+        ESP_LOGI("x", "%d", i);
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
 }
 
 extern "C" void app_main()
 {
-    xTaskCreate(&main_task, "main_task", 2*1024, NULL, 5, NULL);
-}
 
+
+    
+    esp_log_level_set(TAG, ESP_LOG_INFO);
+    xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
+}

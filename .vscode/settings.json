@@ -18,6 +18,13 @@
     "new": "cpp",
     "ostream": "cpp",
     "sstream": "cpp",
-    "streambuf": "cpp"
+    "streambuf": "cpp",
+    "optional": "cpp",
+    "cmath": "cpp",
+    "random": "cpp",
+    "istream": "cpp",
+    "limits": "cpp",
+    "stdexcept": "cpp",
+    "typeinfo": "cpp"
   }
 }
