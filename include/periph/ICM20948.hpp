@@ -19,5 +19,6 @@ private:
 	void init();
 
 	SPIDevice spi;
+	uint8_t currentBank;
 };
 
