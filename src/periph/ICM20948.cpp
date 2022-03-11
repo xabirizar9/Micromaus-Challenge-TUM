@@ -8,7 +8,8 @@ static const char* TAG = "icm";
 
 ICM20948::ICM20948(SPIBus& bus, uint8_t csPin):
 	// todo set higher freq
-	spi(SPIDevice(bus, csPin, 100'000, 0b00))
+	spi(SPIDevice(bus, csPin, 100'000, 0b00)),
+	currentBank(0xff) // not a bank
 {
 	init();
 }
@@ -20,7 +21,10 @@ ICM20948::~ICM20948()
 
 void ICM20948::switchBank(uint8_t bank)
 {
-	spi.write<uint8_t>(0x7f, bank);
+	if (currentBank != bank) {
+		spi.write<uint8_t>(0x7f, bank);
+		currentBank = bank;
+	}
 }
 
 void ICM20948::setSleep(bool sleep)
