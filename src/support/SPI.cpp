@@ -67,64 +67,92 @@ SPIDevice::~SPIDevice()
 	bus.removeDevice(handle);
 }
 
-void SPIDevice::write8(uint8_t reg, uint8_t data)
+/*
+ * this is a template. during compilation, the template will be
+ * "instantiated" into a "specialization". this means that T will be
+ * replaced by a type specified by the user of the function.
+ * however, the code must be known at instantiation time.
+ * this means the function must either be defined in the header file
+ * or, like in this case, a limited number of specializations is put
+ * at the bottom of the source file.
+ * if you need a different specialization, like
+ * SPIDevice::write<wchar_t>, you need to put an explicit specialization
+ * for that at the bottom.
+ *
+ * c++ also supports template argument deduction. this means that if you
+ * call write() with a uint16_t data argument, it will automatically use
+ * write<uint16_t>(). note that in this case, this is super dangerous.
+ * if you did some computations in the expression passed to write(), it
+ * might have been widened to unsigned int, in which case
+ * write<uint32_t>() will be used.
+ * so to use this function, always explicitly specify the template
+ * parameter
+ */
+template<typename T>
+void SPIDevice::write(uint8_t reg, T data)
 {
+	/* this is an assert that happens at compile time so you get an
+	 * error when you specialize with a type too large for the buffer */
+	static_assert(sizeof(T) <= 4,
+			"this function supports only types with max. 4 bytes");
+	/* this is as constant that may be evaluated at compile time */
+	constexpr uint8_t N = sizeof(T);
+
 	spi_transaction_t trans {
 		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
 		.cmd = 0b0, // write
 		.addr = reg, // msb will be ignored
-		.length = 8, // 8-bit data
+		.length = N * 8, // number of bits
 		.rxlength = 0,
 		.user = nullptr,
-		.tx_data {data, 0, 0, 0}, // TODO is this right order?
+		.tx_data {
+			/* the compiler will optimize this away even if you write
+			 * it as a loop. i encourage everyone to put this into
+			 * compiler explorer */
+			(N > 0) ? (uint8_t) ((data >> ((N - 1) * 8)) & 0xff) : (uint8_t) 0,
+			(N > 1) ? (uint8_t) ((data >> ((N - 2) * 8)) & 0xff) : (uint8_t) 0,
+			(N > 2) ? (uint8_t) ((data >> ((N - 3) * 8)) & 0xff) : (uint8_t) 0,
+			(N > 3) ? (uint8_t) (data & 0xff) : (uint8_t) 0,
+		},
 		.rx_data {}
 	};
 	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
 }
 
-uint8_t SPIDevice::read8(uint8_t reg)
+template<typename T>
+T SPIDevice::read(uint8_t reg)
 {
+	static_assert(sizeof(T) <= 4,
+			"this function supports only types with max. 4 bytes");
+	constexpr uint8_t N = sizeof(T);
 	spi_transaction_t trans {
 		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
 		.cmd = 0b1, // read
 		.addr = reg, // msb will be ignored
 		.length = 0,
-		.rxlength = 8, // 8-bit read
+		.rxlength = N * 8,
 		.user = nullptr,
 		.tx_data {},
 		.rx_data {},
 	};
 	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
-	return trans.rx_data[0];
+	return (
+			((N > 0) ? trans.tx_data[0] << ((N - 1) * 8) : 0) +
+			((N > 1) ? trans.tx_data[1] << ((N - 2) * 8) : 0) +
+			((N > 2) ? trans.tx_data[2] << ((N - 3) * 8) : 0) +
+			((N > 3) ? trans.tx_data[3] << ((N - 4) * 8) : 0)
+		   );
 }
 
-void SPIDevice::write16(uint8_t reg, uint16_t data)
-{
-	spi_transaction_t trans {
-		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
-		.cmd = 0b0, // write
-		.addr = reg, // msb will be ignored
-		.length = 16, // 16-bit data
-		.rxlength = 0,
-		.user = nullptr,
-		.tx_data {data >> 8, data & 0xff, 0, 0}, // TODO is this right order?
-		.rx_data {}
-	};
-	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
-}
+/* i know i said dont use macros */
+#define RW_INSTANTIATE(T) \
+	template void SPIDevice::write<T>(uint8_t, T); \
+	template T SPIDevice::read<T>(uint8_t);
 
-uint16_t SPIDevice::read16(uint8_t reg)
-{
-	spi_transaction_t trans {
-		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
-		.cmd = 0b1, // read
-		.addr = reg, // msb will be ignored
-		.length = 0,
-		.rxlength = 16, // 16-bit read
-		.user = nullptr,
-		.tx_data {},
-		.rx_data {},
-	};
-	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
-	return (trans.rx_data[0] << 8) | trans.rx_data[1];
-}
+RW_INSTANTIATE(uint8_t)
+RW_INSTANTIATE(int8_t)
+RW_INSTANTIATE(uint16_t)
+RW_INSTANTIATE(int16_t)
+RW_INSTANTIATE(uint32_t)
+RW_INSTANTIATE(int32_t)
+
