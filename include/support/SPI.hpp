@@ -26,10 +26,13 @@ public:
 
 	operator spi_device_handle_t() const { return handle; }
 
-	void write8(uint8_t reg, uint8_t data);
-	uint8_t read8(uint8_t reg);
-	void write16(uint8_t reg, uint16_t data);
-	uint16_t read16(uint8_t reg);
+	/* write for int types */
+	template<typename T>
+	void write(uint8_t reg, T data);
+
+	/* read for int types */
+	template<typename T>
+	T read(uint8_t reg);
 
 private:
 	SPIBus& bus;
