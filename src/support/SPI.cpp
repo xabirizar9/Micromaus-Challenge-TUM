@@ -97,3 +97,34 @@ uint8_t SPIDevice::read8(uint8_t reg)
 	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
 	return trans.rx_data[0];
 }
+
+void SPIDevice::write16(uint8_t reg, uint16_t data)
+{
+	spi_transaction_t trans {
+		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
+		.cmd = 0b0, // write
+		.addr = reg, // msb will be ignored
+		.length = 16, // 16-bit data
+		.rxlength = 0,
+		.user = nullptr,
+		.tx_data {data >> 8, data & 0xff, 0, 0}, // TODO is this right order?
+		.rx_data {}
+	};
+	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
+}
+
+uint16_t SPIDevice::read16(uint8_t reg)
+{
+	spi_transaction_t trans {
+		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
+		.cmd = 0b1, // read
+		.addr = reg, // msb will be ignored
+		.length = 0,
+		.rxlength = 16, // 16-bit read
+		.user = nullptr,
+		.tx_data {},
+		.rx_data {},
+	};
+	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
+	return (trans.rx_data[0] << 8) | trans.rx_data[1];
+}
