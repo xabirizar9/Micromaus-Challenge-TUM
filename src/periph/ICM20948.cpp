@@ -1,8 +1,11 @@
 #include "periph/ICM20948.hpp"
 
 #include "support/I2C.hpp"
+#include "periph/icm_registers.hpp"
 #include <esp_log.h>
 #include <freertos/task.h>
+
+using namespace linalg;
 
 static const char* TAG = "icm";
 
@@ -48,4 +51,14 @@ void ICM20948::init()
 	spi.write<uint8_t>(0x03, 0x30); // DMP disabled, fifo disabled, i2c master enabled, SPI mode.
 	setSleep(false); // power up the sensors
 
+}
+
+Vec<int16_t> ICM20948::readAccelRaw()
+{
+	switchBank(0);
+	return {
+		spi.read<int16_t>(REG::ACCEL_XOUT_H),
+		spi.read<int16_t>(REG::ACCEL_YOUT_H),
+		spi.read<int16_t>(REG::ACCEL_ZOUT_H)
+	};
 }
