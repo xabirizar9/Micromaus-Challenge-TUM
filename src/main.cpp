@@ -4,6 +4,8 @@
 #include "periph/Encoder.hpp"
 #include "esp_log.h"
 
+#include "periph/SerialBluetooth.hpp"
+
 Encoder e(22, 23);
 
 static const char *TAG = "test";
@@ -35,15 +37,13 @@ void main_task(void *pvParameter)
     {
         int i = e.get();
         ESP_LOGI("x", "%d", i);
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
 extern "C" void app_main()
 {
-
-
-    
+    SerialBluetooth::begin("bla");
     esp_log_level_set(TAG, ESP_LOG_INFO);
     xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
 }

@@ -25,6 +25,7 @@
     "istream": "cpp",
     "limits": "cpp",
     "stdexcept": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "functional": "cpp"
   }
 }

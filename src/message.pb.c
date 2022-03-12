@@ -7,3 +7,7 @@
 #endif
 
 PB_BIND(SensorPacket, SensorPacket, AUTO)
+
+PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)
+
+PB_BIND(MausIncomingMessage, MausIncomingMessage, AUTO)

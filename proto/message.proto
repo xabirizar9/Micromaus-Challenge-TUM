@@ -2,8 +2,12 @@ syntax = "proto3";
 
 option go_package = "gitlab.lrz.de/wlad/micromaus-best";
 
-message SensorPacket { 
-    int32 left  = 1; 
-    int32 front = 2;
-    int32 right = 3; 
+message SensorPacket {
+  int32 left = 1;
+  int32 front = 2;
+  int32 right = 3;
 }
+
+message MausOutgoingMessage { optional SensorPacket packet = 1; }
+
+message MausIncomingMessage { optional SensorPacket packet = 1; }
