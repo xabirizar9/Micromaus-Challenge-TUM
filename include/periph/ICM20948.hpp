@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "support/SPI.hpp"
+#include "support/Linalg.hpp"
 
 class ICM20948
 {
@@ -13,6 +14,7 @@ public:
 	 * the wake-up will take max. 40 ms according to datasheet
 	 */
 	void setSleep(bool sleep);
+	linalg::Vec<int16_t> readAccelRaw();
 
 private:
 	void switchBank(uint8_t bank);
