@@ -76,3 +76,8 @@ int16_t ICM20948::readTempRaw()
 	switchBank(0);
 	return spi.read<int16_t>(REG::TEMP_OUT_H);
 }
+
+float ICM20948::readTemp()
+{
+	return ((readTempRaw() - ROOM_TEMP_OFFSET) / TEMP_SENSITIVITY) + 21.f;
+}
