@@ -35,9 +35,9 @@ void main_task(void *pvParameter)
 {
     while (true)
     {
-        int i = e.get();
-        ESP_LOGI("x", "%d", i);
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        // int i = e.get();
+        // ESP_LOGI("x", "%d", i);
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 

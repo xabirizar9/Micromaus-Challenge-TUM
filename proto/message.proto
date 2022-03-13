@@ -1,6 +1,13 @@
 syntax = "proto3";
 
-option go_package = "gitlab.lrz.de/wlad/micromaus-best";
+option go_package = "./proto";
+
+enum MsgType {
+  Init = 0;
+  SensorData = 1;
+  Control = 2;
+}
+
 
 message SensorPacket {
   int32 left = 1;
@@ -8,6 +15,21 @@ message SensorPacket {
   int32 right = 3;
 }
 
-message MausOutgoingMessage { optional SensorPacket packet = 1; }
+message MausOutgoingMessage {
+  MsgType type = 1; 
+  optional SensorPacket msgSensor = 2;
+}
 
-message MausIncomingMessage { optional SensorPacket packet = 1; }
+// command indicates remote client connection
+message MsgInit {}
+message MsgControl {
+  int32 direction = 1;
+  int32 speed = 2;
+}
+
+
+message MausIncomingMessage { 
+  MsgType type = 1;
+  optional MsgInit init = 2;
+  optional MsgControl control = 3;
+}

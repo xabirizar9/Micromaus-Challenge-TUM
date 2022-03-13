@@ -8,6 +8,18 @@
 
 PB_BIND(SensorPacket, SensorPacket, AUTO)
 
+
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)
 
+
+PB_BIND(MsgInit, MsgInit, AUTO)
+
+
+PB_BIND(MsgControl, MsgControl, AUTO)
+
+
 PB_BIND(MausIncomingMessage, MausIncomingMessage, AUTO)
+
+
+
+

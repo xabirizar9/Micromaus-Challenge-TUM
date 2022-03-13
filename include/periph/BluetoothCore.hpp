@@ -14,5 +14,8 @@ namespace BluetoothCore
      * @return true setup okay
      * @return false setup failed
      */
-    bool setup(void (*handler)(MausIncomingMessage *));
+    bool setup();
+
+    QueueHandle_t getCmdReceiverQueue();
+    QueueHandle_t getCmdSenderQueue();
 }

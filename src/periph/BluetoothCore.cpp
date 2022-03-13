@@ -47,7 +47,6 @@ uint32_t btSppHandle = 0;
 
 QueueHandle_t cmdSenderQueue;
 QueueHandle_t cmdReceiverQueue;
-void (*incomingMessageHandler)(MausIncomingMessage *);
 
 static bool processIncomingMessage(esp_spp_cb_param_t *param)
 {
@@ -101,6 +100,7 @@ static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
         ESP_LOGI(BT_CORE_TAG, "ESP_SPP_CLOSE_EVT status:%d handle:%d close_by_remote:%d", param->close.status,
                  param->close.handle, param->close.async);
         sppActive = false;
+        btSppHandle = 0;
         break;
     case ESP_SPP_START_EVT:
         if (param->start.status == ESP_SPP_SUCCESS)
@@ -290,83 +290,59 @@ bool bluetoothEspSetup()
 
 void senderTask(void *pvParameter)
 {
-    uint8_t encoderBuffer[256];
-    bool encodeStatus;
-    MausOutgoingMessage msg;
-    pb_ostream_t stream;
-    uint8_t test = 'c';
+    static uint8_t buffer[256];
+    static MausOutgoingMessage msg;
     while (true)
     {
         // if SPP is not active yet wait for it
         if (!sppActive)
         {
-            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            vTaskDelay(pdMS_TO_TICKS(100));
             continue;
         }
 
         // esp_spp_cb_param_t *param = (esp_spp_cb_param_t *)pvParameter;
         if (cmdSenderQueue == NULL)
         {
-            ESP_LOGI(BT_CORE_TAG, "not initialized");
+            vTaskDelay(pdMS_TO_TICKS(10));
             continue;
         }
         if (!xQueueReceive(cmdSenderQueue, &msg, 0))
         {
+            vTaskDelay(pdMS_TO_TICKS(10));
             continue;
         }
 
-        stream = pb_ostream_from_buffer(encoderBuffer, sizeof(encoderBuffer));
+        pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 
-        if (!pb_encode(&stream, MausOutgoingMessage_fields, &msg))
+        bool status = pb_encode(&stream, MausOutgoingMessage_fields, &msg);
+
+        if (!status)
         {
-            ESP_LOGI(BT_CORE_TAG, "failed to encode: %s\n", PB_GET_ERROR(&stream));
+            ESP_LOGE(BT_CORE_TAG, "failed to encode: %s", PB_GET_ERROR(&stream));
             continue;
         }
+
+        ESP_LOGI(BT_CORE_TAG, "l %d", msg.msgSensor.right);
+
+        // stream = pb_ostream_from_buffer(encoderBuffer, sizeof(encoderBuffer));
+
+        // if (!pb_encode(&stream, MausOutgoingMessage_fields, &msg))
+        // {
+        //     ESP_LOGI(BT_CORE_TAG, "failed to encode: %s\n", PB_GET_ERROR(&stream));
+        //     continue;
+        // }
+
+        ESP_LOG_BUFFER_HEXDUMP(BT_CORE_TAG, buffer, stream.bytes_written, ESP_LOG_INFO);
 
         // reset stream to start of buffer
-        esp_spp_write(btSppHandle, 1, &test); // stream.bytes_written, stream.state);
+        esp_spp_write(btSppHandle, stream.bytes_written, buffer); // stream.bytes_written, stream.state);
 
-        ESP_LOGI(BT_CORE_TAG, "writing %d", stream.bytes_written);
+        // ESP_LOGI(BT_CORE_TAG, "writing %d", stream.bytes_written);
     }
 }
 
-void receiverTask(void *pvParameter)
-{
-    uint8_t buf[256];
-    MausIncomingMessage msg;
-    // Read in buffer
-    pb_istream_t istream;
-    while (true)
-
-    {
-        if (!sppActive)
-        {
-            vTaskDelay(1000 / portTICK_PERIOD_MS);
-            continue;
-        }
-
-        if (cmdReceiverQueue == NULL)
-        {
-            ESP_LOGI(BT_CORE_TAG, "not initialized");
-            continue;
-        }
-        if (xQueueReceive(cmdReceiverQueue, &buf, 0))
-        {
-            continue;
-        }
-        pb_istream_from_buffer((pb_byte_t *)buf, sizeof(MausIncomingMessage));
-
-        if (!pb_decode(&istream, MausIncomingMessage_fields, &msg))
-        {
-            ESP_LOGE(BT_CORE_TAG, "failed to decode: %s", PB_GET_ERROR(&istream));
-            continue;
-        }
-
-        incomingMessageHandler(&msg);
-    }
-}
-
-bool BluetoothCore::setup(void (*handler)(MausIncomingMessage *))
+bool BluetoothCore::setup()
 {
     if (setupCompleted)
     {
@@ -377,13 +353,10 @@ bool BluetoothCore::setup(void (*handler)(MausIncomingMessage *))
     cmdSenderQueue = xQueueCreate(10, sizeof(MausOutgoingMessage));
     cmdReceiverQueue = xQueueCreate(10, sizeof(MausIncomingMessage));
 
-    // setup incoming message handler
-    incomingMessageHandler = handler;
-
     // setup sender thread
-    xTaskCreate(senderTask, "senderTask", 2048, NULL, 5, NULL);
+    xTaskCreate(senderTask, "senderTask", 4096, NULL, 5, NULL);
     // setup receiver thread
-    xTaskCreate(receiverTask, "receiverTask", 2048, NULL, 5, NULL);
+    // xTaskCreate(receiverTask, "receiverTask", 4096, NULL, 5, NULL);
 
     if (!bluetoothEspSetup())
     {
@@ -392,6 +365,16 @@ bool BluetoothCore::setup(void (*handler)(MausIncomingMessage *))
 
     setupCompleted = true;
     return true;
+}
+
+QueueHandle_t BluetoothCore::getCmdReceiverQueue()
+{
+    return cmdReceiverQueue;
+}
+
+QueueHandle_t BluetoothCore::getCmdSenderQueue()
+{
+    return cmdSenderQueue;
 }
 
 /**
