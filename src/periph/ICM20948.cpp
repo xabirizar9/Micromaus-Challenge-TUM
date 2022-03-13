@@ -102,11 +102,7 @@ int16_t ICM20948::readTempRaw()
 Vec<float> ICM20948::readAccel()
 {
 	auto v = readAccelRaw();
-	return {
-		v.x / accelScale,
-		v.y / accelScale,
-		v.z / accelScale,
-	};
+	return v / accelScale;
 }
 
 float ICM20948::readTemp()
