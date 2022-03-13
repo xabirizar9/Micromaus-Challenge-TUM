@@ -56,9 +56,23 @@ void ICM20948::init()
 Vec<int16_t> ICM20948::readAccelRaw()
 {
 	switchBank(0);
-	return {
-		spi.read<int16_t>(REG::ACCEL_XOUT_H),
-		spi.read<int16_t>(REG::ACCEL_YOUT_H),
-		spi.read<int16_t>(REG::ACCEL_ZOUT_H)
-	};
+	Vec<int16_t> out;
+	spi.read<int16_t>(REG::ACCEL_XOUT_H, out.buffer.data(),
+			out.buffer.size());
+	return out;
+}
+
+Vec<int16_t> ICM20948::readGyroRaw()
+{
+	switchBank(0);
+	Vec<int16_t> out;
+	spi.read<int16_t>(REG::GYRO_XOUT_H, out.buffer.data(),
+			out.buffer.size());
+	return out;
+}
+
+int16_t ICM20948::readTempRaw()
+{
+	switchBank(0);
+	return spi.read<int16_t>(REG::TEMP_OUT_H);
 }
