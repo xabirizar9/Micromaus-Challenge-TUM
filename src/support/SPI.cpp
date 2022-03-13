@@ -146,10 +146,65 @@ T SPIDevice::read(uint8_t reg)
 		   );
 }
 
+void SPIDevice::write(uint8_t reg, const void* buffer, size_t numBytes)
+{
+	spi_transaction_t trans {
+		.flags = 0,
+		.cmd = 0b0, // write
+		.addr = reg, // msb will be ignored
+		.length = numBytes * 8, // number of bits
+		.rxlength = 0,
+		.user = nullptr,
+		.tx_buffer = buffer,
+		.rx_buffer = nullptr
+	};
+	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
+}
+
+void SPIDevice::read(uint8_t reg, void* buffer, size_t numBytes)
+{
+	spi_transaction_t trans {
+		.flags = 0,
+		.cmd = 0b1, // read
+		.addr = reg, // msb will be ignored
+		.length = 0,
+		.rxlength = numBytes * 8,
+		.user = nullptr,
+		.tx_buffer = nullptr,
+		.rx_buffer = buffer
+	};
+	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
+}
+
+template<typename T,
+	std::enable_if_t<(std::is_integral_v<T> && sizeof(T) <= 4), bool> = true>
+void SPIDevice::write(uint8_t reg, const T* buffer, size_t numItems)
+{
+	// need to fix byte order
+	T* cpy = new T[numItems];
+	for (size_t i = 0; i < numItems; ++i) {
+		cpy[i] = SPI_SWAP_DATA_TX(buffer[i], sizeof(T) * 8);
+	}
+	write(reg, (void*) cpy, numItems * sizeof(T));
+	delete cpy;
+}
+
+template<typename T,
+	std::enable_if_t<(std::is_integral_v<T> && sizeof(T) <= 4), bool> = true>
+void SPIDevice::read(uint8_t reg, T* buffer, size_t numItems)
+{
+	read(reg, (void*) buffer, numItems * sizeof(T));
+	for (size_t i = 0; i < numItems; ++i) {
+		buffer[i] = SPI_SWAP_DATA_RX(buffer[i], sizeof(T) * 8);
+	}
+}
+
 /* i know i said dont use macros */
 #define RW_INSTANTIATE(T) \
 	template void SPIDevice::write<T>(uint8_t, T); \
-	template T SPIDevice::read<T>(uint8_t);
+	template T SPIDevice::read<T>(uint8_t); \
+	template void SPIDevice::write<T>(uint8_t, const T*, size_t); \
+	template void SPIDevice::read<T>(uint8_t, T*, size_t);
 
 RW_INSTANTIATE(uint8_t)
 RW_INSTANTIATE(int8_t)
