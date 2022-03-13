@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 #include <driver/spi_master.h>
 
 class SPIDevice;
@@ -33,6 +34,20 @@ public:
 	/* read for int types */
 	template<typename T>
 	T read(uint8_t reg);
+
+	/* r/w for buffers */
+	template<typename T,
+		std::enable_if_t<(std::is_integral_v<T>
+				&& sizeof(T) <= 4), bool> = true>
+	void write(uint8_t reg, const T* buffer, size_t numItems);
+
+	template<typename T,
+		std::enable_if_t<(std::is_integral_v<T>
+				&& sizeof(T) <= 4), bool> = true>
+	void read(uint8_t reg, T* buffer, size_t numItems);
+
+	void write(uint8_t reg, const void* buffer, size_t numBytes);
+	void read(uint8_t reg, void* buffer, size_t numBytes);
 
 private:
 	SPIBus& bus;
