@@ -67,8 +67,66 @@ namespace REG {
 	static constexpr uint8_t DATA_RDY_STATUS = 0x74;
 	static constexpr uint8_t FIFO_CFG = 0x76;
 
+	//bank 1
+	static constexpr uint8_t SELF_TEST_X_GYRO = 0x02;
+	static constexpr uint8_t SELF_TEST_Y_GYRO = 0x03;
+	static constexpr uint8_t SELF_TEST_Z_GYRO = 0x04;
+	static constexpr uint8_t SELF_TEST_X_ACCEL = 0x0E;
+	static constexpr uint8_t SELF_TEST_Y_ACCEL = 0x0F;
+	static constexpr uint8_t SELF_TEST_Z_ACCEL = 0x10;
+	static constexpr uint8_t XA_OFFS_H = 0x14;
+	static constexpr uint8_t XA_OFFS_L = 0x15;
+	static constexpr uint8_t YA_OFFS_H = 0x17;
+	static constexpr uint8_t YA_OFFS_L = 0x18;
+	static constexpr uint8_t ZA_OFFS_H = 0x1A;
+	static constexpr uint8_t ZA_OFFS_L = 0x1B;
+	static constexpr uint8_t TIMEBASE_CORRECTION_PLL = 0x28;
 
-	// bank 1
+	// bank 2
+	static constexpr uint8_t GYRO_SMPLRT_DIV = 0x00;
+	static constexpr uint8_t GYRO_CONFIG_1 = 0x01;
+	static constexpr uint8_t GYRO_CONFIG_2 = 0x02;
+	static constexpr uint8_t XG_OFFS_USRH = 0x03;
+	static constexpr uint8_t XG_OFFS_USRL = 0x04;
+	static constexpr uint8_t YG_OFFS_USRH = 0x05;
+	static constexpr uint8_t YG_OFFS_USRL = 0x06;
+	static constexpr uint8_t ZG_OFFS_USRH = 0x07;
+	static constexpr uint8_t ZG_OFFS_USRL = 0x08;
+	static constexpr uint8_t ODR_ALIGN_EN = 0x09;
+	static constexpr uint8_t ACCEL_SMPLRT_DIV_1 = 0x10;
+	static constexpr uint8_t ACCEL_SMPLRT_DIV_2 = 0x11;
+	static constexpr uint8_t ACCEL_INTEL_CTRL = 0x12;
+	static constexpr uint8_t ACCEL_WOM_THR = 0x13;
+	static constexpr uint8_t ACCEL_CONFIG = 0x14;
+	static constexpr uint8_t ACCEL_CONFIG_2 = 0x15;
+	static constexpr uint8_t FSYNC_CONFIG = 0x52;
+	static constexpr uint8_t TEMP_CONFIG = 0x53;
+	static constexpr uint8_t MOD_CTRL_USR = 0x54;
+
+	// bank 3
+	static constexpr uint8_t I2C_MST_ODR_CONFIG = 0x00;
+	static constexpr uint8_t I2C_MST_DELAY_CTRL = 0x02;
+	static constexpr uint8_t I2C_SLV0_ADDR = 0x03;
+	static constexpr uint8_t I2C_SLV0_REG = 0x04;
+	static constexpr uint8_t I2C_SLV0_CTRL = 0x05;
+	static constexpr uint8_t I2C_SLV0_DO = 0x06;
+	static constexpr uint8_t I2C_SLV1_ADDR = 0x07;
+	static constexpr uint8_t I2C_SLV1_REG = 0x08;
+	static constexpr uint8_t I2C_SLV1_CTRL = 0x09;
+	static constexpr uint8_t I2C_SLV1_DO = 0x0A;
+	static constexpr uint8_t I2C_SLV2_ADDR = 0x0B;
+	static constexpr uint8_t I2C_SLV2_REG = 0x0C;
+	static constexpr uint8_t I2C_SLV2_CTRL = 0x0D;
+	static constexpr uint8_t I2C_SLV2_DO = 0x0E;
+	static constexpr uint8_t I2C_SLV3_ADDR = 0x0F;
+	static constexpr uint8_t I2C_SLV3_REG = 0x10;
+	static constexpr uint8_t I2C_SLV3_CTRL = 0x11;
+	static constexpr uint8_t I2C_SLV3_DO = 0x12;
+	static constexpr uint8_t I2C_SLV4_ADDR = 0x13;
+	static constexpr uint8_t I2C_SLV4_REG = 0x14;
+	static constexpr uint8_t I2C_SLV4_CTRL = 0x15;
+	static constexpr uint8_t I2C_SLV4_DO = 0x16;
+	static constexpr uint8_t I2C_SLV4_DI = 0x17;
 }
 
 
