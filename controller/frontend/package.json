@@ -1,0 +1,18 @@
+{
+  "name": "maus-frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.14.25",
+    "esbuild-svelte": "^0.6.3",
+    "ts-proto": "^1.108.0",
+    "ts-protoc-gen": "^0.15.0",
+    "typescript": "^4.6.2"
+  },
+  "scripts": {
+    "gen:protoc": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/proto --proto_path=../../proto ../../proto/message.proto",
+    "build": "node ./scripts/build.js",
+    "dev": "node ./scripts/build.js --watch"
+  }
+}
