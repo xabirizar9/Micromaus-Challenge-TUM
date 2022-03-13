@@ -58,6 +58,27 @@ void ICM20948::setAccelSensitivity(AccelSensitivity s)
 	}
 }
 
+void ICM20948::setGyroSensitivity(GyroSensitivity s)
+{
+	switchBank(2);
+	// keep low pass enabled
+	spi.write<uint8_t>(REG::GYRO_CONFIG_1, 0x01 | (0x06 & (s << 1)));
+	switch (s) {
+		case GYRO_RANGE_250DPS:
+			gyroScale = 131.f;
+			break;
+		case GYRO_RANGE_500DPS:
+			gyroScale = 65.5;
+			break;
+		case GYRO_RANGE_1000DPS:
+			gyroScale = 32.8;
+			break;
+		case GYRO_RANGE_2000DPS:
+			gyroScale = 16.4;
+			break;
+	}
+}
+
 void ICM20948::init()
 {
 	switchBank(0);
@@ -71,6 +92,7 @@ void ICM20948::init()
 
 	spi.write<uint8_t>(REG::USER_CTRL, 0x30); // DMP disabled, fifo disabled, i2c master enabled, SPI mode.
 	setAccelSensitivity(ACCEL_RANGE_2G);
+	setGyroSensitivity(GYRO_RANGE_250DPS);
 	setSleep(false); // power up the sensors
 
 }
@@ -103,6 +125,12 @@ Vec<float> ICM20948::readAccel()
 {
 	auto v = readAccelRaw();
 	return v / accelScale;
+}
+
+Vec<float> ICM20948::readGyro()
+{
+	auto v = readGyroRaw();
+	return v / gyroScale;
 }
 
 float ICM20948::readTemp()

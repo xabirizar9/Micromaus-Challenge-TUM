@@ -14,6 +14,13 @@ public:
 		ACCEL_RANGE_16G = 3,
 	};
 
+	enum GyroSensitivity: uint8_t {
+		GYRO_RANGE_250DPS = 0,
+		GYRO_RANGE_500DPS = 1,
+		GYRO_RANGE_1000DPS = 2,
+		GYRO_RANGE_2000DPS = 3
+	};
+
 	ICM20948(SPIBus& bus, uint8_t csPin);
 	~ICM20948();
 
@@ -25,6 +32,9 @@ public:
 	/* set accelerometer sensitivity */
 	void setAccelSensitivity(AccelSensitivity);
 
+	/* set gyroscope sensitivity */
+	void setGyroSensitivity(GyroSensitivity);
+
 	linalg::Vec<int16_t> readAccelRaw();
 	linalg::Vec<int16_t> readGyroRaw();
 	int16_t readTempRaw();
@@ -34,6 +44,9 @@ public:
 
 	/// read acceleration in units of g
 	linalg::Vec<float> readAccel();
+
+	/// read gyroscope in units of degrees per second
+	linalg::Vec<float> readGyro();
 
 private:
 	static constexpr float ROOM_TEMP_OFFSET = 0; // LSB
@@ -45,5 +58,6 @@ private:
 	SPIDevice spi;
 	uint8_t currentBank;
 	float accelScale; // LSB / g
+	float gyroScale; // LSB / dps
 };
 
