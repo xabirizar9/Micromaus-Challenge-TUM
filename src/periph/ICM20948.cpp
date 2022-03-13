@@ -37,6 +37,27 @@ void ICM20948::setSleep(bool sleep)
 	spi.write<uint8_t>(REG::PWR_MGMT_1, 0x01 | (sleep ? 0x40 : 0x00));
 }
 
+void ICM20948::setAccelSensitivity(AccelSensitivity s)
+{
+	switchBank(2);
+	// keep low pass enabled
+	spi.write<uint8_t>(REG::ACCEL_CONFIG, 0x01 | (0x06 & (s << 1)));
+	switch (s) {
+		case ACCEL_RANGE_2G:
+			accelScale = 16384.f;
+			break;
+		case ACCEL_RANGE_4G:
+			accelScale = 8192.f;
+			break;
+		case ACCEL_RANGE_8G:
+			accelScale = 4096.f;
+			break;
+		case ACCEL_RANGE_16G:
+			accelScale = 2048.f;
+			break;
+	}
+}
+
 void ICM20948::init()
 {
 	switchBank(0);
@@ -49,6 +70,7 @@ void ICM20948::init()
 	}
 
 	spi.write<uint8_t>(REG::USER_CTRL, 0x30); // DMP disabled, fifo disabled, i2c master enabled, SPI mode.
+	setAccelSensitivity(ACCEL_RANGE_2G);
 	setSleep(false); // power up the sensors
 
 }
@@ -75,6 +97,16 @@ int16_t ICM20948::readTempRaw()
 {
 	switchBank(0);
 	return spi.read<int16_t>(REG::TEMP_OUT_H);
+}
+
+Vec<float> ICM20948::readAccel()
+{
+	auto v = readAccelRaw();
+	return {
+		v.x / accelScale,
+		v.y / accelScale,
+		v.z / accelScale,
+	};
 }
 
 float ICM20948::readTemp()
