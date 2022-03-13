@@ -30,6 +30,8 @@ SPIBus::~SPIBus()
 
 spi_device_handle_t SPIBus::addDevice(uint8_t csPin, int clockFreqHz, uint8_t mode)
 {
+	int freq = spi_get_actual_clock(APB_CLK_FREQ, clockFreqHz, 128);
+	ESP_LOGI(TAG, "requested freq: %i Hz, actual freq: %i Hz", clockFreqHz, freq);
 	spi_device_interface_config_t conf {
 		.command_bits = 1,
 		.address_bits = 7,
@@ -41,7 +43,7 @@ spi_device_handle_t SPIBus::addDevice(uint8_t csPin, int clockFreqHz, uint8_t mo
 		.clock_speed_hz = clockFreqHz,
 		.input_delay_ns = 0,
 		.spics_io_num = csPin,
-		.flags = 0,
+		.flags = SPI_DEVICE_HALFDUPLEX,
 		.queue_size = 7,
 		.pre_cb = nullptr,
 		.post_cb = nullptr
@@ -99,7 +101,7 @@ void SPIDevice::write(uint8_t reg, T data)
 	constexpr uint8_t N = sizeof(T);
 
 	spi_transaction_t trans {
-		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
+		.flags = SPI_TRANS_USE_TXDATA,
 		.cmd = 0b0, // write
 		.addr = reg, // msb will be ignored
 		.length = N * 8, // number of bits
@@ -114,7 +116,7 @@ void SPIDevice::write(uint8_t reg, T data)
 			(N > 2) ? (uint8_t) ((data >> ((N - 3) * 8)) & 0xff) : (uint8_t) 0,
 			(N > 3) ? (uint8_t) (data & 0xff) : (uint8_t) 0,
 		},
-		.rx_data {}
+		.rx_buffer = nullptr
 	};
 	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
 }
@@ -126,21 +128,21 @@ T SPIDevice::read(uint8_t reg)
 			"this function supports only types with max. 4 bytes");
 	constexpr uint8_t N = sizeof(T);
 	spi_transaction_t trans {
-		.flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
+		.flags = SPI_TRANS_USE_RXDATA,
 		.cmd = 0b1, // read
 		.addr = reg, // msb will be ignored
 		.length = 0,
 		.rxlength = N * 8,
 		.user = nullptr,
-		.tx_data {},
+		.tx_buffer = nullptr,
 		.rx_data {},
 	};
 	ESP_ERROR_CHECK(spi_device_transmit(handle, &trans));
 	return (
-			((N > 0) ? trans.tx_data[0] << ((N - 1) * 8) : 0) +
-			((N > 1) ? trans.tx_data[1] << ((N - 2) * 8) : 0) +
-			((N > 2) ? trans.tx_data[2] << ((N - 3) * 8) : 0) +
-			((N > 3) ? trans.tx_data[3] << ((N - 4) * 8) : 0)
+			((N > 0) ? trans.rx_data[0] << ((N - 1) * 8) : 0) +
+			((N > 1) ? trans.rx_data[1] << ((N - 2) * 8) : 0) +
+			((N > 2) ? trans.rx_data[2] << ((N - 3) * 8) : 0) +
+			((N > 3) ? trans.rx_data[3] << ((N - 4) * 8) : 0)
 		   );
 }
 
