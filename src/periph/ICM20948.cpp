@@ -15,6 +15,7 @@ ICM20948::ICM20948(SPIBus& bus, uint8_t csPin):
 	currentBank(0xff) // not a bank
 {
 	init();
+	initMagnetometer();
 }
 
 ICM20948::~ICM20948()
@@ -90,12 +91,106 @@ void ICM20948::init()
 		ESP_LOGW(TAG, "ICM module reports wrong id %02hhx", id);
 	}
 
+	spi.write<uint8_t>(REG::INT_PIN_CFG, 0x00); // this is default but the other libraries always do this ???
 	spi.write<uint8_t>(REG::USER_CTRL, 0x30); // DMP disabled, fifo disabled, i2c master enabled, SPI mode.
 	setAccelSensitivity(ACCEL_RANGE_2G);
 	setGyroSensitivity(GYRO_RANGE_250DPS);
+
 	setSleep(false); // power up the sensors
 
+	switchBank(3);
+ 	// STOP between reads, default frequency of 370kHz 
+	spi.write<uint8_t>(REG::I2C_MST_CTRL, 0x10);
 }
+
+void ICM20948::initMagnetometer()
+{
+	try {
+		magnetometerWrite(MAG::REG::CONTROL3, 0x01); // soft reset
+	} catch (const ICMTimeout&) {
+		ESP_LOGW(TAG, "magnetometer reset timeout");
+	}
+	bool ok = false;
+	for (unsigned int i = 1; i <= 100; i++) {
+		try {
+			vTaskDelay(10 / portTICK_PERIOD_MS);
+			uint8_t id = magnetometerRead(MAG::REG::WHO_AM_I);
+			if (id != MAG::DEVICE_ID) {
+				ESP_LOGW(TAG, "magnetometer reports ID %02hhx", id);
+			}
+			ok = true;
+			break;
+		} catch (const ICMTimeout&) {
+			ESP_LOGW(TAG, "resetting I2C driver (try %i)", i);
+			resetI2CMaster();
+			vTaskDelay(10 / portTICK_PERIOD_MS);
+		}
+	}
+	if (!ok)
+		ESP_LOGE(TAG, "error");
+	else
+		ESP_LOGI(TAG, "ok");
+}
+
+void ICM20948::resetI2CMaster()
+{
+	switchBank(0);
+	const uint8_t ctrl = spi.read<uint8_t>(REG::USER_CTRL);
+	spi.write<uint8_t>(REG::USER_CTRL, ctrl | 0x02);
+}
+
+void ICM20948::externalI2CStartTransaction(uint8_t addr, uint8_t reg,
+		bool isRead)
+{
+	switchBank(3);
+	const uint8_t readFlag = isRead ? 0x80 : 0x00;
+	spi.write<uint8_t>(REG::I2C_SLV4_ADDR, readFlag | (0x7f & addr));
+	spi.write<uint8_t>(REG::I2C_SLV4_REG, reg);
+	spi.write<uint8_t>(REG::I2C_SLV4_CTRL, 0x80); // enable transaction
+}
+
+bool ICM20948::externalI2CWaitComplete(unsigned int timeoutMs)
+{
+	switchBank(0);
+	unsigned long long timeoutEnd = esp_timer_get_time() + timeoutMs * 1000UL;
+	while (timeoutEnd <= esp_timer_get_time()) {
+		uint8_t r = spi.read<uint8_t>(REG::I2C_MST_STATUS);
+		if (r & (1 << 6)) { // bit 6 is I2C_SLV4_DONE
+			return !(r & (1 << 4)); // bit 4 is I2C_SLV4_NACK
+		}
+		vPortYield(); // go do something else
+	}
+
+	throw ICMTimeout();
+}
+
+uint8_t ICM20948::magnetometerRead(uint8_t reg)
+{
+	externalI2CStartTransaction(MAG::ADDR, reg, true);
+
+	bool ok = externalI2CWaitComplete(100); // todo do something with status
+	if (!ok) {
+		ESP_LOGE(TAG, "magnetometer read NACKed: %02hhx", reg);
+	}
+
+	switchBank(3);
+	return spi.read<uint8_t>(REG::I2C_SLV4_DI);
+}
+
+void ICM20948::magnetometerWrite(uint8_t reg, uint8_t data)
+{
+	switchBank(3);
+	spi.write<uint8_t>(REG::I2C_SLV4_DO, data);
+
+	externalI2CStartTransaction(MAG::ADDR, reg, false);
+
+	bool ok = externalI2CWaitComplete(100); // todo do something with status
+	if (!ok) {
+		ESP_LOGE(TAG, "magnetometer write NACKed: %02hhx %02hhx",
+				reg, data);
+	}
+}
+
 
 Vec<int16_t> ICM20948::readAccelRaw()
 {

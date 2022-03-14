@@ -1,8 +1,16 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
+#include <exception>
 #include "support/SPI.hpp"
 #include "support/Linalg.hpp"
+
+class ICMTimeout: public std::exception
+{
+	const char* what() const noexcept override {
+		return "timeout occured in ICM module";
+	}
+};
 
 class ICM20948
 {
@@ -54,6 +62,15 @@ private:
 
 	void switchBank(uint8_t bank);
 	void init();
+	void initMagnetometer();
+
+	void resetI2CMaster();
+
+	void externalI2CStartTransaction(uint8_t addr, uint8_t reg, bool isRead);
+	/// returns true if the transaction was answered with an ACK.
+	bool externalI2CWaitComplete(unsigned int timeoutMs);
+	uint8_t magnetometerRead(uint8_t reg);
+	void magnetometerWrite(uint8_t reg, uint8_t data);
 
 	SPIDevice spi;
 	uint8_t currentBank;
