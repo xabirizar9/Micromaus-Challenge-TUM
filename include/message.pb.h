@@ -35,16 +35,19 @@ typedef struct _SensorPacket {
 
 typedef struct _MausIncomingMessage { 
     MsgType type; 
-    bool has_init;
-    MsgInit init; 
-    bool has_control;
-    MsgControl control; 
+    pb_size_t which_msg;
+    union {
+        MsgInit init;
+        MsgControl control;
+    } msg; 
 } MausIncomingMessage;
 
 typedef struct _MausOutgoingMessage { 
     MsgType type; 
-    bool has_msgSensor;
-    SensorPacket msgSensor; 
+    pb_size_t which_payload;
+    union {
+        SensorPacket sensorData;
+    } payload; 
 } MausOutgoingMessage;
 
 
@@ -60,15 +63,15 @@ extern "C" {
 
 /* Initializer values for message structs */
 #define SensorPacket_init_default                {0, 0, 0}
-#define MausOutgoingMessage_init_default         {_MsgType_MIN, false, SensorPacket_init_default}
+#define MausOutgoingMessage_init_default         {_MsgType_MIN, 0, {SensorPacket_init_default}}
 #define MsgInit_init_default                     {0}
 #define MsgControl_init_default                  {0, 0}
-#define MausIncomingMessage_init_default         {_MsgType_MIN, false, MsgInit_init_default, false, MsgControl_init_default}
+#define MausIncomingMessage_init_default         {_MsgType_MIN, 0, {MsgInit_init_default}}
 #define SensorPacket_init_zero                   {0, 0, 0}
-#define MausOutgoingMessage_init_zero            {_MsgType_MIN, false, SensorPacket_init_zero}
+#define MausOutgoingMessage_init_zero            {_MsgType_MIN, 0, {SensorPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
 #define MsgControl_init_zero                     {0, 0}
-#define MausIncomingMessage_init_zero            {_MsgType_MIN, false, MsgInit_init_zero, false, MsgControl_init_zero}
+#define MausIncomingMessage_init_zero            {_MsgType_MIN, 0, {MsgInit_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define MsgControl_direction_tag                 1
@@ -80,7 +83,7 @@ extern "C" {
 #define MausIncomingMessage_init_tag             2
 #define MausIncomingMessage_control_tag          3
 #define MausOutgoingMessage_type_tag             1
-#define MausOutgoingMessage_msgSensor_tag        2
+#define MausOutgoingMessage_sensorData_tag       2
 
 /* Struct field encoding specification for nanopb */
 #define SensorPacket_FIELDLIST(X, a) \
@@ -92,10 +95,10 @@ X(a, STATIC,   SINGULAR, INT32,    right,             3)
 
 #define MausOutgoingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  msgSensor,         2)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sensorData,payload.sensorData),   2)
 #define MausOutgoingMessage_CALLBACK NULL
 #define MausOutgoingMessage_DEFAULT NULL
-#define MausOutgoingMessage_msgSensor_MSGTYPE SensorPacket
+#define MausOutgoingMessage_payload_sensorData_MSGTYPE SensorPacket
 
 #define MsgInit_FIELDLIST(X, a) \
 
@@ -110,12 +113,12 @@ X(a, STATIC,   SINGULAR, INT32,    speed,             2)
 
 #define MausIncomingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  init,              2) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  control,           3)
+X(a, STATIC,   ONEOF,    MESSAGE,  (msg,init,msg.init),   2) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (msg,control,msg.control),   3)
 #define MausIncomingMessage_CALLBACK NULL
 #define MausIncomingMessage_DEFAULT NULL
-#define MausIncomingMessage_init_MSGTYPE MsgInit
-#define MausIncomingMessage_control_MSGTYPE MsgControl
+#define MausIncomingMessage_msg_init_MSGTYPE MsgInit
+#define MausIncomingMessage_msg_control_MSGTYPE MsgControl
 
 extern const pb_msgdesc_t SensorPacket_msg;
 extern const pb_msgdesc_t MausOutgoingMessage_msg;
@@ -131,7 +134,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MausIncomingMessage_fields &MausIncomingMessage_msg
 
 /* Maximum encoded size of messages (where known) */
-#define MausIncomingMessage_size                 28
+#define MausIncomingMessage_size                 26
 #define MausOutgoingMessage_size                 37
 #define MsgControl_size                          22
 #define MsgInit_size                             0

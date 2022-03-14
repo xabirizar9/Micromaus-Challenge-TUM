@@ -56,21 +56,16 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 				return
 			}
 
-			switch cmd.Type {
-			case pb.MsgType_SensorData:
-				if cmd.MsgSensor != nil {
+			switch msg := cmd.Payload.(type) {
+			case *pb.MausOutgoingMessage_SensorData:
 
-					l.Info("sendor cmd:",
-						zap.Int("left", int(cmd.MsgSensor.Left)),
-						zap.Int("front", int(cmd.MsgSensor.Front)),
-						zap.Int("right", int(cmd.MsgSensor.Right)),
-					)
-				} else {
-					l.Warn("packet empty")
-				}
+				l.Info("sensor cmd (dynamic):",
+					zap.Int("left", int(msg.SensorData.Left)),
+					zap.Int("front", int(msg.SensorData.Front)),
+					zap.Int("right", int(msg.SensorData.Right)),
+				)
 			}
 
-			l.Debug("got command", zap.Int("cmdType", int(cmd.Type)))
 		}
 	}()
 

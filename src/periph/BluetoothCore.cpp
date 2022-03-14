@@ -290,8 +290,9 @@ bool bluetoothEspSetup()
 
 void senderTask(void *pvParameter)
 {
-    static uint8_t buffer[256];
-    static MausOutgoingMessage msg;
+    uint8_t buffer[256];
+    MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
+
     while (true)
     {
         // if SPP is not active yet wait for it
@@ -301,7 +302,7 @@ void senderTask(void *pvParameter)
             continue;
         }
 
-        // esp_spp_cb_param_t *param = (esp_spp_cb_param_t *)pvParameter;
+        // perform sanity checks
         if (cmdSenderQueue == NULL)
         {
             vTaskDelay(pdMS_TO_TICKS(10));
@@ -313,32 +314,16 @@ void senderTask(void *pvParameter)
             continue;
         }
 
+        // encode message in pb format
         pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
-
-        bool status = pb_encode(&stream, MausOutgoingMessage_fields, &msg);
-
-        if (!status)
+        if (!pb_encode(&stream, MausOutgoingMessage_fields, &msg))
         {
             ESP_LOGE(BT_CORE_TAG, "failed to encode: %s", PB_GET_ERROR(&stream));
             continue;
         }
 
-        ESP_LOGI(BT_CORE_TAG, "l %d", msg.msgSensor.right);
-
-        // stream = pb_ostream_from_buffer(encoderBuffer, sizeof(encoderBuffer));
-
-        // if (!pb_encode(&stream, MausOutgoingMessage_fields, &msg))
-        // {
-        //     ESP_LOGI(BT_CORE_TAG, "failed to encode: %s\n", PB_GET_ERROR(&stream));
-        //     continue;
-        // }
-
-        ESP_LOG_BUFFER_HEXDUMP(BT_CORE_TAG, buffer, stream.bytes_written, ESP_LOG_INFO);
-
-        // reset stream to start of buffer
-        esp_spp_write(btSppHandle, stream.bytes_written, buffer); // stream.bytes_written, stream.state);
-
-        // ESP_LOGI(BT_CORE_TAG, "writing %d", stream.bytes_written);
+        // send data over SPP
+        esp_spp_write(btSppHandle, stream.bytes_written, buffer);
     }
 }
 
