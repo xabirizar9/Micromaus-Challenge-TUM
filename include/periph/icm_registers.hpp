@@ -105,6 +105,7 @@ namespace REG {
 
 	// bank 3
 	static constexpr uint8_t I2C_MST_ODR_CONFIG = 0x00;
+	static constexpr uint8_t I2C_MST_CTRL = 0x01;
 	static constexpr uint8_t I2C_MST_DELAY_CTRL = 0x02;
 	static constexpr uint8_t I2C_SLV0_ADDR = 0x03;
 	static constexpr uint8_t I2C_SLV0_REG = 0x04;
@@ -129,4 +130,22 @@ namespace REG {
 	static constexpr uint8_t I2C_SLV4_DI = 0x17;
 }
 
+namespace MAG { // magnetometer constants
+	static constexpr uint8_t ADDR = 0x0C;
+	static constexpr uint8_t DEVICE_ID = 0x09;
+	// reg
+	namespace REG {
+		static constexpr uint8_t WHO_AM_I = 0x01;
+		static constexpr uint8_t STATUS1 = 0x10;
+		static constexpr uint8_t HXL = 0x11;
+		static constexpr uint8_t HXH = 0x12;
+		static constexpr uint8_t HYL = 0x13;
+		static constexpr uint8_t HYH = 0x14;
+		static constexpr uint8_t HZL = 0x15;
+		static constexpr uint8_t HZH = 0x16;
+		static constexpr uint8_t STATUS2 = 0x18;
+		static constexpr uint8_t CONTROL2 = 0x31;
+		static constexpr uint8_t CONTROL3 = 0x32;
+	}
+}
 
