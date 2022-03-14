@@ -68,6 +68,7 @@ func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, error) {
 
 	cmd := &pb.MausOutgoingMessage{}
 
+	log.Error("unknown message type", zap.Binary("type", buf[:n]))
 	err = proto.Unmarshal(buf[:n], cmd)
 	if err != nil {
 		return nil, err

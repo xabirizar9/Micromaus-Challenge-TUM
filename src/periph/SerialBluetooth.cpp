@@ -62,10 +62,12 @@ void receiverTask(void *pvParameter)
 
 void testTask(void *pvParameter)
 {
+    uint8_t i = 0;
     while (true)
     {
-        SerialBluetooth::write('c');
-        vTaskDelay(pdMS_TO_TICKS(2000));
+        SerialBluetooth::writeSensorData(SensorPacket{.left = i + 1, .front = i + 2, .right = i + 3});
+        i++;
+        vTaskDelay(pdMS_TO_TICKS(20));
     }
 }
 
@@ -85,30 +87,14 @@ void SerialBluetooth::begin(std::string name)
 
 uint8_t buffer[128];
 
-void SerialBluetooth::write(char in)
+void SerialBluetooth::writeSensorData(SensorPacket packet)
 {
-    ESP_LOGI(BT_COM_TAG, "w: %c", in);
-
     QueueHandle_t queue = BluetoothCore::getCmdSenderQueue();
     MausOutgoingMessage test = MausOutgoingMessage_init_zero;
-    test.msgSensor = SensorPacket_init_zero;
-    test.type = MsgType_SensorData;
-    test.msgSensor.left = 1;
-    test.msgSensor.front = 2;
-    test.msgSensor.right = 3;
-    // pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
+    test.type = MsgType_Control;
+    test.which_payload = MausOutgoingMessage_sensorData_tag;
+    test.payload.sensorData = packet;
 
-    // pb_ostream_from_buffer((pb_byte_t *)buf, sizeof(MausIncomingMessage));
-
-    // bool status = pb_encode(&stream, MausOutgoingMessage_fields, &test);
-
-    // if (!status)
-    // {
-    //     ESP_LOGE(BT_COM_TAG, "failed to encode: %s", PB_GET_ERROR(&istream));
-    //     return;
-    // }
-
-    // ESP_LOG_BUFFER_HEX(BT_COM_TAG, &buffer, stream.bytes_written);
     if (queue == NULL)
     {
         ESP_LOGI(BT_COM_TAG, "not initialized");

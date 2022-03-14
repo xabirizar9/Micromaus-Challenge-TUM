@@ -10,18 +10,6 @@ Encoder e(22, 23);
 
 static const char *TAG = "test";
 
-void print_sensor_data(void *pvParameter)
-{
-    // 20ms delay
-    const TickType_t xDelay = 20 / portTICK_PERIOD_MS;
-
-    for (;;)
-    {
-        SerialBluetooth::write('c');
-        vTaskDelay(xDelay);
-    }
-}
-
 void navigate(void *pvParameter)
 {
     while (true)

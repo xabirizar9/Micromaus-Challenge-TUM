@@ -8,5 +8,5 @@ namespace SerialBluetooth
 {
     void begin(std::string name);
 
-    void write(char test);
+    void writeSensorData(SensorPacket packet);
 };
