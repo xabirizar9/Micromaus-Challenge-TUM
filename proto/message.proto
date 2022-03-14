@@ -8,6 +8,7 @@ enum MsgType {
   Control = 2;
 }
 
+message AckPacket {}
 
 message SensorPacket {
   int32 left = 1;
@@ -16,8 +17,8 @@ message SensorPacket {
 }
 
 message MausOutgoingMessage {
-  MsgType type = 1; 
   oneof payload {
+    AckPacket ack = 1;
     SensorPacket sensorData = 2;
   }
   

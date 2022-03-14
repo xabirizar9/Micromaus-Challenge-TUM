@@ -69,6 +69,44 @@ func (MsgType) EnumDescriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{0}
 }
 
+type AckPacket struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *AckPacket) Reset() {
+	*x = AckPacket{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AckPacket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AckPacket) ProtoMessage() {}
+
+func (x *AckPacket) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AckPacket.ProtoReflect.Descriptor instead.
+func (*AckPacket) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{0}
+}
+
 type SensorPacket struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -82,7 +120,7 @@ type SensorPacket struct {
 func (x *SensorPacket) Reset() {
 	*x = SensorPacket{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[0]
+		mi := &file_message_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -95,7 +133,7 @@ func (x *SensorPacket) String() string {
 func (*SensorPacket) ProtoMessage() {}
 
 func (x *SensorPacket) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[0]
+	mi := &file_message_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,7 +146,7 @@ func (x *SensorPacket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SensorPacket.ProtoReflect.Descriptor instead.
 func (*SensorPacket) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{0}
+	return file_message_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SensorPacket) GetLeft() int32 {
@@ -137,8 +175,8 @@ type MausOutgoingMessage struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Type MsgType `protobuf:"varint,1,opt,name=type,proto3,enum=MsgType" json:"type,omitempty"`
 	// Types that are assignable to Payload:
+	//	*MausOutgoingMessage_Ack
 	//	*MausOutgoingMessage_SensorData
 	Payload isMausOutgoingMessage_Payload `protobuf_oneof:"payload"`
 }
@@ -146,7 +184,7 @@ type MausOutgoingMessage struct {
 func (x *MausOutgoingMessage) Reset() {
 	*x = MausOutgoingMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[1]
+		mi := &file_message_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -159,7 +197,7 @@ func (x *MausOutgoingMessage) String() string {
 func (*MausOutgoingMessage) ProtoMessage() {}
 
 func (x *MausOutgoingMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[1]
+	mi := &file_message_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -172,19 +210,19 @@ func (x *MausOutgoingMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MausOutgoingMessage.ProtoReflect.Descriptor instead.
 func (*MausOutgoingMessage) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *MausOutgoingMessage) GetType() MsgType {
-	if x != nil {
-		return x.Type
-	}
-	return MsgType_Init
+	return file_message_proto_rawDescGZIP(), []int{2}
 }
 
 func (m *MausOutgoingMessage) GetPayload() isMausOutgoingMessage_Payload {
 	if m != nil {
 		return m.Payload
+	}
+	return nil
+}
+
+func (x *MausOutgoingMessage) GetAck() *AckPacket {
+	if x, ok := x.GetPayload().(*MausOutgoingMessage_Ack); ok {
+		return x.Ack
 	}
 	return nil
 }
@@ -200,9 +238,15 @@ type isMausOutgoingMessage_Payload interface {
 	isMausOutgoingMessage_Payload()
 }
 
+type MausOutgoingMessage_Ack struct {
+	Ack *AckPacket `protobuf:"bytes,1,opt,name=ack,proto3,oneof"`
+}
+
 type MausOutgoingMessage_SensorData struct {
 	SensorData *SensorPacket `protobuf:"bytes,2,opt,name=sensorData,proto3,oneof"`
 }
+
+func (*MausOutgoingMessage_Ack) isMausOutgoingMessage_Payload() {}
 
 func (*MausOutgoingMessage_SensorData) isMausOutgoingMessage_Payload() {}
 
@@ -216,7 +260,7 @@ type MsgInit struct {
 func (x *MsgInit) Reset() {
 	*x = MsgInit{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[2]
+		mi := &file_message_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -229,7 +273,7 @@ func (x *MsgInit) String() string {
 func (*MsgInit) ProtoMessage() {}
 
 func (x *MsgInit) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[2]
+	mi := &file_message_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -242,7 +286,7 @@ func (x *MsgInit) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MsgInit.ProtoReflect.Descriptor instead.
 func (*MsgInit) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{2}
+	return file_message_proto_rawDescGZIP(), []int{3}
 }
 
 type MsgControl struct {
@@ -257,7 +301,7 @@ type MsgControl struct {
 func (x *MsgControl) Reset() {
 	*x = MsgControl{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[3]
+		mi := &file_message_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -270,7 +314,7 @@ func (x *MsgControl) String() string {
 func (*MsgControl) ProtoMessage() {}
 
 func (x *MsgControl) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[3]
+	mi := &file_message_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -283,7 +327,7 @@ func (x *MsgControl) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MsgControl.ProtoReflect.Descriptor instead.
 func (*MsgControl) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{3}
+	return file_message_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *MsgControl) GetDirection() int32 {
@@ -306,16 +350,16 @@ type MausIncomingMessage struct {
 	unknownFields protoimpl.UnknownFields
 
 	Type MsgType `protobuf:"varint,1,opt,name=type,proto3,enum=MsgType" json:"type,omitempty"`
-	// Types that are assignable to Msg:
+	// Types that are assignable to Payload:
 	//	*MausIncomingMessage_Init
 	//	*MausIncomingMessage_Control
-	Msg isMausIncomingMessage_Msg `protobuf_oneof:"msg"`
+	Payload isMausIncomingMessage_Payload `protobuf_oneof:"payload"`
 }
 
 func (x *MausIncomingMessage) Reset() {
 	*x = MausIncomingMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[4]
+		mi := &file_message_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -328,7 +372,7 @@ func (x *MausIncomingMessage) String() string {
 func (*MausIncomingMessage) ProtoMessage() {}
 
 func (x *MausIncomingMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[4]
+	mi := &file_message_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -341,7 +385,7 @@ func (x *MausIncomingMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MausIncomingMessage.ProtoReflect.Descriptor instead.
 func (*MausIncomingMessage) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{4}
+	return file_message_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *MausIncomingMessage) GetType() MsgType {
@@ -351,29 +395,29 @@ func (x *MausIncomingMessage) GetType() MsgType {
 	return MsgType_Init
 }
 
-func (m *MausIncomingMessage) GetMsg() isMausIncomingMessage_Msg {
+func (m *MausIncomingMessage) GetPayload() isMausIncomingMessage_Payload {
 	if m != nil {
-		return m.Msg
+		return m.Payload
 	}
 	return nil
 }
 
 func (x *MausIncomingMessage) GetInit() *MsgInit {
-	if x, ok := x.GetMsg().(*MausIncomingMessage_Init); ok {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_Init); ok {
 		return x.Init
 	}
 	return nil
 }
 
 func (x *MausIncomingMessage) GetControl() *MsgControl {
-	if x, ok := x.GetMsg().(*MausIncomingMessage_Control); ok {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_Control); ok {
 		return x.Control
 	}
 	return nil
 }
 
-type isMausIncomingMessage_Msg interface {
-	isMausIncomingMessage_Msg()
+type isMausIncomingMessage_Payload interface {
+	isMausIncomingMessage_Payload()
 }
 
 type MausIncomingMessage_Init struct {
@@ -384,44 +428,45 @@ type MausIncomingMessage_Control struct {
 	Control *MsgControl `protobuf:"bytes,3,opt,name=control,proto3,oneof"`
 }
 
-func (*MausIncomingMessage_Init) isMausIncomingMessage_Msg() {}
+func (*MausIncomingMessage_Init) isMausIncomingMessage_Payload() {}
 
-func (*MausIncomingMessage_Control) isMausIncomingMessage_Msg() {}
+func (*MausIncomingMessage_Control) isMausIncomingMessage_Payload() {}
 
 var File_message_proto protoreflect.FileDescriptor
 
 var file_message_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0x4e, 0x0a, 0x0c, 0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12,
-	0x12, 0x0a, 0x04, 0x6c, 0x65, 0x66, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x6c,
-	0x65, 0x66, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x05, 0x52, 0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x72, 0x69, 0x67,
-	0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x72, 0x69, 0x67, 0x68, 0x74, 0x22,
-	0x6f, 0x0a, 0x13, 0x4d, 0x61, 0x75, 0x73, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x1c, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0e, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04,
-	0x74, 0x79, 0x70, 0x65, 0x12, 0x2f, 0x0a, 0x0a, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x44, 0x61,
-	0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x53, 0x65, 0x6e, 0x73, 0x6f,
-	0x72, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x0a, 0x73, 0x65, 0x6e, 0x73, 0x6f,
-	0x72, 0x44, 0x61, 0x74, 0x61, 0x42, 0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64,
-	0x22, 0x09, 0x0a, 0x07, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x22, 0x40, 0x0a, 0x0a, 0x4d,
-	0x73, 0x67, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x12, 0x1c, 0x0a, 0x09, 0x64, 0x69, 0x72,
-	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x64, 0x69,
-	0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64, 0x22, 0x83, 0x01,
-	0x0a, 0x13, 0x4d, 0x61, 0x75, 0x73, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x4d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x1c, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0e, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x12, 0x1e, 0x0a, 0x04, 0x69, 0x6e, 0x69, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x48, 0x00, 0x52, 0x04, 0x69,
-	0x6e, 0x69, 0x74, 0x12, 0x27, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f,
-	0x6c, 0x48, 0x00, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x42, 0x05, 0x0a, 0x03,
-	0x6d, 0x73, 0x67, 0x2a, 0x30, 0x0a, 0x07, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x08,
-	0x0a, 0x04, 0x49, 0x6e, 0x69, 0x74, 0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x53, 0x65, 0x6e, 0x73,
-	0x6f, 0x72, 0x44, 0x61, 0x74, 0x61, 0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x43, 0x6f, 0x6e, 0x74,
-	0x72, 0x6f, 0x6c, 0x10, 0x02, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x0b, 0x0a, 0x09, 0x41, 0x63, 0x6b, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x22, 0x4e, 0x0a, 0x0c,
+	0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x12, 0x0a, 0x04,
+	0x6c, 0x65, 0x66, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x6c, 0x65, 0x66, 0x74,
+	0x12, 0x14, 0x0a, 0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x72, 0x69, 0x67, 0x68, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x72, 0x69, 0x67, 0x68, 0x74, 0x22, 0x71, 0x0a, 0x13,
+	0x4d, 0x61, 0x75, 0x73, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x12, 0x1e, 0x0a, 0x03, 0x61, 0x63, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x0a, 0x2e, 0x41, 0x63, 0x6b, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x03,
+	0x61, 0x63, 0x6b, 0x12, 0x2f, 0x0a, 0x0a, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x44, 0x61, 0x74,
+	0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72,
+	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x0a, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72,
+	0x44, 0x61, 0x74, 0x61, 0x42, 0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x22,
+	0x09, 0x0a, 0x07, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x22, 0x40, 0x0a, 0x0a, 0x4d, 0x73,
+	0x67, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x12, 0x1c, 0x0a, 0x09, 0x64, 0x69, 0x72, 0x65,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x64, 0x69, 0x72,
+	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64, 0x22, 0x87, 0x01, 0x0a,
+	0x13, 0x4d, 0x61, 0x75, 0x73, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x12, 0x1c, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0e, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x12, 0x1e, 0x0a, 0x04, 0x69, 0x6e, 0x69, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x48, 0x00, 0x52, 0x04, 0x69, 0x6e,
+	0x69, 0x74, 0x12, 0x27, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c,
+	0x48, 0x00, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x42, 0x09, 0x0a, 0x07, 0x70,
+	0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x2a, 0x30, 0x0a, 0x07, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x08, 0x0a, 0x04, 0x49, 0x6e, 0x69, 0x74, 0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x53,
+	0x65, 0x6e, 0x73, 0x6f, 0x72, 0x44, 0x61, 0x74, 0x61, 0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x43,
+	0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x10, 0x02, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x2f, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -437,21 +482,22 @@ func file_message_proto_rawDescGZIP() []byte {
 }
 
 var file_message_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_message_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_message_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_message_proto_goTypes = []interface{}{
 	(MsgType)(0),                // 0: MsgType
-	(*SensorPacket)(nil),        // 1: SensorPacket
-	(*MausOutgoingMessage)(nil), // 2: MausOutgoingMessage
-	(*MsgInit)(nil),             // 3: MsgInit
-	(*MsgControl)(nil),          // 4: MsgControl
-	(*MausIncomingMessage)(nil), // 5: MausIncomingMessage
+	(*AckPacket)(nil),           // 1: AckPacket
+	(*SensorPacket)(nil),        // 2: SensorPacket
+	(*MausOutgoingMessage)(nil), // 3: MausOutgoingMessage
+	(*MsgInit)(nil),             // 4: MsgInit
+	(*MsgControl)(nil),          // 5: MsgControl
+	(*MausIncomingMessage)(nil), // 6: MausIncomingMessage
 }
 var file_message_proto_depIdxs = []int32{
-	0, // 0: MausOutgoingMessage.type:type_name -> MsgType
-	1, // 1: MausOutgoingMessage.sensorData:type_name -> SensorPacket
+	1, // 0: MausOutgoingMessage.ack:type_name -> AckPacket
+	2, // 1: MausOutgoingMessage.sensorData:type_name -> SensorPacket
 	0, // 2: MausIncomingMessage.type:type_name -> MsgType
-	3, // 3: MausIncomingMessage.init:type_name -> MsgInit
-	4, // 4: MausIncomingMessage.control:type_name -> MsgControl
+	4, // 3: MausIncomingMessage.init:type_name -> MsgInit
+	5, // 4: MausIncomingMessage.control:type_name -> MsgControl
 	5, // [5:5] is the sub-list for method output_type
 	5, // [5:5] is the sub-list for method input_type
 	5, // [5:5] is the sub-list for extension type_name
@@ -466,7 +512,7 @@ func file_message_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_message_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SensorPacket); i {
+			switch v := v.(*AckPacket); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -478,7 +524,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MausOutgoingMessage); i {
+			switch v := v.(*SensorPacket); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -490,7 +536,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgInit); i {
+			switch v := v.(*MausOutgoingMessage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -502,7 +548,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgControl); i {
+			switch v := v.(*MsgInit); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -514,6 +560,18 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgControl); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MausIncomingMessage); i {
 			case 0:
 				return &v.state
@@ -526,10 +584,11 @@ func file_message_proto_init() {
 			}
 		}
 	}
-	file_message_proto_msgTypes[1].OneofWrappers = []interface{}{
+	file_message_proto_msgTypes[2].OneofWrappers = []interface{}{
+		(*MausOutgoingMessage_Ack)(nil),
 		(*MausOutgoingMessage_SensorData)(nil),
 	}
-	file_message_proto_msgTypes[4].OneofWrappers = []interface{}{
+	file_message_proto_msgTypes[5].OneofWrappers = []interface{}{
 		(*MausIncomingMessage_Init)(nil),
 		(*MausIncomingMessage_Control)(nil),
 	}
@@ -539,7 +598,7 @@ func file_message_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_message_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

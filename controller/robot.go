@@ -1,6 +1,9 @@
 package main
 
 import (
+	"errors"
+	"time"
+
 	"github.com/tarm/serial"
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
 	"go.uber.org/zap"
@@ -68,7 +71,6 @@ func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, error) {
 
 	cmd := &pb.MausOutgoingMessage{}
 
-	log.Error("unknown message type", zap.Binary("type", buf[:n]))
 	err = proto.Unmarshal(buf[:n], cmd)
 	if err != nil {
 		return nil, err
@@ -77,18 +79,30 @@ func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, error) {
 	return cmd, nil
 }
 
-func (r *Robot) SendInit() error {
-
+func (r *Robot) StartInitSequence() error {
 	// set init packet
 	cmd := pb.MausIncomingMessage{
 		Type: pb.MsgType_Init,
 	}
+	// retry sending init message till robot respo
+	for {
+		log.Info("sending init packet")
+		err := r.SendCmd(&cmd)
+		if err != nil {
+			return err
+		}
 
-	err := r.SendCmd(&cmd)
-	if err != nil {
-		return err
+		cmd, err := r.ReadCmd()
+
+		if err != nil {
+			return errors.New("invalid robot response to init packet")
+		}
+
+		if ack := cmd.GetAck(); ack != nil {
+			r.Status = Connected
+			return nil
+		}
+		time.Sleep(5 * time.Second)
 	}
 
-	r.Status = Connected
-	return nil
 }
