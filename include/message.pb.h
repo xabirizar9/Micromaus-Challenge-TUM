@@ -17,6 +17,10 @@ typedef enum _MsgType {
 } MsgType;
 
 /* Struct definitions */
+typedef struct _AckPacket { 
+    char dummy_field;
+} AckPacket;
+
 /* command indicates remote client connection */
 typedef struct _MsgInit { 
     char dummy_field;
@@ -35,17 +39,17 @@ typedef struct _SensorPacket {
 
 typedef struct _MausIncomingMessage { 
     MsgType type; 
-    pb_size_t which_msg;
+    pb_size_t which_payload;
     union {
         MsgInit init;
         MsgControl control;
-    } msg; 
+    } payload; 
 } MausIncomingMessage;
 
 typedef struct _MausOutgoingMessage { 
-    MsgType type; 
     pb_size_t which_payload;
     union {
+        AckPacket ack;
         SensorPacket sensorData;
     } payload; 
 } MausOutgoingMessage;
@@ -62,13 +66,15 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
+#define AckPacket_init_default                   {0}
 #define SensorPacket_init_default                {0, 0, 0}
-#define MausOutgoingMessage_init_default         {_MsgType_MIN, 0, {SensorPacket_init_default}}
+#define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
 #define MsgControl_init_default                  {0, 0}
 #define MausIncomingMessage_init_default         {_MsgType_MIN, 0, {MsgInit_init_default}}
+#define AckPacket_init_zero                      {0}
 #define SensorPacket_init_zero                   {0, 0, 0}
-#define MausOutgoingMessage_init_zero            {_MsgType_MIN, 0, {SensorPacket_init_zero}}
+#define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
 #define MsgControl_init_zero                     {0, 0}
 #define MausIncomingMessage_init_zero            {_MsgType_MIN, 0, {MsgInit_init_zero}}
@@ -82,10 +88,15 @@ extern "C" {
 #define MausIncomingMessage_type_tag             1
 #define MausIncomingMessage_init_tag             2
 #define MausIncomingMessage_control_tag          3
-#define MausOutgoingMessage_type_tag             1
+#define MausOutgoingMessage_ack_tag              1
 #define MausOutgoingMessage_sensorData_tag       2
 
 /* Struct field encoding specification for nanopb */
+#define AckPacket_FIELDLIST(X, a) \
+
+#define AckPacket_CALLBACK NULL
+#define AckPacket_DEFAULT NULL
+
 #define SensorPacket_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, INT32,    left,              1) \
 X(a, STATIC,   SINGULAR, INT32,    front,             2) \
@@ -94,10 +105,11 @@ X(a, STATIC,   SINGULAR, INT32,    right,             3)
 #define SensorPacket_DEFAULT NULL
 
 #define MausOutgoingMessage_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ack,payload.ack),   1) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,sensorData,payload.sensorData),   2)
 #define MausOutgoingMessage_CALLBACK NULL
 #define MausOutgoingMessage_DEFAULT NULL
+#define MausOutgoingMessage_payload_ack_MSGTYPE AckPacket
 #define MausOutgoingMessage_payload_sensorData_MSGTYPE SensorPacket
 
 #define MsgInit_FIELDLIST(X, a) \
@@ -113,13 +125,14 @@ X(a, STATIC,   SINGULAR, INT32,    speed,             2)
 
 #define MausIncomingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (msg,init,msg.init),   2) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (msg,control,msg.control),   3)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,init,payload.init),   2) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,control,payload.control),   3)
 #define MausIncomingMessage_CALLBACK NULL
 #define MausIncomingMessage_DEFAULT NULL
-#define MausIncomingMessage_msg_init_MSGTYPE MsgInit
-#define MausIncomingMessage_msg_control_MSGTYPE MsgControl
+#define MausIncomingMessage_payload_init_MSGTYPE MsgInit
+#define MausIncomingMessage_payload_control_MSGTYPE MsgControl
 
+extern const pb_msgdesc_t AckPacket_msg;
 extern const pb_msgdesc_t SensorPacket_msg;
 extern const pb_msgdesc_t MausOutgoingMessage_msg;
 extern const pb_msgdesc_t MsgInit_msg;
@@ -127,6 +140,7 @@ extern const pb_msgdesc_t MsgControl_msg;
 extern const pb_msgdesc_t MausIncomingMessage_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
+#define AckPacket_fields &AckPacket_msg
 #define SensorPacket_fields &SensorPacket_msg
 #define MausOutgoingMessage_fields &MausOutgoingMessage_msg
 #define MsgInit_fields &MsgInit_msg
@@ -134,8 +148,9 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MausIncomingMessage_fields &MausIncomingMessage_msg
 
 /* Maximum encoded size of messages (where known) */
+#define AckPacket_size                           0
 #define MausIncomingMessage_size                 26
-#define MausOutgoingMessage_size                 37
+#define MausOutgoingMessage_size                 35
 #define MsgControl_size                          22
 #define MsgInit_size                             0
 #define SensorPacket_size                        33

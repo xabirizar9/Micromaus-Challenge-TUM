@@ -36,7 +36,7 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 	l := m.getLogger().With(zap.String("robot", "MAUS"))
 	m.Robot = r
 
-	err := r.SendInit()
+	err := r.StartInitSequence()
 	if err != nil {
 		return err
 	}
@@ -93,19 +93,8 @@ func (m *Manager) onClientMsg(c *Client) {
 			return
 		}
 
-		// Print the message to the console
+		l.Debug("got client message, TODO: implement")
 
-		l.Debug("message received", zap.Int("msgType", int(outMsg.Type)))
-
-		switch outMsg.Type {
-		case pb.MsgType_Init:
-			return
-		case pb.MsgType_Control:
-
-			l.Debug("got control message, TODO: implement")
-			// TODO: send packet to robot
-			return
-		}
 	}
 }
 

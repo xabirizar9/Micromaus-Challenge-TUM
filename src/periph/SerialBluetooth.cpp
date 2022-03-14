@@ -20,14 +20,32 @@ using namespace SerialBluetooth;
 
 #define BT_COM_TAG "BT_COM"
 
-uint8_t buf[256];
-MausIncomingMessage msg;
-// Read in buffer
-pb_istream_t istream;
+bool initCompleted = false;
+
+void writeCmd(MausOutgoingMessage *msg)
+{
+    QueueHandle_t queue = BluetoothCore::getCmdSenderQueue();
+    if (queue == NULL)
+    {
+        ESP_LOGI(BT_COM_TAG, "not initialized");
+        return;
+    }
+    xQueueSend(queue, msg, 0);
+};
+
+void SerialBluetooth::writeSensorData(SensorPacket packet)
+{
+    MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
+    msg.which_payload = MausOutgoingMessage_sensorData_tag;
+    msg.payload.sensorData = packet;
+
+    writeCmd(&msg);
+};
 
 void receiverTask(void *pvParameter)
 {
-    uint8_t buf[256];
+    uint8_t buffer[256];
+    MausIncomingMessage msg = MausIncomingMessage_init_zero;
     QueueHandle_t queue = BluetoothCore::getCmdReceiverQueue();
     ESP_LOGI(BT_COM_TAG, "receiverTask started");
     while (true)
@@ -38,7 +56,7 @@ void receiverTask(void *pvParameter)
             vTaskDelay(pdMS_TO_TICKS(20));
             continue;
         }
-        if (!xQueueReceive(queue, &buf, 0))
+        if (!xQueueReceive(queue, buffer, 0))
         {
             // ESP_LOGI(BT_COM_TAG, "queue empty");
             vTaskDelay(pdMS_TO_TICKS(20));
@@ -46,17 +64,26 @@ void receiverTask(void *pvParameter)
         }
         ESP_LOGI(BT_COM_TAG, "persed incoming msg");
 
-        /*pb_istream_from_buffer((pb_byte_t *)buf, sizeof(MausIncomingMessage));
-
-        if (!pb_decode(&istream, MausIncomingMessage_fields, &msg))
+        pb_istream_t stream = pb_istream_from_buffer(buffer, sizeof(buffer));
+        if (!pb_decode(&stream, MausIncomingMessage_fields, &msg))
         {
-            ESP_LOGE(BT_COM_TAG, "failed to decode: %s", PB_GET_ERROR(&istream));
+            ESP_LOGE(BT_COM_TAG, "failed to decode: %s", PB_GET_ERROR(&stream));
             continue;
         }
 
         ESP_LOGD(BT_COM_TAG, "persed incoming msg");
-        esp_log_buffer_hex("", &msg, sizeof(MausIncomingMessage));*/
-        vTaskDelay(pdMS_TO_TICKS(20));
+        esp_log_buffer_hex("", &msg, sizeof(MausIncomingMessage));
+
+        switch (msg.which_payload)
+        {
+        case MausIncomingMessage_init_tag:
+            // TODO: improve memory management
+            MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
+            msg.which_payload = MausOutgoingMessage_ack_tag;
+            writeCmd(&msg);
+            initCompleted = true;
+            break;
+        }
     }
 }
 
@@ -65,9 +92,12 @@ void testTask(void *pvParameter)
     uint8_t i = 0;
     while (true)
     {
-        SerialBluetooth::writeSensorData(SensorPacket{.left = i + 1, .front = i + 2, .right = i + 3});
-        i++;
-        vTaskDelay(pdMS_TO_TICKS(20));
+        if (initCompleted)
+        {
+            SerialBluetooth::writeSensorData(SensorPacket{.left = i + 1, .front = i + 2, .right = i + 3});
+            i++;
+        }
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 
@@ -86,19 +116,3 @@ void SerialBluetooth::begin(std::string name)
 };
 
 uint8_t buffer[128];
-
-void SerialBluetooth::writeSensorData(SensorPacket packet)
-{
-    QueueHandle_t queue = BluetoothCore::getCmdSenderQueue();
-    MausOutgoingMessage test = MausOutgoingMessage_init_zero;
-    test.type = MsgType_Control;
-    test.which_payload = MausOutgoingMessage_sensorData_tag;
-    test.payload.sensorData = packet;
-
-    if (queue == NULL)
-    {
-        ESP_LOGI(BT_COM_TAG, "not initialized");
-        return;
-    }
-    xQueueSend(queue, &test, 0);
-};
