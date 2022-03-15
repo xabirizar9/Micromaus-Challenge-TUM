@@ -118,9 +118,11 @@ void ICM20948::initMagnetometer()
 
 	switchBank(3);
 	// enable reading 9 bytes per shot starting at address 0x10
+	// we need only 8, but that results in weird effects.
 	spi.write<uint8_t>(REG::I2C_SLV0_ADDR, 0x8C);
 	spi.write<uint8_t>(REG::I2C_SLV0_REG, MAG::REG::STATUS1);
-	spi.write<uint8_t>(REG::I2C_SLV0_CTRL, 0x89);
+	// enabled, convert endianness starting from second byte
+	spi.write<uint8_t>(REG::I2C_SLV0_CTRL, 0xd9);
 
 	// i2c master ODR cycle mode
 	switchBank(0);
@@ -209,12 +211,9 @@ Vec<int16_t> ICM20948::readMagRaw()
 {
 	switchBank(0);
 	Vec<int16_t> d;
-	uint8_t status = spi.read<uint8_t>(REG::EXT_SLV_SENS_DATA_00);
+	// TODO do something with the status registers
 	spi.read<int16_t>(REG::EXT_SLV_SENS_DATA_01, d.buffer.data(),
 			d.buffer.size());
-	ESP_LOGI("mag", "st = %02hhx", status);
-	ESP_LOGI("mag", "mx = % 8hi my = % 8hi mz = % 8hi", d.x, d.y, d.z);
-
 	return d;
 }
 
