@@ -57,9 +57,13 @@ public:
 	/// read gyroscope in units of degrees per second
 	linalg::Vec<float> readGyro();
 
+	/// read magnetometer data in microtesla
+	linalg::Vec<float> readMag();
+
 private:
 	static constexpr float ROOM_TEMP_OFFSET = 0; // LSB
 	static constexpr float TEMP_SENSITIVITY = 333.87; // LSB/Kelvin
+	static constexpr float MAGNETOMETER_SCALE = 0.15; // microtesla / LSB
 
 	void switchBank(uint8_t bank);
 	void init();
