@@ -22,7 +22,7 @@ func main() {
 		for {
 			log.Info("connecting to robot...")
 			r, err := NewRobot(log, RobotConnectionOptions{
-				Baud: 9600,
+				Baud: 115200,
 				Dev:  "/dev/cu.MAUS_BT_SERIAL",
 			})
 			if err != nil {

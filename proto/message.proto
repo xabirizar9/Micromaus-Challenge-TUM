@@ -10,22 +10,34 @@ enum MsgType {
 
 message AckPacket {}
 
+message Position {
+  float x = 1;
+  float y = 2;
+  float heading = 3;
+}
+
 message SensorPacket {
-  int32 left = 1;
-  int32 front = 2;
-  int32 right = 3;
+  float left = 1;
+  float front = 2;
+  float right = 3;
+}
+
+message NavigationPacket {
+  SensorPacket sensors = 1;
+  Position position = 2;
 }
 
 message MausOutgoingMessage {
   oneof payload {
     AckPacket ack = 1;
-    SensorPacket sensorData = 2;
+    NavigationPacket nav = 2;
   }
-  
 }
 
 // command indicates remote client connection
-message MsgInit {}
+message MsgInit {
+  int32 version = 1;
+}
 message MsgControl {
   int32 direction = 1;
   int32 speed = 2;
@@ -33,7 +45,6 @@ message MsgControl {
 
 
 message MausIncomingMessage { 
-  MsgType type = 1;
   oneof payload {
     MsgInit init = 2;
     MsgControl control = 3;

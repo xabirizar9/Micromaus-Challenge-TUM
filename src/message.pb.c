@@ -9,7 +9,13 @@
 PB_BIND(AckPacket, AckPacket, AUTO)
 
 
+PB_BIND(Position, Position, AUTO)
+
+
 PB_BIND(SensorPacket, SensorPacket, AUTO)
+
+
+PB_BIND(NavigationPacket, NavigationPacket, AUTO)
 
 
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)

@@ -1,21 +1,27 @@
 #pragma once
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
+#include <freertos/message_buffer.h>
 #include <string>
 #include <functional>
 #include "message.pb.h"
 
 namespace BluetoothCore
 {
-
     /**
-     * @brief
+     * @brief setup ESP SPP bluetooth + Stack
      *
      * @return true setup okay
      * @return false setup failed
      */
     bool setup();
 
-    QueueHandle_t getCmdReceiverQueue();
+    /**
+     * @brief remove queues, tasks and teardown ESP bt stack
+     *
+     */
+    void teardown();
+
+    MessageBufferHandle_t getCmdReceiverMsgBuffer();
     QueueHandle_t getCmdSenderQueue();
 }

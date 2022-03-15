@@ -1,6 +1,7 @@
 const fs = require("fs");
 const esbuild = require("esbuild");
 const sveltePlugin = require("esbuild-svelte");
+const sveltePreprocess = require("svelte-preprocess");
 
 //make sure the directoy exists before stuff gets put into it
 if (!fs.existsSync("./dist/")) {
@@ -19,7 +20,11 @@ esbuild
     watch: true,
     splitting: true,
     sourcemap: "inline",
-    plugins: [sveltePlugin()],
+    plugins: [
+      sveltePlugin({
+        preprocess: sveltePreprocess(),
+      }),
+    ],
   })
   .catch((err) => {
     console.error(err);
