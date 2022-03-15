@@ -4,6 +4,7 @@
 #include "periph/Encoder.hpp"
 #include "esp_log.h"
 
+#include "periph/WifiCommunicator.hpp"
 #include "periph/NetController.hpp"
 
 Encoder e(22, 23);
@@ -28,10 +29,13 @@ void main_task(void *pvParameter)
         vTaskDelay(pdMS_TO_TICKS(2000));
     }
 }
+WifiCommunicator com;
+    
+NetController::Manager netManager(&com);
 
-extern "C" void app_main()
+extern "C" void
+app_main()
 {
-    NetController::begin();
     esp_log_level_set(TAG, ESP_LOG_INFO);
     xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
 }
