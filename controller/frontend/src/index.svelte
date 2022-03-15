@@ -33,6 +33,7 @@
         if (!lastCoords) {
           lastCoords = [x, y];
         }
+        ctx.beginPath();
         ctx.strokeStyle = "#000000";
         ctx.moveTo(...lastCoords);
         ctx.lineTo(x, y);
@@ -40,15 +41,16 @@
         lastCoords = [x, y];
 
         ctx.beginPath();
+
         ctx.arc(
           x + evt.data.nav.sensors.left * (width / 20),
           y + evt.data.nav.sensors.left * (height / 20),
-          5,
+          14,
           0,
           2 * Math.PI,
           false
         );
-        ctx.fillStyle = "rgba(0, 20, 255, 0.5)";
+        ctx.fillStyle = "rgba(52, 152, 219, 0.3)";
         ctx.fill();
         ctx.closePath();
       }
