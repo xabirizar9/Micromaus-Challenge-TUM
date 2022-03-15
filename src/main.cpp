@@ -34,7 +34,7 @@ void main_task(void *pvParameter)
 extern "C" void
 app_main()
 {
-    WifiCommunicator::getInstance();
+    // WifiCommunicator::getInstance();
 
     esp_log_level_set(TAG, ESP_LOG_INFO);
     xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);

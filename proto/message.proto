@@ -39,7 +39,7 @@ message MsgInit {
   int32 version = 1;
 }
 message MsgControl {
-  int32 direction = 1;
+  float direction = 1;
   int32 speed = 2;
 }
 
