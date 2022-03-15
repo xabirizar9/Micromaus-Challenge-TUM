@@ -50,20 +50,23 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 				return
 			}
 
-			cmd, err := r.ReadCmd()
+			cmd, cmdBuf, err := r.ReadCmd()
 			if err != nil {
 				l.Error("failed to read command", zap.Error(err))
 				return
 			}
 
 			switch msg := cmd.Payload.(type) {
-			case *pb.MausOutgoingMessage_SensorData:
-
-				l.Info("sensor cmd (dynamic):",
-					zap.Int("left", int(msg.SensorData.Left)),
-					zap.Int("front", int(msg.SensorData.Front)),
-					zap.Int("right", int(msg.SensorData.Right)),
+			case *pb.MausOutgoingMessage_Nav:
+				l.Info("nav package:",
+					zap.String("content", msg.Nav.String()),
 				)
+				// TODO: add broadcast channel for now simply send to all clients directly
+
+				for _, c := range m.Clients {
+					c.conn.WriteMessage(websocket.BinaryMessage, cmdBuf)
+					// TODO: handle errors
+				}
 			}
 
 		}

@@ -4,25 +4,14 @@ export type CommunicatorOptions = {
   url: string | URL;
 };
 
-export class Communicator {
+export class Communicator extends EventTarget {
   private socket?: WebSocket;
 
-  constructor(options: CommunicatorOptions) {
+  private setupSocket(options: CommunicatorOptions) {
     this.socket = new WebSocket(options.url);
 
     this.socket.onopen = () => {
-      console.log("Connected to server");
-      const message = MausOutgoingMessage.fromPartial({
-        packet: {
-          left: 1,
-          front: 2,
-          right: 3,
-        },
-      });
-      const buffer = MausOutgoingMessage.encode(message).finish();
-      const test = MausOutgoingMessage.decode(buffer);
-      console.log({ message, test });
-      this.socket.send(buffer);
+      this.socket.binaryType = "arraybuffer";
     };
 
     this.socket.onclose = () => {
@@ -30,8 +19,20 @@ export class Communicator {
     };
 
     this.socket.onmessage = (event) => {
-      const message = MausOutgoingMessage.decode(event.data);
-      console.log(message);
+      if (event.data instanceof ArrayBuffer) {
+        // binary frame
+        const message = MausOutgoingMessage.decode(new Uint8Array(event.data));
+        this.dispatchEvent(new MessageEvent("message", { data: message }));
+        //console.log({ ...message.nav });
+      } else {
+        // text frame
+        // console.log(event.data);
+      }
     };
+  }
+
+  constructor(options: CommunicatorOptions) {
+    super();
+    this.setupSocket(options);
   }
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -54,6 +55,8 @@ func (r *Robot) SendCmd(cmd *pb.MausIncomingMessage) error {
 		return err
 	}
 
+	log.Debug("sending command", zap.String("cmd", cmd.String()), zap.Binary("buf", buf), zap.Int("len", len(buf)))
+
 	_, err = r.port.Write(buf)
 	if err != nil {
 		return err
@@ -62,47 +65,87 @@ func (r *Robot) SendCmd(cmd *pb.MausIncomingMessage) error {
 	return nil
 }
 
-func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, error) {
+func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, []byte, error) {
 	buf := make([]byte, 1024)
 	n, err := r.port.Read(buf)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	cmd := &pb.MausOutgoingMessage{}
 
 	err = proto.Unmarshal(buf[:n], cmd)
 	if err != nil {
-		return nil, err
+		return nil, buf[:n], err
 	}
 
-	return cmd, nil
+	log.Debug("got command", zap.String("cmd", cmd.String()))
+
+	return cmd, buf[:n], nil
+}
+
+func (r *Robot) sendInitWithRetries(ctx context.Context) error {
+	respChannel := make(chan error, 1)
+	go func() {
+		log.Debug("connecting to robot")
+
+		// set init packet
+		cmd := &pb.MausIncomingMessage{
+
+			Payload: &pb.MausIncomingMessage_Init{
+				Init: &pb.MsgInit{
+					Version: 2,
+				},
+			},
+		}
+
+		err := r.SendCmd(cmd)
+		log.Debug("init packet send", zap.Error(err))
+		if err != nil {
+			respChannel <- err
+			return
+		}
+		log.Debug("waiting for init ack")
+		ackCmd, _, err := r.ReadCmd()
+		log.Debug("received response", zap.Error(err))
+		if err != nil {
+			respChannel <- errors.New("invalid robot response to init packet")
+			return
+		}
+
+		if ack := ackCmd.GetAck(); ack != nil {
+			respChannel <- nil
+			return
+		}
+	}()
+
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case resp := <-respChannel:
+		return resp
+	}
 }
 
 func (r *Robot) StartInitSequence() error {
-	// set init packet
-	cmd := pb.MausIncomingMessage{
-		Type: pb.MsgType_Init,
-	}
-	// retry sending init message till robot respo
 	for {
-		log.Info("sending init packet")
-		err := r.SendCmd(&cmd)
+		ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
+		defer cancel()
+		err := r.sendInitWithRetries(ctx)
+
 		if err != nil {
+
+			// if cancelled due to timeout retry
+			if errors.Is(err, context.DeadlineExceeded) {
+				continue
+			}
+
+			// if failed due to other error cancel setup
 			return err
-		}
 
-		cmd, err := r.ReadCmd()
-
-		if err != nil {
-			return errors.New("invalid robot response to init packet")
 		}
-
-		if ack := cmd.GetAck(); ack != nil {
-			r.Status = Connected
-			return nil
-		}
-		time.Sleep(5 * time.Second)
+		log.Debug("init completed")
+		r.Status = Connected
+		return nil
 	}
-
 }

@@ -5,6 +5,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
+#include "freertos/message_buffer.h"
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "esp_log.h"
@@ -34,7 +35,6 @@ static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param);
 static void btGapCallback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
 static char *btAddrToStr(uint8_t *bda, char *str, size_t size);
 
-static struct timeval time_new, time_old;
 static const esp_spp_mode_t esp_spp_mode = ESP_SPP_MODE_CB;
 
 static const esp_spp_sec_t sec_mask = ESP_SPP_SEC_AUTHENTICATE;
@@ -46,7 +46,8 @@ bool sppActive = false;
 uint32_t btSppHandle = 0;
 
 QueueHandle_t cmdSenderQueue;
-QueueHandle_t cmdReceiverQueue;
+MessageBufferHandle_t cmdReceiverMsgBuffer;
+TaskHandle_t senderTaskHandle;
 
 static bool processIncomingMessage(esp_spp_cb_param_t *param)
 {
@@ -57,12 +58,11 @@ static bool processIncomingMessage(esp_spp_cb_param_t *param)
 
     ESP_LOGI(BT_CORE_TAG, "ESP_SPP_DATA_IND_EVT len:%d handle:%d",
              param->data_ind.len, param->data_ind.handle);
-    if (param->data_ind.len < 128)
-    {
-        esp_log_buffer_hex("", param->data_ind.data, param->data_ind.len);
-    }
 
-    xQueueSend(cmdReceiverQueue, param->data_ind.data, param->data_ind.len);
+    // TODO: cleanup handle storage and handling
+    btSppHandle = param->data_ind.handle;
+
+    xMessageBufferSend(cmdReceiverMsgBuffer, param->data_ind.data, param->data_ind.len, 0);
     return true;
 }
 
@@ -75,14 +75,12 @@ static bool processIncomingMessage(esp_spp_cb_param_t *param)
  */
 static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
 {
-    char bda_str[18] = {0};
-
     switch (event)
     {
     case ESP_SPP_INIT_EVT:
         if (param->init.status == ESP_SPP_SUCCESS)
         {
-            ESP_LOGI(BT_CORE_TAG, "ESP_SPP_INIT_EVT");
+            ESP_LOGD(BT_CORE_TAG, "ESP_SPP_INIT_EVT");
             esp_spp_start_srv(sec_mask, role_slave, 0, SPP_SERVER_NAME);
         }
         else
@@ -91,13 +89,13 @@ static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
         }
         break;
     case ESP_SPP_DISCOVERY_COMP_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_DISCOVERY_COMP_EVT");
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_DISCOVERY_COMP_EVT");
         break;
     case ESP_SPP_OPEN_EVT:
         ESP_LOGE(BT_CORE_TAG, "ESP_SPP_OPEN_EVT status:%d", param->open.status);
         break;
     case ESP_SPP_CLOSE_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_CLOSE_EVT status:%d handle:%d close_by_remote:%d", param->close.status,
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_CLOSE_EVT status:%d handle:%d close_by_remote:%d", param->close.status,
                  param->close.handle, param->close.async);
         sppActive = false;
         btSppHandle = 0;
@@ -105,7 +103,7 @@ static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
     case ESP_SPP_START_EVT:
         if (param->start.status == ESP_SPP_SUCCESS)
         {
-            ESP_LOGI(BT_CORE_TAG, "ESP_SPP_START_EVT handle:%d sec_id:%d scn:%d", param->start.handle, param->start.sec_id,
+            ESP_LOGD(BT_CORE_TAG, "ESP_SPP_START_EVT handle:%d sec_id:%d scn:%d", param->start.handle, param->start.sec_id,
                      param->start.scn);
             esp_bt_dev_set_device_name(EXAMPLE_DEVICE_NAME);
             esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
@@ -119,26 +117,27 @@ static void btSppCallback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
         }
         break;
     case ESP_SPP_CL_INIT_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_CL_INIT_EVT");
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_CL_INIT_EVT");
         break;
     case ESP_SPP_DATA_IND_EVT:
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_DATA_IND_EVT");
         processIncomingMessage(param);
         break;
     case ESP_SPP_CONG_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_CONG_EVT");
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_CONG_EVT");
         break;
     case ESP_SPP_WRITE_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_WRITE_EVT len=%d cong=%d", param->write.len, param->write.cong);
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_WRITE_EVT len=%d cong=%d", param->write.len, param->write.cong);
         break;
     case ESP_SPP_SRV_OPEN_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_SRV_OPEN_EVT");
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_SRV_OPEN_EVT");
         sppActive = true;
         break;
     case ESP_SPP_SRV_STOP_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_SRV_STOP_EVT");
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_SRV_STOP_EVT");
         break;
     case ESP_SPP_UNINIT_EVT:
-        ESP_LOGI(BT_CORE_TAG, "ESP_SPP_UNINIT_EVT");
+        ESP_LOGD(BT_CORE_TAG, "ESP_SPP_UNINIT_EVT");
         break;
     default:
         break;
@@ -322,6 +321,8 @@ void senderTask(void *pvParameter)
             continue;
         }
 
+        ESP_LOGD(BT_CORE_TAG, "sending message of size %d", stream.bytes_written);
+
         // send data over SPP
         esp_spp_write(btSppHandle, stream.bytes_written, buffer);
     }
@@ -335,13 +336,12 @@ bool BluetoothCore::setup()
         return false;
     }
 
-    cmdSenderQueue = xQueueCreate(10, sizeof(MausOutgoingMessage));
-    cmdReceiverQueue = xQueueCreate(10, sizeof(MausIncomingMessage));
+    // TODO: maybe switch to msg buffer for sender commands as well
+    cmdSenderQueue = xQueueCreate(10, MausOutgoingMessage_size);
+    // since incoming messages are of variable size -> use msg buffer
+    cmdReceiverMsgBuffer = xMessageBufferCreate(512);
 
-    // setup sender thread
-    xTaskCreate(senderTask, "senderTask", 4096, NULL, 5, NULL);
-    // setup receiver thread
-    // xTaskCreate(receiverTask, "receiverTask", 4096, NULL, 5, NULL);
+    xTaskCreate(senderTask, "senderTask", 4096, NULL, 5, &senderTaskHandle);
 
     if (!bluetoothEspSetup())
     {
@@ -352,9 +352,22 @@ bool BluetoothCore::setup()
     return true;
 }
 
-QueueHandle_t BluetoothCore::getCmdReceiverQueue()
+void BluetoothCore::teardown()
 {
-    return cmdReceiverQueue;
+    vTaskDelete(senderTaskHandle);
+    vMessageBufferDelete(cmdReceiverMsgBuffer);
+    vQueueDelete(cmdSenderQueue);
+    cmdReceiverMsgBuffer = NULL;
+    cmdSenderQueue = NULL;
+
+    esp_spp_deinit();
+    esp_bluedroid_disable();
+    esp_bluedroid_deinit();
+}
+
+MessageBufferHandle_t BluetoothCore::getCmdReceiverMsgBuffer()
+{
+    return cmdReceiverMsgBuffer;
 }
 
 QueueHandle_t BluetoothCore::getCmdSenderQueue()
