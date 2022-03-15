@@ -118,7 +118,7 @@ void ICM20948::initMagnetometer()
 
 	switchBank(3);
 	// enable reading 9 bytes per shot starting at address 0x10
-	spi.write<uint8_t>(REG::I2C_SLV0_ADDR, 0x0C);
+	spi.write<uint8_t>(REG::I2C_SLV0_ADDR, 0x8C);
 	spi.write<uint8_t>(REG::I2C_SLV0_REG, MAG::REG::STATUS1);
 	spi.write<uint8_t>(REG::I2C_SLV0_CTRL, 0x89);
 
