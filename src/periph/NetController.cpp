@@ -61,7 +61,7 @@ void receiverTask(void *pvParameter)
     uint8_t buffer[256];
     NetController::Manager *manager = (NetController::Manager *)pvParameter;
     MausIncomingMessage msg = MausIncomingMessage_init_default;
-    MessageBufferHandle_t msgBuffer = manager->comInterface->getCmdReceiverMsgBuffer();
+    MessageBufferHandle_t msgBuffer = manager->comInterface.getCmdReceiverMsgBuffer();
     ESP_LOGI(tag, "receiverTask started");
 
     while (true)
@@ -101,7 +101,7 @@ void receiverTask(void *pvParameter)
 }
 bool NetController::Manager::writeCmd(MausOutgoingMessage *msg)
 {
-    QueueHandle_t queue = this->comInterface->getCmdSenderQueue();
+    QueueHandle_t queue = this->comInterface.getCmdSenderQueue();
     if (queue == NULL)
     {
         ESP_LOGI(tag, "not initialized");
@@ -112,12 +112,11 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg)
     return true;
 };
 
-NetController::Manager::Manager(NetController::Communicator *interface) : comInterface(interface)
+NetController::Manager::Manager(NetController::Communicator interface) : comInterface(interface)
 {
     ESP_LOGI(tag, "Manager()");
 
-    xTaskCreate(receiverTask, "receiverTask", 2048, NULL, 5, NULL);
-    xTaskCreate(testTask, "testTask", 2048, NULL, 5, NULL);
+    xTaskCreate(receiverTask, "receiverTask", 2048, this, 5, NULL);
 };
 
 /**

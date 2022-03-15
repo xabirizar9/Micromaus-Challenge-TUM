@@ -29,13 +29,13 @@ void main_task(void *pvParameter)
         vTaskDelay(pdMS_TO_TICKS(2000));
     }
 }
-WifiCommunicator com;
-    
-NetController::Manager netManager(&com);
+// NetController::Manager &netManager = NULL;
 
 extern "C" void
 app_main()
 {
+    WifiCommunicator::getInstance();
+
     esp_log_level_set(TAG, ESP_LOG_INFO);
     xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
 }
