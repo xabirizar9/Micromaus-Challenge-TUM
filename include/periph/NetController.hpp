@@ -1,17 +1,16 @@
+
 #pragma once
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 #include <string>
 #include "message.pb.h"
 
-namespace SerialBluetooth
+namespace NetController
 {
-    void begin(std::string name);
+    void begin();
 
     template <typename T, int tag>
     void writePacket(T packet);
 
-    void writeAck();
-     
     void setIncomingPacketCallback(void (*callback)(MausIncomingMessage));
 };
