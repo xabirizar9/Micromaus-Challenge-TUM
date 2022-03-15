@@ -86,50 +86,45 @@ void ICM20948::init()
 	spi.write<uint8_t>(REG::PWR_MGMT_1, 0x80); // reset
 	vTaskDelay(100 / portTICK_PERIOD_MS);
 
+	setSleep(false);
+
 	uint8_t id = spi.read<uint8_t>(REG::WHO_AM_I);
 	if (id != 0xea) {
 		ESP_LOGW(TAG, "ICM module reports wrong id %02hhx", id);
 	}
 
-	spi.write<uint8_t>(REG::INT_PIN_CFG, 0x00); // this is default but the other libraries always do this ???
+	switchBank(3);
+	// i2c master: STOP between reads, default frequency of 370kHz
+	spi.write<uint8_t>(REG::I2C_MST_CTRL, 0x10);
+	switchBank(0);
 	spi.write<uint8_t>(REG::USER_CTRL, 0x30); // DMP disabled, fifo disabled, i2c master enabled, SPI mode.
+
 	setAccelSensitivity(ACCEL_RANGE_2G);
 	setGyroSensitivity(GYRO_RANGE_250DPS);
-
-	setSleep(false); // power up the sensors
-
-	switchBank(3);
- 	// STOP between reads, default frequency of 370kHz 
-	spi.write<uint8_t>(REG::I2C_MST_CTRL, 0x10);
 }
 
 void ICM20948::initMagnetometer()
 {
-	try {
-		magnetometerWrite(MAG::REG::CONTROL3, 0x01); // soft reset
-	} catch (const ICMTimeout&) {
-		ESP_LOGW(TAG, "magnetometer reset timeout");
+	magnetometerWrite(MAG::REG::CONTROL3, 0x01); // soft reset
+	vTaskDelay(10 / portTICK_PERIOD_MS);
+
+	uint8_t id = magnetometerRead(MAG::REG::WHO_AM_I);
+	if (id != MAG::DEVICE_ID) {
+		ESP_LOGW(TAG, "magnetometer reports ID %02hhx", id);
 	}
-	bool ok = false;
-	for (unsigned int i = 1; i <= 100; i++) {
-		try {
-			vTaskDelay(10 / portTICK_PERIOD_MS);
-			uint8_t id = magnetometerRead(MAG::REG::WHO_AM_I);
-			if (id != MAG::DEVICE_ID) {
-				ESP_LOGW(TAG, "magnetometer reports ID %02hhx", id);
-			}
-			ok = true;
-			break;
-		} catch (const ICMTimeout&) {
-			ESP_LOGW(TAG, "resetting I2C driver (try %i)", i);
-			resetI2CMaster();
-			vTaskDelay(10 / portTICK_PERIOD_MS);
-		}
-	}
-	if (!ok)
-		ESP_LOGE(TAG, "error");
-	else
-		ESP_LOGI(TAG, "ok");
+
+	// set measurement mode 4
+	magnetometerWrite(MAG::REG::CONTROL2, 0x08);
+
+	switchBank(3);
+	// enable reading 9 bytes per shot starting at address 0x10
+	spi.write<uint8_t>(REG::I2C_SLV0_ADDR, 0x0C);
+	spi.write<uint8_t>(REG::I2C_SLV0_REG, MAG::REG::STATUS1);
+	spi.write<uint8_t>(REG::I2C_SLV0_CTRL, 0x89);
+
+	// i2c master ODR cycle mode
+	switchBank(0);
+	spi.write<uint8_t>(REG::LP_CONFIG, 0x40);
 }
 
 void ICM20948::resetI2CMaster()
@@ -153,7 +148,7 @@ bool ICM20948::externalI2CWaitComplete(unsigned int timeoutMs)
 {
 	switchBank(0);
 	unsigned long long timeoutEnd = esp_timer_get_time() + timeoutMs * 1000UL;
-	while (timeoutEnd <= esp_timer_get_time()) {
+	while (timeoutEnd >= esp_timer_get_time()) {
 		uint8_t r = spi.read<uint8_t>(REG::I2C_MST_STATUS);
 		if (r & (1 << 6)) { // bit 6 is I2C_SLV4_DONE
 			return !(r & (1 << 4)); // bit 4 is I2C_SLV4_NACK
@@ -208,6 +203,19 @@ Vec<int16_t> ICM20948::readGyroRaw()
 	spi.read<int16_t>(REG::GYRO_XOUT_H, out.buffer.data(),
 			out.buffer.size());
 	return out;
+}
+
+Vec<int16_t> ICM20948::readMagRaw()
+{
+	switchBank(0);
+	Vec<int16_t> d;
+	uint8_t status = spi.read<uint8_t>(REG::EXT_SLV_SENS_DATA_00);
+	spi.read<int16_t>(REG::EXT_SLV_SENS_DATA_01, d.buffer.data(),
+			d.buffer.size());
+	ESP_LOGI("mag", "st = %02hhx", status);
+	ESP_LOGI("mag", "mx = % 8hi my = % 8hi mz = % 8hi", d.x, d.y, d.z);
+
+	return d;
 }
 
 int16_t ICM20948::readTempRaw()
