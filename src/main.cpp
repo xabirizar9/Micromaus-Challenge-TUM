@@ -7,7 +7,7 @@
 #include "periph/WifiCommunicator.hpp"
 #include "periph/NetController.hpp"
 
-Encoder e(22, 23);
+Encoder e(16, 17);
 
 static const char *TAG = "test";
 
