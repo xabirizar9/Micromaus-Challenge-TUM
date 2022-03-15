@@ -6,6 +6,8 @@
   "devDependencies": {
     "esbuild": "^0.14.25",
     "esbuild-svelte": "^0.6.3",
+    "node-sass": "^7.0.1",
+    "postcss": "^8.4.8",
     "svelte-preprocess": "^4.10.4",
     "ts-proto": "^1.108.0",
     "ts-protoc-gen": "^0.15.0",
