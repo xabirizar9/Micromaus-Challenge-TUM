@@ -15,13 +15,15 @@
 #include "pb_encode.h"
 #include "message.pb.h"
 
-#include "periph/SerialBluetooth.hpp"
-#include "periph/BluetoothCore.hpp"
+#include "periph/NetController.hpp"
+// TODO: add toggle
+// #include "periph/BluetoothCore.hpp"
+#include "periph/WifiCore.hpp"
 #include "config.h"
 
-using namespace SerialBluetooth;
+using namespace NetController;
 
-#define BT_COM_TAG "BT_COM"
+#define NET_COM_TAG "NET"
 
 bool initCompleted = false;
 
@@ -34,10 +36,10 @@ bool initCompleted = false;
  */
 bool writeCmd(MausOutgoingMessage *msg)
 {
-    QueueHandle_t queue = BluetoothCore::getCmdSenderQueue();
+    QueueHandle_t queue = WifiCore::getCmdSenderQueue();
     if (queue == NULL)
     {
-        ESP_LOGI(BT_COM_TAG, "not initialized");
+        ESP_LOGI(NET_COM_TAG, "not initialized");
         return false;
     };
 
@@ -45,25 +47,14 @@ bool writeCmd(MausOutgoingMessage *msg)
     return true;
 };
 
-/**
- * @brief writes acknowledgement packet to bluetooth SPP
- *
- */
-void SerialBluetooth::writeAck()
-{
-    MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
-    msg.which_payload = MausOutgoingMessage_ack_tag;
-    writeCmd(&msg);
-}
-
 template <typename T, int tag>
-void SerialBluetooth::writePacket(T packet)
+void NetController::writePacket(T packet)
 {
     MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
     msg.which_payload = tag;
     *reinterpret_cast<T *>(&msg.payload) = packet;
 
-    ESP_LOGD(BT_COM_TAG, "x %f y %f", msg.payload.nav.position.x, msg.payload.nav.position.y);
+    ESP_LOGD(NET_COM_TAG, "x %f y %f", msg.payload.nav.position.x, msg.payload.nav.position.y);
 
     writeCmd(&msg);
 };
@@ -73,39 +64,39 @@ void receiverTask(void *pvParameter)
     uint16_t msgLen = 0;
     uint8_t buffer[256];
     MausIncomingMessage msg = MausIncomingMessage_init_default;
-    MessageBufferHandle_t msgBuffer = BluetoothCore::getCmdReceiverMsgBuffer();
-    ESP_LOGI(BT_COM_TAG, "receiverTask started");
+    MessageBufferHandle_t msgBuffer = WifiCore::getCmdReceiverMsgBuffer();
+    ESP_LOGI(NET_COM_TAG, "receiverTask started");
 
     while (true)
     {
         if (msgBuffer == NULL)
         {
-            ESP_LOGD(BT_COM_TAG, "not initialized");
+            ESP_LOGD(NET_COM_TAG, "not initialized");
             vTaskDelay(pdMS_TO_TICKS(20));
             continue;
         }
         msgLen = xMessageBufferReceive(msgBuffer, buffer, sizeof(buffer), 0);
         if (msgLen == 0)
         {
-            // ESP_LOGI(BT_COM_TAG, "queue empty");
+            // ESP_LOGI(NET_COM_TAG, "queue empty");
             vTaskDelay(pdMS_TO_TICKS(20));
             continue;
         }
-        ESP_LOGD(BT_COM_TAG, "persed incoming msg");
+        ESP_LOGD(NET_COM_TAG, "persed incoming msg");
 
         pb_istream_t stream = pb_istream_from_buffer(buffer, msgLen);
         if (!pb_decode(&stream, MausIncomingMessage_fields, &msg))
         {
-            ESP_LOGE(BT_COM_TAG, "failed to decode: %s", PB_GET_ERROR(&stream));
+            ESP_LOGE(NET_COM_TAG, "failed to decode: %s", PB_GET_ERROR(&stream));
             continue;
         }
 
         switch (msg.which_payload)
         {
         case MausIncomingMessage_init_tag:
-            ESP_LOGI(BT_COM_TAG, "connected to connector v.%d", msg.payload.init.version);
+            ESP_LOGI(NET_COM_TAG, "connected to connector v.%d", msg.payload.init.version);
             // TODO: improve memory management
-            SerialBluetooth::writeAck();
+            NetController::writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
             initCompleted = true;
             break;
         }
@@ -133,7 +124,7 @@ void testTask(void *pvParameter)
 
         if (initCompleted)
         {
-            SerialBluetooth::writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(packet);
+            NetController::writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(packet);
             i++;
         }
         vTaskDelay(pdMS_TO_TICKS(200));
@@ -145,10 +136,11 @@ void testTask(void *pvParameter)
  *
  * @param name
  */
-void SerialBluetooth::begin(std::string name)
+void NetController::begin()
 {
-    ESP_LOGI(BT_COM_TAG, "Initializing SPP...");
-    BluetoothCore::setup();
+
+    ESP_LOGI(NET_COM_TAG, "Initializing SPP...");
+    WifiCore::setup();
 
     xTaskCreate(receiverTask, "receiverTask", 2048, NULL, 5, NULL);
     xTaskCreate(testTask, "testTask", 2048, NULL, 5, NULL);

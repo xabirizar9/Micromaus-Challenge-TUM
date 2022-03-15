@@ -4,7 +4,7 @@
 #include "periph/Encoder.hpp"
 #include "esp_log.h"
 
-#include "periph/SerialBluetooth.hpp"
+#include "periph/NetController.hpp"
 
 Encoder e(22, 23);
 
@@ -31,7 +31,7 @@ void main_task(void *pvParameter)
 
 extern "C" void app_main()
 {
-    SerialBluetooth::begin("bla");
+    NetController::begin();
     esp_log_level_set(TAG, ESP_LOG_INFO);
     xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
 }
