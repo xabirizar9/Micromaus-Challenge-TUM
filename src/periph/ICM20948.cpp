@@ -235,6 +235,12 @@ Vec<float> ICM20948::readGyro()
 	return v / gyroScale;
 }
 
+Vec<float> ICM20948::readMag()
+{
+	auto v = readMagRaw();
+	return v * MAGNETOMETER_SCALE;
+}
+
 float ICM20948::readTemp()
 {
 	return ((readTempRaw() - ROOM_TEMP_OFFSET) / TEMP_SENSITIVITY) + 21.f;
