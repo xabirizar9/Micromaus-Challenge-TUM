@@ -45,6 +45,7 @@ public:
 
 	linalg::Vec<int16_t> readAccelRaw();
 	linalg::Vec<int16_t> readGyroRaw();
+	linalg::Vec<int16_t> readMagRaw();
 	int16_t readTempRaw();
 
 	/// read temperature in celsius
