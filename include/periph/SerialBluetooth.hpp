@@ -8,7 +8,10 @@ namespace SerialBluetooth
 {
     void begin(std::string name);
 
-    void writeNavPacket(NavigationPacket packet);
+    template <typename T, int tag>
+    void writePacket(T packet);
 
+    void writeAck();
+     
     void setIncomingPacketCallback(void (*callback)(MausIncomingMessage));
 };

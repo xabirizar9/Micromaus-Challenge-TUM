@@ -49,18 +49,19 @@ bool writeCmd(MausOutgoingMessage *msg)
  * @brief writes acknowledgement packet to bluetooth SPP
  *
  */
-void writeAck()
+void SerialBluetooth::writeAck()
 {
     MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
     msg.which_payload = MausOutgoingMessage_ack_tag;
     writeCmd(&msg);
 }
 
-void SerialBluetooth::writeNavPacket(NavigationPacket packet)
+template <typename T, int tag>
+void SerialBluetooth::writePacket(T packet)
 {
     MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
-    msg.which_payload = MausOutgoingMessage_nav_tag;
-    msg.payload.nav = packet;
+    msg.which_payload = tag;
+    *reinterpret_cast<T *>(&msg.payload) = packet;
 
     ESP_LOGD(BT_COM_TAG, "x %f y %f", msg.payload.nav.position.x, msg.payload.nav.position.y);
 
@@ -104,7 +105,7 @@ void receiverTask(void *pvParameter)
         case MausIncomingMessage_init_tag:
             ESP_LOGI(BT_COM_TAG, "connected to connector v.%d", msg.payload.init.version);
             // TODO: improve memory management
-            writeAck();
+            SerialBluetooth::writeAck();
             initCompleted = true;
             break;
         }
@@ -132,7 +133,7 @@ void testTask(void *pvParameter)
 
         if (initCompleted)
         {
-            SerialBluetooth::writeNavPacket(packet);
+            SerialBluetooth::writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(packet);
             i++;
         }
         vTaskDelay(pdMS_TO_TICKS(200));
