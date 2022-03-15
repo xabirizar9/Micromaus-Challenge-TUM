@@ -9,11 +9,6 @@ namespace NetController
 {
     class Communicator
     {
-
-    private:
-        QueueHandle_t cmdSenderQueue;
-        MessageBufferHandle_t cmdReceiverMsgBuffer;
-
     public:
         MessageBufferHandle_t getCmdReceiverMsgBuffer()
         {
@@ -25,6 +20,10 @@ namespace NetController
         };
 
         // virtual ~Communicator() = 0;
+
+    private:
+        QueueHandle_t cmdSenderQueue;
+        MessageBufferHandle_t cmdReceiverMsgBuffer;
     };
 
     class Manager
@@ -33,10 +32,10 @@ namespace NetController
         bool writeCmd(MausOutgoingMessage *msg);
 
     public:
-        Manager(Communicator *interface);
+        Manager(Communicator interface);
 
         bool initCompleted;
-        Communicator *comInterface;
+        Communicator comInterface;
 
         template <typename T, int tag>
         void writePacket(T packet);
