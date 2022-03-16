@@ -1,12 +1,13 @@
 #include "periph/Serial.hpp"
-#include "config.h"
+
 #include <driver/uart.h>
+
+#include "config.h"
 
 const uart_port_t defaultUART = UART_NUM_0;
 
-HardwareSerial::HardwareSerial(uint8_t txPin, uint8_t rxPin)
-{
-	uart_config_t uart_config {
+HardwareSerial::HardwareSerial(uint8_t txPin, uint8_t rxPin) {
+	uart_config_t uart_config{
 		.baud_rate = 115200,
 		.data_bits = UART_DATA_8_BITS,
 		.parity = UART_PARITY_DISABLE,
@@ -16,8 +17,7 @@ HardwareSerial::HardwareSerial(uint8_t txPin, uint8_t rxPin)
 		.source_clk = UART_SCLK_APB,
 	};
 
-	ESP_ERROR_CHECK(uart_driver_install(defaultUART, 1024, 1024,
-				0, nullptr, 0));
+	ESP_ERROR_CHECK(uart_driver_install(defaultUART, 1024, 1024, 0, nullptr, 0));
 
 	ESP_ERROR_CHECK(uart_param_config(defaultUART, &uart_config));
 
@@ -25,13 +25,11 @@ HardwareSerial::HardwareSerial(uint8_t txPin, uint8_t rxPin)
 	ESP_ERROR_CHECK(uart_set_pin(defaultUART, txPin, rxPin, -1, -1));
 }
 
-void HardwareSerial::write(std::string_view msg)
-{
+void HardwareSerial::write(std::string_view msg) {
 	uart_write_bytes(defaultUART, msg.data(), msg.length());
 }
 
-void HardwareSerial::println(std::string_view msg)
-{
+void HardwareSerial::println(std::string_view msg) {
 	write(msg);
 	write("\n");
 }

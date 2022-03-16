@@ -1,6 +1,5 @@
 #pragma once
 
-class PathNavigation
-{
-    void begin();
+class PathNavigation {
+	void begin();
 }

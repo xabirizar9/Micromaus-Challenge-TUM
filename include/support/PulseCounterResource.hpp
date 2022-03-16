@@ -1,11 +1,11 @@
 #pragma once
 
-#include "support/Resource.hpp"
 #include <driver/pcnt.h>
 
-class PulseCounterResource
-{
-public:
+#include "support/Resource.hpp"
+
+class PulseCounterResource {
+   public:
 	PulseCounterResource() = default;
 	~PulseCounterResource() = default;
 
@@ -16,6 +16,6 @@ public:
 		return impl;
 	}
 
-private:
+   private:
 	CountedResource<pcnt_unit_t, PCNT_UNIT_MAX> impl;
 };

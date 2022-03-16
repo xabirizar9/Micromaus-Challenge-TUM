@@ -1,19 +1,18 @@
 #pragma once
 
-#include <cstdint>
 #include <driver/adc.h>
+
+#include <cstdint>
 
 class ADC1;
 
-class ADCChannel
-{
-public:
+class ADCChannel {
+   public:
 	/// read the channel
 	int read();
 
-private:
-	ADCChannel(ADC1& adc, adc1_channel_t channel):
-		adc(adc), channel(channel) {}
+   private:
+	ADCChannel(ADC1& adc, adc1_channel_t channel) : adc(adc), channel(channel) {}
 
 	ADC1& adc;
 	adc1_channel_t channel;
@@ -21,9 +20,8 @@ private:
 	friend class ADC1;
 };
 
-class ADC1
-{
-public:
+class ADC1 {
+   public:
 	/// return singleton instance
 	static ADC1& instance() {
 		static ADC1 inst;
@@ -34,10 +32,9 @@ public:
 	ADCChannel configureChannel(adc1_channel_t channel);
 	ADCChannel configureChannel(uint8_t pin);
 
-private:
+   private:
 	ADC1();
 	int read(adc1_channel_t);
 
 	friend class ADCChannel;
 };
-
