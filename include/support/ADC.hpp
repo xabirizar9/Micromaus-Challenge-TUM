@@ -32,6 +32,7 @@ public:
 
 	/// configure a channel for reading
 	ADCChannel configureChannel(adc1_channel_t channel);
+	ADCChannel configureChannel(uint8_t pin);
 
 private:
 	ADC1();
