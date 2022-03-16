@@ -1,17 +1,15 @@
 #include "periph/Encoder.hpp"
 
-#include "support/PulseCounterResource.hpp"
-
 #include <driver/pcnt.h>
 #include <esp_compiler.h>
 
-static const constexpr int limit = 16*33*4;
+#include "support/PulseCounterResource.hpp"
+
+static const constexpr int limit = 16 * 33 * 4;
 static uint8_t isrServiceRefcount = 0;
 
-Encoder::Encoder(uint8_t pinA, uint8_t pinB):
-	unit(new PulseCounterResource())
-{
-	pcnt_config_t conf {
+Encoder::Encoder(uint8_t pinA, uint8_t pinB) : unit(new PulseCounterResource()) {
+	pcnt_config_t conf{
 		.pulse_gpio_num = pinA,
 		.ctrl_gpio_num = pinB,
 		.lctrl_mode = PCNT_MODE_REVERSE,
@@ -40,9 +38,8 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB):
 	}
 	isrServiceRefcount++;
 
-	pcnt_isr_handler_add(*unit, [](void* e){
-			static_cast<Encoder*>(e)->onOverflow();
-		}, this);
+	pcnt_isr_handler_add(
+		*unit, [](void* e) { static_cast<Encoder*>(e)->onOverflow(); }, this);
 
 	pcnt_event_enable(*unit, PCNT_EVT_H_LIM);
 	pcnt_event_enable(*unit, PCNT_EVT_L_LIM);
@@ -50,8 +47,7 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB):
 	pcnt_counter_resume(*unit);
 }
 
-Encoder::~Encoder()
-{
+Encoder::~Encoder() {
 	pcnt_intr_disable(*unit);
 	pcnt_isr_handler_remove(*unit);
 	isrServiceRefcount--;
@@ -61,12 +57,10 @@ Encoder::~Encoder()
 	delete unit;
 }
 
-int16_t Encoder::get() const
-{
+int16_t Encoder::get() const {
 	int16_t n;
 	ESP_ERROR_CHECK(pcnt_get_counter_value(*unit, &n));
 	return n;
 }
 
-void Encoder::onOverflow()
-{}
+void Encoder::onOverflow() {}
