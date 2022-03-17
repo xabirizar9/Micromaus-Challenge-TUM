@@ -77,7 +77,7 @@ ADCChannel ADC1::configurePin(uint8_t pin)
 ADCChannel ADC1::configureChannel(adc1_channel_t channel)
 {
 	adc1_config_channel_atten(channel, ADC_ATTEN_DB_11);
-	return ADCChannel(*this, channel);
+	return ADCChannel(channel);
 }
 
 int ADC1::read(uint8_t ch)
@@ -94,5 +94,5 @@ int ADC1::read(uint8_t ch)
 
 int ADCChannel::read()
 {
-	return adc.read(channel);
+	return ADC1::instance().read(channel);
 }

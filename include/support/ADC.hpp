@@ -12,9 +12,8 @@ public:
 	int read();
 
 private:
-	ADCChannel(ADC1 &adc, uint8_t channel) : adc(adc), channel(channel) {}
+	ADCChannel(uint8_t channel): channel(channel) {}
 
-	ADC1 &adc;
 	uint8_t channel;
 
 	friend class ADC1;
