@@ -5,7 +5,7 @@
 
 #include <exception>
 
-static const adc_bits_width_t ADC1_BIT_WIDTH = ADC_WIDTH_BIT_13;
+static const adc_bits_width_t ADC1_BIT_WIDTH = ADC_WIDTH_MAX;
 
 class InvalidADC1Channel : public std::exception {
    public:

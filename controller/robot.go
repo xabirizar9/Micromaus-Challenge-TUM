@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"errors"
+	"net"
 	"time"
 
-	"github.com/tarm/serial"
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
@@ -18,8 +18,13 @@ const (
 	Disconnected
 )
 
+type RobotComInterface interface {
+	Write(b []byte) (n int, err error)
+	Read(b []byte) (n int, err error)
+}
+
 type Robot struct {
-	port *serial.Port
+	com RobotComInterface
 
 	Status RobotConnStatus
 }
@@ -29,20 +34,36 @@ type RobotConnectionOptions struct {
 	Dev  string
 }
 
+func (r *Robot) connect(ctx context.Context, address string) (err error) {
+	raddr, err := net.ResolveUDPAddr("udp", address)
+	if err != nil {
+		return
+	}
+
+	conn, err := net.DialUDP("udp", nil, raddr)
+	if err != nil {
+		return
+	}
+	r.com = conn
+
+	return
+}
+
 func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
-	c := &serial.Config{Name: opt.Dev, Baud: opt.Baud}
+	/*c := &serial.Config{Name: opt.Dev, Baud: opt.Baud}
 	s, err := serial.OpenPort(c)
 	if err != nil {
 		l.Error("failed to open port", zap.Error(err))
 		return
-	}
+	}*/
 
 	l.Debug("serial connection established")
-
 	r = &Robot{
-		port:   s,
+		//port:   s,
 		Status: Disconnected,
 	}
+
+	r.connect(context.TODO(), "waxn-maus.local:8888")
 
 	// start listening on the serial port
 
@@ -57,17 +78,16 @@ func (r *Robot) SendCmd(cmd *pb.MausIncomingMessage) error {
 
 	log.Debug("sending command", zap.String("cmd", cmd.String()), zap.Binary("buf", buf), zap.Int("len", len(buf)))
 
-	_, err = r.port.Write(buf)
+	_, err = r.com.Write(buf)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, []byte, error) {
 	buf := make([]byte, 1024)
-	n, err := r.port.Read(buf)
+	n, err := r.com.Read(buf)
 	if err != nil {
 		return nil, nil, err
 	}

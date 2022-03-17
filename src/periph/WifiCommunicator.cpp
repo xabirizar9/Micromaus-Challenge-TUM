@@ -35,7 +35,7 @@
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
 */
 #define WIFI_CHANNEL 11
-#define PORT 9999
+#define PORT 8888
 
 #define STA_MODE
 
@@ -67,15 +67,11 @@ void start_mdns_service() {
 	}
 
 	// set hostname
-	ESP_ERROR_CHECK(mdns_hostname_set("maus"));
+	mdns_hostname_set("waxn-maus");
 	// set default instance
-	ESP_ERROR_CHECK(mdns_instance_name_set("WAXN-v7"));
+	mdns_instance_name_set("WAXN Micromaus v7");
 
-	// structure with TXT records
-	mdns_txt_item_t serviceTxtData[3] = {{"board", "esp32"}, {"u", "user"}, {"p", "password"}};
-
-	// initialize service
-	ESP_ERROR_CHECK(mdns_service_add("ESP32-WebServer", "_http", "_tcp", 80, serviceTxtData, 3));
+	mdns_service_port_set("_robo", "_udp", 8888);
 }
 
 static void on_got_ip(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
@@ -193,17 +189,19 @@ static esp_netif_t *setupWifi(void) {
 	return netif;
 }
 
-static void udpServerTask(void *pvParameters) {
+/* static void udpReceiverTask(void *pvParameters) {
 	char rx_buffer[128];
 	char addr_str[128];
-	int addr_family = AF_INET;
-	int ip_protocol = IPPROTO_IP;
+	int addr_family = (int)pvParameters;
+	int ip_protocol = 0;
+	struct sockaddr_in6 dest_addr;
 
-	while (true) {
-		struct sockaddr_in *dest_addr = {};
-		dest_addr->sin_addr.s_addr = htonl(INADDR_ANY);
-		dest_addr->sin_family = AF_INET;
-		dest_addr->sin_port = htons(PORT);
+	while (1) {
+		struct sockaddr_in *dest_addr_ip4 = (struct sockaddr_in *)&dest_addr;
+		dest_addr_ip4->sin_addr.s_addr = htonl(INADDR_ANY);
+		dest_addr_ip4->sin_family = AF_INET;
+		dest_addr_ip4->sin_port = htons(PORT);
+		ip_protocol = IPPROTO_IP;
 
 		int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
 		if (sock < 0) {
@@ -218,7 +216,7 @@ static void udpServerTask(void *pvParameters) {
 		}
 		ESP_LOGI(TAG, "Socket bound, port %d", PORT);
 
-		while (true) {
+		while (1) {
 			ESP_LOGI(TAG, "Waiting for data");
 			struct sockaddr_storage source_addr;  // Large enough for both IPv4 or IPv6
 			socklen_t socklen = sizeof(source_addr);
@@ -237,8 +235,15 @@ static void udpServerTask(void *pvParameters) {
 			// Data received
 			else {
 				// Get the sender's ip address as string
-				inet_ntoa_r(
-					((struct sockaddr_in *)&source_addr)->sin_addr, addr_str, sizeof(addr_str) - 1);
+				if (source_addr.ss_family == PF_INET) {
+					inet_ntoa_r(((struct sockaddr_in *)&source_addr)->sin_addr,
+								addr_str,
+								sizeof(addr_str) - 1);
+				} else if (source_addr.ss_family == PF_INET6) {
+					inet6_ntoa_r(((struct sockaddr_in6 *)&source_addr)->sin6_addr,
+								 addr_str,
+								 sizeof(addr_str) - 1);
+				}
 
 				rx_buffer[len] =
 					0;	// Null-terminate whatever we received and treat like a string...
@@ -252,24 +257,122 @@ static void udpServerTask(void *pvParameters) {
 					break;
 				}
 			}
+		}
 
-			if (sock != -1) {
-				ESP_LOGE(TAG, "Shutting down socket and restarting...");
-				shutdown(sock, 0);
-				close(sock);
-			}
+		if (sock != -1) {
+			ESP_LOGE(TAG, "Shutting down socket and restarting...");
+			shutdown(sock, 0);
+			close(sock);
+		}
+	}
+	vTaskDelete(NULL);
+}*/
+
+static void udpReceiverTask(void *pvParameters) {
+	uint8_t rx_buffer[128];
+
+	UdpCommunicator *com = WifiCommunicator::getInstance().com;
+	MessageBufferHandle_t msgBuf = WifiCommunicator::getInstance().getCmdReceiverMsgBuffer();
+
+	while (true) {
+		ESP_LOGI(TAG, "Waiting for data");
+		int len = com->read(rx_buffer, sizeof(rx_buffer) - 1);
+		// Error occurred during receiving
+		if (len < 0) {
+			ESP_LOGE(TAG, "recvfrom failed: errno %d", errno);
+			break;
+		}
+		// Data received
+		else {
+			xMessageBufferSend(msgBuf, rx_buffer, len, 0);
 		}
 	}
 
 	vTaskDelete(NULL);
 }
 
+static void udpSenderTask(void *pvParameters) {
+	uint8_t rx_buffer[128];
+	uint16_t msgLen = 0;
+	UdpCommunicator *com = WifiCommunicator::getInstance().com;
+	MessageBufferHandle_t msgBuf = WifiCommunicator::getInstance().getCmdSenderMsgBuffer();
+
+	while (true) {
+		msgLen = xMessageBufferReceive(msgBuf, rx_buffer, sizeof(rx_buffer), 0);
+		if (msgLen == 0) {
+			// ESP_LOGI(tag, "queue empty");
+			vTaskDelay(pdMS_TO_TICKS(20));
+			continue;
+		}
+		ESP_LOGI(TAG, "Waiting for data");
+		int len = com->write(rx_buffer, msgLen);
+
+		// Error occurred during receiving
+		if (len != msgLen) {
+			ESP_LOGE(TAG, "write failed");
+			continue;
+		}
+		// Data received
+		else {}
+	}
+
+	vTaskDelete(NULL);
+}
+
+UdpCommunicator::UdpCommunicator(uint16_t port) {
+	int addr_family = AF_INET;
+	int ip_protocol = IPPROTO_IP;
+	ESP_LOGI(TAG, "Socket created 1");
+	struct sockaddr_in dest_addr = {};
+
+	dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	dest_addr.sin_family = AF_INET;
+	dest_addr.sin_port = htons(port);
+	ip_protocol = IPPROTO_IP;
+
+	this->sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
+	ESP_LOGI(TAG, "6");
+	if (sock < 0) {
+		ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+		vTaskDelete(NULL);
+		return;
+	}
+	ESP_LOGI(TAG, "Socket created");
+
+	int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+	if (err < 0) {
+		ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
+		return;
+	}
+	ESP_LOGI(TAG, "Socket bound, port %d", PORT);
+};
+
+int UdpCommunicator::read(uint8_t *buf, size_t bufLen) {
+	ESP_LOGI(TAG, "Waiting for data");
+	return recvfrom(this->sock,
+					buf,
+					sizeof(bufLen) - 1,
+					0,
+					(struct sockaddr *)&this->sourceAddr,
+					&this->socklen);
+};
+
+int UdpCommunicator::write(uint8_t *buf, size_t msgLen) {
+	// Get the sender's ip address as string
+	inet_ntoa_r(((struct sockaddr_in *)&this->sourceAddr)->sin_addr,
+				this->addrTmp,
+				sizeof(this->addrTmp) - 1);
+	ESP_LOGI(TAG, "Sending %d bytes to %s:", msgLen, this->addrTmp);
+
+	return sendto(
+		sock, buf, msgLen, 0, (struct sockaddr *)&this->sourceAddr, sizeof(this->sourceAddr));
+};
+
 WifiCommunicator::WifiCommunicator() {
 	s_semph_get_ip_addrs = xSemaphoreCreateCounting(1, 0);
 	ESP_ERROR_CHECK(nvs_flash_init());
 	ESP_ERROR_CHECK(esp_netif_init());
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
-	// this->udpCom = UdpCommunicator("", 9999);
 
 	ESP_LOGI(TAG, "setting up wifi");
 	setupWifi();
@@ -277,8 +380,11 @@ WifiCommunicator::WifiCommunicator() {
 	// wait for ip
 	xSemaphoreTake(s_semph_get_ip_addrs, portMAX_DELAY);
 
+	this->com = new UdpCommunicator();
+
 	start_mdns_service();
-	// xTaskCreate(udpServerTask, "udpServerTask", 4096, NULL, 5, NULL);
+	xTaskCreate(udpReceiverTask, "udpReceiverTask", 4096, (void *)AF_INET, 5, NULL);
+	xTaskCreate(udpSenderTask, "udpSenderTask", 4096, (void *)AF_INET, 5, NULL);
 }
 
 WifiCommunicator::~WifiCommunicator() {}
