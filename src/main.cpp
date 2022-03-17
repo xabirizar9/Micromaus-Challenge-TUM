@@ -6,8 +6,7 @@
 #include "periph/NetController.hpp"
 #include "periph/WifiCommunicator.hpp"
 #include "sdkconfig.h"
-
-Encoder e(16, 17);
+#include "config.h"
 
 static const char* TAG = "test";
 
@@ -20,11 +19,10 @@ void navigate(void* pvParameter) {
 
 void main_task(void* pvParameter) {
 	while (true) {
-		int i = e.get();
-		ESP_LOGI("x", "%d", i);
 		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
 }
+
 NetController::Manager* netManager = NULL;
 
 extern "C" void app_main() {
