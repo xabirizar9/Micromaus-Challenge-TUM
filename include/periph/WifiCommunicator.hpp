@@ -15,14 +15,20 @@
 
 class UdpCommunicator {
    private:
-	int rxSock = -1;
-	int txSock = -1;
+	int sock = -1;
+	struct sockaddr_storage sourceAddr;
+	socklen_t socklen = sizeof(sourceAddr);
+
+	// TODO: remove single UDP address also switch to IPv4
+	char addrTmp[128];
 
    public:
-	UdpCommunicator(const char *ipAddrV4, int port);
+	UdpCommunicator(uint16_t port = 8888);
 
-	bool send(uint8_t *payload, int len);
-	bool recv(uint8_t *buffer);
+	~UdpCommunicator();
+
+	int read(uint8_t *buf, size_t bufLen);
+	int write(uint8_t *buf, size_t msgLen);
 };
 class WifiCommunicator : public NetController::Communicator {
    public:
@@ -30,10 +36,9 @@ class WifiCommunicator : public NetController::Communicator {
 		static WifiCommunicator instance;
 		return instance;
 	}
+	UdpCommunicator *com;
 
    private:
-	// UdpCommunicator udpCom;
-
 	WifiCommunicator();
 
 	~WifiCommunicator();

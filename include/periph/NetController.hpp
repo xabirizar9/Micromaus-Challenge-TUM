@@ -1,6 +1,7 @@
 
 #pragma once
 #include <freertos/FreeRTOS.h>
+#include <freertos/message_buffer.h>
 #include <freertos/queue.h>
 
 #include <string>
@@ -13,19 +14,21 @@ class Communicator {
 	MessageBufferHandle_t getCmdReceiverMsgBuffer() {
 		return cmdReceiverMsgBuffer;
 	};
-	QueueHandle_t getCmdSenderQueue() {
-		return cmdSenderQueue;
+	MessageBufferHandle_t getCmdSenderMsgBuffer() {
+		return cmdSenderMsgBuffer;
 	};
 
 	// virtual ~Communicator() = 0;
 
    private:
-	QueueHandle_t cmdSenderQueue;
-	MessageBufferHandle_t cmdReceiverMsgBuffer;
+	MessageBufferHandle_t cmdSenderMsgBuffer = xMessageBufferCreate(512);
+	MessageBufferHandle_t cmdReceiverMsgBuffer = xMessageBufferCreate(512);
 };
 
 class Manager {
    private:
+	uint8_t encodeBuffer[256];
+	uint8_t decodeBuffer[256];
 	bool writeCmd(MausOutgoingMessage *msg);
 
    public:

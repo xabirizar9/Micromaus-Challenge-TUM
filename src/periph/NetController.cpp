@@ -71,7 +71,7 @@ void receiverTask(void *pvParameter) {
 			vTaskDelay(pdMS_TO_TICKS(20));
 			continue;
 		}
-		ESP_LOGD(tag, "persed incoming msg");
+		ESP_LOGI(tag, "persed incoming msg, bufLen=%d, msgLen=%d", sizeof(buffer), msgLen);
 
 		pb_istream_t stream = pb_istream_from_buffer(buffer, msgLen);
 		if (!pb_decode(&stream, MausIncomingMessage_fields, &msg)) {
@@ -90,17 +90,27 @@ void receiverTask(void *pvParameter) {
 	}
 }
 bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
-	QueueHandle_t queue = this->comInterface.getCmdSenderQueue();
-	if (queue == NULL) {
+	MessageBufferHandle_t buffer = this->comInterface.getCmdSenderMsgBuffer();
+	if (buffer == NULL) {
 		ESP_LOGI(tag, "not initialized");
 		return false;
 	};
 
-	xQueueSend(queue, msg, 0);
+	// encode message in pb format
+	pb_ostream_t stream = pb_ostream_from_buffer(this->encodeBuffer, sizeof(this->encodeBuffer));
+	if (!pb_encode(&stream, MausOutgoingMessage_fields, &msg)) {
+		ESP_LOGE(tag, "failed to encode: %s", PB_GET_ERROR(&stream));
+		return false;
+	}
+
+	ESP_LOGD(tag, "sending message of size %d", stream.bytes_written);
+
+	xMessageBufferSend(buffer, msg, stream.bytes_written, 0);
 	return true;
 };
 
-NetController::Manager::Manager(NetController::Communicator interface) : comInterface(interface) {
+NetController::Manager::Manager(NetController::Communicator interface) {
+	this->comInterface = interface;
 	ESP_LOGI(tag, "Manager()");
 
 	xTaskCreate(receiverTask, "receiverTask", 2048, this, 5, NULL);

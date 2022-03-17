@@ -25,10 +25,11 @@ void main_task(void* pvParameter) {
 		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
 }
-// NetController::Manager &netManager = NULL;
+NetController::Manager* netManager = NULL;
 
 extern "C" void app_main() {
-	// WifiCommunicator::getInstance();
+	// enable if you want network streaming
+	// netManager = new NetController::Manager(WifiCommunicator::getInstance());
 
 	esp_log_level_set(TAG, ESP_LOG_INFO);
 	xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
