@@ -7,8 +7,8 @@ class ADCChannel;
 namespace power {
 
 // see measurements in `voltage_measurements.ods`
-constexpr float MOUSE_VOLTAGE_SCALE = 802.6;
-constexpr float MOUSE_VOLTAGE_OFFSET = 28.5;
+constexpr float MOUSE_VOLTAGE_SCALE = 133.f / 33.f * 1e-3;
+constexpr float MOUSE_VOLTAGE_OFFSET = 0;
 
 class VoltageGauge {
 public:
