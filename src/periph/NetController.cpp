@@ -53,8 +53,8 @@ void testTask(void *pvParameter) {
 
 void receiverTask(void *pvParameter) {
 	uint16_t msgLen = 0;
-	uint8_t buffer[256];
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
+	uint8_t *buffer = manager->decodeBuffer;
 	MausIncomingMessage msg = MausIncomingMessage_init_default;
 	MessageBufferHandle_t msgBuffer = manager->comInterface.getCmdReceiverMsgBuffer();
 	ESP_LOGI(tag, "receiverTask started");
@@ -85,6 +85,10 @@ void receiverTask(void *pvParameter) {
 				// TODO: improve memory management
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
 				manager->initCompleted = true;
+
+				// TODO: move this somewhere else just here for testing
+				xTaskCreate(&testTask, "testTask", 2048, manager, 5, NULL);
+
 				break;
 		}
 	}
@@ -98,14 +102,14 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 
 	// encode message in pb format
 	pb_ostream_t stream = pb_ostream_from_buffer(this->encodeBuffer, sizeof(this->encodeBuffer));
-	if (!pb_encode(&stream, MausOutgoingMessage_fields, &msg)) {
+	if (!pb_encode(&stream, MausOutgoingMessage_fields, msg)) {
 		ESP_LOGE(tag, "failed to encode: %s", PB_GET_ERROR(&stream));
 		return false;
 	}
 
-	ESP_LOGD(tag, "sending message of size %d", stream.bytes_written);
+	ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
 
-	xMessageBufferSend(buffer, msg, stream.bytes_written, 0);
+	xMessageBufferSend(buffer, this->encodeBuffer, stream.bytes_written, 0);
 	return true;
 };
 
@@ -123,12 +127,11 @@ NetController::Manager::Manager(NetController::Communicator interface) {
  * @return true msg was added to the sender queue
  * @return false queue not initialized
  */
-template <typename T, int tag>
+template <typename T, int msgTag>
 void NetController::Manager::writePacket(T packet) {
 	MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
-	msg.which_payload = tag;
+	msg.which_payload = msgTag;
 	*reinterpret_cast<T *>(&msg.payload) = packet;
-
 	// ESP_LOGI(tag, "x %f y %f", msg.payload.nav.position.x, msg.payload.nav.position.y);
 
 	writeCmd(&msg);

@@ -57,16 +57,19 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 		return
 	}*/
 
-	l.Debug("serial connection established")
+	l.Debug("connecting to robot")
 	r = &Robot{
 		//port:   s,
 		Status: Disconnected,
 	}
 
-	r.connect(context.TODO(), "waxn-maus.local:8888")
+	err = r.connect(context.TODO(), "waxn-maus.local:8888")
+	if err != nil {
+		l.Error("failed to connect to robot", zap.Error(err))
+		return
+	}
 
 	// start listening on the serial port
-
 	return
 }
 
@@ -77,6 +80,11 @@ func (r *Robot) SendCmd(cmd *pb.MausIncomingMessage) error {
 	}
 
 	log.Debug("sending command", zap.String("cmd", cmd.String()), zap.Binary("buf", buf), zap.Int("len", len(buf)))
+
+	if r.com == nil {
+		log.Error("no connection to robot")
+		return errors.New("no connection to robot")
+	}
 
 	_, err = r.com.Write(buf)
 	if err != nil {
@@ -134,6 +142,7 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 		}
 
 		if ack := ackCmd.GetAck(); ack != nil {
+			log.Debug("got ack packet stopping func")
 			respChannel <- nil
 			return
 		}
@@ -143,20 +152,21 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 	case <-ctx.Done():
 		return ctx.Err()
 	case resp := <-respChannel:
+		log.Debug("connected")
 		return resp
 	}
 }
 
 func (r *Robot) StartInitSequence() error {
 	for {
-		ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
+		ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
 		defer cancel()
 		err := r.sendInitWithRetries(ctx)
 
 		if err != nil {
-
 			// if cancelled due to timeout retry
 			if errors.Is(err, context.DeadlineExceeded) {
+				log.Debug("failed to connect to robot in time", zap.Error(err))
 				continue
 			}
 

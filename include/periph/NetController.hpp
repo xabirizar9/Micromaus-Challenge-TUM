@@ -12,10 +12,10 @@ namespace NetController {
 class Communicator {
    public:
 	MessageBufferHandle_t getCmdReceiverMsgBuffer() {
-		return cmdReceiverMsgBuffer;
+		return this->cmdReceiverMsgBuffer;
 	};
 	MessageBufferHandle_t getCmdSenderMsgBuffer() {
-		return cmdSenderMsgBuffer;
+		return this->cmdSenderMsgBuffer;
 	};
 
 	// virtual ~Communicator() = 0;
@@ -27,14 +27,14 @@ class Communicator {
 
 class Manager {
    private:
-	uint8_t encodeBuffer[256];
-	uint8_t decodeBuffer[256];
 	bool writeCmd(MausOutgoingMessage *msg);
 
    public:
 	Manager(Communicator interface);
 
 	bool initCompleted;
+	uint8_t encodeBuffer[256];
+	uint8_t decodeBuffer[256];
 	Communicator comInterface;
 
 	template <typename T, int tag>
