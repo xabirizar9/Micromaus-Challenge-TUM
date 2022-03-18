@@ -1,12 +1,12 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
+#include "config.h"
 #include "esp_log.h"
 #include "periph/Encoder.hpp"
 #include "periph/NetController.hpp"
 #include "periph/WifiCommunicator.hpp"
 #include "sdkconfig.h"
-#include "config.h"
 
 static const char* TAG = "test";
 
