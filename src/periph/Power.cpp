@@ -4,7 +4,7 @@
 using namespace power;
 
 VoltageGauge::VoltageGauge(const uint8_t pin, const float scale, const float offset):
-	channel(new ADCChannel(ADC1::instance().configureChannel(pin))),
+	channel(new ADCChannel(ADC1::instance().configurePin(pin))),
 	scale(scale), offset(offset), reading(0.f)
 {}
 
@@ -16,7 +16,7 @@ VoltageGauge::~VoltageGauge()
 float VoltageGauge::read()
 {
 	int raw = channel->read();
-	reading = (raw + offset) / scale;
+	reading = (raw - offset) * scale;
 	return reading;
 }
 
