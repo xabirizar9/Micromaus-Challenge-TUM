@@ -67,3 +67,14 @@ yarn-error.log
 dist
 *.log
 controller/micromaus
+# latex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.pdf
+*.xdv
+
+# sdkconfig backups
+sdkconfig.*.old
+
