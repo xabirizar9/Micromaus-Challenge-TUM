@@ -48,4 +48,25 @@ private:
 	VoltageGauge voltage;
 };
 
+class PowerManagement {
+public:
+	PowerManagement(uint8_t batteryPin);
+	~PowerManagement();
+
+	bool runsOnUSB() const { return !bat.isConnected(); }
+	bool isBatteryLow() const { return bat.isLow(); }
+	bool getBatteryVoltage() const { return bat.getVoltage(); }
+	bool getBatteryPercentage() const { return bat.getPercentage(); }
+
+private:
+	static void _run(PowerManagement* p) {
+		p->run();
+	}
+
+	void run();
+
+	Battery bat;
+	void* taskHandle;
+};
+
 }
