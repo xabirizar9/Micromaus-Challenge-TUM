@@ -17,7 +17,7 @@ SPIBus::SPIBus(uint8_t misoPin, uint8_t mosiPin, uint8_t clkPin)
 		.flags = 0,
 		.intr_flags = 0
 	};
-	ESP_ERROR_CHECK(spi_bus_initialize(VSPI_HOST, &conf, SPI_DMA_CH_AUTO));
+	ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &conf, SPI_DMA_CH_AUTO));
 }
 
 SPIBus::~SPIBus()
@@ -25,7 +25,7 @@ SPIBus::~SPIBus()
 	if (references > 0) {
 		ESP_LOGE(TAG, "destroying SPIBus with reference count %i", references);
 	}
-	ESP_ERROR_CHECK(spi_bus_free(VSPI_HOST));
+	ESP_ERROR_CHECK(spi_bus_free(SPI2_HOST));
 }
 
 spi_device_handle_t SPIBus::addDevice(uint8_t csPin, int clockFreqHz, uint8_t mode)
@@ -49,7 +49,7 @@ spi_device_handle_t SPIBus::addDevice(uint8_t csPin, int clockFreqHz, uint8_t mo
 		.post_cb = nullptr
 	};
 	spi_device_handle_t hnd;
-	ESP_ERROR_CHECK(spi_bus_add_device(VSPI_HOST, &conf, &hnd));
+	ESP_ERROR_CHECK(spi_bus_add_device(SPI2_HOST, &conf, &hnd));
 	references++;
 	return hnd;
 }
