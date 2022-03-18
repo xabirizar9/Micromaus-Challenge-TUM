@@ -7,6 +7,7 @@
 #include "periph/WifiCommunicator.hpp"
 #include "sdkconfig.h"
 #include "config.h"
+#include "periph/Power.hpp"
 
 static const char* TAG = "test";
 
@@ -18,6 +19,8 @@ void navigate(void* pvParameter) {
 };
 
 void main_task(void* pvParameter) {
+	power::PowerManagement powerManagement(IO::VSENSE);
+
 	while (true) {
 		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
