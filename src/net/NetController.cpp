@@ -1,5 +1,5 @@
 
-#include "periph/NetController.hpp"
+#include "net/NetController.hpp"
 
 #include <math.h>
 #include <stdbool.h>
@@ -16,15 +16,21 @@
 #include "pb_encode.h"
 #include "sys/time.h"
 // TODO: add toggle
-// #include "periph/BluetoothCore.hpp"
+// #include "net/BluetoothCore.hpp"
 #include "config.h"
-#include "periph/WifiCommunicator.hpp"
+#include "net/WifiCommunicator.hpp"
 
 static const char *tag = "NET";
+static const uint16_t sensorSendInterval = pdMS_TO_TICKS(200);
 
 using namespace NetController;
 
-void testTask(void *pvParameter) {
+/**
+ * @brief task used to send current machine state to the remote server
+ *
+ * @param pvParameter
+ */
+void infoStreamerTask(void *pvParameter) {
 	uint8_t i = 0;
 
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
@@ -47,7 +53,7 @@ void testTask(void *pvParameter) {
 			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(packet);
 			i++;
 		}
-		vTaskDelay(pdMS_TO_TICKS(200));
+		vTaskDelay(sensorSendInterval);
 	}
 }
 
@@ -85,10 +91,6 @@ void receiverTask(void *pvParameter) {
 				// TODO: improve memory management
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
 				manager->initCompleted = true;
-
-				// TODO: move this somewhere else just here for testing
-				xTaskCreate(&testTask, "testTask", 2048, manager, 5, NULL);
-
 				break;
 		}
 	}
@@ -118,6 +120,9 @@ NetController::Manager::Manager(NetController::Communicator interface) {
 	ESP_LOGI(tag, "Manager()");
 
 	xTaskCreate(receiverTask, "receiverTask", 2048, this, 5, NULL);
+
+	// TODO: move this somewhere else just here for testing
+	// xTaskCreate(&testTask, "testTask", 2048, manager, 5, NULL);
 };
 
 /**

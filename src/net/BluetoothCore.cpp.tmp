@@ -19,7 +19,7 @@
 #include "pb_encode.h"
 #include "message.pb.h"
 
-#include "periph/BluetoothCore.hpp"
+#include "net/BluetoothCore.hpp"
 
 #define BT_CORE_TAG "BT_CORE"
 #define SPP_SERVER_NAME "MAUS_SPP_SERVER"
