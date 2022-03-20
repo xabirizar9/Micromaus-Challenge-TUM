@@ -6,6 +6,7 @@
 #include "net/NetController.hpp"
 #include "net/WifiCommunicator.hpp"
 #include "periph/Encoder.hpp"
+#include "Controller.hpp"
 #include "periph/Power.hpp"
 #include "sdkconfig.h"
 
@@ -18,18 +19,17 @@ void navigate(void* pvParameter) {
 	};
 };
 
-void main_task(void* pvParameter) {
-	while (true) {
-		vTaskDelay(pdMS_TO_TICKS(2000));
-	}
-}
-
 NetController::Manager* netManager = NULL;
+Controller* mainController = NULL;
 
 extern "C" void app_main() {
+	// configure logging and other pre-run setup
+	esp_log_level_set(TAG, ESP_LOG_DEBUG);
+
+
 	// enable if you want network streaming
 	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 
-	esp_log_level_set(TAG, ESP_LOG_DEBUG);
-	xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);
+	// start main robot controller interface with motors and encoders
+	mainController = new Controller();
 }

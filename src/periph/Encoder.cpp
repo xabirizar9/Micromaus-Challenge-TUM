@@ -66,4 +66,8 @@ int16_t Encoder::get() const {
 	return n;
 }
 
+void Encoder::reset() {
+	pcnt_counter_clear(*unit);
+}
+
 void Encoder::onOverflow() {}

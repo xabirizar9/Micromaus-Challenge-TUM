@@ -13,6 +13,7 @@ public:
 	~Encoder();
 
 	int16_t get() const;
+	void reset();
 
 protected:
 	void onOverflow();
