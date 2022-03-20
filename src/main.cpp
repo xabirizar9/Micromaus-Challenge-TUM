@@ -3,10 +3,10 @@
 
 #include "config.h"
 #include "esp_log.h"
+#include "net/NetController.hpp"
+#include "net/WifiCommunicator.hpp"
 #include "periph/Encoder.hpp"
-#include "periph/NetController.hpp"
 #include "periph/Power.hpp"
-#include "periph/WifiCommunicator.hpp"
 #include "sdkconfig.h"
 
 static const char* TAG = "test";
@@ -28,7 +28,7 @@ NetController::Manager* netManager = NULL;
 
 extern "C" void app_main() {
 	// enable if you want network streaming
-	// netManager = new NetController::Manager(WifiCommunicator::getInstance());
+	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 
 	esp_log_level_set(TAG, ESP_LOG_DEBUG);
 	xTaskCreate(&main_task, "main_task", 2048, NULL, 5, NULL);

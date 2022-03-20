@@ -1,4 +1,4 @@
-#include "periph/WifiCommunicator.hpp"
+#include "net/WifiCommunicator.hpp"
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -24,11 +24,11 @@
 #include "lwip/sys.h"
 #include "mdns.h"
 #include "message.pb.h"
+#include "net/NetController.hpp"
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "pb_decode.h"
 #include "pb_encode.h"
-#include "periph/NetController.hpp"
 
 /* The examples use WiFi configuration that you can set via project configuration menu
    If you'd rather not, just change the below entries to strings with
@@ -300,8 +300,8 @@ WifiCommunicator::WifiCommunicator() {
 	this->com = new UdpCommunicator();
 
 	start_mdns_service();
-	xTaskCreate(udpReceiverTask, "udpReceiverTask", 4096, (void *)AF_INET, 5, NULL);
-	xTaskCreate(udpSenderTask, "udpSenderTask", 4096, (void *)AF_INET, 5, NULL);
+	xTaskCreate(udpReceiverTask, "udpReceiverTask", 4096, (void *)AF_INET, 3, NULL);
+	xTaskCreate(udpSenderTask, "udpSenderTask", 4096, (void *)AF_INET, 3, NULL);
 }
 
 WifiCommunicator::~WifiCommunicator() {}

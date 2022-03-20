@@ -11,7 +11,7 @@
 #include "lwip/sockets.h"
 #include "lwip/sys.h"
 #include "message.pb.h"
-#include "periph/NetController.hpp"
+#include "net/NetController.hpp"
 
 class UdpCommunicator {
    private:
