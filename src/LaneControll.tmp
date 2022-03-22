@@ -1,0 +1,30 @@
+//#include "LaneControll.hpp"
+#include "IRSensor.hpp"
+
+LaneControll::LaneControll(){
+    Controller::Controller MotorControll();
+
+}
+
+VDesired LaneControll::getDisiredSpeed(){
+
+    float d_right, float d_left = getSensorvalues();
+    float d_E = d_left - d_right;
+    //->integralComponent+=
+    
+    return VDesired{Vbase+ c*d_E, Vbase + c*d_E};
+    MotorControll.setSpeed();
+    
+}
+
+tuple{float right, float left} LaneControll::getSensorvalues(){
+
+    IRSensor Right(IR_SENSOR_RIGHT);
+    IRSensor Left(IR_SENSOR_LEFT);
+
+    float right = Right.measuredistance();
+    float left = Left.measuredistance();
+
+    return {right, left};
+
+}
