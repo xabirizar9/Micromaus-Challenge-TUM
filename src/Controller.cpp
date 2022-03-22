@@ -8,8 +8,9 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "periph/Motor.hpp"
+#include "esp_log.h"
 
-
+static const char* TAG = "ctrl";
 struct PidTaskInitPayload {
 	Controller *controller;
 	MotorPosition position;
@@ -24,6 +25,7 @@ void motorPidTask(void *pvParameter) {
 
 	// current speed target in ticks
 	int16_t target = 0;
+	uint32_t tick_diff = 0;
 	TickType_t lastTick = xTaskGetTickCount();
 	TickType_t curTick = 0;
 
@@ -32,6 +34,7 @@ void motorPidTask(void *pvParameter) {
 
 	int16_t lastError = 0;
 	int16_t curError = 0;
+	int16_t derError = 0;
 	int16_t errorSum = 0;
 	
 	uint32_t timeInterval = 0;
@@ -41,22 +44,32 @@ void motorPidTask(void *pvParameter) {
 	float kI = 0.001;
 	float correction = 0;
 
+	vTaskDelay(pdMS_TO_TICKS(200));
 	while (true) {
+
 		// get speed target for selected motor
 		target = controller->getSpeedInTicks(payload->position);
 		curEncoderReading = enc->get();
 		curTick = xTaskGetTickCount();
-
+		tick_diff = curTick - lastTick;
+		ESP_LOGI(TAG, "%d %d", curTick, lastTick);
+		if (tick_diff == 0){
+			vTaskDelay(pdMS_TO_TICKS(50));
+			continue;
+		}
+		
 		// compute duration since this method was last called
 		timeInterval = pdTICKS_TO_MS(curTick - lastTick );
+		ESP_LOGI(TAG, "time_interval=%d", timeInterval);
 
 		// compute speed in ticks
 		// TODO: maybe omit division if this causes problems
 		curSpeed = curEncoderReading / timeInterval;
 		curError = target - curSpeed;
-
+		derError = (lastError - curError) / timeInterval;
 		// compute correction with momentum
 		correction += (kP * error) + (kD * lastError) + (kI * errorSum);
+		
 
 		// copy step values for next step
 		lastTick = curTick;
@@ -70,7 +83,7 @@ void motorPidTask(void *pvParameter) {
 		enc->reset();
 
 		// add short interval
-		vTaskDelay(pdMS_TO_TICKS(20));
+		vTaskDelay(pdMS_TO_TICKS(200));
 	}
 }
 
@@ -86,7 +99,7 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 	xTaskCreate(
 		motorPidTask, 
 		"pidLeftMotorTask", 
-		256, 
+		4096, 
 		&leftPayload, 
 		1, 
 		&this->leftMotorPidTaskHandle
@@ -95,7 +108,7 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 	xTaskCreate(
 		motorPidTask,
 		"pidRightMotorTask",
-		256,
+		4096,
 		&rightPayload, 
 		1,
 		&this->rightMotorPidTaskHandle
@@ -109,8 +122,8 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 
 void Controller::setSpeed(int16_t speed) {
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
-	this->leftSpeedTickTarget = 20;
-	this->rightSpeedTickTarget = 20;
+	this->leftSpeedTickTarget = 10;
+	this->rightSpeedTickTarget = 10;
 }
 
 void Controller::setDirection(int16_t direction) {
