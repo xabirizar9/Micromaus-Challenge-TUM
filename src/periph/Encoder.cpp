@@ -62,7 +62,7 @@ Encoder::~Encoder() {
 
 int16_t Encoder::get() const {
 	int16_t n;
-	ESP_ERROR_CHECK(pcnt_get_counter_value(*unit, &n));
+	ESP_ERROR_CHECK(pcnt_get_counter_value(*this->unit, &n));
 	return n;
 }
 

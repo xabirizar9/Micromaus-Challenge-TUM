@@ -11,17 +11,22 @@
 #include "esp_log.h"
 
 static const char* TAG = "ctrl";
-struct PidTaskInitPayload {
+typedef struct PidTaskInitPayload {
 	Controller *controller;
 	MotorPosition position;
-};
+} PidTaskInitPayload;
 
 void motorPidTask(void *pvParameter) {
 	uint16_t error = 0;
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
+
+	ESP_LOGI(TAG, "in %p", payload);
+
 	Controller *controller = payload->controller;
 	Motor *m = controller->getMotor(payload->position);
 	Encoder *enc = controller->getEncoder(payload->position);
+
+	ESP_LOGI(TAG, "pid task %d", payload->position);
 
 	// current speed target in ticks
 	int16_t target = 0;
@@ -94,6 +99,8 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 
 	PidTaskInitPayload leftPayload = {this, MotorPosition::left};
 	PidTaskInitPayload rightPayload = {this, MotorPosition::left};
+
+	ESP_LOGI(TAG, "out %p", &leftPayload);
 
 	// setup pids to control the motors
 	xTaskCreate(
