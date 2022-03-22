@@ -68,13 +68,13 @@ void motorPidTask(void *pvParameter) {
 		curError = target - curSpeed;
 		derError = (lastError - curError) / timeInterval;
 		// compute correction with momentum
-		correction += (kP * error) + (kD * lastError) + (kI * errorSum);
+		correction += (kP * error) + (kD * derError) + (kI * errorSum);
 		
 
 		// copy step values for next step
-		lastTick = curTick;
 		lastError = curError;
-		errorSum += curError;
+		lastTick = curTick;
+		errorSum += curError * timeInterval;
 
 		// apply adjustments and clamp them to 0-100%
 		m->setPWM(std::clamp(correction, (float)0.0, (float)1.0));
