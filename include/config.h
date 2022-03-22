@@ -32,8 +32,8 @@ static constexpr uint8_t IR_SENSOR_FRONT = 10;
 static constexpr uint8_t IR_SENSOR_RIGHT = 6;
 static constexpr uint8_t IR_SENSOR_ENABLE = 12;
 
-static const IO::Motor MOTOR_L{7, 19, 20, {21, 26}};
-static const IO::Motor MOTOR_R{13, 14, 15, {16, 17}};
+static const IO::Motor MOTOR_L{7, 19, 20, {26, 21}};
+static const IO::Motor MOTOR_R{13, 15, 14, {16, 17}};
 
 namespace SPI {
 static constexpr uint8_t CS_INS = 34;
@@ -55,7 +55,7 @@ static constexpr uint8_t IR_SENSOR_FRONT = 10;
 static constexpr uint8_t IR_SENSOR_RIGHT = 6;
 static constexpr uint8_t IR_SENSOR_ENABLE = 12;
 
-static const IO::Motor MOTOR_L{7, 19, 20, {21, 26}};
+static const IO::Motor MOTOR_L{7, 19, 20, {26, 21}};
 static const IO::Motor MOTOR_R{13, 14, 15, {16, 17}};
 
 namespace SPI {
