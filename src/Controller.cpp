@@ -9,11 +9,21 @@
 #include "freertos/task.h"
 #include "periph/Motor.hpp"
 #include "esp_log.h"
+#include "IRSensor.hpp"
 
 static const char* TAG = "ctrl";
 struct PidTaskInitPayload {
 	Controller *controller;
 	MotorPosition position;
+};
+
+struct PIDErrors{
+	int16_t lastError;
+	int16_t curError;
+	int16_t derError;
+	int16_t errorSum;
+
+	float correction;
 };
 
 
@@ -25,6 +35,7 @@ void motorPidTask(void *pvParameter) {
 	Controller *controller = payload->controller;
 	Motor *m = controller->getMotor(payload->position);
 	Encoder *enc = controller->getEncoder(payload->position);
+	IRSensor *
 
 	ESP_LOGI(TAG, "pid task %d", payload->position);
 
@@ -37,17 +48,14 @@ void motorPidTask(void *pvParameter) {
 	int16_t curEncoderReading = 0;
 	int16_t curSpeed = 0;
 
-	int16_t lastError = 0;
-	int16_t curError = 0;
-	int16_t derError = 0;
-	int16_t errorSum = 0;
+	PIDErrors straightLine;
+	PIDErrors wallDistance;
 	
 	uint32_t timeInterval = 0;
 
 	float kP = 0.01;
 	float kD = 0.000;
 	float kI = 0.000;
-	float correction = 0;
 	float speed = 0;
 
 	vTaskDelay(pdMS_TO_TICKS(200));
@@ -68,16 +76,21 @@ void motorPidTask(void *pvParameter) {
 		// compute speed in ticks
 		// TODO: maybe omit division if this causes problems
 		curSpeed = curEncoderReading / timeInterval;
-		curError = target - curSpeed;
-		derError = (lastError - curError) / timeInterval;
+		// Calculate errors for driving in a straight line
+
+		straightLine.curError = target - curSpeed;
+		straightLine.derError = (straightLine.lastError - straightLine.curError) / timeInterval;
+
+		
 		// compute correction with momentum
-		correction = (kP * curError) + (kD * derError) + (kI * errorSum);
-		speed = std::clamp(speed + correction, (float)0.0, (float)1.0);
+		straightLine.correction = (kP * straightLine.curError) + (kD * straightLine.derError) + (kI * straightLine.errorSum);
+
+		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0, (float)1.0);
 
 		// copy step values for next step
-		lastError = curError;
 		lastTick = curTick;
-		errorSum += curError * timeInterval;
+		straightLine.lastError = straightLine.curError;
+		straightLine.errorSum += straightLine.curError * timeInterval;
 
 		ESP_LOGI(TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
 
@@ -91,6 +104,19 @@ void motorPidTask(void *pvParameter) {
 		vTaskDelay(pdMS_TO_TICKS(50));
 	}
 }
+
+void laneControlTask(void* args){
+	Controller *controller = (Controller* )args;
+	while (true){
+		wallDistance.curError = d_left - d_right;
+		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
+		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) + (kI * wallDistance.errorSum);
+
+		wallDistance.lastError = wallDistance.curError;
+		wallDistance.errorSum += wallDistance.curError * timeInterval;
+
+	}
+};
 
 Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 	rightMotor(Motor(IO::MOTOR_R)), 
@@ -121,6 +147,15 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 		"pidRightMotorTask",
 		4096,
 		rightPayload, 
+		1,
+		&this->rightMotorPidTaskHandle
+	);
+
+	xTaskCreate(
+		laneControlTask,
+		"laneControlTask",
+		4096,
+		this, 
 		1,
 		&this->rightMotorPidTaskHandle
 	);
