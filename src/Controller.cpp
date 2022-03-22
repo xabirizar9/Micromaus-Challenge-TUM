@@ -68,7 +68,7 @@ void motorPidTask(void *pvParameter) {
 		curError = target - curSpeed;
 		derError = (lastError - curError) / timeInterval;
 		// compute correction with momentum
-		correction += (kP * error) + (kD * derError) + (kI * errorSum);
+		correction = (kP * error) + (kD * derError) + (kI * errorSum);
 		
 
 		// copy step values for next step
