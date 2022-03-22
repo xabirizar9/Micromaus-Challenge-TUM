@@ -28,8 +28,9 @@ extern "C" void app_main() {
 
 
 	// enable if you want network streaming
-	netManager = new NetController::Manager(WifiCommunicator::getInstance());
+	// netManager = new NetController::Manager(WifiCommunicator::getInstance());
 
 	// start main robot controller interface with motors and encoders
 	mainController = new Controller();
+	mainController->drive(20, 0);
 }
