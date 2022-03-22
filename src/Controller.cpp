@@ -11,16 +11,16 @@
 #include "esp_log.h"
 
 static const char* TAG = "ctrl";
-typedef struct PidTaskInitPayload {
+struct PidTaskInitPayload {
 	Controller *controller;
 	MotorPosition position;
-} PidTaskInitPayload;
+};
+
 
 void motorPidTask(void *pvParameter) {
-	uint16_t error = 0;
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
 
-	ESP_LOGI(TAG, "in %p", payload);
+	ESP_LOGI(TAG, "in %p, %d", payload, (*payload).position);
 
 	Controller *controller = payload->controller;
 	Motor *m = controller->getMotor(payload->position);
@@ -44,20 +44,19 @@ void motorPidTask(void *pvParameter) {
 	
 	uint32_t timeInterval = 0;
 
-	float kP = 0.02;
-	float kD = 0.01;
-	float kI = 0.001;
+	float kP = 0.01;
+	float kD = 0.000;
+	float kI = 0.000;
 	float correction = 0;
+	float speed = 0;
 
 	vTaskDelay(pdMS_TO_TICKS(200));
 	while (true) {
-
 		// get speed target for selected motor
 		target = controller->getSpeedInTicks(payload->position);
 		curEncoderReading = enc->get();
 		curTick = xTaskGetTickCount();
 		tick_diff = curTick - lastTick;
-		ESP_LOGI(TAG, "%d %d", curTick, lastTick);
 		if (tick_diff == 0){
 			vTaskDelay(pdMS_TO_TICKS(50));
 			continue;
@@ -65,7 +64,6 @@ void motorPidTask(void *pvParameter) {
 		
 		// compute duration since this method was last called
 		timeInterval = pdTICKS_TO_MS(curTick - lastTick );
-		ESP_LOGI(TAG, "time_interval=%d", timeInterval);
 
 		// compute speed in ticks
 		// TODO: maybe omit division if this causes problems
@@ -73,22 +71,24 @@ void motorPidTask(void *pvParameter) {
 		curError = target - curSpeed;
 		derError = (lastError - curError) / timeInterval;
 		// compute correction with momentum
-		correction = (kP * error) + (kD * derError) + (kI * errorSum);
-		
+		correction = (kP * curError) + (kD * derError) + (kI * errorSum);
+		speed = std::clamp(speed + correction, (float)0.0, (float)1.0);
 
 		// copy step values for next step
 		lastError = curError;
 		lastTick = curTick;
 		errorSum += curError * timeInterval;
 
+		ESP_LOGI(TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
+
 		// apply adjustments and clamp them to 0-100%
-		m->setPWM(std::clamp(correction, (float)0.0, (float)1.0));
+		m->setPWM(speed);
 
 		// reset encoder to avoid overflows
 		enc->reset();
 
 		// add short interval
-		vTaskDelay(pdMS_TO_TICKS(200));
+		vTaskDelay(pdMS_TO_TICKS(50));
 	}
 }
 
@@ -97,8 +97,12 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 	leftEncoder(Encoder(IO::MOTOR_L.encoder)), 
 	rightEncoder(Encoder(IO::MOTOR_R.encoder)) {
 
-	PidTaskInitPayload leftPayload = {this, MotorPosition::left};
-	PidTaskInitPayload rightPayload = {this, MotorPosition::left};
+	PidTaskInitPayload *leftPayload = new PidTaskInitPayload();
+	leftPayload->controller = this;
+	leftPayload->position = MotorPosition::left;
+	PidTaskInitPayload *rightPayload = new PidTaskInitPayload();
+	rightPayload->controller = this;
+	rightPayload->position = MotorPosition::right;
 
 	ESP_LOGI(TAG, "out %p", &leftPayload);
 
@@ -107,7 +111,7 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 		motorPidTask, 
 		"pidLeftMotorTask", 
 		4096, 
-		&leftPayload, 
+		leftPayload, 
 		1, 
 		&this->leftMotorPidTaskHandle
 	);
@@ -116,7 +120,7 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 		motorPidTask,
 		"pidRightMotorTask",
 		4096,
-		&rightPayload, 
+		rightPayload, 
 		1,
 		&this->rightMotorPidTaskHandle
 	);
@@ -129,8 +133,8 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 
 void Controller::setSpeed(int16_t speed) {
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
-	this->leftSpeedTickTarget = 10;
-	this->rightSpeedTickTarget = 10;
+	this->leftSpeedTickTarget = 2;
+	this->rightSpeedTickTarget = 2;
 }
 
 void Controller::setDirection(int16_t direction) {
