@@ -35,7 +35,6 @@ void motorPidTask(void *pvParameter) {
 	Controller *controller = payload->controller;
 	Motor *m = controller->getMotor(payload->position);
 	Encoder *enc = controller->getEncoder(payload->position);
-	IRSensor *
 
 	ESP_LOGI(TAG, "pid task %d", payload->position);
 
@@ -49,7 +48,6 @@ void motorPidTask(void *pvParameter) {
 	int16_t curSpeed = 0;
 
 	PIDErrors straightLine;
-	PIDErrors wallDistance;
 	
 	uint32_t timeInterval = 0;
 
@@ -107,7 +105,15 @@ void motorPidTask(void *pvParameter) {
 
 void laneControlTask(void* args){
 	Controller *controller = (Controller* )args;
+	PIDErrors wallDistance;
+	uint32_t timeInterval = 0;
+
+	kP
+	kD
+	kI
+
 	while (true){
+		timeInterval = pdTICKS_TO_MS(curTick - lastTick );
 		wallDistance.curError = d_left - d_right;
 		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
 		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) + (kI * wallDistance.errorSum);
@@ -115,6 +121,7 @@ void laneControlTask(void* args){
 		wallDistance.lastError = wallDistance.curError;
 		wallDistance.errorSum += wallDistance.curError * timeInterval;
 
+		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0, (float)1.0);
 	}
 };
 
