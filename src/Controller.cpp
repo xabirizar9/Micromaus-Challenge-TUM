@@ -17,16 +17,6 @@ struct PidTaskInitPayload {
 	MotorPosition position;
 };
 
-struct PIDErrors{
-	int16_t lastError;
-	int16_t curError;
-	int16_t derError;
-	int16_t errorSum;
-
-	float correction;
-};
-
-
 void motorPidTask(void *pvParameter) {
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
 
@@ -47,13 +37,17 @@ void motorPidTask(void *pvParameter) {
 	int16_t curEncoderReading = 0;
 	int16_t curSpeed = 0;
 
-	PIDErrors straightLine;
+	int16_t lastError = 0;
+	int16_t curError = 0;
+	int16_t derError = 0;
+	int16_t errorSum = 0;
 	
 	uint32_t timeInterval = 0;
 
 	float kP = 0.01;
 	float kD = 0.000;
 	float kI = 0.000;
+	float correction = 0;
 	float speed = 0;
 
 	vTaskDelay(pdMS_TO_TICKS(200));
@@ -74,21 +68,16 @@ void motorPidTask(void *pvParameter) {
 		// compute speed in ticks
 		// TODO: maybe omit division if this causes problems
 		curSpeed = curEncoderReading / timeInterval;
-		// Calculate errors for driving in a straight line
-
-		straightLine.curError = target - curSpeed;
-		straightLine.derError = (straightLine.lastError - straightLine.curError) / timeInterval;
-
-		
+		curError = target - curSpeed;
+		derError = (lastError - curError) / timeInterval;
 		// compute correction with momentum
-		straightLine.correction = (kP * straightLine.curError) + (kD * straightLine.derError) + (kI * straightLine.errorSum);
-
-		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0, (float)1.0);
+		correction = (kP * curError) + (kD * derError) + (kI * errorSum);
+		speed = std::clamp(speed + correction, (float)0.0, (float)1.0);
 
 		// copy step values for next step
+		lastError = curError;
 		lastTick = curTick;
-		straightLine.lastError = straightLine.curError;
-		straightLine.errorSum += straightLine.curError * timeInterval;
+		errorSum += curError * timeInterval;
 
 		ESP_LOGI(TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
 
@@ -103,7 +92,7 @@ void motorPidTask(void *pvParameter) {
 	}
 }
 
-void laneControlTask(void* args){
+/* void laneControlTask(void* args){
 	Controller *controller = (Controller* )args;
 	PIDErrors wallDistance;
 	uint32_t timeInterval = 0;
@@ -123,7 +112,7 @@ void laneControlTask(void* args){
 
 		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0, (float)1.0);
 	}
-};
+};*/ 
 
 Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 	rightMotor(Motor(IO::MOTOR_R)), 
@@ -158,14 +147,14 @@ Controller::Controller(): leftMotor(Motor(IO::MOTOR_L)),
 		&this->rightMotorPidTaskHandle
 	);
 
-	xTaskCreate(
+	/*xTaskCreate(
 		laneControlTask,
 		"laneControlTask",
 		4096,
 		this, 
 		1,
 		&this->rightMotorPidTaskHandle
-	);
+	);*/
 }
 
 
