@@ -1,4 +1,4 @@
-import { MausOutgoingMessage } from "./proto/message";
+import { MausIncomingMessage, MausOutgoingMessage } from "./proto/message";
 
 export type CommunicatorOptions = {
   url: string | URL;
@@ -6,6 +6,19 @@ export type CommunicatorOptions = {
 
 export class Communicator extends EventTarget {
   private socket?: WebSocket;
+
+  constructor(options: CommunicatorOptions) {
+    super();
+    this.setupSocket(options);
+  }
+
+  send(message: Partial<MausIncomingMessage>) {
+    const msg = MausIncomingMessage.encode(
+      message as MausIncomingMessage
+    ).finish();
+    console.log(message, msg);
+    this.socket?.send(msg);
+  }
 
   private setupSocket(options: CommunicatorOptions) {
     this.socket = new WebSocket(options.url);
@@ -29,10 +42,5 @@ export class Communicator extends EventTarget {
         // console.log(event.data);
       }
     };
-  }
-
-  constructor(options: CommunicatorOptions) {
-    super();
-    this.setupSocket(options);
   }
 }
