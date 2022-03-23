@@ -75,3 +75,7 @@ void Encoder::reset(bool resetTotalCounter) {
 }
 
 void Encoder::onOverflow() {}
+
+int64_t Encoder::getTotalCounter() const {
+	return this->totalCounter;
+}

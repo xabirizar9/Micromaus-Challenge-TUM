@@ -7,6 +7,7 @@
 #include "message.pb.h"
 #include "periph/Encoder.hpp"
 #include "periph/Motor.hpp"
+#include "periph/Power.hpp"
 
 enum MotorPosition { left, right };
 class Controller {
@@ -32,6 +33,8 @@ class Controller {
    public:
 	Controller();
 	~Controller();
+
+	// power::Battery battery;
 
 	NavigationPacket getState();
 

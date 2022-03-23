@@ -27,9 +27,11 @@ message NavigationPacket {
 	Position position = 2;
 	float leftMotorSpeed = 3;
 	float rightMotorSpeed = 4;
-	int64 leftEncoderTotal = 5;
-	int64 rightEncoderTotal = 6;
-	uint64 timestamp = 7;
+	int32 leftEncoderTotal = 5;
+	int32 rightEncoderTotal = 6;
+	float voltage = 7;
+	float batPercentage = 8;
+	uint32 timestamp = 9;
 }
 
 message MausOutgoingMessage {
@@ -48,9 +50,16 @@ message MsgControl {
 	int32 speed = 2;
 }
 
+message MsgEncoderCallibration {
+	float kP = 1;
+	float kI = 2;
+	float kD = 3;
+}
+
 message MausIncomingMessage {
 	oneof payload {
 		MsgInit init = 2;
 		MsgControl control = 3;
+		MsgEncoderCallibration encoderCallibration = 4;
 	}
 }

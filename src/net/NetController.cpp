@@ -13,6 +13,7 @@
 #include "message.pb.h"
 #include "pb_decode.h"
 #include "pb_encode.h"
+#include "periph/Led.hpp"
 #include "sys/time.h"
 // TODO: add toggle
 // #include "net/BluetoothCore.hpp"
@@ -73,12 +74,33 @@ void receiverTask(void *pvParameter) {
 			continue;
 		}
 
+		ESP_LOGI(tag, "got msg ID=%d", msg.which_payload);
+
 		switch (msg.which_payload) {
 			case MausIncomingMessage_init_tag:
 				ESP_LOGI(tag, "connected to connector v.%d", msg.payload.init.version);
 				// TODO: improve memory management
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
 				manager->initCompleted = true;
+
+				// set okay status LED
+				LedController((gpio_num_t)3).set(1);
+
+				break;
+			case MausIncomingMessage_encoderCallibration_tag:
+				// update values for both motors
+				manager->controller->getMotor(MotorPosition::left)
+					->updatePidConfig(msg.payload.encoderCallibration);
+				manager->controller->getMotor(MotorPosition::right)
+					->updatePidConfig(msg.payload.encoderCallibration);
+				break;
+			case MausIncomingMessage_control_tag:
+				manager->controller->drive(msg.payload.control.speed,
+										   msg.payload.control.direction);
+				ESP_LOGI(tag,
+						 "rcv ctrl cmd s=%d d=%f",
+						 msg.payload.control.speed,
+						 msg.payload.control.direction);
 				break;
 		}
 	}
