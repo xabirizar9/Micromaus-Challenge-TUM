@@ -1,12 +1,12 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
+#include "Controller.hpp"
 #include "config.h"
 #include "esp_log.h"
 #include "net/NetController.hpp"
 #include "net/WifiCommunicator.hpp"
 #include "periph/Encoder.hpp"
-#include "Controller.hpp"
 #include "periph/Power.hpp"
 #include "sdkconfig.h"
 
@@ -25,7 +25,6 @@ Controller* mainController = NULL;
 extern "C" void app_main() {
 	// configure logging and other pre-run setup
 	esp_log_level_set(TAG, ESP_LOG_DEBUG);
-
 
 	// enable if you want network streaming
 	// netManager = new NetController::Manager(WifiCommunicator::getInstance());
