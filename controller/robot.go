@@ -141,6 +141,12 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 			return
 		}
 
+		if nav := ackCmd.GetNav(); nav != nil {
+			log.Debug("robot already streaming reconnecting...")
+			respChannel <- nil
+			return
+		}
+
 		if ack := ackCmd.GetAck(); ack != nil {
 			log.Debug("got ack packet stopping func")
 			respChannel <- nil

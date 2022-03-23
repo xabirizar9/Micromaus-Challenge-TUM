@@ -96,8 +96,13 @@ func (m *Manager) onClientMsg(c *Client) {
 			return
 		}
 
-		l.Debug("got client message, TODO: implement")
+		n, err := m.Robot.com.Write(msg)
+		if err != nil {
+			l.Error("failed to send message to robot", zap.Error(err))
+			return
+		}
 
+		l.Debug("sent message to robot", zap.Int("bytes", n))
 	}
 }
 
