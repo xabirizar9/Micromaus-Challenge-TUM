@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/d3": "^7.1.0",
     "esbuild": "^0.14.25",
     "esbuild-svelte": "^0.6.3",
     "node-sass": "^7.0.1",
@@ -17,5 +18,10 @@
     "gen:protoc": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/proto --proto_path=../../proto ../../proto/message.proto",
     "build": "node ./scripts/build.js",
     "dev": "node ./scripts/build.js --watch"
+  },
+  "dependencies": {
+    "@sveltejs/svelte-virtual-list": "^3.0.1",
+    "d3": "^7.3.0",
+    "long": "^5.2.0"
   }
 }
