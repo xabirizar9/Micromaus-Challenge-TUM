@@ -12,6 +12,8 @@
 \setmainfont{STIX Two Text}
 \setmathfont{STIX Two Math}
 
+\usepackage{siunitx}
+
 
 \title{Algorithmen für Micromouse}
 \author{Fuchs, Alexander}
@@ -28,7 +30,45 @@
 
 \begin{document}
 
-\maketitle
+\section{Modell des IR-Sensors}
+Folgendes Modell $f$ passt ganz gut auf die Spannungswerte des IR-Sensors,
+abhängig von der Entfernung:
+\begin{align*}
+	f_1(x, a, x_0, y_1)
+		&= \frac{a}{x + x_0} - \frac{a x_0}{2 (x + x_0)^2} + y_1 \\
+	f_2(x, b, y_2)
+		&= b x^2 + y_2
+\end{align*}
+Diese Modelle haben die Eigenschaft, dass jeweils bei $x=0$ ihre Ableitung 0
+ist.
+Das komplette Modell wird dann gebildet durch:
+\[
+	f(x) = \left\{\begin{array}{rl}
+		f_1\left(x - l, a, x_0, y_1\right) & \text{ für } x \geq l, \\
+		f_2\left(x - l, b, y_1 + \frac{a}{2 x_0}\right) & \text{ für } x < l.
+	\end{array}\right.
+\]
+
+Ein Fit auf beispielhafte Daten eines IR-Sensors ergibt:
+\[
+	\begin{array}{rcl}
+		a &=& \SI{5.324E3}{\milli\volt\per\centi\meter}\\
+		b &=& \SI{-1.374E3}{\milli\volt\per\square\centi\meter}\\
+		x_0 &=& \SI{1.137E0}{\centi\meter} \\
+		y_1 &=& \SI{1.951E1}{\milli\volt} \\
+		l &=& \SI{1.201E0}{\centi\meter} \\
+	\end{array}
+\]
+Dabei beträgt die Standardabweichung für die Messpunkte auf der linken Hälfte
+\SI{135.5}{\milli\volt} und auf der rechten Hälfte \SI{14.67}{\milli\volt}.
+
+Die Distanz als Funktion der Spannung kann im Bereicht $x \geq l$ gebildet
+werden durch Umstellen und Auflösen nach $x$:
+\[
+	x = \frac{1}{2 (f_1 - y_1)} \left(
+		a + \sqrt{a^2 - 2 (f_1 - y_1) a x_0} \right) - x_0
+\]
+
 
 \section{SLAM-Algorithmus}
 
@@ -128,5 +168,7 @@ Weiter macht man dann das ganz normale Kalman measurement update:
 \subsection{Filter für die Map}
 Die Map kann dargestellt werden durch einen Vektor $\vec{\pi} \in [0, 1]^M$,
 wobei $\pi_i$ die Wahrscheinlichkeit darstellt, dass $m_i = \true$.
+
+
 
 \end{document}
