@@ -30,6 +30,11 @@
 #include "pb_decode.h"
 #include "pb_encode.h"
 
+// only include enterprise connection if credentials present
+#ifdef USE_802_1x
+#include "esp_wpa2.h"
+#endif
+
 /* The examples use WiFi configuration that you can set via project configuration menu
    If you'd rather not, just change the below entries to strings with
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
@@ -164,16 +169,36 @@ static esp_netif_t *setupWifi(void) {
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
 	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
 #else
+#ifdef USE_802_1x
+	wifi_sta_config_t wifi_sta_config = {};
+	strcpy((char *)wifi_sta_config.ssid, WIFI_SSID);
+	wifi_sta_config.pmf_cfg.required = false;
+	
+	wifi_config.sta = wifi_sta_config;
+	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
+
+	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_username(
+		(uint8_t *)WIFI_IDENTITY, strlen(WIFI_IDENTITY)
+	));
+	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_password(
+			(uint8_t *)WIFI_PW, strlen(WIFI_PW)
+	));
+	
+	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_enable()); //set config settings to enable function
+	#else
 	wifi_sta_config_t wifi_sta_config = {};
 	strcpy((char *)wifi_sta_config.ssid, WIFI_SSID);
 	strcpy((char *)wifi_sta_config.password, WIFI_PW);
+	
 	// wifi_sta_config.channel = WIFI_CHANNEL;
 	wifi_sta_config.pmf_cfg.required = false;
 	wifi_sta_config.threshold.authmode = WIFI_AUTH_OPEN;
 	wifi_config.sta = wifi_sta_config;
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
-#endif
+#endif // END USE_802_1x
+#endif // END AP/STA MODE
 	ESP_ERROR_CHECK(esp_wifi_start());
 
 #ifndef AP_MODE
