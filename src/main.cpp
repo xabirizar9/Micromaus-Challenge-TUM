@@ -27,9 +27,11 @@ extern "C" void app_main() {
 	esp_log_level_set(TAG, ESP_LOG_DEBUG);
 
 	// enable if you want network streaming
-	// netManager = new NetController::Manager(WifiCommunicator::getInstance());
 
 	// start main robot controller interface with motors and encoders
 	mainController = new Controller();
-	mainController->drive(20, 0);
+
+	netManager = new NetController::Manager(WifiCommunicator::getInstance());
+	// pass controller to remote controller
+	netManager->controller = mainController;
 }

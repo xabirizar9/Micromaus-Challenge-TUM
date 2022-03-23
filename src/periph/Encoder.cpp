@@ -47,8 +47,7 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB) : unit(new PulseCounterResource()) 
 	pcnt_counter_resume(*unit);
 }
 
-Encoder::Encoder(IO::Encoder io) : Encoder(io.a, io.b) {
-}
+Encoder::Encoder(IO::Encoder io) : Encoder(io.a, io.b) {}
 
 Encoder::~Encoder() {
 	pcnt_intr_disable(*unit);
@@ -66,7 +65,12 @@ int16_t Encoder::get() const {
 	return n;
 }
 
-void Encoder::reset() {
+void Encoder::reset(bool resetTotalCounter) {
+	if (resetTotalCounter) {
+		totalCounter = 0;
+	} else {
+		totalCounter += this->get();
+	}
 	pcnt_counter_clear(*unit);
 }
 

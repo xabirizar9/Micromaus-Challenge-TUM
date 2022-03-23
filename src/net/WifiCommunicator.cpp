@@ -173,32 +173,29 @@ static esp_netif_t *setupWifi(void) {
 	wifi_sta_config_t wifi_sta_config = {};
 	strcpy((char *)wifi_sta_config.ssid, WIFI_SSID);
 	wifi_sta_config.pmf_cfg.required = false;
-	
+
 	wifi_config.sta = wifi_sta_config;
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
 
-	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_username(
-		(uint8_t *)WIFI_IDENTITY, strlen(WIFI_IDENTITY)
-	));
-	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_password(
-			(uint8_t *)WIFI_PW, strlen(WIFI_PW)
-	));
-	
-	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_enable()); //set config settings to enable function
-	#else
+	ESP_ERROR_CHECK(
+		esp_wifi_sta_wpa2_ent_set_username((uint8_t *)WIFI_IDENTITY, strlen(WIFI_IDENTITY)));
+	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_password((uint8_t *)WIFI_PW, strlen(WIFI_PW)));
+
+	ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_enable());  // set config settings to enable function
+#else
 	wifi_sta_config_t wifi_sta_config = {};
 	strcpy((char *)wifi_sta_config.ssid, WIFI_SSID);
 	strcpy((char *)wifi_sta_config.password, WIFI_PW);
-	
+
 	// wifi_sta_config.channel = WIFI_CHANNEL;
 	wifi_sta_config.pmf_cfg.required = false;
 	wifi_sta_config.threshold.authmode = WIFI_AUTH_OPEN;
 	wifi_config.sta = wifi_sta_config;
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
-#endif // END USE_802_1x
-#endif // END AP/STA MODE
+#endif	// END USE_802_1x
+#endif	// END AP/STA MODE
 	ESP_ERROR_CHECK(esp_wifi_start());
 
 #ifndef AP_MODE
@@ -250,12 +247,12 @@ static void udpSenderTask(void *pvParameters) {
 			vTaskDelay(pdMS_TO_TICKS(20));
 			continue;
 		}
-		ESP_LOGI(TAG, "Waiting for data");
+		// ESP_LOGI(TAG, "Waiting for data");
 		int len = com->write(rx_buffer, msgLen);
 
 		// Error occurred during receiving
 		if (len != msgLen) {
-			ESP_LOGE(TAG, "write failed");
+			ESP_LOGE(TAG, "write failed %d!=%d", len, msgLen);
 			continue;
 		}
 		// Data received
@@ -304,7 +301,7 @@ int UdpCommunicator::write(uint8_t *buf, size_t msgLen) {
 	inet_ntoa_r(((struct sockaddr_in *)&this->sourceAddr)->sin_addr,
 				this->addrTmp,
 				sizeof(this->addrTmp) - 1);
-	ESP_LOGI(TAG, "Sending %d bytes to %s:", msgLen, this->addrTmp);
+	// ESP_LOGI(TAG, "Sending %d bytes to %s:", msgLen, this->addrTmp);
 
 	return sendto(
 		sock, buf, msgLen, 0, (struct sockaddr *)&this->sourceAddr, sizeof(this->sourceAddr));

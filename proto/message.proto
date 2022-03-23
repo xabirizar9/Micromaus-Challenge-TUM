@@ -3,50 +3,54 @@ syntax = "proto3";
 option go_package = "./proto";
 
 enum MsgType {
-  Init = 0;
-  SensorData = 1;
-  Control = 2;
+	Init = 0;
+	SensorData = 1;
+	Control = 2;
 }
 
 message AckPacket {}
 
 message Position {
-  float x = 1;
-  float y = 2;
-  float heading = 3;
+	float x = 1;
+	float y = 2;
+	float heading = 3;
 }
 
 message SensorPacket {
-  float left = 1;
-  float front = 2;
-  float right = 3;
+	float left = 1;
+	float front = 2;
+	float right = 3;
 }
 
 message NavigationPacket {
-  SensorPacket sensors = 1;
-  Position position = 2;
+	SensorPacket sensors = 1;
+	Position position = 2;
+	float leftMotorSpeed = 3;
+	float rightMotorSpeed = 4;
+	int64 leftEncoderTotal = 5;
+	int64 rightEncoderTotal = 6;
+	uint64 timestamp = 7;
 }
 
 message MausOutgoingMessage {
-  oneof payload {
-    AckPacket ack = 1;
-    NavigationPacket nav = 2;
-  }
+	oneof payload {
+		AckPacket ack = 1;
+		NavigationPacket nav = 2;
+	}
 }
 
 // command indicates remote client connection
 message MsgInit {
-  int32 version = 1;
+	int32 version = 1;
 }
 message MsgControl {
-  float direction = 1;
-  int32 speed = 2;
+	float direction = 1;
+	int32 speed = 2;
 }
 
-
-message MausIncomingMessage { 
-  oneof payload {
-    MsgInit init = 2;
-    MsgControl control = 3;
-  }
+message MausIncomingMessage {
+	oneof payload {
+		MsgInit init = 2;
+		MsgControl control = 3;
+	}
 }

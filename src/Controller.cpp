@@ -20,14 +20,15 @@ struct PidTaskInitPayload {
 
 void motorPidTask(void *pvParameter) {
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
-
-	ESP_LOGI(TAG, "in %p, %d", payload, (*payload).position);
-
 	Controller *controller = payload->controller;
-	Motor *m = controller->getMotor(payload->position);
-	Encoder *enc = controller->getEncoder(payload->position);
+	MotorPosition pos = payload->position;
+	Motor *m = controller->getMotor(pos);
+	Encoder *enc = controller->getEncoder(pos);
 
-	ESP_LOGI(TAG, "pid task %d", payload->position);
+	// delete payload after we have read everything
+	delete payload;
+
+	ESP_LOGD(TAG, "started pid task %d", pos);
 
 	// current speed target in ticks
 	int16_t target = 0;
@@ -51,10 +52,9 @@ void motorPidTask(void *pvParameter) {
 	float correction = 0;
 	float speed = 0;
 
-	vTaskDelay(pdMS_TO_TICKS(200));
 	while (true) {
 		// get speed target for selected motor
-		target = controller->getSpeedInTicks(payload->position);
+		target = controller->getSpeedInTicks(pos);
 		curEncoderReading = enc->get();
 		curTick = xTaskGetTickCount();
 		tick_diff = curTick - lastTick;
@@ -80,7 +80,7 @@ void motorPidTask(void *pvParameter) {
 		lastTick = curTick;
 		errorSum += curError * timeInterval;
 
-		ESP_LOGI(
+		ESP_LOGD(
 			TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
 
 		// apply adjustments and clamp them to 0-100%
@@ -123,6 +123,13 @@ Controller::Controller()
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
 	  rightEncoder(Encoder(IO::MOTOR_R.encoder)) {
+	// init state stream object
+	this->state.has_position = true;
+	this->state.has_sensors = true;
+	this->state.position = Position_init_zero;
+	this->state.sensors = SensorPacket_init_zero;
+
+	// init pid payload
 	PidTaskInitPayload *leftPayload = new PidTaskInitPayload();
 	leftPayload->controller = this;
 	leftPayload->position = MotorPosition::left;
@@ -130,14 +137,12 @@ Controller::Controller()
 	rightPayload->controller = this;
 	rightPayload->position = MotorPosition::right;
 
-	ESP_LOGI(TAG, "out %p", &leftPayload);
-
 	// setup pids to control the motors
 	xTaskCreate(
-		motorPidTask, "pidLeftMotorTask", 4096, leftPayload, 1, &this->leftMotorPidTaskHandle);
+		motorPidTask, "pidLeftMotorTask", 2048, leftPayload, 1, &this->leftMotorPidTaskHandle);
 
 	xTaskCreate(
-		motorPidTask, "pidRightMotorTask", 4096, rightPayload, 1, &this->rightMotorPidTaskHandle);
+		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
 
 	/*xTaskCreate(
 		laneControlTask,
@@ -154,12 +159,16 @@ Controller::Controller()
  ******************************************************************/
 
 void Controller::setSpeed(int16_t speed) {
+	this->state.leftMotorSpeed = (float)speed;
+	this->state.rightMotorSpeed = (float)speed;
+
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
 	this->leftSpeedTickTarget = 2;
 	this->rightSpeedTickTarget = 2;
 }
 
 void Controller::setDirection(int16_t direction) {
+	this->state.position.heading = (float)direction;
 	this->direction = direction;
 	// TODO: implement
 }
@@ -199,4 +208,9 @@ Motor *Controller::getMotor(MotorPosition position) {
 			// should be unreachable
 			return NULL;
 	}
+}
+
+NavigationPacket Controller::getState() {
+	this->state.timestamp = xTaskGetTickCount();
+	return this->state;
 }
