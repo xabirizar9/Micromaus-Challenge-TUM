@@ -29,6 +29,7 @@
 #include "nvs_flash.h"
 #include "pb_decode.h"
 #include "pb_encode.h"
+#include "periph/Led.hpp"
 
 // only include enterprise connection if credentials present
 #ifdef USE_802_1x
@@ -44,7 +45,7 @@
 
 #define STA_MODE
 
-static const char *TAG = "wifi station";
+static const char *TAG = "[WIFI]";
 
 static esp_ip4_addr_t s_ip_addr;
 
@@ -218,15 +219,16 @@ static void udpReceiverTask(void *pvParameters) {
 	MessageBufferHandle_t msgBuf = WifiCommunicator::getInstance().getCmdReceiverMsgBuffer();
 
 	while (true) {
-		ESP_LOGI(TAG, "Waiting for data");
 		int len = com->read(rx_buffer, sizeof(rx_buffer));
 		// Error occurred during receiving
 		if (len < 0) {
 			ESP_LOGE(TAG, "recvfrom failed: errno %d", errno);
 			break;
 		}
+
 		// Data received
 		else {
+			ESP_LOGI(TAG, "read %d bytes", len);
 			xMessageBufferSend(msgBuf, rx_buffer, len, 0);
 		}
 	}
@@ -291,7 +293,7 @@ UdpCommunicator::UdpCommunicator(uint16_t port) {
 };
 
 int UdpCommunicator::read(uint8_t *buf, size_t bufLen) {
-	ESP_LOGI(TAG, "Waiting for data");
+	ESP_LOGI(TAG, "reading data");
 	return recvfrom(
 		this->sock, buf, bufLen, 0, (struct sockaddr *)&this->sourceAddr, &this->socklen);
 };
@@ -308,6 +310,9 @@ int UdpCommunicator::write(uint8_t *buf, size_t msgLen) {
 };
 
 WifiCommunicator::WifiCommunicator() {
+	LedController led1 = LedController((gpio_num_t)4);
+	led1.startBlinking(400);
+
 	s_semph_get_ip_addrs = xSemaphoreCreateCounting(1, 0);
 	ESP_ERROR_CHECK(nvs_flash_init());
 	ESP_ERROR_CHECK(esp_netif_init());
@@ -324,6 +329,8 @@ WifiCommunicator::WifiCommunicator() {
 	start_mdns_service();
 	xTaskCreate(udpReceiverTask, "udpReceiverTask", 4096, (void *)AF_INET, 3, NULL);
 	xTaskCreate(udpSenderTask, "udpSenderTask", 4096, (void *)AF_INET, 3, NULL);
+
+	led1.set(false);
 }
 
 WifiCommunicator::~WifiCommunicator() {}

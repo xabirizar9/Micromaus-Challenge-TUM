@@ -27,6 +27,9 @@ PB_BIND(MsgInit, MsgInit, AUTO)
 PB_BIND(MsgControl, MsgControl, AUTO)
 
 
+PB_BIND(MsgEncoderCallibration, MsgEncoderCallibration, AUTO)
+
+
 PB_BIND(MausIncomingMessage, MausIncomingMessage, AUTO)
 
 

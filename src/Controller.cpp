@@ -46,13 +46,19 @@ void motorPidTask(void *pvParameter) {
 
 	uint32_t timeInterval = 0;
 
-	float kP = 0.01;
-	float kD = 0.000;
-	float kI = 0.000;
+	float kP;
+	float kD;
+	float kI;
+
 	float correction = 0;
 	float speed = 0;
 
 	while (true) {
+		// update values
+		kP = m->kP;
+		kD = m->kD;
+		kI = m->kI;
+
 		// get speed target for selected motor
 		target = controller->getSpeedInTicks(pos);
 		curEncoderReading = enc->get();
@@ -123,6 +129,7 @@ Controller::Controller()
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
 	  rightEncoder(Encoder(IO::MOTOR_R.encoder)) {
+	// battery(power::Battery(IO::VSENSE)) {
 	// init state stream object
 	this->state.has_position = true;
 	this->state.has_sensors = true;
@@ -212,5 +219,10 @@ Motor *Controller::getMotor(MotorPosition position) {
 
 NavigationPacket Controller::getState() {
 	this->state.timestamp = xTaskGetTickCount();
+	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	// TODO: @alex enable this after it works
+	// this->state.batPercentage = this->battery.getPercentage();
+	// this->state.voltage = this->battery.getVoltage();
 	return this->state;
 }
