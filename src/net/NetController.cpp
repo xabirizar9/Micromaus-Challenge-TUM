@@ -1,4 +1,3 @@
-
 #include "net/NetController.hpp"
 
 #include <math.h>
@@ -31,27 +30,16 @@ using namespace NetController;
  * @param pvParameter
  */
 void infoStreamerTask(void *pvParameter) {
-	uint8_t i = 0;
-
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
-
-	NavigationPacket packet = NavigationPacket_init_zero;
-	packet.has_position = true;
-	packet.has_sensors = true;
-	packet.position = Position_init_zero;
-	packet.sensors = SensorPacket_init_zero;
-
 	while (true) {
-		// TODO: replace with actual position data
-		packet.position.x = sin((float)i / 10.0);
-		packet.position.y = cos((float)i / 10.0);
-		packet.sensors.left = ((float)rand() / (float)(RAND_MAX)) * 2;
-		packet.sensors.front = ((float)rand() / (float)(RAND_MAX)) * 2;
-		packet.sensors.right = ((float)rand() / (float)(RAND_MAX)) * 2;
+		if (manager->controller == NULL || !manager->initCompleted) {
+			vTaskDelay(sensorSendInterval);
+			continue;
+		}
 
 		if (manager->initCompleted) {
-			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(packet);
-			i++;
+			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(
+				manager->controller->getState());
 		}
 		vTaskDelay(sensorSendInterval);
 	}
@@ -77,7 +65,7 @@ void receiverTask(void *pvParameter) {
 			vTaskDelay(pdMS_TO_TICKS(20));
 			continue;
 		}
-		ESP_LOGI(tag, "persed incoming msg, bufLen=%d, msgLen=%d", sizeof(buffer), msgLen);
+		// ESP_LOGI(tag, "persed incoming msg, bufLen=%d, msgLen=%d", sizeof(buffer), msgLen);
 
 		pb_istream_t stream = pb_istream_from_buffer(buffer, msgLen);
 		if (!pb_decode(&stream, MausIncomingMessage_fields, &msg)) {
@@ -109,7 +97,7 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 		return false;
 	}
 
-	ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
+	// ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
 
 	xMessageBufferSend(buffer, this->encodeBuffer, stream.bytes_written, 0);
 	return true;
@@ -122,7 +110,7 @@ NetController::Manager::Manager(NetController::Communicator interface) {
 	xTaskCreate(receiverTask, "receiverTask", 2048, this, 5, NULL);
 
 	// TODO: move this somewhere else just here for testing
-	// xTaskCreate(&testTask, "testTask", 2048, manager, 5, NULL);
+	xTaskCreate(&infoStreamerTask, "infoStreamerTask", 2048, this, 5, NULL);
 };
 
 /**
