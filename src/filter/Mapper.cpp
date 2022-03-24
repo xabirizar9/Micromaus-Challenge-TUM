@@ -1,12 +1,10 @@
-#include "filter/Mapper.cpp"
+#include "filter/Mapper.hpp"
 
-Mapper::Mapper(): bel(6, 6, 0.5) {
-}
+Mapper::Mapper() : bel(6, 6, 0.5) {}
 
-void update(const RobotPosition& currentPos)
-{
-	//TODO
-	
+void update(const RobotPosition& currentPos) {
+	// TODO
+
 	// for every distance sensor,
 	//		compute the walls within the beam of the sensor with max.
 	//		distance 20cm.

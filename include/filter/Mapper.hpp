@@ -7,7 +7,9 @@ class Mapper {
    public:
 	Mapper();
 
-	const MapBelief& getCurrentBelief() const { return bel; }
+	const MapBelief& getCurrentBelief() const {
+		return bel;
+	}
 
 	void update(const RobotPosition& currentPos);
 

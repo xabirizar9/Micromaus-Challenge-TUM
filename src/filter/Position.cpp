@@ -2,6 +2,6 @@
 
 #include <cmath>
 
-linalg::Vec Position::getOrientationVector() const {
-	return {cos(w), sin(w), 0.f};
+linalg::Vec<float> RobotPosition::getOrientationVector() const {
+	return {std::cos(w), std::sin(w), 0.f};
 }
