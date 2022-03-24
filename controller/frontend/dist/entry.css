@@ -1,0 +1,76 @@
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/node_modules/@sveltejs/svelte-virtual-list/VirtualList.esbuild-svelte-fake-css */
+svelte-virtual-list-viewport.svelte-1tqh76q {
+  position: relative;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+}
+svelte-virtual-list-contents.svelte-1tqh76q,
+svelte-virtual-list-row.svelte-1tqh76q {
+  display: block;
+}
+svelte-virtual-list-row.svelte-1tqh76q {
+  overflow: hidden;
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/sensorTable.esbuild-svelte-fake-css */
+.logs.svelte-i9qf9t {
+  font-family: monospace;
+  height: 50vh;
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/MazeViewCard.esbuild-svelte-fake-css */
+.map.svelte-1popbqv.svelte-1popbqv {
+  padding: 0;
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+.map.svelte-1popbqv > .svelte-1popbqv {
+  position: absolute;
+  margin: 0.5rem;
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/index.esbuild-svelte-fake-css */
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
+  box-sizing: border-box;
+}
+body {
+  --main-bg-secondary:#dadada;
+  --main-bg-color:#e8e8e8;
+  --main-text-color:#333;
+  background-color: var(--main-bg-color);
+  padding: 1rem;
+  color: var(--main-text-color);
+  background: #e8e8e8;
+}
+body .card.svelte-wsvhv2 {
+  background-color: var(--main-bg-secondary);
+  border-radius: 1.25rem;
+  box-shadow: 20px 20px 60px #c5c5c5, -20px -20px 60px #ffffff;
+  padding: 0.5rem;
+}
+main.svelte-wsvhv2 {
+  background-color: var(--main-bg-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiVmlydHVhbExpc3Quc3ZlbHRlIiwgInNlbnNvclRhYmxlLnN2ZWx0ZSIsICJNYXplVmlld0NhcmQuc3ZlbHRlIiwgImluZGV4LnN2ZWx0ZSJdLAogICJzb3VyY2VzQ29udGVudCI6IFtudWxsLCBudWxsLCBudWxsLCBudWxsXSwKICAibWFwcGluZ3MiOiAiO0FBeUlDO0FBQ0M7QUFDQTtBQUNBO0FBQ0E7O0FBR0Q7O0FBQ0M7O0FBR0Q7QUFDQzs7OztBQzNIZ0I7QUFBQTtBQUFBOzs7O0FDeUdBO0FBQUE7QUFBQTtBQUFBOztBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7Ozs7QUM5REE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7Ozs7Ozs7Ozs7OztBQUFBOztBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOzsiLAogICJuYW1lcyI6IFtdCn0K */
