@@ -98,7 +98,14 @@
   main {
     background-color: var(--main-bg-color);
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 2fr;
+    }
     gap: 2rem;
   }
 </style>
