@@ -128,7 +128,10 @@ Controller::Controller()
 	: leftMotor(Motor(IO::MOTOR_L)),
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
-	  rightEncoder(Encoder(IO::MOTOR_R.encoder)) {
+	  rightEncoder(Encoder(IO::MOTOR_R.encoder)),
+	  leftSensor(IO::IR_SENSOR_LEFT),
+	  rightSensor(IO::IR_SENSOR_RIGHT),
+	  frontSensor(IO::IR_SENSOR_FRONT) {
 	// battery(power::Battery(IO::VSENSE)) {
 	// init state stream object
 	this->state.has_position = true;
