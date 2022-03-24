@@ -56,17 +56,24 @@ void receiverTask(void *pvParameter) {
 
 	while (true) {
 		if (msgBuffer == NULL) {
-			ESP_LOGD(tag, "not initialized");
+			// ESP_LOGD(tag, "not initialized");
 			vTaskDelay(pdMS_TO_TICKS(20));
 			continue;
 		}
-		msgLen = xMessageBufferReceive(msgBuffer, buffer, sizeof(buffer), 0);
-		if (msgLen == 0) {
+		if (xMessageBufferIsEmpty(msgBuffer)) {
 			// ESP_LOGI(tag, "queue empty");
 			vTaskDelay(pdMS_TO_TICKS(20));
 			continue;
 		}
-		// ESP_LOGI(tag, "persed incoming msg, bufLen=%d, msgLen=%d", sizeof(buffer), msgLen);
+		msgLen = xMessageBufferReceive(msgBuffer, buffer, 256, pdMS_TO_TICKS(20));
+
+		if (msgLen == 0) {
+			// ESP_LOGI(tag, "empty message");
+			vTaskDelay(pdMS_TO_TICKS(20));
+			continue;
+		}
+
+		// ESP_LOGI(tag, "persed incoming msg, bufLen=%d, msgLen=%d", 256, msgLen);
 
 		pb_istream_t stream = pb_istream_from_buffer(buffer, msgLen);
 		if (!pb_decode(&stream, MausIncomingMessage_fields, &msg)) {
@@ -88,6 +95,11 @@ void receiverTask(void *pvParameter) {
 
 				break;
 			case MausIncomingMessage_encoderCallibration_tag:
+				ESP_LOGI(tag,
+						 "updated motors to kP=%f kD=%f kI=%f",
+						 msg.payload.encoderCallibration.kP,
+						 msg.payload.encoderCallibration.kD,
+						 msg.payload.encoderCallibration.kI);
 				// update values for both motors
 				manager->controller->getMotor(MotorPosition::left)
 					->updatePidConfig(msg.payload.encoderCallibration);

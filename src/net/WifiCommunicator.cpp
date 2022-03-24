@@ -228,8 +228,7 @@ static void udpReceiverTask(void *pvParameters) {
 
 		// Data received
 		else {
-			ESP_LOGI(TAG, "read %d bytes", len);
-			xMessageBufferSend(msgBuf, rx_buffer, len, 0);
+			xMessageBufferSend(msgBuf, rx_buffer, len, 2);
 		}
 	}
 

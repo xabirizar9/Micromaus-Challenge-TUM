@@ -1,9 +1,0 @@
-#!/bin/sh
-
-if hash clang-format 2>/dev/null; then
-	for FILE in $(git diff --cached --name-only); do
-		clang-format -i $FILE
-	done
-else
-	echo "clang-format not found, skipping formatting"
-fi
