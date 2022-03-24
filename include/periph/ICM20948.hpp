@@ -2,27 +2,26 @@
 
 #include <cstdint>
 #include <exception>
-#include "support/SPI.hpp"
-#include "support/Linalg.hpp"
 
-class ICMTimeout: public std::exception
-{
+#include "support/Linalg.hpp"
+#include "support/SPI.hpp"
+
+class ICMTimeout : public std::exception {
 	const char* what() const noexcept override {
 		return "timeout occured in ICM module";
 	}
 };
 
-class ICM20948
-{
-public:
-	enum AccelSensitivity: uint8_t {
+class ICM20948 {
+   public:
+	enum AccelSensitivity : uint8_t {
 		ACCEL_RANGE_2G = 0,
 		ACCEL_RANGE_4G = 1,
 		ACCEL_RANGE_8G = 2,
 		ACCEL_RANGE_16G = 3,
 	};
 
-	enum GyroSensitivity: uint8_t {
+	enum GyroSensitivity : uint8_t {
 		GYRO_RANGE_250DPS = 0,
 		GYRO_RANGE_500DPS = 1,
 		GYRO_RANGE_1000DPS = 2,
@@ -49,7 +48,7 @@ public:
 	int16_t readTempRaw();
 
 	/// read temperature in celsius
-	float readTemp(); 
+	float readTemp();
 
 	/// read acceleration in units of g
 	linalg::Vec<float> readAccel();
@@ -60,10 +59,10 @@ public:
 	/// read magnetometer data in microtesla
 	linalg::Vec<float> readMag();
 
-private:
-	static constexpr float ROOM_TEMP_OFFSET = 0; // LSB
-	static constexpr float TEMP_SENSITIVITY = 333.87; // LSB/Kelvin
-	static constexpr float MAGNETOMETER_SCALE = 0.15; // microtesla / LSB
+   private:
+	static constexpr float ROOM_TEMP_OFFSET = 0;  // LSB
+	static constexpr float TEMP_SENSITIVITY = 333.87;  // LSB/Kelvin
+	static constexpr float MAGNETOMETER_SCALE = 0.15;  // microtesla / LSB
 
 	void switchBank(uint8_t bank);
 	void init();
@@ -79,7 +78,6 @@ private:
 
 	SPIDevice spi;
 	uint8_t currentBank;
-	float accelScale; // LSB / g
-	float gyroScale; // LSB / dps
+	float accelScale;  // LSB / g
+	float gyroScale;  // LSB / dps
 };
-

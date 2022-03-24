@@ -6,11 +6,12 @@
 
 Motor::Motor(uint8_t forwardPin, uint8_t backwardPin, uint8_t enPin)
 	: channel(new LEDCChannelResource()), forwardPin(forwardPin), backwardPin(backwardPin) {
-	gpio_config_t ioConf{.pin_bit_mask = (1ULL << forwardPin) | (1ULL << backwardPin) | (1ULL << enPin),
-						 .mode = GPIO_MODE_OUTPUT,
-						 .pull_up_en = GPIO_PULLUP_DISABLE,
-						 .pull_down_en = GPIO_PULLDOWN_DISABLE,
-						 .intr_type = GPIO_INTR_DISABLE};
+	gpio_config_t ioConf{
+		.pin_bit_mask = (1ULL << forwardPin) | (1ULL << backwardPin) | (1ULL << enPin),
+		.mode = GPIO_MODE_OUTPUT,
+		.pull_up_en = GPIO_PULLUP_DISABLE,
+		.pull_down_en = GPIO_PULLDOWN_DISABLE,
+		.intr_type = GPIO_INTR_DISABLE};
 	ESP_ERROR_CHECK(gpio_config(&ioConf));
 
 	ledc_timer_config_t tConf{.speed_mode = LEDC_LOW_SPEED_MODE,
@@ -30,8 +31,7 @@ Motor::Motor(uint8_t forwardPin, uint8_t backwardPin, uint8_t enPin)
 	ESP_ERROR_CHECK(ledc_channel_config(&chanConf));
 }
 
-Motor::Motor(IO::Motor io) : Motor(io.ch1, io.ch2, io.en) {
-}
+Motor::Motor(IO::Motor io) : Motor(io.ch1, io.ch2, io.en) {}
 
 Motor::~Motor() {
 	setPWM(0.0);
@@ -39,7 +39,7 @@ Motor::~Motor() {
 }
 
 void Motor::setPWM(float val) {
-	constexpr float maxDuty = 1024; // depending on
+	constexpr float maxDuty = 1024;	 // depending on
 	bool reverse = (val < 0);
 	uint32_t duty = lroundf(fabs(val) * maxDuty);
 

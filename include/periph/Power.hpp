@@ -11,16 +11,18 @@ constexpr float MOUSE_VOLTAGE_SCALE = 133.f / 33.f * 1e-3;
 constexpr float MOUSE_VOLTAGE_OFFSET = 0;
 
 class VoltageGauge {
-public:
+   public:
 	/// pin: gpio number, scale: 1/Volts, offset in adc ticks
 	/// voltage will be computed as (adc_value + offset) / scale
 	VoltageGauge(const uint8_t pin, const float scale, const float offset);
 	~VoltageGauge();
 
-	float read(); // in volts
-	float getReading() const { return reading; }
+	float read();  // in volts
+	float getReading() const {
+		return reading;
+	}
 
-private:
+   private:
 	// I am using a pointer here so i do not need to define ADCChannel.
 	// this hides the driver/adc.h include from the user of Power.hpp
 	// (I do not want C code implicitly included with this file)
@@ -31,11 +33,9 @@ private:
 };
 
 class Battery {
-public:
+   public:
 	/* with magic values for a 2s lipo */
-	Battery(uint8_t pin):
-		voltage(pin, MOUSE_VOLTAGE_SCALE, MOUSE_VOLTAGE_OFFSET)
-	{}
+	Battery(uint8_t pin) : voltage(pin, MOUSE_VOLTAGE_SCALE, MOUSE_VOLTAGE_OFFSET) {}
 
 	bool isConnected() const;
 	bool isLow() const;
@@ -44,21 +44,29 @@ public:
 
 	void update();
 
-private:
+   private:
 	VoltageGauge voltage;
 };
 
 class PowerManagement {
-public:
+   public:
 	PowerManagement(uint8_t batteryPin);
 	~PowerManagement();
 
-	bool runsOnUSB() const { return !bat.isConnected(); }
-	bool isBatteryLow() const { return bat.isLow(); }
-	bool getBatteryVoltage() const { return bat.getVoltage(); }
-	bool getBatteryPercentage() const { return bat.getPercentage(); }
+	bool runsOnUSB() const {
+		return !bat.isConnected();
+	}
+	bool isBatteryLow() const {
+		return bat.isLow();
+	}
+	bool getBatteryVoltage() const {
+		return bat.getVoltage();
+	}
+	bool getBatteryPercentage() const {
+		return bat.getPercentage();
+	}
 
-private:
+   private:
 	static void _run(PowerManagement* p) {
 		p->run();
 	}
@@ -69,4 +77,4 @@ private:
 	void* taskHandle;
 };
 
-}
+}  // namespace power

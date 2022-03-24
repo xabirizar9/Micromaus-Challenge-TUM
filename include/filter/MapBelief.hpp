@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 #ifdef MAPBELIEF_TEST
 #include <iostream>
@@ -14,7 +14,7 @@ using namespace std;
  * Walls are adressed by field coordinate and direction. For example,
  * in this 2x2 field,
  *
- *     ## -- 
+ *     ## --
  *    |  |  $
  *     -- --
  *    |  |  |
@@ -29,21 +29,17 @@ using namespace std;
  * By default, the walls at the boundary of the field are fixed.
  */
 class MapBelief {
-public:
-	enum Direction {
-		NORTH,
-		SOUTH,
-		EAST,
-		WEST
-	};
+   public:
+	enum Direction { NORTH, SOUTH, EAST, WEST };
 
 	/**
 	 * prior: prior probability that a wall is set
 	 */
-	MapBelief(int width, int height, const float prior):
-		width(width), height(height), probabilities((width + 1) * (height + 1) * 2, prior),
-		fixed((width + 1) * (height + 1) * 2, false)
-	{
+	MapBelief(int width, int height, const float prior)
+		: width(width),
+		  height(height),
+		  probabilities((width + 1) * (height + 1) * 2, prior),
+		  fixed((width + 1) * (height + 1) * 2, false) {
 		// set all border walls to fixed
 		// at() performs bounds checking so we immediately see if i fucked up
 		for (int x = 0; x <= width; ++x) {
@@ -61,7 +57,7 @@ public:
 	~MapBelief() = default;
 
 	/// I forbid copying for performance reasons, hoping that i will
-	//never need it
+	// never need it
 	MapBelief(const MapBelief&) = delete;
 
 	/// efficient move construction operations
@@ -89,7 +85,7 @@ public:
 	 */
 	float get(int x, int y, Direction d) const {
 		if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) {
-			return 1.0; // all walls outside the field are set
+			return 1.0;	 // all walls outside the field are set
 		}
 
 		int loc = locate(x, y, d);
@@ -132,7 +128,7 @@ public:
 	}
 #endif
 
-private:
+   private:
 	/// transform x/y/d coordinate to array index.
 	int locate(int x, int y, Direction d) const {
 		if (d == EAST) {
@@ -151,8 +147,7 @@ private:
 };
 
 #ifdef MAPBELIEF_TEST
-int main()
-{
+int main() {
 	MapBelief bel(6, 6, 0.5);
 	bel.print();
 	return 0;
