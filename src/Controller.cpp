@@ -169,7 +169,7 @@ void Controller::setSpeed(int16_t speed) {
 	this->state.leftMotorSpeed = (float)speed;
 	this->state.rightMotorSpeed = (float)speed;
 
-	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
+	// TODO: @wlad convert from cm/s to encoder ticks for now use some magic numbers
 	this->leftSpeedTickTarget = 2;
 	this->rightSpeedTickTarget = 2;
 }
@@ -191,6 +191,15 @@ int16_t Controller::getSpeedInTicks(MotorPosition position) {
 		case MotorPosition::right: return this->rightSpeedTickTarget;
 		default: return 0;
 	}
+}
+
+void Controller::turnright() {
+	vTaskDelay(pdMS_TO_TICKS(5000));
+	this->leftSpeedTickTarget = 2;
+	this->rightSpeedTickTarget = 2;
+	vTaskDelay(pdMS_TO_TICKS(1350));
+	this->leftSpeedTickTarget = 0;
+	this->rightSpeedTickTarget = 0;
 }
 
 /******************************************************************
