@@ -17,8 +17,9 @@
   <VirtualList items={data} let:item>
     <!-- this will be rendered for each currently visible item -->
     <span>
-      [{item.timestamp}] pos=({item.position.x},{item.position.y}) dir=({item
-        .position.heading}) bat={item.batteryLevel ?? 0}
+      [{item.timestamp}] pos=({item.position.x},{item.position.y}) speed=({item.leftMotorSpeed},{item.rightMotorSpeed})
+      dir=({item.position.heading}) encTotal=({item.leftEncoderTotal},{item.rightEncoderTotal})
+      bat={item.batteryLevel ?? 0}
     </span>
   </VirtualList>
 </div>
