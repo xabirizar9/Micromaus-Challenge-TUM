@@ -30,7 +30,6 @@ class Controller {
 
 	int16_t direction = 0;
 	int16_t speedTickTarget = 0;
-	
 
    public:
 	Controller();
@@ -42,7 +41,6 @@ class Controller {
 	 * @return int16_t
 	 */
 	int16_t getSpeed();
-
 
 	/**
 	 * @brief Get the Speed in encoder tick format for each motor
@@ -59,7 +57,6 @@ class Controller {
 	 */
 	void setSpeed(int16_t speed);
 	void setDirection(int16_t direction);
-	void setMode(DriveMode mode);
 
 	/**
 	 * @brief Utility method to set both speed and direction
