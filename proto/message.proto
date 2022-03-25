@@ -56,6 +56,18 @@ message MsgControl {
 	int32 speed = 2;
 }
 
+message MsgTurn {
+	float degree = 1;
+	int32 speed = 2;
+}
+
+message MsgDrive {
+	int32 distance = 1;
+	int32 speed = 2;
+}
+
+message MsgStop {}
+
 message MsgEncoderCallibration {
 	float kP = 1;
 	float kI = 2;
@@ -68,5 +80,8 @@ message MausIncomingMessage {
 		MsgControl control = 3;
 		MsgEncoderCallibration encoderCallibration = 4;
 		MsgPing ping = 5;
+		MsgTurn turn = 6;
+		MsgStop stop = 7;
+		MsgDrive drive = 8;
 	}
 }

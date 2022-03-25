@@ -25,6 +25,10 @@ typedef struct _MsgPing {
     char dummy_field;
 } MsgPing;
 
+typedef struct _MsgStop { 
+    char dummy_field;
+} MsgStop;
+
 typedef struct _PongPacket { 
     char dummy_field;
 } PongPacket;
@@ -33,6 +37,11 @@ typedef struct _MsgControl {
     float direction; 
     int32_t speed; 
 } MsgControl;
+
+typedef struct _MsgDrive { 
+    int32_t distance; 
+    int32_t speed; 
+} MsgDrive;
 
 typedef struct _MsgEncoderCallibration { 
     float kP; 
@@ -44,6 +53,11 @@ typedef struct _MsgEncoderCallibration {
 typedef struct _MsgInit { 
     int32_t version; 
 } MsgInit;
+
+typedef struct _MsgTurn { 
+    float degree; 
+    int32_t speed; 
+} MsgTurn;
 
 typedef struct _Position { 
     float x; 
@@ -64,6 +78,9 @@ typedef struct _MausIncomingMessage {
         MsgControl control;
         MsgEncoderCallibration encoderCallibration;
         MsgPing ping;
+        MsgTurn turn;
+        MsgStop stop;
+        MsgDrive drive;
     } payload; 
 } MausIncomingMessage;
 
@@ -111,6 +128,9 @@ extern "C" {
 #define MsgInit_init_default                     {0}
 #define MsgPing_init_default                     {0}
 #define MsgControl_init_default                  {0, 0}
+#define MsgTurn_init_default                     {0, 0}
+#define MsgDrive_init_default                    {0, 0}
+#define MsgStop_init_default                     {0}
 #define MsgEncoderCallibration_init_default      {0, 0, 0}
 #define MausIncomingMessage_init_default         {0, {MsgInit_init_default}}
 #define AckPacket_init_zero                      {0}
@@ -122,16 +142,23 @@ extern "C" {
 #define MsgInit_init_zero                        {0}
 #define MsgPing_init_zero                        {0}
 #define MsgControl_init_zero                     {0, 0}
+#define MsgTurn_init_zero                        {0, 0}
+#define MsgDrive_init_zero                       {0, 0}
+#define MsgStop_init_zero                        {0}
 #define MsgEncoderCallibration_init_zero         {0, 0, 0}
 #define MausIncomingMessage_init_zero            {0, {MsgInit_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define MsgControl_direction_tag                 1
 #define MsgControl_speed_tag                     2
+#define MsgDrive_distance_tag                    1
+#define MsgDrive_speed_tag                       2
 #define MsgEncoderCallibration_kP_tag            1
 #define MsgEncoderCallibration_kI_tag            2
 #define MsgEncoderCallibration_kD_tag            3
 #define MsgInit_version_tag                      1
+#define MsgTurn_degree_tag                       1
+#define MsgTurn_speed_tag                        2
 #define Position_x_tag                           1
 #define Position_y_tag                           2
 #define Position_heading_tag                     3
@@ -142,6 +169,9 @@ extern "C" {
 #define MausIncomingMessage_control_tag          3
 #define MausIncomingMessage_encoderCallibration_tag 4
 #define MausIncomingMessage_ping_tag             5
+#define MausIncomingMessage_turn_tag             6
+#define MausIncomingMessage_stop_tag             7
+#define MausIncomingMessage_drive_tag            8
 #define NavigationPacket_sensors_tag             1
 #define NavigationPacket_position_tag            2
 #define NavigationPacket_leftMotorSpeed_tag      3
@@ -221,6 +251,23 @@ X(a, STATIC,   SINGULAR, INT32,    speed,             2)
 #define MsgControl_CALLBACK NULL
 #define MsgControl_DEFAULT NULL
 
+#define MsgTurn_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, FLOAT,    degree,            1) \
+X(a, STATIC,   SINGULAR, INT32,    speed,             2)
+#define MsgTurn_CALLBACK NULL
+#define MsgTurn_DEFAULT NULL
+
+#define MsgDrive_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, INT32,    distance,          1) \
+X(a, STATIC,   SINGULAR, INT32,    speed,             2)
+#define MsgDrive_CALLBACK NULL
+#define MsgDrive_DEFAULT NULL
+
+#define MsgStop_FIELDLIST(X, a) \
+
+#define MsgStop_CALLBACK NULL
+#define MsgStop_DEFAULT NULL
+
 #define MsgEncoderCallibration_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, FLOAT,    kP,                1) \
 X(a, STATIC,   SINGULAR, FLOAT,    kI,                2) \
@@ -232,13 +279,19 @@ X(a, STATIC,   SINGULAR, FLOAT,    kD,                3)
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,init,payload.init),   2) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,control,payload.control),   3) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,encoderCallibration,payload.encoderCallibration),   4) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ping,payload.ping),   5)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ping,payload.ping),   5) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,turn,payload.turn),   6) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,stop,payload.stop),   7) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,drive,payload.drive),   8)
 #define MausIncomingMessage_CALLBACK NULL
 #define MausIncomingMessage_DEFAULT NULL
 #define MausIncomingMessage_payload_init_MSGTYPE MsgInit
 #define MausIncomingMessage_payload_control_MSGTYPE MsgControl
 #define MausIncomingMessage_payload_encoderCallibration_MSGTYPE MsgEncoderCallibration
 #define MausIncomingMessage_payload_ping_MSGTYPE MsgPing
+#define MausIncomingMessage_payload_turn_MSGTYPE MsgTurn
+#define MausIncomingMessage_payload_stop_MSGTYPE MsgStop
+#define MausIncomingMessage_payload_drive_MSGTYPE MsgDrive
 
 extern const pb_msgdesc_t AckPacket_msg;
 extern const pb_msgdesc_t Position_msg;
@@ -249,6 +302,9 @@ extern const pb_msgdesc_t MausOutgoingMessage_msg;
 extern const pb_msgdesc_t MsgInit_msg;
 extern const pb_msgdesc_t MsgPing_msg;
 extern const pb_msgdesc_t MsgControl_msg;
+extern const pb_msgdesc_t MsgTurn_msg;
+extern const pb_msgdesc_t MsgDrive_msg;
+extern const pb_msgdesc_t MsgStop_msg;
 extern const pb_msgdesc_t MsgEncoderCallibration_msg;
 extern const pb_msgdesc_t MausIncomingMessage_msg;
 
@@ -262,17 +318,23 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MsgInit_fields &MsgInit_msg
 #define MsgPing_fields &MsgPing_msg
 #define MsgControl_fields &MsgControl_msg
+#define MsgTurn_fields &MsgTurn_msg
+#define MsgDrive_fields &MsgDrive_msg
+#define MsgStop_fields &MsgStop_msg
 #define MsgEncoderCallibration_fields &MsgEncoderCallibration_msg
 #define MausIncomingMessage_fields &MausIncomingMessage_msg
 
 /* Maximum encoded size of messages (where known) */
 #define AckPacket_size                           0
-#define MausIncomingMessage_size                 18
+#define MausIncomingMessage_size                 24
 #define MausOutgoingMessage_size                 84
 #define MsgControl_size                          16
+#define MsgDrive_size                            22
 #define MsgEncoderCallibration_size              15
 #define MsgInit_size                             11
 #define MsgPing_size                             0
+#define MsgStop_size                             0
+#define MsgTurn_size                             16
 #define NavigationPacket_size                    82
 #define PongPacket_size                          0
 #define Position_size                            15

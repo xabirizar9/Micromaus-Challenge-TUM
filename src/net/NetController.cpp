@@ -120,6 +120,21 @@ void receiverTask(void *pvParameter) {
 						 msg.payload.control.speed,
 						 msg.payload.control.direction);
 				break;
+
+			case MausIncomingMessage_drive_tag:
+				// TODO: call method on controller
+
+				break;
+
+			case MausIncomingMessage_stop_tag:
+				// TODO: call method on controller
+
+				break;
+
+			case MausIncomingMessage_turn_tag:
+				// TODO: call method on controller
+
+				break;
 		}
 	}
 }
