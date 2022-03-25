@@ -14,7 +14,8 @@ var (
 )
 
 func main() {
-
+	c := Config{}
+	c.getConf()
 	m := NewManager()
 
 	// try connecting robot
@@ -24,6 +25,7 @@ func main() {
 			r, err := NewRobot(log, RobotConnectionOptions{
 				Baud: 115200,
 				Dev:  "/dev/cu.MAUS_BT_SERIAL",
+				Addr: c.MausAddr,
 			})
 			if err != nil {
 
