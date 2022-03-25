@@ -79,7 +79,7 @@ class Controller {
 	 * @param direction direction in rotational angle
 	 */
 	void drive(int16_t speed, int16_t direction);
-	void turnright();
+	void turnOnSpot(float degree, int16_t speed);
 	void sensorUpdates();
 
 	Encoder *getEncoder(MotorPosition position);

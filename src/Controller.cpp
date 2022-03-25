@@ -313,16 +313,19 @@ float Controller::getSpeedInTicks(MotorPosition position) {
 	}
 }
 
-void Controller::turnright() {
+void Controller::turnOnSpot(float degree, int16_t speed) {
 	// vTaskDelay(pdMS_TO_TICKS(5000));
-	this->leftSpeedTickTarget = convertMMsToTPS(30);
-	this->rightSpeedTickTarget = convertMMsToTPS(30);
-	vTaskDelay(pdMS_TO_TICKS(5000));
-	this->leftSpeedTickTarget = convertMMsToTPS(47);
-	this->rightSpeedTickTarget = -convertMMsToTPS(47);
-	vTaskDelay(pdMS_TO_TICKS(1000));
-	this->leftSpeedTickTarget = convertMMsToTPS(0);
-	this->rightSpeedTickTarget = -convertMMsToTPS(0);
+	int8_t pre = -1;
+	if (degree < 0) {
+		pre = 1;
+	}
+	uint8_t rMaus = 60;
+	float d_rad = abs(degree) * rMaus * 0.5;
+	float duration = d_rad / speed;
+
+	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
+	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
+	vTaskDelay(pdMS_TO_TICKS(duration));
 }
 
 /******************************************************************
