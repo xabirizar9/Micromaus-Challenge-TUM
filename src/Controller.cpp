@@ -42,6 +42,14 @@ float convertMillimetersToRevolutions(int16_t millis) {
 	return (float)millis * mmToRp;
 }
 
+inline float mmsToTicks(float millis) {
+	return millis * mmToRp * ticksPerRevolution;
+}
+
+inline float convertMMsToTPS(float millis) {
+	return convertMillimetersToRevolutions(millis) * ticksPerRevolution;
+}
+
 void motorPidTask(void *pvParameter) {
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
 
@@ -169,19 +177,20 @@ void laneControlTask(void *args) {
 	Controller *controller = (Controller *)args;
 	Motor *leftMotor = controller->getMotor(left);
 	Motor *rightMotor = controller->getMotor(right);
+
 	PIDErrors wallDistance;
 	uint32_t timeInterval = 0;
 
 	// declare variables for sensor distances
-	int8_t d_left;
-	int8_t d_right;
+	int8_t dLeft;
+	int8_t dRight;
 
 	const float updateConst = 0.01;
 	float kP = 0.5;
 	float kD = 0;
 	float kI = 0;
 
-	float curSpeed;
+	float curSpeedTicks;
 	float leftSpeed;
 	float rightSpeed;
 	float direction;
@@ -194,7 +203,13 @@ void laneControlTask(void *args) {
 		d_right = get_right_sensor_distance()
 		cur_speed = get_current_speed()
 		*/
-		wallDistance.curError = d_left - d_right;
+		dLeft = controller->getState().sensors.left;
+		dRight = controller->getState().sensors.right;
+		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
+
+		ESP_LOGI(TAG, "dLeft=%f, dRight=%f", dLeft, dRight);
+
+		wallDistance.curError = dLeft - dRight;
 		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
 		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) +
 								  (kI * wallDistance.intError);
@@ -203,11 +218,11 @@ void laneControlTask(void *args) {
 
 		// Update speed of right motor
 		clamp(wallDistance.correction, wallDistance.intError, timeInterval);
-		leftMotor->setPWM(leftSpeed + updateConst * wallDistance.correction);
-		rightMotor->setPWM(rightSpeed - updateConst * wallDistance.correction);
+		leftMotor->setPWM(curSpeedTicks + updateConst * mmsToTicks(wallDistance.correction));
+		rightMotor->setPWM(curSpeedTicks - updateConst * mmsToTicks(wallDistance.correction));
 
-		direction = 0;	// Compute somehow direction from left/right speeds
-		controller->setDirection(direction);
+		// direction = 0;	// Compute somehow direction from left/right speeds
+		// controller->setDirection(direction);
 
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}
