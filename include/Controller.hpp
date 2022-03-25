@@ -28,12 +28,16 @@ class Controller {
 	float leftSpeedTickTarget = 0;
 	float rightSpeedTickTarget = 0;
 
-	int16_t direction = 0;
-	int16_t speedTickTarget = 0;
+	// create packet storring current controller state
+	NavigationPacket state;
 
    public:
 	Controller();
 	~Controller();
+
+	// power::Battery battery;
+
+	NavigationPacket getState();
 
 	/**
 	 * @brief Get global robot speed (both motors) in mm/s
@@ -49,6 +53,9 @@ class Controller {
 	 * @return int16_t speed in ticks per second
 	 */
 	float getSpeedInTicks(MotorPosition position);
+
+	int16_t direction = 0;
+	int16_t speedTickTarget = 0;
 
 	/**
 	 * @brief Set global speed in mm/s

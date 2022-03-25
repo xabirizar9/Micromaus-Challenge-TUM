@@ -37,10 +37,9 @@ void motorPidTask(void *pvParameter) {
 	MotorPosition pos = payload->position;
 	Motor *m = controller->getMotor(pos);
 	Encoder *enc = controller->getEncoder(pos);
-	IRSensor *sen =
 
-		// delete payload after we have read everything
-		delete payload;
+	// delete payload after we have read everything
+	delete payload;
 
 	// PID interval in ms
 	uint16_t monitorInterval = 100;
@@ -111,13 +110,13 @@ void motorPidTask(void *pvParameter) {
 		speed += correction;
 
 		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum, correction);
-		ESP_LOGI(TAG,
-				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
-				 target,
-				 curError,
-				 correction,
-				 speed,
-				 curEncoderReading);
+		// ESP_LOGI(TAG,
+		// 		 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
+		// 		 target,
+		// 		 curError,
+		// 		 correction,
+		// 		 speed,
+		// 		 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
@@ -139,7 +138,7 @@ void motorPidTask(void *pvParameter) {
 
 void stateTask(void *arg) {
 	Controller *controller = (Controller *)arg;
-	controller->SensorUpdates();
+	controller->sensorUpdates();
 
 	vTaskDelay(pdMS_TO_TICKS(500));
 }
@@ -194,9 +193,17 @@ void Controller::setSpeed(int16_t speed) {
 }
 
 void Controller::sensorUpdates() {
-	this->state.sensorPacket.left = leftSensor.measuredistance();
-	rightSensor.measuredistance();
-	frontSensor.measuredistance();
+	while (true) {
+		this->state.sensors.left = leftSensor.measuredistance();
+		this->state.sensors.right = rightSensor.measuredistance();
+		this->state.sensors.front = frontSensor.measuredistance();
+		// ESP_LOGI(TAG,
+		// 		 "PID: left:%.3f right=%.3f front=%.3f",
+		// 		 this->state.sensors.left,
+		// 		 this->state.sensors.right,
+		// 		 this->state.sensors.front);
+		// vTaskDelay(pdMS_TO_TICKS(500));
+	}
 }
 
 void Controller::setDirection(int16_t direction) {
