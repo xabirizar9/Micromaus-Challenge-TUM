@@ -283,17 +283,15 @@ void Controller::setSpeed(int16_t speed) {
 }
 
 void Controller::sensorUpdates() {
-	while (true) {
-		this->state.sensors.left = leftSensor.measuredistance();
-		this->state.sensors.right = rightSensor.measuredistance();
-		this->state.sensors.front = frontSensor.measuredistance();
-		// ESP_LOGI(TAG,
-		// 		 "PID: left:%.3f right=%.3f front=%.3f",
-		// 		 this->state.sensors.left,
-		// 		 this->state.sensors.right,
-		// 		 this->state.sensors.front);
-		// vTaskDelay(pdMS_TO_TICKS(500));
-	}
+	this->state.sensors.left = leftSensor.measuredistance();
+	this->state.sensors.right = rightSensor.measuredistance();
+	this->state.sensors.front = frontSensor.measuredistance();
+	// ESP_LOGI(TAG,
+	// 		 "PID: left:%.3f right=%.3f front=%.3f",
+	// 		 this->state.sensors.left,
+	// 		 this->state.sensors.right,
+	// 		 this->state.sensors.front);
+	// vTaskDelay(pdMS_TO_TICKS(500));
 }
 
 void Controller::setDirection(int16_t direction) {

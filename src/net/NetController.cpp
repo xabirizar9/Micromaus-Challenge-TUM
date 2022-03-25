@@ -123,7 +123,8 @@ void receiverTask(void *pvParameter) {
 
 			case MausIncomingMessage_drive_tag:
 				// TODO: call method on controller
-
+				ESP_LOGI(
+					tag, "Dist=%d, speed=%d", msg.payload.drive.distance, msg.payload.drive.speed);
 				break;
 
 			case MausIncomingMessage_stop_tag:
