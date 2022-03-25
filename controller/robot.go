@@ -41,6 +41,7 @@ type Robot struct {
 type RobotConnectionOptions struct {
 	Baud int
 	Dev  string
+	Addr string
 }
 
 func (r *Robot) connect(ctx context.Context, address string) (err error) {
@@ -76,7 +77,7 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 		pongMsgChannel: make(chan bool),
 	}
 
-	err = r.connect(context.TODO(), "131.159.195.109:8888")
+	err = r.connect(context.TODO(), opt.Addr)
 	if err != nil {
 		l.Error("failed to connect to robot", zap.Error(err))
 		return
