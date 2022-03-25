@@ -37,7 +37,7 @@ float IRSensor::measuredistance() {
 		distance = 0.001;
 	}
 
-	return distance;
+	return distance * 10;
 }
 
 void IRSensor::toggleled(float ms) {
