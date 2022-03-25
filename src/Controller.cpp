@@ -110,13 +110,13 @@ void motorPidTask(void *pvParameter) {
 		speed += correction;
 
 		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum, correction);
-		ESP_LOGI(TAG,
-				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
-				 target,
-				 curError,
-				 correction,
-				 speed,
-				 curEncoderReading);
+		// ESP_LOGI(TAG,
+		// 		 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
+		// 		 target,
+		// 		 curError,
+		// 		 correction,
+		// 		 speed,
+		// 		 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
@@ -136,35 +136,21 @@ void motorPidTask(void *pvParameter) {
 	}
 }
 
-/* void laneControlTask(void* args){
-	Controller *controller = (Controller* )args;
-	PIDErrors wallDistance;
-	uint32_t timeInterval = 0;
+void stateTask(void *arg) {
+	Controller *controller = (Controller *)arg;
+	controller->sensorUpdates();
 
-	kP
-	kD
-	kI
-
-	while (true){
-		timeInterval = pdTICKS_TO_MS(curTick - lastTick );
-		wallDistance.curError = d_left - d_right;
-		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
-		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) + (kI
-* wallDistance.errorSum);
-
-		wallDistance.lastError = wallDistance.curError;
-		wallDistance.errorSum += wallDistance.curError * timeInterval;
-
-		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0,
-(float)1.0);
-	}
-};*/
+	vTaskDelay(pdMS_TO_TICKS(500));
+}
 
 Controller::Controller()
 	: leftMotor(Motor(IO::MOTOR_L)),
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
-	  rightEncoder(Encoder(IO::MOTOR_R.encoder)) {
+	  rightEncoder(Encoder(IO::MOTOR_R.encoder)),
+	  leftSensor(IO::IR_SENSOR_LEFT),
+	  rightSensor(IO::IR_SENSOR_RIGHT),
+	  frontSensor(IO::IR_SENSOR_FRONT) {
 	// battery(power::Battery(IO::VSENSE)) {
 	// init state stream object
 	this->state.has_position = true;
@@ -187,14 +173,7 @@ Controller::Controller()
 	xTaskCreate(
 		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
 
-	/*xTaskCreate(
-		laneControlTask,
-		"laneControlTask",
-		4096,
-		this,
-		1,
-		&this->rightMotorPidTaskHandle
-	);*/
+	xTaskCreate(stateTask, "stateTask", 2048, this, 1, &this->sensorRead);
 }
 
 /******************************************************************
@@ -211,6 +190,20 @@ void Controller::setSpeed(int16_t speed) {
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
 	this->leftSpeedTickTarget = this->rightSpeedTickTarget =
 		convertMillimetersToRevolutions((float)speed) * ticksPerRevolution;
+}
+
+void Controller::sensorUpdates() {
+	while (true) {
+		this->state.sensors.left = leftSensor.measuredistance();
+		this->state.sensors.right = rightSensor.measuredistance();
+		this->state.sensors.front = frontSensor.measuredistance();
+		// ESP_LOGI(TAG,
+		// 		 "PID: left:%.3f right=%.3f front=%.3f",
+		// 		 this->state.sensors.left,
+		// 		 this->state.sensors.right,
+		// 		 this->state.sensors.front);
+		// vTaskDelay(pdMS_TO_TICKS(500));
+	}
 }
 
 void Controller::setDirection(int16_t direction) {
@@ -230,6 +223,15 @@ float Controller::getSpeedInTicks(MotorPosition position) {
 		case MotorPosition::right: return this->rightSpeedTickTarget;
 		default: return 0;
 	}
+}
+
+void Controller::turnright() {
+	// vTaskDelay(pdMS_TO_TICKS(5000));
+	this->leftSpeedTickTarget = 2;
+	this->rightSpeedTickTarget = 2;
+	vTaskDelay(pdMS_TO_TICKS(5000));
+	this->leftSpeedTickTarget = 0;
+	this->rightSpeedTickTarget = 0;
 }
 
 /******************************************************************

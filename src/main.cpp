@@ -34,4 +34,6 @@ extern "C" void app_main() {
 	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 	// pass controller to remote controller
 	netManager->controller = mainController;
+
+	mainController->turnright();
 }

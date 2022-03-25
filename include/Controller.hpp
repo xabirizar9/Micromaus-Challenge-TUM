@@ -1,31 +1,32 @@
 #pragma once
 #include <stdint.h>
 
+#include "IRSensor.hpp"
 #include "config.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "message.pb.h"
 #include "periph/Encoder.hpp"
 #include "periph/Motor.hpp"
-#include "periph/Power.hpp"
 
 enum MotorPosition { left, right };
+
 class Controller {
    private:
 	TaskHandle_t leftMotorPidTaskHandle;
 	TaskHandle_t rightMotorPidTaskHandle;
+	TaskHandle_t sensorRead;
 
 	Motor leftMotor;
 	Motor rightMotor;
 	Encoder leftEncoder;
 	Encoder rightEncoder;
+	IRSensor leftSensor;
+	IRSensor rightSensor;
+	IRSensor frontSensor;
 
 	// individual speed targets per motor
 	float leftSpeedTickTarget = 0;
 	float rightSpeedTickTarget = 0;
-
-	int16_t direction = 0;
-	int16_t speedTickTarget = 0;
 
 	// create packet storring current controller state
 	NavigationPacket state;
@@ -53,6 +54,9 @@ class Controller {
 	 */
 	float getSpeedInTicks(MotorPosition position);
 
+	int16_t direction = 0;
+	int16_t speedTickTarget = 0;
+
 	/**
 	 * @brief Set global speed in mm/s
 	 *
@@ -68,6 +72,8 @@ class Controller {
 	 * @param direction direction in rotational angle
 	 */
 	void drive(int16_t speed, int16_t direction);
+	void turnright();
+	void sensorUpdates();
 
 	Encoder* getEncoder(MotorPosition position);
 	Motor* getMotor(MotorPosition position);
