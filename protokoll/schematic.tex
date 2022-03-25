@@ -1,0 +1,21 @@
+\newcommand{\schematicpage}[3]{
+\includepdf[pagecommand={%
+\thispagestyle{empty}
+\ifstrequal{#1}{1}{
+\section{Schematics}
+}{}
+\label{#3}
+\begin{tikzpicture}[remember picture, overlay]
+	\node[rotate=90] at ($(current page.east) - (2.5cm, 0cm)$) {#2};
+	\node[rotate=90] at ($(current page.south east) - (2.5cm, -3cm)$) {\thepage};
+\end{tikzpicture}
+}, pages={#1}, angle=90,
+noautoscale=true]{schematic.pdf}
+}
+
+\schematicpage{1}{Controller and User Interface}{schematic:controller}
+\schematicpage{2}{USB-UART Interface}{schematic:usb}
+\schematicpage{3}{Infrared Range Sensors}{schematic:ir}
+\schematicpage{4}{Motor Driver Circuitry}{schematic:hbridge}
+\schematicpage{5}{Power Supply}{schematic:power}
+\schematicpage{6}{IMU Module Connector}{schematic:imu}

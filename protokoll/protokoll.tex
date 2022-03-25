@@ -4,6 +4,7 @@
 %
 \documentclass[titlepage=firstiscover, twoside=semi, overfullrule]{scrartcl}
 \usepackage{scrlayer-scrpage}
+\usepackage{pdfpages}
 
 % xelatex
 \usepackage[babelshorthands]{polyglossia}
@@ -63,10 +64,10 @@ citebordercolor={0 .8 0}]{hyperref}
 % plotting
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.16}
-\usetikzlibrary{external} % put figures in external pdfs, improves performance
-\tikzsetexternalprefix{tikz/}
+%\usetikzlibrary{external} % put figures in external pdfs, improves performance
+%\tikzsetexternalprefix{tikz/}
 %\tikzset{external/force remake} % uncomment to force remake of all figures
-\tikzexternalize 
+%\tikzexternalize 
 \usetikzlibrary{calc}
 
 \pgfplotsset{every tick label/.append style={font=\small}}
@@ -103,5 +104,6 @@ citebordercolor={0 .8 0}]{hyperref}
 \begin{document}
 \input{title.tex}
 \input{hardware.tex}
+\appendix
 \input{schematic.tex}
 \end{document}

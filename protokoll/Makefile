@@ -1,11 +1,11 @@
-INPUTS=protokoll.tex title.tex
+INPUTS=protokoll.tex title.tex schematic.tex
 
 all: protokoll.pdf
 
 protokoll.pdf: $(INPUTS)
 
 %.pdf: %.tex
-	latexmk -xelatex $<
+	latexmk -xelatex -shell-escape $<
 
 clean-figures:
 	rm -f tikz/*
@@ -13,4 +13,5 @@ clean-figures:
 
 clean:
 	rm -f tikz/* protokoll.bbl protokoll.auxlock protokoll.run.xml
-	latexmk -C
+	latexmk -c
+	rm -f protokoll.pdf protokoll.xdv
