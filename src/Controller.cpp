@@ -248,7 +248,7 @@ Controller::Controller()
 	xTaskCreate(
 		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
 
-	// xTaskCreate(stateTask, "stateTask", 2048, this, 1, &this->sensorRead);
+	xTaskCreate(stateTask, "stateTask", 2048, this, 1, &this->sensorRead);
 }
 
 /******************************************************************

@@ -90,6 +90,29 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 		}
 	}()
 
+	// start client broadcast
+	go func() {
+		for {
+			cmd := <-m.broadcastChannel
+			// re encode message
+			buf, err := proto.Marshal(cmd)
+			if err != nil {
+				l.Error("failed to encode proto message", zap.Error(err))
+				continue
+
+			}
+			// send message to all clients
+			for _, c := range m.Clients {
+				c.conn.WriteMessage(websocket.BinaryMessage, buf)
+				if err != nil {
+					l.Error("failed to write to client", zap.Error(err), zap.String("client", c.ID))
+					continue
+
+				}
+			}
+		}
+	}()
+
 	l.Debug("send init packet to robot")
 
 	return nil

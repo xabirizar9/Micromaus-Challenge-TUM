@@ -43,7 +43,7 @@
   }
 
   .entry {
-    padding: 0.25rem;
+    pad: 0.25rem;
     border-bottom: 1px solid #eee;
   }
 </style>
