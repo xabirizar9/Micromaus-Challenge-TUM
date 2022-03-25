@@ -24,9 +24,10 @@ void motorPidTask(void *pvParameter) {
 	MotorPosition pos = payload->position;
 	Motor *m = controller->getMotor(pos);
 	Encoder *enc = controller->getEncoder(pos);
+	IRSensor *sen =
 
-	// delete payload after we have read everything
-	delete payload;
+		// delete payload after we have read everything
+		delete payload;
 
 	ESP_LOGD(TAG, "started pid task %d", pos);
 
@@ -100,29 +101,12 @@ void motorPidTask(void *pvParameter) {
 	}
 }
 
-/* void laneControlTask(void* args){
-	Controller *controller = (Controller* )args;
-	PIDErrors wallDistance;
-	uint32_t timeInterval = 0;
+void stateTask(void *arg) {
+	Controller *controller = (Controller *)arg;
+	controller->SensorUpdates();
 
-	kP
-	kD
-	kI
-
-	while (true){
-		timeInterval = pdTICKS_TO_MS(curTick - lastTick );
-		wallDistance.curError = d_left - d_right;
-		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
-		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) + (kI
-* wallDistance.errorSum);
-
-		wallDistance.lastError = wallDistance.curError;
-		wallDistance.errorSum += wallDistance.curError * timeInterval;
-
-		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0,
-(float)1.0);
-	}
-};*/
+	vTaskDelay(pdMS_TO_TICKS(500));
+}
 
 Controller::Controller()
 	: leftMotor(Motor(IO::MOTOR_L)),
@@ -154,14 +138,7 @@ Controller::Controller()
 	xTaskCreate(
 		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
 
-	/*xTaskCreate(
-		laneControlTask,
-		"laneControlTask",
-		4096,
-		this,
-		1,
-		&this->rightMotorPidTaskHandle
-	);*/
+	xTaskCreate(stateTask, "stateTask", 2048, this, 1, &this->sensorRead);
 }
 
 /******************************************************************
@@ -175,6 +152,12 @@ void Controller::setSpeed(int16_t speed) {
 	// TODO: @wlad convert from cm/s to encoder ticks for now use some magic numbers
 	this->leftSpeedTickTarget = 2;
 	this->rightSpeedTickTarget = 2;
+}
+
+void Controller::sensorUpdates() {
+	this->state.sensorPacket.left = leftSensor.measuredistance();
+	rightSensor.measuredistance();
+	frontSensor.measuredistance();
 }
 
 void Controller::setDirection(int16_t direction) {
@@ -197,10 +180,10 @@ int16_t Controller::getSpeedInTicks(MotorPosition position) {
 }
 
 void Controller::turnright() {
-	vTaskDelay(pdMS_TO_TICKS(5000));
+	// vTaskDelay(pdMS_TO_TICKS(5000));
 	this->leftSpeedTickTarget = 2;
 	this->rightSpeedTickTarget = 2;
-	vTaskDelay(pdMS_TO_TICKS(1350));
+	vTaskDelay(pdMS_TO_TICKS(5000));
 	this->leftSpeedTickTarget = 0;
 	this->rightSpeedTickTarget = 0;
 }
