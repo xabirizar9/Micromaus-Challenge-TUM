@@ -25,8 +25,7 @@ static const float mmToRp = 0.0053051648;  // 1 / (2 * PI * 30)
 static const float ticksPerRevolution = 2112.0;
 
 template <typename T = float>
-void clamp(
-	T &correction, T &intError, uint32_t &timeInterval, T minValue = -1.0, T maxValue = 1.0) {
+void clamp(T &correction, T &intError, uint32_t &timeInterval, T minValue, T maxValue) {
 	if (correction < minValue) {
 		correction = minValue;
 	} else if (correction > maxValue) {
@@ -179,7 +178,7 @@ void laneControlTask(void *args) {
 	Motor *rightMotor = controller->getMotor(right);
 
 	PIDErrors wallDistance;
-	uint32_t timeInterval = 0;
+	uint32_t timeInterval = 100;
 
 	// declare variables for sensor distances
 	int8_t dLeft;
@@ -194,7 +193,6 @@ void laneControlTask(void *args) {
 	float leftSpeed;
 	float rightSpeed;
 	float direction;
-	uint8_t timeInterval = 100;
 
 	while (true) {
 		/*
@@ -207,7 +205,7 @@ void laneControlTask(void *args) {
 		dRight = controller->getState().sensors.right;
 		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
 
-		ESP_LOGI(TAG, "dLeft=%f, dRight=%f", dLeft, dRight);
+		ESP_LOGI(TAG, "dLeft=%d, dRight=%d", dLeft, dRight);
 
 		wallDistance.curError = dLeft - dRight;
 		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
