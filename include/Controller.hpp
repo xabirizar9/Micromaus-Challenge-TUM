@@ -14,7 +14,7 @@ class Controller {
    private:
 	TaskHandle_t leftMotorPidTaskHandle;
 	TaskHandle_t rightMotorPidTaskHandle;
-	TaskHandle_t sensorLaneCorrection;
+	TaskHandle_t sensorRead;
 
 	Motor leftMotor;
 	Motor rightMotor;
@@ -66,6 +66,7 @@ class Controller {
 	 */
 	void drive(int16_t speed, int16_t direction);
 	void turnright();
+	void sensorUpdates();
 
 	Encoder* getEncoder(MotorPosition position);
 	Motor* getMotor(MotorPosition position);
