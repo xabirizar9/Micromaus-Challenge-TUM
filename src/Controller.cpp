@@ -305,11 +305,14 @@ float Controller::getSpeedInTicks(MotorPosition position) {
 
 void Controller::turnright() {
 	// vTaskDelay(pdMS_TO_TICKS(5000));
-	this->leftSpeedTickTarget = 2;
-	this->rightSpeedTickTarget = 2;
+	this->leftSpeedTickTarget = convertMMsToTPS(30);
+	this->rightSpeedTickTarget = convertMMsToTPS(30);
 	vTaskDelay(pdMS_TO_TICKS(5000));
-	this->leftSpeedTickTarget = 0;
-	this->rightSpeedTickTarget = 0;
+	this->leftSpeedTickTarget = convertMMsToTPS(47);
+	this->rightSpeedTickTarget = -convertMMsToTPS(47);
+	vTaskDelay(pdMS_TO_TICKS(1000));
+	this->leftSpeedTickTarget = convertMMsToTPS(0);
+	this->rightSpeedTickTarget = -convertMMsToTPS(0);
 }
 
 /******************************************************************
