@@ -106,6 +106,12 @@ void receiverTask(void *pvParameter) {
 				manager->controller->getMotor(MotorPosition::right)
 					->updatePidConfig(msg.payload.encoderCallibration);
 				break;
+			// ping pong interface
+			case MausIncomingMessage_ping_tag:
+				ESP_LOGI(tag, "ping<->pong");
+				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
+					PongPacket_init_zero);
+				break;
 			case MausIncomingMessage_control_tag:
 				manager->controller->drive(msg.payload.control.speed,
 										   msg.payload.control.direction);

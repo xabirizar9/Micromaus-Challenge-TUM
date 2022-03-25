@@ -21,6 +21,14 @@ typedef struct _AckPacket {
     char dummy_field;
 } AckPacket;
 
+typedef struct _MsgPing { 
+    char dummy_field;
+} MsgPing;
+
+typedef struct _PongPacket { 
+    char dummy_field;
+} PongPacket;
+
 typedef struct _MsgControl { 
     float direction; 
     int32_t speed; 
@@ -55,6 +63,7 @@ typedef struct _MausIncomingMessage {
         MsgInit init;
         MsgControl control;
         MsgEncoderCallibration encoderCallibration;
+        MsgPing ping;
     } payload; 
 } MausIncomingMessage;
 
@@ -77,6 +86,7 @@ typedef struct _MausOutgoingMessage {
     union {
         AckPacket ack;
         NavigationPacket nav;
+        PongPacket pong;
     } payload; 
 } MausOutgoingMessage;
 
@@ -94,19 +104,23 @@ extern "C" {
 /* Initializer values for message structs */
 #define AckPacket_init_default                   {0}
 #define Position_init_default                    {0, 0, 0}
+#define PongPacket_init_default                  {0}
 #define SensorPacket_init_default                {0, 0, 0}
 #define NavigationPacket_init_default            {false, SensorPacket_init_default, false, Position_init_default, 0, 0, 0, 0, 0, 0, 0}
 #define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
+#define MsgPing_init_default                     {0}
 #define MsgControl_init_default                  {0, 0}
 #define MsgEncoderCallibration_init_default      {0, 0, 0}
 #define MausIncomingMessage_init_default         {0, {MsgInit_init_default}}
 #define AckPacket_init_zero                      {0}
 #define Position_init_zero                       {0, 0, 0}
+#define PongPacket_init_zero                     {0}
 #define SensorPacket_init_zero                   {0, 0, 0}
 #define NavigationPacket_init_zero               {false, SensorPacket_init_zero, false, Position_init_zero, 0, 0, 0, 0, 0, 0, 0}
 #define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
+#define MsgPing_init_zero                        {0}
 #define MsgControl_init_zero                     {0, 0}
 #define MsgEncoderCallibration_init_zero         {0, 0, 0}
 #define MausIncomingMessage_init_zero            {0, {MsgInit_init_zero}}
@@ -127,6 +141,7 @@ extern "C" {
 #define MausIncomingMessage_init_tag             2
 #define MausIncomingMessage_control_tag          3
 #define MausIncomingMessage_encoderCallibration_tag 4
+#define MausIncomingMessage_ping_tag             5
 #define NavigationPacket_sensors_tag             1
 #define NavigationPacket_position_tag            2
 #define NavigationPacket_leftMotorSpeed_tag      3
@@ -138,6 +153,7 @@ extern "C" {
 #define NavigationPacket_timestamp_tag           9
 #define MausOutgoingMessage_ack_tag              1
 #define MausOutgoingMessage_nav_tag              2
+#define MausOutgoingMessage_pong_tag             3
 
 /* Struct field encoding specification for nanopb */
 #define AckPacket_FIELDLIST(X, a) \
@@ -151,6 +167,11 @@ X(a, STATIC,   SINGULAR, FLOAT,    y,                 2) \
 X(a, STATIC,   SINGULAR, FLOAT,    heading,           3)
 #define Position_CALLBACK NULL
 #define Position_DEFAULT NULL
+
+#define PongPacket_FIELDLIST(X, a) \
+
+#define PongPacket_CALLBACK NULL
+#define PongPacket_DEFAULT NULL
 
 #define SensorPacket_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, FLOAT,    left,              1) \
@@ -176,16 +197,23 @@ X(a, STATIC,   SINGULAR, UINT32,   timestamp,         9)
 
 #define MausOutgoingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ack,payload.ack),   1) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,nav,payload.nav),   2)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,nav,payload.nav),   2) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,pong,payload.pong),   3)
 #define MausOutgoingMessage_CALLBACK NULL
 #define MausOutgoingMessage_DEFAULT NULL
 #define MausOutgoingMessage_payload_ack_MSGTYPE AckPacket
 #define MausOutgoingMessage_payload_nav_MSGTYPE NavigationPacket
+#define MausOutgoingMessage_payload_pong_MSGTYPE PongPacket
 
 #define MsgInit_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, INT32,    version,           1)
 #define MsgInit_CALLBACK NULL
 #define MsgInit_DEFAULT NULL
+
+#define MsgPing_FIELDLIST(X, a) \
+
+#define MsgPing_CALLBACK NULL
+#define MsgPing_DEFAULT NULL
 
 #define MsgControl_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, FLOAT,    direction,         1) \
@@ -203,19 +231,23 @@ X(a, STATIC,   SINGULAR, FLOAT,    kD,                3)
 #define MausIncomingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,init,payload.init),   2) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,control,payload.control),   3) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,encoderCallibration,payload.encoderCallibration),   4)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,encoderCallibration,payload.encoderCallibration),   4) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ping,payload.ping),   5)
 #define MausIncomingMessage_CALLBACK NULL
 #define MausIncomingMessage_DEFAULT NULL
 #define MausIncomingMessage_payload_init_MSGTYPE MsgInit
 #define MausIncomingMessage_payload_control_MSGTYPE MsgControl
 #define MausIncomingMessage_payload_encoderCallibration_MSGTYPE MsgEncoderCallibration
+#define MausIncomingMessage_payload_ping_MSGTYPE MsgPing
 
 extern const pb_msgdesc_t AckPacket_msg;
 extern const pb_msgdesc_t Position_msg;
+extern const pb_msgdesc_t PongPacket_msg;
 extern const pb_msgdesc_t SensorPacket_msg;
 extern const pb_msgdesc_t NavigationPacket_msg;
 extern const pb_msgdesc_t MausOutgoingMessage_msg;
 extern const pb_msgdesc_t MsgInit_msg;
+extern const pb_msgdesc_t MsgPing_msg;
 extern const pb_msgdesc_t MsgControl_msg;
 extern const pb_msgdesc_t MsgEncoderCallibration_msg;
 extern const pb_msgdesc_t MausIncomingMessage_msg;
@@ -223,10 +255,12 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define AckPacket_fields &AckPacket_msg
 #define Position_fields &Position_msg
+#define PongPacket_fields &PongPacket_msg
 #define SensorPacket_fields &SensorPacket_msg
 #define NavigationPacket_fields &NavigationPacket_msg
 #define MausOutgoingMessage_fields &MausOutgoingMessage_msg
 #define MsgInit_fields &MsgInit_msg
+#define MsgPing_fields &MsgPing_msg
 #define MsgControl_fields &MsgControl_msg
 #define MsgEncoderCallibration_fields &MsgEncoderCallibration_msg
 #define MausIncomingMessage_fields &MausIncomingMessage_msg
@@ -238,7 +272,9 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MsgControl_size                          16
 #define MsgEncoderCallibration_size              15
 #define MsgInit_size                             11
+#define MsgPing_size                             0
 #define NavigationPacket_size                    82
+#define PongPacket_size                          0
 #define Position_size                            15
 #define SensorPacket_size                        15
 
