@@ -1,0 +1,21 @@
+\section{Hardware Design}
+In comparison to other Micromouse projects, we laid the focus not so much on
+the educational aspect for low-level programming, but on the possiblity to try
+out more sophisticated methods of mobile robotics.
+
+\subsection{Microcontroller}
+Our design uses the Espressif ESP32-S2-WROOM microcontroller module
+featuring an ARM processor clocked at \SI{240}{\mega\hertz},
+\SI{320}{\kilo\byte} of SRAM, \SI{4}{\mega\byte} of flash and Wi-Fi
+connectivity \cite{esp32-s2-wroom-datasheet}.
+
+Espressif provides a software framework that implements a Wi-Fi stack and a
+convenient interface to the controller's peripherals for the C language.
+
+\subsection{Inertial Measurement Unit}
+Our board has a slot for a board containing an Inertial Measurement Unit, an
+ICM-20948 Module by Adafruit with the TDK\,InvenSense ICM-20948 chip that
+contains a MEMS accelerometer, a gyroscope and a compass with three axes each
+\cite{icm20948-datasheet}.
+
+The module is connected to the microcontroller through a SPI bus.
