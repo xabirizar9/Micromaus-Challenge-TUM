@@ -24,9 +24,11 @@ static const float mmToRp = 0.0053051648;  // 1 / (2 * PI * 30)
 // number of ticks in a full wheel rotation
 static const float ticksPerRevolution = 2112.0;
 
-template <typename T = float>
-void clamp(
-	T &correction, T &intError, uint32_t &timeInterval, T minValue = -1.0, T maxValue = 1.0) {
+void clampAndIntegrate(float &correction,
+					   float &intError,
+					   uint32_t &timeInterval,
+					   float minValue = -1.0,
+					   float maxValue = 1.0) {
 	if (correction < minValue) {
 		correction = minValue;
 	} else if (correction > maxValue) {
@@ -158,7 +160,7 @@ void motorPidTask(void *pvParameter) {
 
 		// apply adjustments and clamp them to 0-100%
 		newPwm = (curSpeed + correction) * maxEncoderTicks;
-		clamp(newPwm, intError, timeInterval);
+		clampAndIntegrate(newPwm, intError, timeInterval);
 		m->setPWM(newPwm);
 
 		// reset encoder to avoid overflows
@@ -217,7 +219,7 @@ void laneControlTask(void *args) {
 		wallDistance.lastError = wallDistance.curError;
 
 		// Update speed of right motor
-		clamp(wallDistance.correction, wallDistance.intError, timeInterval);
+		clampAndIntegrate(wallDistance.correction, wallDistance.intError, timeInterval);
 		leftMotor->setPWM(curSpeedTicks + updateConst * mmsToTicks(wallDistance.correction));
 		rightMotor->setPWM(curSpeedTicks - updateConst * mmsToTicks(wallDistance.correction));
 
