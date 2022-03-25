@@ -25,7 +25,8 @@ static const float mmToRp = 0.0053051648;  // 1 / (2 * PI * 30)
 static const float ticksPerRevolution = 2112.0;
 
 template <typename T = float>
-void clamp(T &correction, T &intError, uint32_t &timeInterval, T minValue, T maxValue) {
+void clamp(
+	T &correction, T &intError, uint32_t &timeInterval, T minValue = -1.0, T maxValue = 1.0) {
 	if (correction < minValue) {
 		correction = minValue;
 	} else if (correction > maxValue) {
@@ -129,6 +130,7 @@ void motorPidTask(void *pvParameter) {
 		// compute correction
 		correction = (kP * curError) + (kD * derError) + (kI * intError);
 
+		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum, correction);
 		// ESP_LOGI(TAG,
 		// 		 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
 		// 		 target,
@@ -136,6 +138,15 @@ void motorPidTask(void *pvParameter) {
 		// 		 correction,
 		// 		 speed,
 		// 		 curEncoderReading);
+		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum,
+		// correction);
+		ESP_LOGI(TAG,
+				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
+				 target,
+				 curError,
+				 correction,
+				 speed,
+				 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
