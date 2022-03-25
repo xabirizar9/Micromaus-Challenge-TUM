@@ -13,6 +13,8 @@
   let ctx: CanvasRenderingContext2D;
   let lastCoords: [number, number];
 
+  const data: Vector2D[] = [];
+
   const onNavPacket = (nav: NavigationPacket) => {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
@@ -76,7 +78,10 @@
     );
   }
 
+  let pathChart: ReturnType<typeof ConnectedScatterplot>;
+
   function RobotPath(node: HTMLElement) {
+    const rect = node.getBoundingClientRect();
     const data: Vector2D[] = [
       {
         x: 0.5,
@@ -108,8 +113,8 @@
         y: 4.2,
       },
     ];
-    const rect = node.getBoundingClientRect();
-    let chart = ConnectedScatterplot(data, {
+
+    pathChart = ConnectedScatterplot(data, {
       x: (d) => d.x,
       y: (d) => d.y,
       title: (d) => d.year,
@@ -120,13 +125,25 @@
       height: rect.height,
       duration: 0, // for the intro animation; 0 to disable
     });
-    node.appendChild(chart);
+    node.appendChild(pathChart);
   }
+
+  const addPoint = () => {
+    console.log("add point");
+    data.push({
+      x: Math.random() * 6,
+      y: Math.random() * 6,
+    });
+    pathChart.update(data);
+  };
 </script>
 
 <div class="card map">
   <canvas use:CanvasEl />
   <div use:RobotPath />
+  <div>
+    <button on:click={addPoint}>Add point test</button>
+  </div>
 </div>
 
 <style lang="scss">

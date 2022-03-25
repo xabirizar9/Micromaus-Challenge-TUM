@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -56,10 +57,11 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 
 			switch msg := cmd.Payload.(type) {
 			case *pb.MausOutgoingMessage_Nav:
-				l.Info("nav package:",
+				fmt.Printf(".")
+				l.Debug("nav package:",
 					zap.String("content", msg.Nav.String()),
 				)
-
+				m.broadcastChannel <- cmd
 			}
 
 		}

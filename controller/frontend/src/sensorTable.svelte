@@ -11,15 +11,23 @@
       data = [evt.data.nav, ...data];
     }
   });
+
+  const formatInfo = (item: NavigationPacket) => `pos=(${item.position.x},${
+    item.position.y
+  }) speed=(${item.leftMotorSpeed.toFixed(3)},${item.rightMotorSpeed.toFixed(
+    3
+  )}) dir=(${item.position.heading.toFixed(3)}) encTotal=(${
+    item.leftEncoderTotal
+  },${item.rightEncoderTotal})
+  `;
 </script>
 
 <div class="logs">
   <VirtualList items={data} let:item>
     <!-- this will be rendered for each currently visible item -->
-    <span>
-      [{item.timestamp}] pos=({item.position.x},{item.position.y}) speed=({item.leftMotorSpeed},{item.rightMotorSpeed})
-      dir=({item.position.heading}) encTotal=({item.leftEncoderTotal},{item.rightEncoderTotal})
-      bat={item.batteryLevel ?? 0}
+    <span class="entry">
+      <span class="light">[{item.timestamp}]</span>
+      {formatInfo(item)}
     </span>
   </VirtualList>
 </div>
@@ -28,5 +36,14 @@
   .logs {
     font-family: monospace;
     height: 50vh;
+  }
+
+  .light {
+    opacity: 0.4;
+  }
+
+  .entry {
+    padding: 0.25rem;
+    border-bottom: 1px solid #eee;
   }
 </style>

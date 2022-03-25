@@ -17,7 +17,6 @@ func main() {
 	c := Config{}
 	c.getConf()
 	m := NewManager()
-
 	// try connecting robot
 	go func() {
 		for {
