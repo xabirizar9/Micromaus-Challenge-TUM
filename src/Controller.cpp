@@ -320,8 +320,8 @@ void Controller::turnOnSpot(float degree, int16_t speed) {
 		pre = 1;
 	}
 	uint8_t rMaus = 60;
-	float d_rad = abs(degree) * rMaus * 0.5;
-	float duration = d_rad / speed;
+	float dRad = abs(degree) * rMaus;
+	float duration = dRad / speed;
 
 	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
 	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
