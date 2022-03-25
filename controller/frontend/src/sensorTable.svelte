@@ -43,7 +43,8 @@
   }
 
   .entry {
-    pad: 0.25rem;
-    border-bottom: 1px solid #eee;
+    padding: 0.5rem;
+    display: block;
+    border-bottom: 1px solid var(--main-bg-color);
   }
 </style>

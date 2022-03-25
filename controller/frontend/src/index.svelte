@@ -15,6 +15,12 @@
   let direction = 0;
   let speed = 0;
 
+  let turnDegree = 0;
+  let turnSpeed = 0;
+
+  let driveDistance = 0;
+  let driveSpeed = 0;
+
   const onUpdateMotorCalibration = () => {
     com.send({
       encoderCallibration: {
@@ -33,6 +39,30 @@
       },
     });
   };
+
+  const onTurn = () => {
+    com.send({
+      turn: {
+        degree: turnDegree,
+        speed: turnSpeed,
+      },
+    });
+  };
+
+  const onDrive = () => {
+    com.send({
+      drive: {
+        distance: driveDistance,
+        speed: driveSpeed,
+      },
+    });
+  };
+
+  const onStop = () => {
+    com.send({
+      stop: {},
+    });
+  };
 </script>
 
 <main>
@@ -40,30 +70,74 @@
   <div class="card"><SensorTable {com} /></div>
   <div class="card">
     <h2>Controls</h2>
-    <label>
-      Speed:
-      <input type="number" bind:value={speed} />
-    </label>
-    <label>
-      Direction:
-      <input type="number" bind:value={direction} />
-    </label>
-    <button on:click={onUpdateControls}>Update</button>
+    <form on:submit={onUpdateMotorCalibration}>
+      <div>
+        <label>
+          Speed:
+          <input type="number" bind:value={speed} />
+        </label>
+        <label>
+          Direction:
+          <input type="number" bind:value={direction} />
+        </label>
+      </div>
+      <button on:click={onUpdateControls}>Update</button>
+    </form>
+
+    <h2>Turn</h2>
+    <form on:submit={onTurn}>
+      <div>
+        <label>
+          <span>Degree:</span>
+          <input step="0.001" type="number" bind:value={turnDegree} />
+        </label>
+        <label>
+          <span>Speed:</span>
+          <input step="0.001" type="number" bind:value={turnSpeed} />
+        </label>
+      </div>
+      <button type="submit">Turn</button>
+    </form>
+
+    <h2>Drive</h2>
+    <form on:submit={onDrive}>
+      <div>
+        <label>
+          <span>Degree:</span>
+          <input step="0.001" type="number" bind:value={driveDistance} />
+        </label>
+        <label>
+          <span>Speed:</span>
+          <input step="0.001" type="number" bind:value={driveSpeed} />
+        </label>
+      </div>
+      <button type="submit">Drive</button>
+    </form>
 
     <h2>Tuning</h2>
-    <label>
-      kP:
-      <input step="0.001" type="number" bind:value={kP} />
-    </label>
-    <label>
-      kD:
-      <input step="0.001" type="number" bind:value={kD} />
-    </label>
-    <label>
-      kI:
-      <input step="0.001" type="number" bind:value={kI} />
-    </label>
-    <button on:click={onUpdateMotorCalibration}>Update</button>
+    <form on:submit={onUpdateMotorCalibration}>
+      <div>
+        <label>
+          <span>kP:</span>
+          <input step="0.001" type="number" bind:value={kP} />
+        </label>
+        <label>
+          <span>kD:</span>
+
+          <input step="0.001" type="number" bind:value={kD} />
+        </label>
+        <label>
+          <span> kI:</span>
+          <input step="0.001" type="number" bind:value={kI} />
+        </label>
+      </div>
+      <button type="submit">Update</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Actions</h2>
+    <button on:click={onStop}>STOP!</button>
   </div>
 </main>
 
@@ -93,6 +167,10 @@
       box-shadow: 20px 20px 60px #c5c5c5, -20px -20px 60px #ffffff;
       padding: 0.5rem;
     }
+  }
+
+  label {
+    display: block;
   }
 
   main {
