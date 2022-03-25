@@ -16,6 +16,8 @@ message Position {
 	float heading = 3;
 }
 
+message PongPacket {}
+
 message SensorPacket {
 	float left = 1;
 	float front = 2;
@@ -38,6 +40,7 @@ message MausOutgoingMessage {
 	oneof payload {
 		AckPacket ack = 1;
 		NavigationPacket nav = 2;
+		PongPacket pong = 3;
 	}
 }
 
@@ -45,6 +48,9 @@ message MausOutgoingMessage {
 message MsgInit {
 	int32 version = 1;
 }
+
+message MsgPing {}
+
 message MsgControl {
 	float direction = 1;
 	int32 speed = 2;
@@ -61,5 +67,6 @@ message MausIncomingMessage {
 		MsgInit init = 2;
 		MsgControl control = 3;
 		MsgEncoderCallibration encoderCallibration = 4;
+		MsgPing ping = 5;
 	}
 }

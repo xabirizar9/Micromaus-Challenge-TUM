@@ -18,8 +18,21 @@ struct PidTaskInitPayload {
 	MotorPosition position;
 };
 
+// conversion from mm -> to wheel rotation
+static const float mmToRp = 0.0053051648;  // 1 / (2 * PI * 30)
+
+// number of ticks in a full wheel rotation
+static const float ticksPerRevolution = 2112.0;
+
+float convertMillimetersToRevolutions(int16_t millis) {
+	// this depends on wheel size
+	return (float)millis * mmToRp;
+}
+
 void motorPidTask(void *pvParameter) {
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
+
+	// copy all relevant values
 	Controller *controller = payload->controller;
 	MotorPosition pos = payload->position;
 	Motor *m = controller->getMotor(pos);
@@ -29,10 +42,17 @@ void motorPidTask(void *pvParameter) {
 		// delete payload after we have read everything
 		delete payload;
 
+	// PID interval in ms
+	uint16_t monitorInterval = 100;
+	// fraction of interval to full second
+	// needed to compute target speed for a given PID loop interval
+	float secondFraction = (float)monitorInterval / 1000.0;
+	float maxEncoderTicks = 1 / (5315.2 * secondFraction);
+
 	ESP_LOGD(TAG, "started pid task %d", pos);
 
 	// current speed target in ticks
-	int16_t target = 0;
+	float target = 0;
 	uint32_t tick_diff = 0;
 	TickType_t lastTick = xTaskGetTickCount();
 	TickType_t curTick = 0;
@@ -40,10 +60,10 @@ void motorPidTask(void *pvParameter) {
 	int16_t curEncoderReading = 0;
 	int16_t curSpeed = 0;
 
-	int16_t lastError = 0;
-	int16_t curError = 0;
-	int16_t derError = 0;
-	int16_t errorSum = 0;
+	float lastError = 0.0;
+	float curError = 0.0;
+	float derError = 0.0;
+	float errorSum = 0.0;
 
 	uint32_t timeInterval = 0;
 
@@ -60,44 +80,60 @@ void motorPidTask(void *pvParameter) {
 		kD = m->kD;
 		kI = m->kI;
 
-		// get speed target for selected motor
-		target = controller->getSpeedInTicks(pos);
-		curEncoderReading = enc->get();
+		// get target speed for a given PID interval
+		target = (float)controller->getSpeedInTicks(pos) * secondFraction;
+
+		// m->setPWM(std::clamp((float)(target /), (float)-1.0, (float)1.0));
+		// ESP_LOGI(TAG, "speed %f, t=%f", target / (5315.2 * secondFraction), target);
+		// vTaskDelay(pdMS_TO_TICKS(monitorInterval));
+
+		// continue;
+
 		curTick = xTaskGetTickCount();
 		tick_diff = curTick - lastTick;
 		if (tick_diff == 0) {
-			vTaskDelay(pdMS_TO_TICKS(50));
+			ESP_LOGD(TAG, "no time passed %d %d", curTick, lastTick);
+			vTaskDelay(pdMS_TO_TICKS(monitorInterval));
 			continue;
 		}
+
+		curEncoderReading = enc->get();
 
 		// compute duration since this method was last called
 		timeInterval = pdTICKS_TO_MS(curTick - lastTick);
 
 		// compute speed in ticks
-		// TODO: maybe omit division if this causes problems
-		curSpeed = curEncoderReading / timeInterval;
-		curError = target - curSpeed;
+		curError = target - curEncoderReading;
 		derError = (lastError - curError) / timeInterval;
-		// compute correction with momentum
+
+		// compute correction
 		correction = (kP * curError) + (kD * derError) + (kI * errorSum);
-		speed = std::clamp(speed + correction, (float)0.0, (float)1.0);
+		speed += correction;
+
+		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum, correction);
+		ESP_LOGI(TAG,
+				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
+				 target,
+				 curError,
+				 correction,
+				 speed,
+				 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
 		lastTick = curTick;
 		errorSum += curError * timeInterval;
 
-		ESP_LOGD(
-			TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
+		// ESP_LOGI(TAG, "m=%d , pos, );
 
 		// apply adjustments and clamp them to 0-100%
-		m->setPWM(speed);
+		m->setPWM(std::clamp(speed * maxEncoderTicks, (float)-1.0, (float)1.0));
 
 		// reset encoder to avoid overflows
 		enc->reset();
 
 		// add short interval
-		vTaskDelay(pdMS_TO_TICKS(50));
+		vTaskDelay(pdMS_TO_TICKS(monitorInterval));
 	}
 }
 
@@ -149,9 +185,12 @@ void Controller::setSpeed(int16_t speed) {
 	this->state.leftMotorSpeed = (float)speed;
 	this->state.rightMotorSpeed = (float)speed;
 
-	// TODO: @wlad convert from cm/s to encoder ticks for now use some magic numbers
-	this->leftSpeedTickTarget = 2;
-	this->rightSpeedTickTarget = 2;
+	// since speed is given in mm/s and our PID is using ticks/s
+	// we have to convert them
+
+	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
+	this->leftSpeedTickTarget = this->rightSpeedTickTarget =
+		convertMillimetersToRevolutions((float)speed) * ticksPerRevolution;
 }
 
 void Controller::sensorUpdates() {
@@ -171,7 +210,7 @@ void Controller::drive(int16_t speed, int16_t direction) {
 	this->setDirection(direction);
 }
 
-int16_t Controller::getSpeedInTicks(MotorPosition position) {
+float Controller::getSpeedInTicks(MotorPosition position) {
 	switch (position) {
 		case MotorPosition::left: return this->leftSpeedTickTarget;
 		case MotorPosition::right: return this->rightSpeedTickTarget;

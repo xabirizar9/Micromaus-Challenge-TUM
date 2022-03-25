@@ -12,6 +12,9 @@ PB_BIND(AckPacket, AckPacket, AUTO)
 PB_BIND(Position, Position, AUTO)
 
 
+PB_BIND(PongPacket, PongPacket, AUTO)
+
+
 PB_BIND(SensorPacket, SensorPacket, AUTO)
 
 
@@ -22,6 +25,9 @@ PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)
 
 
 PB_BIND(MsgInit, MsgInit, AUTO)
+
+
+PB_BIND(MsgPing, MsgPing, AUTO)
 
 
 PB_BIND(MsgControl, MsgControl, AUTO)
