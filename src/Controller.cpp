@@ -24,6 +24,19 @@ static const float mmToRp = 0.0053051648;  // 1 / (2 * PI * 30)
 // number of ticks in a full wheel rotation
 static const float ticksPerRevolution = 2112.0;
 
+template <typename T = float>
+void clamp(
+	T &correction, T &intError, uint32_t &timeInterval, T minValue = -1.0, T maxValue = 1.0) {
+	if (correction < minValue) {
+		correction = minValue;
+	} else if (correction > maxValue) {
+		correction = maxValue;
+	} else {
+		// safe to integrate
+		intError += correction * timeInterval;
+	}
+}
+
 float convertMillimetersToRevolutions(int16_t millis) {
 	// this depends on wheel size
 	return (float)millis * mmToRp;
@@ -62,7 +75,7 @@ void motorPidTask(void *pvParameter) {
 	float lastError = 0.0;
 	float curError = 0.0;
 	float derError = 0.0;
-	float errorSum = 0.0;
+	float intError = 0.0;
 
 	uint32_t timeInterval = 0;
 
@@ -72,6 +85,7 @@ void motorPidTask(void *pvParameter) {
 
 	float correction = 0;
 	float speed = 0;
+	float newPwm;
 
 	while (true) {
 		// update values
@@ -106,8 +120,7 @@ void motorPidTask(void *pvParameter) {
 		derError = (lastError - curError) / timeInterval;
 
 		// compute correction
-		correction = (kP * curError) + (kD * derError) + (kI * errorSum);
-		speed += correction;
+		correction = (kP * curError) + (kD * derError) + (kI * intError);
 
 		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum, correction);
 		// ESP_LOGI(TAG,
@@ -117,16 +130,26 @@ void motorPidTask(void *pvParameter) {
 		// 		 correction,
 		// 		 speed,
 		// 		 curEncoderReading);
+		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum,
+		// correction);
+		ESP_LOGI(TAG,
+				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
+				 target,
+				 curError,
+				 correction,
+				 speed,
+				 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
-		lastTick = curTick;
-		errorSum += curError * timeInterval;
 
-		// ESP_LOGI(TAG, "m=%d , pos, );
+		ESP_LOGD(
+			TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
 
 		// apply adjustments and clamp them to 0-100%
-		m->setPWM(std::clamp(speed * maxEncoderTicks, (float)-1.0, (float)1.0));
+		newPwm = (speed + correction) * maxEncoderTicks;
+		clamp(newPwm, intError, timeInterval);
+		m->setPWM(newPwm);
 
 		// reset encoder to avoid overflows
 		enc->reset();
@@ -142,6 +165,53 @@ void stateTask(void *arg) {
 
 	vTaskDelay(pdMS_TO_TICKS(500));
 }
+void laneControlTask(void *args) {
+	Controller *controller = (Controller *)args;
+	Motor *leftMotor = controller->getMotor(left);
+	Motor *rightMotor = controller->getMotor(right);
+	PIDErrors wallDistance;
+	uint32_t timeInterval = 0;
+
+	// declare variables for sensor distances
+	int8_t d_left;
+	int8_t d_right;
+
+	const float updateConst = 0.01;
+	float kP = 0.5;
+	float kD = 0;
+	float kI = 0;
+
+	float curSpeed;
+	float leftSpeed;
+	float rightSpeed;
+	float direction;
+	uint8_t timeInterval = 100;
+
+	while (true) {
+		/*
+		Get left and right sensor readings + current speed
+		d_left = get_left_sensor_distance()
+		d_right = get_right_sensor_distance()
+		cur_speed = get_current_speed()
+		*/
+		wallDistance.curError = d_left - d_right;
+		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
+		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) +
+								  (kI * wallDistance.intError);
+
+		wallDistance.lastError = wallDistance.curError;
+
+		// Update speed of right motor
+		clamp(wallDistance.correction, wallDistance.intError, timeInterval);
+		leftMotor->setPWM(leftSpeed + updateConst * wallDistance.correction);
+		rightMotor->setPWM(rightSpeed - updateConst * wallDistance.correction);
+
+		direction = 0;	// Compute somehow direction from left/right speeds
+		controller->setDirection(direction);
+
+		vTaskDelay(pdMS_TO_TICKS(timeInterval));
+	}
+};
 
 Controller::Controller()
 	: leftMotor(Motor(IO::MOTOR_L)),
@@ -190,6 +260,9 @@ void Controller::setSpeed(int16_t speed) {
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
 	this->leftSpeedTickTarget = this->rightSpeedTickTarget =
 		convertMillimetersToRevolutions((float)speed) * ticksPerRevolution;
+	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
+	this->leftSpeedTickTarget = 2;
+	this->rightSpeedTickTarget = 2;
 }
 
 void Controller::sensorUpdates() {
