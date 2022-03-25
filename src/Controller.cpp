@@ -129,7 +129,6 @@ void motorPidTask(void *pvParameter) {
 		// compute correction
 		correction = (kP * curError) + (kD * derError) + (kI * intError);
 
-		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum, correction);
 		// ESP_LOGI(TAG,
 		// 		 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
 		// 		 target,
@@ -137,15 +136,6 @@ void motorPidTask(void *pvParameter) {
 		// 		 correction,
 		// 		 speed,
 		// 		 curEncoderReading);
-		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum,
-		// correction);
-		ESP_LOGI(TAG,
-				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
-				 target,
-				 curError,
-				 correction,
-				 speed,
-				 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
@@ -168,9 +158,11 @@ void motorPidTask(void *pvParameter) {
 
 void stateTask(void *arg) {
 	Controller *controller = (Controller *)arg;
-	controller->sensorUpdates();
 
-	vTaskDelay(pdMS_TO_TICKS(500));
+	while (true) {
+		controller->sensorUpdates();
+		vTaskDelay(pdMS_TO_TICKS(100));
+	}
 }
 void laneControlTask(void *args) {
 	Controller *controller = (Controller *)args;
@@ -256,7 +248,7 @@ Controller::Controller()
 	xTaskCreate(
 		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
 
-	xTaskCreate(stateTask, "stateTask", 2048, this, 1, &this->sensorRead);
+	// xTaskCreate(stateTask, "stateTask", 2048, this, 1, &this->sensorRead);
 }
 
 /******************************************************************
