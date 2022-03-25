@@ -17,14 +17,16 @@ type Manager struct {
 	// currently connected web clients
 	Clients map[string]*Client
 
+	broadcastChannel chan *pb.MausOutgoingMessage
+
 	ctx context.Context
 }
 
 func NewManager() *Manager {
 	return &Manager{
-		Clients: make(map[string]*Client),
-
-		ctx: context.WithValue(context.TODO(), "log", log.With(zap.String("service", "manager"))),
+		Clients:          make(map[string]*Client),
+		broadcastChannel: make(chan *pb.MausOutgoingMessage),
+		ctx:              context.WithValue(context.TODO(), "log", log.With(zap.String("service", "manager"))),
 	}
 }
 
@@ -36,7 +38,7 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 	l := m.getLogger().With(zap.String("robot", "MAUS"))
 	m.Robot = r
 
-	err := r.StartInitSequence()
+	err := r.Connect()
 	if err != nil {
 		return err
 	}
@@ -50,25 +52,39 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 				return
 			}
 
-			cmd, cmdBuf, err := r.ReadCmd()
-			if err != nil {
-				l.Error("failed to read command", zap.Error(err))
-				return
-			}
+			cmd := <-r.IncomingMsg
 
 			switch msg := cmd.Payload.(type) {
 			case *pb.MausOutgoingMessage_Nav:
 				l.Info("nav package:",
 					zap.String("content", msg.Nav.String()),
 				)
-				// TODO: add broadcast channel for now simply send to all clients directly
 
-				for _, c := range m.Clients {
-					c.conn.WriteMessage(websocket.BinaryMessage, cmdBuf)
-					// TODO: handle errors
-				}
 			}
 
+		}
+	}()
+
+	// start client broadcast
+	go func() {
+		for {
+			cmd := <-m.broadcastChannel
+			// re encode message
+			buf, err := proto.Marshal(cmd)
+			if err != nil {
+				l.Error("failed to encode proto message", zap.Error(err))
+				continue
+
+			}
+			// send message to all clients
+			for _, c := range m.Clients {
+				c.conn.WriteMessage(websocket.BinaryMessage, buf)
+				if err != nil {
+					l.Error("failed to write to client", zap.Error(err), zap.String("client", c.ID))
+					continue
+
+				}
+			}
 		}
 	}()
 

@@ -25,8 +25,8 @@ class Controller {
 	IRSensor frontSensor;
 
 	// individual speed targets per motor
-	int16_t leftSpeedTickTarget;
-	int16_t rightSpeedTickTarget;
+	float leftSpeedTickTarget = 0;
+	float rightSpeedTickTarget = 0;
 
 	int16_t direction = 0;
 	int16_t speedTickTarget = 0;
@@ -46,9 +46,9 @@ class Controller {
 	 * @brief Get the Speed in encoder tick format for each motor
 	 * usefull for PID correction
 	 *
-	 * @return int16_t speed per msec
+	 * @return int16_t speed in ticks per second
 	 */
-	int16_t getSpeedInTicks(MotorPosition position);
+	float getSpeedInTicks(MotorPosition position);
 
 	/**
 	 * @brief Set global speed in mm/s
