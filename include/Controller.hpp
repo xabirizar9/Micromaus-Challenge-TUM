@@ -10,6 +10,16 @@
 #include "periph/Power.hpp"
 
 enum MotorPosition { left, right };
+
+struct PIDErrors {
+	int16_t correction;
+	int16_t curError;
+	int16_t derError;
+	int16_t intError;
+	int16_t lastError;
+};
+template <typename T = float>
+void clamp(T &correction, T &intError, uint32_t &timeInterval, T minValue = -1.0, T maxValue = 1.0);
 class Controller {
    private:
 	TaskHandle_t leftMotorPidTaskHandle;
@@ -69,6 +79,6 @@ class Controller {
 	 */
 	void drive(int16_t speed, int16_t direction);
 
-	Encoder* getEncoder(MotorPosition position);
-	Motor* getMotor(MotorPosition position);
+	Encoder *getEncoder(MotorPosition position);
+	Motor *getMotor(MotorPosition position);
 };
