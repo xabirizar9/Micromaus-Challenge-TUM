@@ -315,14 +315,14 @@ float Controller::getSpeedInTicks(MotorPosition position) {
 	}
 }
 
-void Controller::turnOnSpot(int16_t degree, int16_t speed) {
+void Controller::turnOnSpot(float degree, int16_t speed) {
 	// vTaskDelay(pdMS_TO_TICKS(5000));
 	int8_t pre = -1;
 	if (degree < 0) {
-		pre = 1
+		pre = 1;
 	}
 	uint8_t rMaus = 60;
-	float d_rad = arg(degree) * rMaus * 0.5;
+	float d_rad = abs(degree) * rMaus * 0.5;
 	float duration = d_rad / speed;
 
 	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
