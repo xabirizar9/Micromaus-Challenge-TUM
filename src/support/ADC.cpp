@@ -7,13 +7,17 @@
 #include <exception>
 
 static const char* TAG = "adc";
-static const adc_bits_width_t ADC1_BIT_WIDTH = ADC_WIDTH_MAX;
-static const adc_bits_width_t ADC2_BIT_WIDTH = ADC_WIDTH_MAX;
+// static const adc_bits_width_t ADC1_BIT_WIDTH = ADC_WIDTH_MAX;
+// static const adc_bits_width_t ADC1_BIT_WIDTH = adc_bits_width_t(13);
+//static const adc_bits_width_t ADC1_BIT_WIDTH = adc_bits_width_t(4);
+static const adc_bits_width_t ADC1_BIT_WIDTH = ADC_WIDTH_BIT_13;
+
+// static const adc_bits_width_t ADC2_BIT_WIDTH = ADC_WIDTH_MAX;
 
 class InvalidADC1Channel : public std::exception {
    public:
 	const char* what() const noexcept override {
-		return "ADC1 does not have a cannel for the pin you requested";
+		return "ADC1 does not have a channel for the pin you requested";
 	}
 };
 
