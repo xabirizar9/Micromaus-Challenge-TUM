@@ -76,9 +76,7 @@ void motorPidTask(void *pvParameter) {
 	uint32_t tick_diff = 0;
 	TickType_t lastTick = xTaskGetTickCount();
 	TickType_t curTick = 0;
-
 	int16_t curEncoderReading = 0;
-	int16_t curSpeed = 0;
 
 	float lastError = 0.0;
 	float curError = 0.0;
@@ -92,7 +90,7 @@ void motorPidTask(void *pvParameter) {
 	float kI;
 
 	float correction = 0;
-	float speed = 0;
+	float curSpeed = 0;
 	float newPwm;
 
 	while (true) {
@@ -145,17 +143,21 @@ void motorPidTask(void *pvParameter) {
 				 target,
 				 curError,
 				 correction,
-				 speed,
+				 curSpeed,
 				 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
 
-		ESP_LOGD(
-			TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
+		ESP_LOGD(TAG,
+				 "m=%d s=%f i=%d e=%d",
+				 payload->position,
+				 curSpeed,
+				 timeInterval,
+				 curEncoderReading);
 
 		// apply adjustments and clamp them to 0-100%
-		newPwm = (speed + correction) * maxEncoderTicks;
+		newPwm = (curSpeed + correction) * maxEncoderTicks;
 		clamp(newPwm, intError, timeInterval);
 		m->setPWM(newPwm);
 
@@ -193,9 +195,6 @@ void laneControlTask(void *args) {
 	float kI = 0;
 
 	float curSpeedTicks;
-	float leftSpeed;
-	float rightSpeed;
-	float direction;
 
 	while (true) {
 		/*
