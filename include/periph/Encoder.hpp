@@ -10,7 +10,7 @@ class PulseCounterResource;
 
 class Encoder {
    private:
-	int64_t totalCounter;
+	int64_t totalCounter = 0;
 
    public:
 	Encoder(uint8_t pinA, uint8_t pinB);

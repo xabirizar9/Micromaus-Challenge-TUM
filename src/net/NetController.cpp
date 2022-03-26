@@ -133,6 +133,7 @@ void receiverTask(void *pvParameter) {
 				break;
 
 			case MausIncomingMessage_turn_tag:
+				manager->controller->turnOnSpot(msg.payload.turn.degree, msg.payload.turn.speed);
 				// TODO: call method on controller
 
 				break;

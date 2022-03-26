@@ -35,5 +35,5 @@ extern "C" void app_main() {
 	// pass controller to remote controller
 	netManager->controller = mainController;
 
-	mainController->turnOnSpot(0.5 * 3.1416, 50);
+	// mainController->turnOnSpot(0.5 * 3.1416, 50);
 }

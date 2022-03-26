@@ -140,13 +140,13 @@ void motorPidTask(void *pvParameter) {
 		// 		 curEncoderReading);
 		// ESP_LOGI(TAG, "PID: ce=%f de=%f es=%f c=%f", curError, derError, errorSum,
 		// correction);
-		ESP_LOGI(TAG,
-				 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
-				 target,
-				 curError,
-				 correction,
-				 curSpeed,
-				 curEncoderReading);
+		// ESP_LOGI(TAG,
+		// 		 "PID: t=%.3f errCur=%.3f. cor=%.3f sp=%.3f enc=%d",
+		// 		 target,
+		// 		 curError,
+		// 		 correction,
+		// 		 curSpeed,
+		// 		 curEncoderReading);
 
 		// copy step values for next step
 		lastError = curError;
@@ -237,8 +237,8 @@ Controller::Controller()
 	  rightEncoder(Encoder(IO::MOTOR_R.encoder)),
 	  leftSensor(IO::IR_SENSOR_LEFT),
 	  rightSensor(IO::IR_SENSOR_RIGHT),
-	  frontSensor(IO::IR_SENSOR_FRONT) {
-	// battery(power::Battery(IO::VSENSE)) {
+	  frontSensor(IO::IR_SENSOR_FRONT),
+	  battery(power::Battery(IO::VSENSE)) {
 	// init state stream object
 	this->state.has_position = true;
 	this->state.has_sensors = true;
@@ -277,9 +277,6 @@ void Controller::setSpeed(int16_t speed) {
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
 	this->leftSpeedTickTarget = this->rightSpeedTickTarget =
 		convertMillimetersToRevolutions((float)speed) * ticksPerRevolution;
-	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
-	this->leftSpeedTickTarget = 2;
-	this->rightSpeedTickTarget = 2;
 }
 
 void Controller::sensorUpdates() {
@@ -325,7 +322,11 @@ void Controller::turnOnSpot(float degree, int16_t speed) {
 
 	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
 	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
+
+	ESP_LOGI(TAG, "no time passed %f %f", leftSpeedTickTarget, rightSpeedTickTarget);
+
 	vTaskDelay(pdMS_TO_TICKS(duration));
+	this->setSpeed(0);
 }
 
 /******************************************************************
@@ -354,10 +355,15 @@ Motor *Controller::getMotor(MotorPosition position) {
 
 NavigationPacket Controller::getState() {
 	this->state.timestamp = xTaskGetTickCount();
+	this->state.leftMotorSpeed = this->leftSpeedTickTarget;
+	this->state.rightMotorSpeed = this->rightSpeedTickTarget;
 	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	this->state.position.y = 300.0;	 // this->getEncoder(MotorPosition::left)->getTotalCounter()
+	this->state.position.x =
+		this->getEncoder(MotorPosition::left)->getTotalCounter() * 0.0892497913;
 	// TODO: @alex enable this after it works
-	// this->state.batPercentage = this->battery.getPercentage();
-	// this->state.voltage = this->battery.getVoltage();
+	this->state.batPercentage = this->battery.getPercentage();
+	this->state.voltage = this->battery.getVoltage();
 	return this->state;
 }

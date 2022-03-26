@@ -2,12 +2,6 @@ syntax = "proto3";
 
 option go_package = "./proto";
 
-enum MsgType {
-	Init = 0;
-	SensorData = 1;
-	Control = 2;
-}
-
 message AckPacket {}
 
 message Position {
@@ -36,11 +30,28 @@ message NavigationPacket {
 	uint32 timestamp = 9;
 }
 
+enum InfoCmdType {
+	Drive = 0;
+	TurnLeft = 1;
+	TurnRight = 2;
+	Stop = 3;
+
+	// commands only intended for the go<->client communication
+	Connected = 100;
+	MausConnected = 101;
+	MausDisconnected = 102;
+}
+
+message InfoPacket {
+	InfoCmdType cmd = 1;
+}
+
 message MausOutgoingMessage {
 	oneof payload {
 		AckPacket ack = 1;
 		NavigationPacket nav = 2;
 		PongPacket pong = 3;
+		InfoPacket info = 4;
 	}
 }
 
