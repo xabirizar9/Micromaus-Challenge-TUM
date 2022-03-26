@@ -18,7 +18,9 @@
     3
   )}) dir=(${item.position.heading.toFixed(3)}) encTotal=(${
     item.leftEncoderTotal
-  },${item.rightEncoderTotal})
+  },${item.rightEncoderTotal}) sense=(${item.sensors.left.toFixed(
+    3
+  )},${item.sensors.front.toFixed(3)},${item.sensors.right.toFixed(3)})
   `;
 </script>
 

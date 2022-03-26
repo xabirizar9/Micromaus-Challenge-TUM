@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { Vector2D } from "../utils/geo";
 
 const renderLegend = () => {
   //   svg
@@ -45,62 +46,54 @@ const renderLegend = () => {
   //     );
 };
 
+type ConnectedScatterPlotOptions = {
+  dotRadius: number; // (fixed) radius of dots, in pixels
+  curve: d3.CurveCatmullRomFactory; // curve generator for the line
+  width: number; // outer width, in pixels
+  height: number; // outer height, in pixels
+  inset: number; // inset the default range, in pixels
+  xType: d3.ScaleLinear; // type of x-scale
+  xDomain: [number, number]; // [xmin, xmax]
+  xRange: [number, number];
+  yType: d3.ScaleLinear; // type of y-scale
+  yDomain: [number, number];
+  yRange: [number, number];
+  fill: string; // fill color of dots
+  stroke: string; // stroke color of line and dots
+  strokeWidth: number; // stroke width of line and dots
+  strokeLinecap: string; // stroke line cap of line
+  strokeLinejoin: string; // stroke line join of line
+  duration: number; // intro animation in milliseconds (0 to disable)
+};
+
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/connected-scatterplot
-export function ConnectedScatterplot<T>(
+export function ConnectedScatterplot<T extends Vector2D>(
   data,
   {
-    x = ([T]) => x, // given d in data, returns the (quantitative) x-value
-    y = ([, T]) => y, // given d in data, returns the (quantitative) y-value
-    r = 3, // (fixed) radius of dots, in pixels
-    title, // given d in data, returns the label
-    orient = () => "top", // given d in data, returns a label orientation (top, right, bottom, left)
-    defined, // for gaps in data
+    dotRadius = 3, // (fixed) radius of dots, in pixels
     curve = d3.curveCatmullRom, // curve generator for the line
     width = 640, // outer width, in pixels
     height = 400, // outer height, in pixels
-    marginTop = 0, // top margin, in pixels
-    marginRight = 0, // right margin, in pixels
-    marginBottom = 0, // bottom margin, in pixels
-    marginLeft = 0, // left margin, in pixels
-    inset = r * 2, // inset the default range, in pixels
-    insetTop = inset, // inset the default y-range
-    insetRight = inset, // inset the default x-range
-    insetBottom = inset, // inset the default y-range
-    insetLeft = inset, // inset the default x-range
     xType = d3.scaleLinear, // type of x-scale
-    xDomain, // [xmin, xmax]
-    xRange = [marginLeft + insetLeft, width - marginRight - insetRight], // [left, right]
-    xFormat, // a format specifier string for the x-axis
-    xLabel, // a label for the x-axis
+    xDomain = [0, 6], // [xmin, xmax]
+    xRange = [0, width], // [left, right]
     yType = d3.scaleLinear, // type of y-scale
-    yDomain, // [ymin, ymax]
-    yRange = [height - marginBottom - insetBottom, marginTop + insetTop], // [bottom, top]
-    yFormat, // a format specifier string for the y-axis
-    yLabel, // a label for the y-axis
+    yDomain = [0, 6], // [ymin, ymax]
+    yRange = [height, 0], // [bottom, top]
     fill = "white", // fill color of dots
     stroke = "currentColor", // stroke color of line and dots
     strokeWidth = 2, // stroke width of line and dots
     strokeLinecap = "round", // stroke line cap of line
     strokeLinejoin = "round", // stroke line join of line
-    halo = "#fff", // halo color for the labels
-    haloWidth = 6, // halo width for the labels
-    duration = 0, // intro animation in milliseconds (0 to disable)
-  } = {}
+    duration = 0, // intro animation in milliseconds (0 to disable)}: Partial<
+  }: Partial<ConnectedScatterPlotOptions> = {}
 ) {
-  // Compute values.
-  const X = d3.map(data, x);
-  const Y = d3.map(data, y);
-  const T = title == null ? null : d3.map(data, title);
-  const O = d3.map(data, orient);
-  const I = d3.range(X.length);
-  if (defined === undefined) defined = (d, i) => !isNaN(X[i]) && !isNaN(Y[i]);
-  const D = d3.map(data, defined);
+  const X = d3.map<T, number>(data, (d) => d.x);
+  const Y = d3.map<T, number>(data, (d) => d.y);
 
-  // Compute default domains.
-  if (xDomain === undefined) xDomain = d3.nice(...d3.extent(X), width / 80);
-  if (yDomain === undefined) yDomain = d3.nice(...d3.extent(Y), height / 50);
+  const I = d3.range(X.length);
 
   // Construct scales and axes.
   const xScale = xType(xDomain, xRange);
@@ -121,7 +114,7 @@ export function ConnectedScatterplot<T>(
     .attr("viewBox", [0, 0, width, height])
     .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
-  const path = svg
+  let path = svg
     .append("path")
     .attr("fill", "none")
     .attr("stroke", stroke)
@@ -140,48 +133,7 @@ export function ConnectedScatterplot<T>(
     .join("circle")
     .attr("cx", (i) => xScale(X[i]))
     .attr("cy", (i) => yScale(Y[i]))
-    .attr("r", r);
-
-  // const label = svg
-  //   .append("g")
-  //   .attr("font-family", "sans-serif")
-  //   .attr("font-size", 10)
-  //   .attr("stroke-linejoin", "round")
-  //   .selectAll("g")
-  //   .data(I.filter((i) => D[i]))
-  //   .join("g")
-  //   .attr("transform", (i) => `translate(${xScale(X[i])},${yScale(Y[i])})`);
-
-  // if (T) {
-  //   label
-  //     .append("text")
-  //     .text((i) => T[i])
-  //     .each(function (i) {
-  //       const t = d3.select(this);
-  //       switch (O[i]) {
-  //         case "bottom":
-  //           t.attr("text-anchor", "middle").attr("dy", "1.4em");
-  //           break;
-  //         case "left":
-  //           t.attr("dx", "-0.5em")
-  //             .attr("dy", "0.32em")
-  //             .attr("text-anchor", "end");
-  //           break;
-  //         case "right":
-  //           t.attr("dx", "0.5em")
-  //             .attr("dy", "0.32em")
-  //             .attr("text-anchor", "start");
-  //           break;
-  //         default:
-  //           t.attr("text-anchor", "middle").attr("dy", "-0.7em");
-  //           break;
-  //       }
-  //     })
-  //     .call((text) => text.clone(true))
-  //     .attr("fill", "none")
-  //     .attr("stroke", halo)
-  //     .attr("stroke-width", haloWidth);
-  // }
+    .attr("r", dotRadius);
 
   // Measure the length of the given SVG path string.
   function length(path) {
@@ -212,24 +164,46 @@ export function ConnectedScatterplot<T>(
   }
 
   const renderPath = (data: T[]) => {
-    const D = d3.map(data, defined);
+    // Compute values.
+    const X = d3.map(data, x);
+    const Y = d3.map(data, y);
+    const I = d3.range(X.length);
+
+    // Construct scales and axes.
+    const xScale = xType(xDomain, xRange);
+    const yScale = yType(yDomain, yRange);
+
     // Construct the line generator.
     line = d3
       .line()
       .curve(curve)
-      .defined((i) => D[i])
       .x((i) => xScale(X[i]))
       .y((i) => yScale(Y[i]));
 
-    path.attr("d", line(I));
+    // path.remove();
+
+    path = path.attr("d", line(I));
+
+    svg
+      .append("g")
+      .attr("fill", fill)
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .selectAll("circle")
+      .data([data[data.length - 1]])
+      .join("circle")
+      .attr("cx", (i) => xScale(X[data.length - 1]))
+      .attr("cy", (i) => yScale(Y[data.length - 1]))
+      .attr("r", dotRadius);
   };
 
-  const update = (newData: T[]) => {
-    console.log(newData);
+  const redrawPath = (newData: T[]) => {
     renderPath(newData);
   };
 
+  const appendPoint = (point: T) => {};
+
   animate();
 
-  return Object.assign(svg.node(), { animate, update });
+  return Object.assign(svg.node(), { animate, redrawPath });
 }

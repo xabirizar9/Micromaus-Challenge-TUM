@@ -28,9 +28,6 @@ type Robot struct {
 
 	Status RobotConnStatus
 
-	// channel on which to listen for errors
-	ConnectionError chan error
-
 	// channel on which to listen for messages
 	pongMsgChannel chan bool
 
@@ -70,9 +67,8 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	l.Debug("connecting to robot")
 	r = &Robot{
 		//port:   s,
-		Status:          Disconnected,
-		ConnectionError: make(chan error),
-		IncomingMsg:     make(chan *pb.MausOutgoingMessage),
+		Status:      Disconnected,
+		IncomingMsg: make(chan *pb.MausOutgoingMessage),
 		// channel for incoming pong messages
 		pongMsgChannel: make(chan bool),
 	}
@@ -121,7 +117,7 @@ func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, []byte, error) {
 		return nil, buf[:n], err
 	}
 
-	log.Debug("got command", zap.String("cmd", cmd.String()))
+	// log.Debug("got command", zap.String("cmd", cmd.String()))
 
 	return cmd, buf[:n], nil
 }
@@ -177,17 +173,16 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 	}
 }
 
-func executeWithRetries(ctx context.Context, maxRetries uint, f func() error) (err error) {
+func executeWithRetries(ctx context.Context, maxRetries uint, f func(ctx context.Context, errChan chan error)) (err error) {
 	for i := uint(0); i < maxRetries; i++ {
-		err = f()
-		if err == nil {
-			return nil
-		}
-		log.Error("failed to execute function", zap.Error(err))
+		errChan := make(chan error, 1)
+		go f(ctx, errChan)
 		select {
+		case err := <-errChan:
+			return err
 		case <-ctx.Done():
+			log.Error("context canceled")
 			return ctx.Err()
-		case <-time.After(time.Second):
 		}
 	}
 	return err
@@ -202,26 +197,33 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 
 	for {
 		ctx, cancel := context.WithTimeout(context.TODO(), timeout)
+
 		defer cancel()
-		err := executeWithRetries(ctx, maxRetries, func() error {
+
+		err := executeWithRetries(ctx, maxRetries, func(ctx context.Context, errChan chan error) {
 			err := r.SendCmd(pingCmd)
 			if err != nil {
-				return err
+				log.Error("failed to send ping", zap.Error(err))
+				errChan <- err
+				return
 			}
 
+			log.Info("waiting for pong", zap.Error(err))
 			// wait for pong
-			_ = <-r.pongMsgChannel
+			<-r.pongMsgChannel
 
-			return nil
+			log.Info("got something", zap.Error(err))
+
+			errChan <- nil
 		})
 
 		if err != nil {
 			log.Error("failed to send ping, disconnecting", zap.Error(err))
-			r.ConnectionError <- err
 			r.Status = Disconnected
+			log.Info("reconnecting")
+			r.Connect()
 			return
 		}
-
 		time.Sleep(interval)
 	}
 }

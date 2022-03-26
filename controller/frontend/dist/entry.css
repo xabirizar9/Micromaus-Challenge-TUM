@@ -1,3 +1,89 @@
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/node_modules/@zerodevx/svelte-toast/src/ToastItem.esbuild-svelte-fake-css */
+._toastItem.svelte-5er0t9 {
+  width: var(--toastWidth, 16rem);
+  height: var(--toastHeight, auto);
+  min-height: var(--toastMinHeight, 3.5rem);
+  margin: var(--toastMargin, 0 0 0.5rem 0);
+  padding: var(--toastPadding, 0);
+  background: var(--toastBackground, rgba(66, 66, 66, 0.9));
+  color: var(--toastColor, #fff);
+  box-shadow: var( --toastBoxShadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) );
+  border: var(--toastBorder, none);
+  border-radius: var(--toastBorderRadius, 0.125rem);
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  will-change: transform, opacity;
+  -webkit-tap-highlight-color: transparent;
+}
+._toastMsg.svelte-5er0t9 {
+  padding: var(--toastMsgPadding, 0.75rem 0.5rem);
+  flex: 1 1 0%;
+}
+.pe.svelte-5er0t9,
+._toastMsg.svelte-5er0t9 a {
+  pointer-events: auto;
+}
+._toastBtn.svelte-5er0t9 {
+  width: 2rem;
+  height: 100%;
+  font: 1rem sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+}
+._toastBar.svelte-5er0t9 {
+  top: var(--toastBarTop, auto);
+  right: var(--toastBarRight, auto);
+  bottom: var(--toastBarBottom, 0);
+  left: var(--toastBarLeft, 0);
+  height: var(--toastBarHeight, 6px);
+  width: var(--toastBarWidth, 100%);
+  position: absolute;
+  display: block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background: transparent;
+  pointer-events: none;
+}
+._toastBar.svelte-5er0t9::-webkit-progress-bar {
+  background: transparent;
+}
+._toastBar.svelte-5er0t9::-webkit-progress-value {
+  background: var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)));
+}
+._toastBar.svelte-5er0t9::-moz-progress-bar {
+  background: var(--toastProgressBackground, var(--toastBarBackground, rgba(33, 150, 243, 0.75)));
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/node_modules/@zerodevx/svelte-toast/src/SvelteToast.esbuild-svelte-fake-css */
+._toastContainer.svelte-yh90az {
+  top: var(--toastContainerTop, 1.5rem);
+  right: var(--toastContainerRight, 2rem);
+  bottom: var(--toastContainerBottom, auto);
+  left: var(--toastContainerLeft, auto);
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  pointer-events: none;
+  z-index: var(--toastContainerZIndex, 9999);
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/components/Toaster.esbuild-svelte-fake-css */
+:root {
+  --toastBackground:var(--primary-color);
+  --toastColor:var(--primary-color-text);
+  --toastBorderRadius:0.5rem;
+  --toastBarBackground:rgba(0, 0, 0, 0.2);
+}
+
 /* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/node_modules/@sveltejs/svelte-virtual-list/VirtualList.esbuild-svelte-fake-css */
 svelte-virtual-list-viewport.svelte-1tqh76q {
   position: relative;
@@ -28,19 +114,103 @@ svelte-virtual-list-row.svelte-1tqh76q {
 }
 
 /* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/MazeViewCard.esbuild-svelte-fake-css */
-.map.svelte-1popbqv.svelte-1popbqv {
+.map.svelte-1o7zz2v.svelte-1o7zz2v {
+  min-width: 25vw;
   padding: 0;
   position: relative;
   aspect-ratio: 1 / 1;
 }
-.map.svelte-1popbqv > .svelte-1popbqv {
+.map.svelte-1o7zz2v > .svelte-1o7zz2v {
   position: absolute;
   margin: 0.5rem;
   width: calc(100% - 1rem);
   height: calc(100% - 1rem);
 }
 
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/components/Input.esbuild-svelte-fake-css */
+.input.svelte-1b2ym2t.svelte-1b2ym2t {
+  min-width: 0;
+}
+.input.svelte-1b2ym2t:hover input.svelte-1b2ym2t {
+  border-color: var(--primary-color);
+  background: var(--main-bg-tertiary);
+}
+.input.svelte-1b2ym2t .label.svelte-1b2ym2t {
+  display: block;
+  padding-left: 1rem;
+}
+.input.svelte-1b2ym2t input.svelte-1b2ym2t {
+  max-width: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 0;
+  color: var(--main-text-color);
+  border: 2px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: none;
+  padding: 15px;
+  background: var(--main-bg-secondary);
+  margin: 0 0 10px 0;
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/components/Grid.esbuild-svelte-fake-css */
+.grid.svelte-9rjhs.svelte-9rjhs {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5rem;
+}
+.grid.svelte-9rjhs > .svelte-9rjhs {
+  min-width: 0;
+}
+
+/* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/components/Button.esbuild-svelte-fake-css */
+.btn.svelte-12808a5 {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  background-color: var(--main-bg-tertiary);
+  color: var(--primary-color-text);
+  outline: none;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
+  box-shadow: none;
+}
+.btn.inline.svelte-12808a5 {
+  display: inline;
+  width: auto;
+}
+.btn.svelte-12808a5:hover {
+  background-color: var(--primary-color);
+}
+
 /* fakecss:/Users/wlad/Developer/projects/micromaus/controller/frontend/src/index.esbuild-svelte-fake-css */
+:root {
+  --primary-color:#0070f3;
+  --primary-color-text:#fff;
+  --error-color:#f56969;
+  --error-color-text:#fff;
+  --success-color:#77c97e;
+  --success-color-text:#fff;
+  --border-color:rgb(121, 121, 121);
+  --main-bg-secondary:#e8e8e8;
+  --main-bg-color:#dadada;
+  --main-bg-tertiary:#ebebeb;
+  --main-text-color:#333;
+  --main-shadow-color:#rgba(0, 0, 0, 0.1);
+  --main-shadow-secondary-color:rgba(0, 0, 0, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --border-color:#333;
+    --main-bg-secondary:rgb(40, 40, 40);
+    --main-bg-color:#181818;
+    --main-bg-tertiary:#434343;
+    --main-text-color:rgb(235, 235, 235);
+    --main-shadow-color:#222222;
+    --main-shadow-secondary-color:#171717;
+  }
+}
 html,
 body {
   padding: 0;
@@ -61,36 +231,41 @@ body {
   box-sizing: border-box;
 }
 body {
-  --main-bg-secondary:#dadada;
-  --main-bg-color:#e8e8e8;
-  --main-text-color:#333;
   background-color: var(--main-bg-color);
   padding: 1rem;
   color: var(--main-text-color);
-  background: #e8e8e8;
 }
-body .card.svelte-o4gwjr {
+body .card.svelte-zlcof5.svelte-zlcof5 {
   background-color: var(--main-bg-secondary);
   border-radius: 1.25rem;
-  box-shadow: 20px 20px 60px #c5c5c5, -20px -20px 60px #ffffff;
+  box-shadow: 20px 20px 60px var(--main-shadow-color), -20px -20px 60px var(--main-shadow-secondary-color);
   padding: 0.5rem;
 }
-label.svelte-o4gwjr {
-  display: block;
+body .subgrid.svelte-zlcof5.svelte-zlcof5 {
+  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
-main.svelte-o4gwjr {
+body .subgrid.svelte-zlcof5 > .card.svelte-zlcof5 {
+  background-color: var(--main-bg-secondary);
+  box-shadow: none;
+}
+main.svelte-zlcof5.svelte-zlcof5 {
   background-color: var(--main-bg-color);
   display: grid;
   gap: 2rem;
 }
+main.svelte-zlcof5 > .full.svelte-zlcof5 {
+  grid-column: 1 / -1;
+}
 @media (min-width: 768px) {
-  main.svelte-o4gwjr {
+  main.svelte-zlcof5.svelte-zlcof5 {
     grid-template-columns: 1fr 1fr;
   }
 }
 @media (min-width: 1024px) {
-  main.svelte-o4gwjr {
+  main.svelte-zlcof5.svelte-zlcof5 {
     grid-template-columns: 1fr 2fr;
   }
 }
-/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiVmlydHVhbExpc3Quc3ZlbHRlIiwgInNlbnNvclRhYmxlLnN2ZWx0ZSIsICJNYXplVmlld0NhcmQuc3ZlbHRlIiwgImluZGV4LnN2ZWx0ZSJdLAogICJzb3VyY2VzQ29udGVudCI6IFtudWxsLCBudWxsLCBudWxsLCBudWxsXSwKICAibWFwcGluZ3MiOiAiO0FBeUlDO0FBQ0M7QUFDQTtBQUNBO0FBQ0E7O0FBR0Q7O0FBQ0M7O0FBR0Q7QUFDQzs7OztBQ25IZ0I7QUFBQTtBQUFBOztBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7Ozs7QUNrSEE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7OztBQ0xBOztBQUFBO0FBQUE7QUFBQTtBQUFBOzs7Ozs7Ozs7Ozs7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOztBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7OztBQUFBO0FBQUE7QUFBQTs7OyIsCiAgIm5hbWVzIjogW10KfQo= */
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiVG9hc3RJdGVtLnN2ZWx0ZSIsICJTdmVsdGVUb2FzdC5zdmVsdGUiLCAiVG9hc3Rlci5zdmVsdGUiLCAiVmlydHVhbExpc3Quc3ZlbHRlIiwgInNlbnNvclRhYmxlLnN2ZWx0ZSIsICJNYXplVmlld0NhcmQuc3ZlbHRlIiwgIklucHV0LnN2ZWx0ZSIsICJHcmlkLnN2ZWx0ZSIsICJCdXR0b24uc3ZlbHRlIiwgImluZGV4LnN2ZWx0ZSJdLAogICJzb3VyY2VzQ29udGVudCI6IFtudWxsLCBudWxsLCBudWxsLCBudWxsLCBudWxsLCBudWxsLCBudWxsLCBudWxsLCBudWxsLCBudWxsXSwKICAibWFwcGluZ3MiOiAiO0FBNkVBO0FBQ0U7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUtBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFRjtBQUNFO0FBQ0E7O0FBRUY7O0FBRUU7O0FBRUY7QUFDRTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVGO0FBQ0U7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFRjtBQUNFOztBQUdGO0FBQ0U7O0FBRUY7QUFDRTs7OztBQzlHRjtBQUNFO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FDOUJnQjtBQUFBO0FBQUE7QUFBQTtBQUFBOzs7O0FDNkhqQjtBQUNDO0FBQ0E7QUFDQTtBQUNBOztBQUdEOztBQUNDOztBQUdEO0FBQ0M7Ozs7QUNqSGdCO0FBQUE7QUFBQTs7QUFBQTtBQUFBOztBQUFBO0FBQUE7QUFBQTtBQUFBOzs7O0FDdUZBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7OztBQ3BGQTtBQUFBOztBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOzs7O0FDbkNBO0FBQUE7QUFBQTtBQUFBOztBQUFBO0FBQUE7Ozs7QUNhQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOztBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBOzs7O0FDMklBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOzs7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTs7Ozs7Ozs7Ozs7O0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7OztBQUFBO0FBQUE7QUFBQTs7OyIsCiAgIm5hbWVzIjogW10KfQo= */

@@ -65,32 +65,6 @@ func main() {
 		id := m.AddClient(conn)
 
 		l.Debug("client added", zap.String("id", id))
-
-		// for {
-		// 	// Read message from browser
-		// 	msgType, msg, err := conn.ReadMessage()
-
-		// 	if err != nil {
-		// 		return
-		// 	}
-
-		// 	outMsg := &pb.MausOutgoingMessage{}
-
-		// 	proto.Unmarshal(msg, outMsg)
-
-		// 	// Print the message to the console
-		// 	log.Infow("message received", "msg", msg, "type", msgType)
-
-		// 	buf, err := proto.Marshal(outMsg)
-		// 	if err != nil {
-		// 		return
-		// 	}
-
-		// 	// Write message back to browser
-		// 	if err = conn.WriteMessage(msgType, buf); err != nil {
-		// 		return
-		// 	}
-		// }
 	})
 
 	log.Info("server started")

@@ -36,7 +36,7 @@
     ctx.arc(
       x + nav.sensors.left * (width / 20),
       y + nav.sensors.left * (height / 20),
-      14,
+      7,
       0,
       2 * Math.PI,
       false
@@ -44,6 +44,11 @@
     ctx.fillStyle = "rgba(52, 200, 219, 0.3)";
     ctx.fill();
     ctx.closePath();
+
+    data.push({
+      x: x + nav.sensors.left * (width / 20),
+      y: y + nav.sensors.left * (height / 20),
+    });
   };
 
   function CanvasEl(node: HTMLCanvasElement) {
@@ -82,37 +87,7 @@
 
   function RobotPath(node: HTMLElement) {
     const rect = node.getBoundingClientRect();
-    const data: Vector2D[] = [
-      {
-        x: 0.5,
-        y: 0,
-      },
-      {
-        x: 0.55,
-        y: 0.5,
-      },
-      {
-        x: 0.49,
-        y: 1,
-      },
-      {
-        x: 0.6,
-        y: 1.2,
-      },
-      {
-        x: 1.6,
-        y: 1.2,
-      },
-      {
-        x: 2.6,
-        y: 4.2,
-      },
-
-      {
-        x: 6.0,
-        y: 4.2,
-      },
-    ];
+    const data: Vector2D[] = [];
 
     pathChart = ConnectedScatterplot(data, {
       x: (d) => d.x,
@@ -148,6 +123,7 @@
 
 <style lang="scss">
   .map {
+    min-width: 25vw;
     padding: 0;
     position: relative;
     aspect-ratio: 1 / 1;

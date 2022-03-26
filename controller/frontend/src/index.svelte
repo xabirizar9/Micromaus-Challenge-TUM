@@ -1,8 +1,11 @@
 <script lang="ts">
+  import Toaster from "./components/Toaster.svelte";
   import SensorTable from "./sensorTable.svelte";
   import MazeView from "./MazeViewCard.svelte";
+  import Input from "./components/Input.svelte";
   import { Communicator } from "./Communicator";
-  import { MausOutgoingMessage, NavigationPacket } from "./proto/message";
+  import Grid from "./components/Grid.svelte";
+  import Button from "./components/Button.svelte";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
@@ -21,7 +24,10 @@
   let driveDistance = 0;
   let driveSpeed = 0;
 
-  const onUpdateMotorCalibration = () => {
+  const onUpdateMotorCalibration = (
+    evt: SubmitEvent | CustomEvent<MouseEvent>
+  ) => {
+    evt.preventDefault();
     com.send({
       encoderCallibration: {
         kD,
@@ -31,7 +37,8 @@
     });
   };
 
-  const onUpdateControls = () => {
+  const onUpdateControls = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
+    evt.preventDefault();
     com.send({
       control: {
         speed,
@@ -40,7 +47,9 @@
     });
   };
 
-  const onTurn = () => {
+  const onTurn = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
+    console.log({ turnDegree, turnSpeed });
+    evt.preventDefault();
     com.send({
       turn: {
         degree: turnDegree,
@@ -49,7 +58,8 @@
     });
   };
 
-  const onDrive = () => {
+  const onDrive = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
+    evt.preventDefault();
     com.send({
       drive: {
         distance: driveDistance,
@@ -59,89 +69,121 @@
   };
 
   const onStop = () => {
+    console.log("STOP!");
     com.send({
       stop: {},
     });
   };
 </script>
 
+<Toaster />
 <main>
   <MazeView {com} />
-  <div class="card"><SensorTable {com} /></div>
-  <div class="card">
-    <h2>Controls</h2>
-    <form on:submit={onUpdateMotorCalibration}>
-      <div>
-        <label>
-          Speed:
-          <input type="number" bind:value={speed} />
-        </label>
-        <label>
-          Direction:
-          <input type="number" bind:value={direction} />
-        </label>
-      </div>
-      <button on:click={onUpdateControls}>Update</button>
-    </form>
 
-    <h2>Turn</h2>
-    <form on:submit={onTurn}>
-      <div>
-        <label>
-          <span>Degree:</span>
-          <input step="0.001" type="number" bind:value={turnDegree} />
-        </label>
-        <label>
-          <span>Speed:</span>
-          <input step="0.001" type="number" bind:value={turnSpeed} />
-        </label>
-      </div>
-      <button type="submit">Turn</button>
-    </form>
+  <div class="subgrid">
+    <div class="card">
+      <h2>Controls</h2>
+      <form on:submit={onUpdateMotorCalibration}>
+        <Grid>
+          <Input label="Speed" type="number" bind:value={speed} />
+          <Input label="heading" type="number" bind:value={direction} />
+        </Grid>
+        <Button on:click={onUpdateControls}>Update</Button>
+      </form>
+    </div>
 
-    <h2>Drive</h2>
-    <form on:submit={onDrive}>
-      <div>
-        <label>
-          <span>Degree:</span>
-          <input step="0.001" type="number" bind:value={driveDistance} />
-        </label>
-        <label>
-          <span>Speed:</span>
-          <input step="0.001" type="number" bind:value={driveSpeed} />
-        </label>
-      </div>
-      <button type="submit">Drive</button>
-    </form>
+    <div class="card">
+      <h2>Turn</h2>
+      <form on:submit={onTurn}>
+        <Grid>
+          <Input
+            label="Degree"
+            step="0.001"
+            type="number"
+            bind:value={turnDegree}
+          />
 
-    <h2>Tuning</h2>
-    <form on:submit={onUpdateMotorCalibration}>
-      <div>
-        <label>
-          <span>kP:</span>
-          <input step="0.001" type="number" bind:value={kP} />
-        </label>
-        <label>
-          <span>kD:</span>
+          <Input
+            label="Speed"
+            step="0.001"
+            type="number"
+            bind:value={turnSpeed}
+          />
+        </Grid>
+        <Button type="submit">Turn</Button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Drive</h2>
+      <form on:submit={onDrive}>
+        <Grid>
+          <Input
+            label="Degree"
+            step="0.001"
+            type="number"
+            bind:value={driveDistance}
+          />
 
-          <input step="0.001" type="number" bind:value={kD} />
-        </label>
-        <label>
-          <span> kI:</span>
-          <input step="0.001" type="number" bind:value={kI} />
-        </label>
-      </div>
-      <button type="submit">Update</button>
-    </form>
+          <Input
+            label="Speed"
+            step="0.001"
+            type="number"
+            bind:value={driveSpeed}
+          />
+        </Grid>
+        <Button type="submit">Drive</Button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Tuning</h2>
+      <form on:submit={onUpdateMotorCalibration}>
+        <Grid>
+          <Input label="kP" step="0.001" type="number" bind:value={kP} />
+          <Input label="kD" step="0.001" type="number" bind:value={kD} />
+          <Input label="kI" step="0.001" type="number" bind:value={kI} />
+        </Grid>
+        <Button type="submit">Update</Button>
+      </form>
+    </div>
   </div>
-
   <div class="card">
     <h2>Actions</h2>
-    <button on:click={onStop}>STOP!</button>
+    <Button inline on:click={onStop}>STOP!</Button>
   </div>
+  <div class="card full"><SensorTable {com} /></div>
 </main>
 
 <style lang="scss">
+  :root {
+    --primary-color: #0070f3;
+    --primary-color-text: #fff;
+
+    --error-color: #f56969;
+    --error-color-text: #fff;
+
+    --success-color: #77c97e;
+    --success-color-text: #fff;
+
+    --border-color: rgb(121, 121, 121);
+    --main-bg-secondary: #e8e8e8;
+    --main-bg-color: #dadada;
+    --main-bg-tertiary: #ebebeb;
+    --main-text-color: #333;
+    --main-shadow-color: #rgba(0, 0, 0, 0.1);
+    --main-shadow-secondary-color: rgba(0, 0, 0, 0.05);
+
+    @media (prefers-color-scheme: dark) {
+      --border-color: #333;
+      --main-bg-secondary: rgb(40, 40, 40);
+      --main-bg-color: #181818;
+      --main-bg-tertiary: #434343;
+      --main-text-color: rgb(235, 235, 235);
+      --main-shadow-color: #222222;
+      --main-shadow-secondary-color: #171717;
+    }
+  }
+
   :global(html),
   :global(body) {
     padding: 0;
@@ -153,19 +195,27 @@
   }
 
   :global(body) {
-    --main-bg-secondary: #dadada;
-    --main-bg-color: #e8e8e8;
-    --main-text-color: #333;
     background-color: var(--main-bg-color);
     padding: 1rem;
     color: var(--main-text-color);
-    background: #e8e8e8;
 
     .card {
       background-color: var(--main-bg-secondary);
       border-radius: 1.25rem;
-      box-shadow: 20px 20px 60px #c5c5c5, -20px -20px 60px #ffffff;
+      box-shadow: 20px 20px 60px var(--main-shadow-color),
+        -20px -20px 60px var(--main-shadow-secondary-color);
       padding: 0.5rem;
+    }
+
+    .subgrid {
+      > .card {
+        background-color: var(--main-bg-secondary);
+        box-shadow: none;
+      }
+
+      gap: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
   }
 
@@ -176,6 +226,10 @@
   main {
     background-color: var(--main-bg-color);
     display: grid;
+
+    > .full {
+      grid-column: 1 / -1;
+    }
 
     @media (min-width: 768px) {
       grid-template-columns: 1fr 1fr;
