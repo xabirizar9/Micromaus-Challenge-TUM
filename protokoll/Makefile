@@ -1,4 +1,4 @@
-INPUTS=protokoll.tex title.tex schematic.tex
+INPUTS=$(wildcard *.tex)
 
 all: protokoll.pdf
 
