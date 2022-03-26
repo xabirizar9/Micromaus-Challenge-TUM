@@ -6,16 +6,131 @@ out more sophisticated methods of mobile robotics.
 \subsection{Microcontroller}
 Our design uses the Espressif ESP32-S2-WROOM microcontroller module
 featuring an ARM processor clocked at \SI{240}{\mega\hertz},
-\SI{320}{\kilo\byte} of SRAM, \SI{4}{\mega\byte} of flash and Wi-Fi
+\SI{320}{\kilo\byte} of SRAM, \SI{4}{\mega\byte} of flash memory and Wi-Fi
 connectivity \cite{esp32-s2-wroom-datasheet}.
 
 Espressif provides a software framework that implements a Wi-Fi stack and a
 convenient interface to the controller's peripherals for the C language.
+\subsection{Sensors and Actuators}
+The motor driver circuitry is depicted on page \pageref{schematic:hbridge}.
+We would have liked to use a H-bridge driver with integrated logic circuitry
+to be able to drive each motor with only two logic signals and integrated
+flyback diodes, but because of the higher availability of the part, we chose
+the L298P.
+The motors have an integrated encoder, making it possible to measure the
+angular velocity.
+The direction of the motor is chosen by the signals \signal{ESP32\_Mx\_y} and by
+applying a PWM signal to the enable pins \signal{H\_EN\_x}, the speed of the
+motor can be regulated.
 
-\subsection{Inertial Measurement Unit}
+Our design uses three Sharp GP2Y0A51SK0F infrared distance measuring units
+visible on page \pageref{schematic:ir}.
+These can measure ranges of \SIrange{1.5}{15}{\centi\meter}, which is ideal for
+our application where the typical distance of the robot to the wall will be
+\SI{3}{\centi\meter}.
+Because of their supply current of \SI{20}{\milli\ampere} each we added the
+MOSFET \partref{Q6} to be able to implement a low power mode when the robot is
+not in use or the battery is low.
+
 Our board has a slot for a board containing an Inertial Measurement Unit, an
 ICM-20948 Module by Adafruit with the TDK\,InvenSense ICM-20948 chip that
 contains a MEMS accelerometer, a gyroscope and a compass with three axes each
 \cite{icm20948-datasheet}.
 
-The module is connected to the microcontroller through a SPI bus.
+The module is connected to the microcontroller through a SPI bus, with lines
+\signal{MISO} (\signal{SDO}) for data from the module to the controller,
+\signal{MOSI} (\signal{SDA}) for data from the controller to the module,
+\signal{SCL} as clock,
+\signal{INT} for possilbe interrupts sent from the module on movement and
+\signal{CS} for addressing the module on the bus.
+See the schematics on pages \pageref{schematic:controller} and
+\pageref{schematic:imu} for reference.
+
+\subsection{Power Supply}
+The power supply unit is documented in the schematics on page
+\pageref{schematic:power}.
+Power is primarily supplied from a male XT60 socket, so that common lithium
+polymer batteries used in R/C model making can be used.
+We also made an adaptor to be able to power the robot from a 9V battery.
+
+\begin{table}
+\centering
+\begin{tabu} to 7.5cm {lX[1,r,p]l}
+\toprule
+Component & \multicolumn{2}{r}{Current in standby mode} \\
+\midrule
+ESP32-S2 & \SI{20}{\micro\ampere} \\
+USB-UART & \SI{100}{\micro\ampere} \\
+Range Sensors & \SI{230}{\micro\ampere} \\
+H-Bridge & \SI{6}{\milli\ampere} & (\signal{+5V})\\
+& \SI{4}{\milli\ampere} & (\signal{VBAT})\\
+IMU & \SI{8}{\micro\ampere} \\
+Power Supply & \SI{7}{\milli\ampere} & (\signal{+5V}) \\
+& \SI{5}{\milli\ampere} & (\signal{VBAT}) \\
+\midrule
+Total & \SI{13.4}{\milli\ampere} & (\signal{+5V}) \\
+& \SI{9}{\milli\ampere} & (\signal{VBAT}) \\
+\bottomrule
+\end{tabu}
+\caption{Supply current in standby mode.}
+\label{tab:standby currents}
+\end{table}
+
+If the robot is powered through USB only, the \signal{+5V} line is directly
+supplied from the USB bus, through the MOSFET \partref{Q7}.
+The AP1509 Buck converter is disabled by the comparator \partref{U6B} through
+the \signal{VBUS\_EN} line.
+When the battery voltage rises above \SI{6.6}{\volt}, \partref{U6} will
+disable the USB power supply and enable the Buck converter.
+This way, it is ensured that no current flows back through the USB bus voltage
+line.
+
+The initial design had the shutdown pin of \partref{IC1} connected directly to
+\signal{USB\_VBUS}, but when powering up the robot from battery, power flows
+back through \partref{Q7} to the \signal{USB\_VBUS} line, thereby disabling the
+buck converter making it impossible to power the robot from USB.
+The schematics on p.\,\pageref{schematic:power} depict the fixed circuit
+currently used in the real robot.
+
+For the choice of the \SI{3.3}{\volt} regulator, the high current consumption
+of the ESP32-S2 when in Wi-Fi transmission mode had to be considered.
+While the LP3965 regulator was chosen because of its
+availability at the time of design, it was out of stock, so it had to be
+replaced.
+
+As the robot is thought to be powered from a lithium polymer battery, it is
+important that the battery is protected from undervoltage.
+The robot can crudely measure the battery voltage through a resistor devider
+visible on the bottom right on p.\,\pageref{schematic:power}.
+In case of the battery voltage becoming too low or the robot laying around
+powered, but unused, a standby mode can be entered.
+To reduce power consumption, the IMU can be set to sleep mode, the enable pins
+of the H-bridge can be driven low and the distance sensors can be powered down
+using the MOSFET \partref{Q6}.
+Finally, the ESP32-S2 can be set to deep sleep mode.
+This way, the total current consumption can be reduced to under
+\SI{25}{\milli\ampere} (see \autoref{tab:standby currents}).
+
+The current consumption could be lowered further by using a different H-bridge
+driver and a different voltage regulator with lower quiescent currents or,
+using a different approach, with a self-holding circuit that drives the
+shutdow pin of the Buck converter high, thereby unpowering the whole robot.
+
+While the robot was thought to be powered from a two-cell lithium battery
+(\SIrange{6.8}{8.4}{\volt}), the Buck converter allows for a wide input range.
+The voltage is limited on the low side by the voltage source switching circuit
+which deactivates the Buck converter if the battery voltage drops below
+\SI{6.6}{\volt}.
+On the high side, the maximum input voltage of the AP1509 is \SI{22}{\volt}.
+However, as the maximum measurable voltage for the ADC is
+\SI{2500}{\milli\volt}, the maximum voltage measurable by the battery voltage
+measurement circuit is around \SI{10}{\volt}.
+This way, the ADC will be overdriven for higher voltages.
+While the ESP32-S2 is tolerant up to input voltages of \SI{3.6}{\volt}, care
+should be taken because the behaviour of the ADC on overvoltage is not
+documented in the datasheet.
+If higher input voltages need to be used, we recommend altering the values of
+the voltage divider accordingly.
+For example, replacing \partref{R17} by \SI{10}{\kilo\ohm} will give a
+measurable voltage range of up to \SI{25}{\volt} which is higher than the Buck
+converter can take in.
