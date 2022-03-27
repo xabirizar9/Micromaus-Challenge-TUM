@@ -3,7 +3,12 @@
 
   import { ConnectedScatterplot } from "./plot/ConnectedScatterplot";
 
-  import { MausOutgoingMessage, NavigationPacket } from "./proto/message";
+  import {
+    MausOutgoingMessage,
+    NavigationPacket,
+    Position,
+    SensorPacket,
+  } from "./proto/message";
   import { drawGrid } from "./utils/canvas";
   import { mazeSize, Vector2D } from "./utils/geo";
 
@@ -11,44 +16,51 @@
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
-  let lastCoords: [number, number];
 
   const data: Vector2D[] = [];
 
-  const onNavPacket = (nav: NavigationPacket) => {
+  const fromMmToUnits = (mm: number) => mm / 160 / 6;
+
+  const drawSensorDot = (nav: NavigationPacket, sensor: keyof SensorPacket) => {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
 
-    const x = (nav.position.x + 2) * (canvas.clientWidth / 5);
-    const y = (nav.position.y + 2) * (canvas.clientHeight / 5);
-    if (!lastCoords) {
-      lastCoords = [x, y];
+    // discard sensor reading if out of range
+    if (nav.sensors[sensor] < 1) {
+      return;
     }
-    ctx.beginPath();
-    ctx.strokeStyle = "#ffffff";
-    ctx.moveTo(...lastCoords);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    lastCoords = [x, y];
+
+    const x = fromMmToUnits(nav.position.x) * width;
+    const y = height - fromMmToUnits(nav.position.y) * height;
 
     ctx.beginPath();
 
-    ctx.arc(
-      x + nav.sensors.left * (width / 20),
-      y + nav.sensors.left * (height / 20),
-      7,
-      0,
-      2 * Math.PI,
-      false
-    );
+    let sensorX = x;
+    let sensorY = y;
+
+    switch (sensor) {
+      case "left":
+        sensorX -= fromMmToUnits(nav.sensors.left) * canvas.clientWidth;
+        break;
+      case "right":
+        sensorX += fromMmToUnits(nav.sensors.right) * canvas.clientWidth;
+        break;
+      case "front":
+        sensorY -= fromMmToUnits(nav.sensors.front) * canvas.clientHeight;
+        break;
+    }
+
+    ctx.arc(sensorX, sensorY, 2, 0, 2 * Math.PI, false);
     ctx.fillStyle = "rgba(52, 200, 219, 0.3)";
     ctx.fill();
     ctx.closePath();
+  };
 
-    data.push({
-      x: x + nav.sensors.left * (width / 20),
-      y: y + nav.sensors.left * (height / 20),
-    });
+  const onNavPacket = (nav: NavigationPacket) => {
+    drawSensorDot(nav, "left");
+    drawSensorDot(nav, "front");
+    drawSensorDot(nav, "right");
+    // addPoint();
   };
 
   function CanvasEl(node: HTMLCanvasElement) {
@@ -105,11 +117,10 @@
 
   const addPoint = () => {
     console.log("add point");
-    data.push({
+    pathChart.appendPoint({
       x: Math.random() * 6,
       y: Math.random() * 6,
     });
-    pathChart.update(data);
   };
 </script>
 

@@ -6,10 +6,13 @@
   import { Communicator } from "./Communicator";
   import Grid from "./components/Grid.svelte";
   import Button from "./components/Button.svelte";
+  import { Joystick } from "./Joystick";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
   });
+
+  const controller = new Joystick(com);
 
   let kD = 0.0;
   let kI = 0.0;
@@ -38,7 +41,9 @@
   };
 
   const onUpdateControls = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
+    console.log("onUpdateControls", { speed, direction });
     evt.preventDefault();
+    evt.stopPropagation();
     com.send({
       control: {
         speed,
@@ -83,12 +88,12 @@
   <div class="subgrid">
     <div class="card">
       <h2>Controls</h2>
-      <form on:submit={onUpdateMotorCalibration}>
+      <form on:submit={onUpdateControls}>
         <Grid>
           <Input label="Speed" type="number" bind:value={speed} />
           <Input label="heading" type="number" bind:value={direction} />
         </Grid>
-        <Button on:click={onUpdateControls}>Update</Button>
+        <Button type="submit">Update</Button>
       </form>
     </div>
 

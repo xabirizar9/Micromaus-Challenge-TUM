@@ -103,7 +103,6 @@ export function ConnectedScatterplot<T extends Vector2D>(
   let line = d3
     .line()
     .curve(curve)
-    .defined((i) => D[i])
     .x((i) => xScale(X[i]))
     .y((i) => yScale(Y[i]));
 
@@ -164,9 +163,9 @@ export function ConnectedScatterplot<T extends Vector2D>(
   }
 
   const renderPath = (data: T[]) => {
-    // Compute values.
-    const X = d3.map(data, x);
-    const Y = d3.map(data, y);
+    const X = d3.map<T, number>(data, (d) => d.x);
+    const Y = d3.map<T, number>(data, (d) => d.y);
+
     const I = d3.range(X.length);
 
     // Construct scales and axes.
@@ -180,9 +179,16 @@ export function ConnectedScatterplot<T extends Vector2D>(
       .x((i) => xScale(X[i]))
       .y((i) => yScale(Y[i]));
 
-    // path.remove();
+    path.remove();
 
-    path = path.attr("d", line(I));
+    path = svg
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .attr("stroke-linejoin", strokeLinejoin)
+      .attr("stroke-linecap", strokeLinecap)
+      .attr("d", line(I));
 
     svg
       .append("g")
@@ -201,9 +207,11 @@ export function ConnectedScatterplot<T extends Vector2D>(
     renderPath(newData);
   };
 
-  const appendPoint = (point: T) => {};
+  const appendPoint = (point: T) => {
+    renderPath([...data, point]);
+  };
 
   animate();
 
-  return Object.assign(svg.node(), { animate, redrawPath });
+  return Object.assign(svg.node(), { animate, redrawPath, appendPoint });
 }

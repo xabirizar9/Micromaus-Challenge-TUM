@@ -18,7 +18,6 @@
 
     if (type === "number") {
       value = evt.currentTarget.valueAsNumber;
-      console.log(value);
     } else {
       value = evt.currentTarget.value;
     }
@@ -50,6 +49,7 @@
     .label {
       display: block;
       padding-left: 1rem;
+      color: var(--main-bg-tertiary);
     }
 
     input {
