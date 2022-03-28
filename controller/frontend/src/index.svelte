@@ -144,9 +144,9 @@
       <h2>Tuning</h2>
       <form on:submit={onUpdateMotorCalibration}>
         <Grid>
-          <Input label="kP" step="0.001" type="number" bind:value={kP} />
-          <Input label="kD" step="0.001" type="number" bind:value={kD} />
-          <Input label="kI" step="0.001" type="number" bind:value={kI} />
+          <Input step="0.000001" label="kP" type="number" bind:value={kP} />
+          <Input step="0.000001" label="kD" type="number" bind:value={kD} />
+          <Input step="0.000001" label="kI" type="number" bind:value={kI} />
         </Grid>
         <Button type="submit">Update</Button>
       </form>
@@ -173,7 +173,7 @@
     --border-color: rgb(121, 121, 121);
     --main-bg-secondary: #e8e8e8;
     --main-bg-color: #dadada;
-    --main-bg-tertiary: #ebebeb;
+    --main-bg-tertiary: #aaaaaa;
     --main-text-color: #333;
     --main-shadow-color: #rgba(0, 0, 0, 0.1);
     --main-shadow-secondary-color: rgba(0, 0, 0, 0.05);
@@ -223,11 +223,6 @@
       grid-template-columns: 1fr 1fr;
     }
   }
-
-  label {
-    display: block;
-  }
-
   main {
     background-color: var(--main-bg-color);
     display: grid;

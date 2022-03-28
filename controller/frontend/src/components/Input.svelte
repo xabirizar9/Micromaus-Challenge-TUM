@@ -60,7 +60,6 @@
       color: var(--main-text-color);
       border: 2px solid var(--border-color);
       border-radius: 0.5rem;
-      box-shadow: none;
       padding: 15px;
       background: var(--main-bg-secondary);
       margin: 0 0 10px 0;
