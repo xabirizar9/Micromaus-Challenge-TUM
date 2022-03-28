@@ -192,7 +192,6 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 		ESP_LOGI(tag, "not initialized");
 		return false;
 	};
-	ESP_LOGI(tag, "-->1");
 
 	// encode message in pb format
 	pb_ostream_t stream = pb_ostream_from_buffer(this->encodeBuffer, SEND_BUFFER_SIZE);
@@ -201,12 +200,9 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 		return false;
 	}
 
-	ESP_LOGI(tag, "-->2");
 	// ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
 
 	xMessageBufferSend(buffer, this->encodeBuffer, stream.bytes_written, 0);
-
-	ESP_LOGI(tag, "-->3");
 	return true;
 };
 
