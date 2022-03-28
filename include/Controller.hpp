@@ -9,15 +9,7 @@
 #include "periph/Motor.hpp"
 #include "periph/Power.hpp"
 
-enum MotorPosition { left, right };
 
-struct PIDErrors {
-	float correction;
-	float curError;
-	float derError;
-	float intError;
-	float lastError;
-};
 class Controller {
    private:
 	TaskHandle_t leftMotorPidTaskHandle;
@@ -73,6 +65,15 @@ class Controller {
 	void setSpeed(int16_t speed);
 	void setDirection(int16_t direction);
 
+	void updateSensors();
+
+	/**
+	 * @brief update position based on current encoder values
+	 * 
+	 */
+	void updatePosition();
+
+
 	/**
 	 * @brief Utility method to set both speed and direction
 	 *
@@ -81,7 +82,7 @@ class Controller {
 	 */
 	void drive(int16_t speed, int16_t direction);
 	void turnOnSpot(float degree, int16_t speed);
-	void sensorUpdates();
+	
 
 	Encoder *getEncoder(MotorPosition position);
 	Motor *getMotor(MotorPosition position);
