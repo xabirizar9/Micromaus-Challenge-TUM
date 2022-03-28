@@ -31,6 +31,8 @@ void motorPidTask(void *pvParameter) {
 	float target = 0;
 	int16_t curEncoderReading = 0;
 
+	float lastSpeed = (float)controller->getSpeedInTicks(pos) * secondFraction;
+
 	float error = 0.0;
 	float lastError = 0.0;
 	float intError = 0.0;
@@ -66,6 +68,12 @@ void motorPidTask(void *pvParameter) {
 			// add short interval
 			vTaskDelay(pdMS_TO_TICKS(monitorInterval));
 			continue;
+		}
+		// if speed has changed reset errors and correction
+		if (target != lastSpeed) {
+			correction = 0.0;
+			intError = 0;
+			derError = 0;
 		}
 
 		curEncoderReading = enc->get();
