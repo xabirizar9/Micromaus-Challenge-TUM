@@ -9,6 +9,7 @@
 #include "periph/Motor.hpp"
 #include "periph/Power.hpp"
 
+#define PID_TUNNING_BUFFER_SIZE 256
 
 class Controller {
    private:
@@ -23,6 +24,10 @@ class Controller {
 	IRSensor leftSensor;
 	IRSensor rightSensor;
 	IRSensor frontSensor;
+
+	bool isPidTuningEnabled = false;
+	uint32_t currentPidTuningSampleIndex = 0;
+	float *pidTuningSamples = NULL;
 
 	// individual speed targets per motor
 	float leftSpeedTickTarget = 0;
@@ -69,10 +74,9 @@ class Controller {
 
 	/**
 	 * @brief update position based on current encoder values
-	 * 
+	 *
 	 */
 	void updatePosition();
-
 
 	/**
 	 * @brief Utility method to set both speed and direction
@@ -82,8 +86,14 @@ class Controller {
 	 */
 	void drive(int16_t speed, int16_t direction);
 	void turnOnSpot(float degree, int16_t speed);
-	
 
 	Encoder *getEncoder(MotorPosition position);
 	Motor *getMotor(MotorPosition position);
+
+	// PID tuning routine
+	void startPidTuning();
+	void stopPidTuning();
+	bool getIsPidTuningEnabled();
+	float *getPidTuningBuffer();
+	void appendPidTuningSample(float sample);
 };

@@ -4,6 +4,8 @@
 
 static const char *TAG = "PID";
 
+// #define DEBUG_PID
+
 void motorPidTask(void *pvParameter) {
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
 
@@ -29,8 +31,6 @@ void motorPidTask(void *pvParameter) {
 	float target = 0;
 	int16_t curEncoderReading = 0;
 
-	float lastSpeed = (float)controller->getSpeedInTicks(pos) * secondFraction;
-
 	float error = 0.0;
 	float lastError = 0.0;
 	float intError = 0.0;
@@ -39,6 +39,10 @@ void motorPidTask(void *pvParameter) {
 	float kP;
 	float kD;
 	float kI;
+
+#ifdef DEBUG_PID
+	uint32_t lastTicks = xTaskGetTickCount();
+#endif
 
 	float correction = 0;
 
@@ -65,29 +69,38 @@ void motorPidTask(void *pvParameter) {
 		}
 
 		curEncoderReading = enc->get();
+		// reset encoder to avoid overflows
+		enc->reset();
 
 		// compute speed in ticks
 		error = target - (float)curEncoderReading;
 		derError = lastError - error;
 
 		// compute correction
-		correction = (kP * error) + (kD * derError) + (kI * intError);
+		correction += (kP * error) + (kD * derError) + (kI * intError);
 
-		// ESP_LOGI(TAG,
-		// 		 "PID: t=%.3f errCur=%.3f. cor=%.3f pwm=% .3f enc=%d",
-		// 		 target,
-		// 		 error,
-		// 		 correction,
-		// 		 correction * maxEncoderTicks,
-		// 		 curEncoderReading);
+#ifdef DEBUG_PID
+		if (pos == MotorPosition::left) {
+			ESP_LOGI(TAG,
+					 "PID: t=%.3f errCur=%.3f. cor=%.3f pwm=%.3f enc=%d time=%d",
+					 target,
+					 error,
+					 correction,
+					 correction * oneOverMaxSpeed,
+					 curEncoderReading,
+					 pdTICKS_TO_MS(xTaskGetTickCount() - lastTicks));
+		}
+		lastTicks = xTaskGetTickCount();
+#endif
 
 		// copy step values for next step
 		lastError = error;
 
 		m->setPWM(correction * oneOverMaxSpeed);
 
-		// reset encoder to avoid overflows
-		enc->reset();
+		if (controller->getIsPidTuningEnabled()) {
+			controller->appendPidTuningSample(error);
+		}
 
 		// add short interval
 		vTaskDelay(pdMS_TO_TICKS(monitorInterval));

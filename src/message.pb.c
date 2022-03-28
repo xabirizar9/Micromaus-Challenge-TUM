@@ -21,6 +21,12 @@ PB_BIND(SensorPacket, SensorPacket, AUTO)
 PB_BIND(NavigationPacket, NavigationPacket, AUTO)
 
 
+PB_BIND(InfoPacket, InfoPacket, AUTO)
+
+
+PB_BIND(PidTuningInfo, PidTuningInfo, AUTO)
+
+
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)
 
 

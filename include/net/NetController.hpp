@@ -9,6 +9,9 @@
 #include "Controller.hpp"
 #include "message.pb.h"
 
+#define SEND_BUFFER_SIZE 2048
+#define RECV_BUFFER_SIZE 2048
+
 namespace NetController {
 class Communicator {
    public:
@@ -22,8 +25,8 @@ class Communicator {
 	// virtual ~Communicator() = 0;
 
    private:
-	MessageBufferHandle_t cmdSenderMsgBuffer = xMessageBufferCreate(512);
-	MessageBufferHandle_t cmdReceiverMsgBuffer = xMessageBufferCreate(512);
+	MessageBufferHandle_t cmdSenderMsgBuffer = xMessageBufferCreate(SEND_BUFFER_SIZE);
+	MessageBufferHandle_t cmdReceiverMsgBuffer = xMessageBufferCreate(RECV_BUFFER_SIZE);
 };
 
 class Manager {
@@ -34,8 +37,8 @@ class Manager {
 	Manager(Communicator interface);
 
 	bool initCompleted = false;
-	uint8_t encodeBuffer[256];
-	uint8_t decodeBuffer[256];
+	uint8_t encodeBuffer[SEND_BUFFER_SIZE];
+	uint8_t decodeBuffer[RECV_BUFFER_SIZE];
 	Communicator comInterface;
 	Controller* controller;
 

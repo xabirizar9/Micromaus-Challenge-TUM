@@ -46,12 +46,17 @@ message InfoPacket {
 	InfoCmdType cmd = 1;
 }
 
+message PidTuningInfo {
+	repeated float err = 1;
+}
+
 message MausOutgoingMessage {
 	oneof payload {
 		AckPacket ack = 1;
 		NavigationPacket nav = 2;
 		PongPacket pong = 3;
 		InfoPacket info = 4;
+		PidTuningInfo pidTuning = 5;
 	}
 }
 
@@ -83,6 +88,7 @@ message MsgEncoderCallibration {
 	float kP = 1;
 	float kI = 2;
 	float kD = 3;
+	bool streamData = 4;
 }
 
 message MausIncomingMessage {

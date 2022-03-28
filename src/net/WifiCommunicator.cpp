@@ -236,7 +236,7 @@ static void udpReceiverTask(void *pvParameters) {
 }
 
 static void udpSenderTask(void *pvParameters) {
-	uint8_t rx_buffer[128];
+	uint8_t rx_buffer[2048];
 	uint16_t msgLen = 0;
 	UdpCommunicator *com = WifiCommunicator::getInstance().com;
 	MessageBufferHandle_t msgBuf = WifiCommunicator::getInstance().getCmdSenderMsgBuffer();

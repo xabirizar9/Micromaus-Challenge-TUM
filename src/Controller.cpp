@@ -169,3 +169,37 @@ NavigationPacket Controller::getState() {
 	this->state.voltage = this->battery.getVoltage();
 	return this->state;
 }
+
+/******************************************************************
+ * Pid Tuning methods
+ ******************************************************************/
+void Controller::startPidTuning() {
+	if (this->pidTuningSamples) {
+		delete pidTuningSamples;
+	}
+	this->currentPidTuningSampleIndex = 0;
+	this->pidTuningSamples = new float[PID_TUNNING_BUFFER_SIZE];
+	this->isPidTuningEnabled = true;
+}
+
+void Controller::stopPidTuning() {
+	this->isPidTuningEnabled = false;
+}
+
+void Controller::appendPidTuningSample(float sample) {
+	if (this->currentPidTuningSampleIndex >= PID_TUNNING_BUFFER_SIZE) {
+		this->stopPidTuning();
+		return;
+	}
+
+	this->pidTuningSamples[this->currentPidTuningSampleIndex] = sample;
+	this->currentPidTuningSampleIndex++;
+}
+
+bool Controller::getIsPidTuningEnabled() {
+	return this->isPidTuningEnabled;
+}
+
+float *Controller::getPidTuningBuffer() {
+	return this->pidTuningSamples;
+}
