@@ -4,39 +4,64 @@ import * as Long from "long";
 
 export const protobufPackage = "";
 
-export enum MsgType {
-  Init = 0,
-  SensorData = 1,
-  Control = 2,
+export enum InfoCmdType {
+  Drive = 0,
+  TurnLeft = 1,
+  TurnRight = 2,
+  Stop = 3,
+  /** Connected - commands only intended for the go<->client communication */
+  Connected = 100,
+  MausConnected = 101,
+  MausDisconnected = 102,
   UNRECOGNIZED = -1,
 }
 
-export function msgTypeFromJSON(object: any): MsgType {
+export function infoCmdTypeFromJSON(object: any): InfoCmdType {
   switch (object) {
     case 0:
-    case "Init":
-      return MsgType.Init;
+    case "Drive":
+      return InfoCmdType.Drive;
     case 1:
-    case "SensorData":
-      return MsgType.SensorData;
+    case "TurnLeft":
+      return InfoCmdType.TurnLeft;
     case 2:
-    case "Control":
-      return MsgType.Control;
+    case "TurnRight":
+      return InfoCmdType.TurnRight;
+    case 3:
+    case "Stop":
+      return InfoCmdType.Stop;
+    case 100:
+    case "Connected":
+      return InfoCmdType.Connected;
+    case 101:
+    case "MausConnected":
+      return InfoCmdType.MausConnected;
+    case 102:
+    case "MausDisconnected":
+      return InfoCmdType.MausDisconnected;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return MsgType.UNRECOGNIZED;
+      return InfoCmdType.UNRECOGNIZED;
   }
 }
 
-export function msgTypeToJSON(object: MsgType): string {
+export function infoCmdTypeToJSON(object: InfoCmdType): string {
   switch (object) {
-    case MsgType.Init:
-      return "Init";
-    case MsgType.SensorData:
-      return "SensorData";
-    case MsgType.Control:
-      return "Control";
+    case InfoCmdType.Drive:
+      return "Drive";
+    case InfoCmdType.TurnLeft:
+      return "TurnLeft";
+    case InfoCmdType.TurnRight:
+      return "TurnRight";
+    case InfoCmdType.Stop:
+      return "Stop";
+    case InfoCmdType.Connected:
+      return "Connected";
+    case InfoCmdType.MausConnected:
+      return "MausConnected";
+    case InfoCmdType.MausDisconnected:
+      return "MausDisconnected";
     default:
       return "UNKNOWN";
   }
@@ -70,10 +95,20 @@ export interface NavigationPacket {
   timestamp: number;
 }
 
+export interface InfoPacket {
+  cmd: InfoCmdType;
+}
+
+export interface PidTuningInfo {
+  err: number[];
+}
+
 export interface MausOutgoingMessage {
   ack: AckPacket | undefined;
   nav: NavigationPacket | undefined;
   pong: PongPacket | undefined;
+  info: InfoPacket | undefined;
+  pidTuning: PidTuningInfo | undefined;
 }
 
 /** command indicates remote client connection */
@@ -104,6 +139,7 @@ export interface MsgEncoderCallibration {
   kP: number;
   kI: number;
   kD: number;
+  streamData: boolean;
 }
 
 export interface MausIncomingMessage {
@@ -495,8 +531,131 @@ export const NavigationPacket = {
   },
 };
 
+function createBaseInfoPacket(): InfoPacket {
+  return { cmd: 0 };
+}
+
+export const InfoPacket = {
+  encode(message: InfoPacket, writer: Writer = Writer.create()): Writer {
+    if (message.cmd !== 0) {
+      writer.uint32(8).int32(message.cmd);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): InfoPacket {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInfoPacket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.cmd = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InfoPacket {
+    return {
+      cmd: isSet(object.cmd) ? infoCmdTypeFromJSON(object.cmd) : 0,
+    };
+  },
+
+  toJSON(message: InfoPacket): unknown {
+    const obj: any = {};
+    message.cmd !== undefined && (obj.cmd = infoCmdTypeToJSON(message.cmd));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<InfoPacket>, I>>(
+    object: I
+  ): InfoPacket {
+    const message = createBaseInfoPacket();
+    message.cmd = object.cmd ?? 0;
+    return message;
+  },
+};
+
+function createBasePidTuningInfo(): PidTuningInfo {
+  return { err: [] };
+}
+
+export const PidTuningInfo = {
+  encode(message: PidTuningInfo, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).fork();
+    for (const v of message.err) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PidTuningInfo {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePidTuningInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.err.push(reader.float());
+            }
+          } else {
+            message.err.push(reader.float());
+          }
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PidTuningInfo {
+    return {
+      err: Array.isArray(object?.err)
+        ? object.err.map((e: any) => Number(e))
+        : [],
+    };
+  },
+
+  toJSON(message: PidTuningInfo): unknown {
+    const obj: any = {};
+    if (message.err) {
+      obj.err = message.err.map((e) => e);
+    } else {
+      obj.err = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PidTuningInfo>, I>>(
+    object: I
+  ): PidTuningInfo {
+    const message = createBasePidTuningInfo();
+    message.err = object.err?.map((e) => e) || [];
+    return message;
+  },
+};
+
 function createBaseMausOutgoingMessage(): MausOutgoingMessage {
-  return { ack: undefined, nav: undefined, pong: undefined };
+  return {
+    ack: undefined,
+    nav: undefined,
+    pong: undefined,
+    info: undefined,
+    pidTuning: undefined,
+  };
 }
 
 export const MausOutgoingMessage = {
@@ -512,6 +671,15 @@ export const MausOutgoingMessage = {
     }
     if (message.pong !== undefined) {
       PongPacket.encode(message.pong, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.info !== undefined) {
+      InfoPacket.encode(message.info, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.pidTuning !== undefined) {
+      PidTuningInfo.encode(
+        message.pidTuning,
+        writer.uint32(42).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -532,6 +700,12 @@ export const MausOutgoingMessage = {
         case 3:
           message.pong = PongPacket.decode(reader, reader.uint32());
           break;
+        case 4:
+          message.info = InfoPacket.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.pidTuning = PidTuningInfo.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -547,6 +721,10 @@ export const MausOutgoingMessage = {
         ? NavigationPacket.fromJSON(object.nav)
         : undefined,
       pong: isSet(object.pong) ? PongPacket.fromJSON(object.pong) : undefined,
+      info: isSet(object.info) ? InfoPacket.fromJSON(object.info) : undefined,
+      pidTuning: isSet(object.pidTuning)
+        ? PidTuningInfo.fromJSON(object.pidTuning)
+        : undefined,
     };
   },
 
@@ -560,6 +738,12 @@ export const MausOutgoingMessage = {
         : undefined);
     message.pong !== undefined &&
       (obj.pong = message.pong ? PongPacket.toJSON(message.pong) : undefined);
+    message.info !== undefined &&
+      (obj.info = message.info ? InfoPacket.toJSON(message.info) : undefined);
+    message.pidTuning !== undefined &&
+      (obj.pidTuning = message.pidTuning
+        ? PidTuningInfo.toJSON(message.pidTuning)
+        : undefined);
     return obj;
   },
 
@@ -578,6 +762,14 @@ export const MausOutgoingMessage = {
     message.pong =
       object.pong !== undefined && object.pong !== null
         ? PongPacket.fromPartial(object.pong)
+        : undefined;
+    message.info =
+      object.info !== undefined && object.info !== null
+        ? InfoPacket.fromPartial(object.info)
+        : undefined;
+    message.pidTuning =
+      object.pidTuning !== undefined && object.pidTuning !== null
+        ? PidTuningInfo.fromPartial(object.pidTuning)
         : undefined;
     return message;
   },
@@ -889,7 +1081,7 @@ export const MsgStop = {
 };
 
 function createBaseMsgEncoderCallibration(): MsgEncoderCallibration {
-  return { kP: 0, kI: 0, kD: 0 };
+  return { kP: 0, kI: 0, kD: 0, streamData: false };
 }
 
 export const MsgEncoderCallibration = {
@@ -905,6 +1097,9 @@ export const MsgEncoderCallibration = {
     }
     if (message.kD !== 0) {
       writer.uint32(29).float(message.kD);
+    }
+    if (message.streamData === true) {
+      writer.uint32(32).bool(message.streamData);
     }
     return writer;
   },
@@ -925,6 +1120,9 @@ export const MsgEncoderCallibration = {
         case 3:
           message.kD = reader.float();
           break;
+        case 4:
+          message.streamData = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -938,6 +1136,7 @@ export const MsgEncoderCallibration = {
       kP: isSet(object.kP) ? Number(object.kP) : 0,
       kI: isSet(object.kI) ? Number(object.kI) : 0,
       kD: isSet(object.kD) ? Number(object.kD) : 0,
+      streamData: isSet(object.streamData) ? Boolean(object.streamData) : false,
     };
   },
 
@@ -946,6 +1145,7 @@ export const MsgEncoderCallibration = {
     message.kP !== undefined && (obj.kP = message.kP);
     message.kI !== undefined && (obj.kI = message.kI);
     message.kD !== undefined && (obj.kD = message.kD);
+    message.streamData !== undefined && (obj.streamData = message.streamData);
     return obj;
   },
 
@@ -956,6 +1156,7 @@ export const MsgEncoderCallibration = {
     message.kP = object.kP ?? 0;
     message.kI = object.kI ?? 0;
     message.kD = object.kD ?? 0;
+    message.streamData = object.streamData ?? false;
     return message;
   },
 };

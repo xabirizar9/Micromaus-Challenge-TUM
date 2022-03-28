@@ -36,6 +36,7 @@
         kD,
         kI,
         kP,
+        streamData: false,
       },
     });
   };
@@ -78,6 +79,20 @@
     com.send({
       stop: {},
     });
+  };
+
+  let isPidTuningActive = false;
+
+  const onTunePid = () => {
+    com.send({
+      encoderCallibration: {
+        kD,
+        kI,
+        kP,
+        streamData: !isPidTuningActive,
+      },
+    });
+    isPidTuningActive = !isPidTuningActive;
   };
 </script>
 
@@ -155,6 +170,9 @@
   <div class="card">
     <h2>Actions</h2>
     <Button inline on:click={onStop}>STOP!</Button>
+    <Button inline on:click={onTunePid}
+      >{isPidTuningActive ? "STOP" : "START"} AutoTune PID</Button
+    >
   </div>
   <div class="card full"><SensorTable {com} /></div>
 </main>
