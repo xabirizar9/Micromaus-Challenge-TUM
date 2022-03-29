@@ -266,7 +266,7 @@ static void udpSenderTask(void *pvParameters) {
 UdpCommunicator::UdpCommunicator(uint16_t port) {
 	int addr_family = AF_INET;
 	int ip_protocol = IPPROTO_IP;
-	ESP_LOGI(TAG, "Socket created 1");
+	ESP_LOGD(TAG, "creating socket");
 	struct sockaddr_in dest_addr = {};
 
 	dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -275,20 +275,19 @@ UdpCommunicator::UdpCommunicator(uint16_t port) {
 	ip_protocol = IPPROTO_IP;
 
 	this->sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
-	ESP_LOGI(TAG, "6");
 	if (sock < 0) {
 		ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
 		vTaskDelete(NULL);
 		return;
 	}
-	ESP_LOGI(TAG, "Socket created");
+	ESP_LOGI(TAG, "socket created");
 
 	int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
 	if (err < 0) {
 		ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
 		return;
 	}
-	ESP_LOGI(TAG, "Socket bound, port %d", PORT);
+	ESP_LOGI(TAG, "Socket bound to port %d", PORT);
 };
 
 int UdpCommunicator::read(uint8_t *buf, size_t bufLen) {
@@ -307,6 +306,31 @@ int UdpCommunicator::write(uint8_t *buf, size_t msgLen) {
 	return sendto(
 		sock, buf, msgLen, 0, (struct sockaddr *)&this->sourceAddr, sizeof(this->sourceAddr));
 };
+
+void UdpCommunicator::sendOwnIP() {
+	/* convert URL to IP address */
+	ip_addr_t target_addr;
+	sockaddr target;
+	struct addrinfo hint;
+	struct addrinfo *res = NULL;
+	memset(&hint, 0, sizeof(hint));
+	memset(&target_addr, 0, sizeof(target_addr));
+	getaddrinfo("iamwlad.com", NULL, &hint, &res);
+	struct in_addr addr4 = ((struct sockaddr_in *)(res->ai_addr))->sin_addr;
+	inet_addr_to_ip4addr(ip_2_ip4(&target_addr), &addr4);
+
+	ESP_LOGI(TAG, "Resolved online server:" IPSTR, IP2STR(&target_addr.u_addr.ip4));
+	((struct sockaddr_in *)res->ai_addr)->sin_port = htons(8888);
+	uint8_t retries = 2;
+
+	while (retries > 0) {
+		int len = sendto(
+			this->sock, &s_ip_addr, sizeof(esp_ip4_addr_t), 0, res->ai_addr, res->ai_addrlen);
+		retries--;
+		ESP_LOGI(TAG, "sending remote packet len=%d", len);
+		vTaskDelay(pdMS_TO_TICKS(20));
+	}
+}
 
 WifiCommunicator::WifiCommunicator() {
 	LedController led1 = LedController((gpio_num_t)4);
@@ -328,6 +352,8 @@ WifiCommunicator::WifiCommunicator() {
 	start_mdns_service();
 	xTaskCreate(udpReceiverTask, "udpReceiverTask", 4096, (void *)AF_INET, 3, NULL);
 	xTaskCreate(udpSenderTask, "udpSenderTask", 4096, (void *)AF_INET, 3, NULL);
+
+	this->com->sendOwnIP();
 
 	led1.set(false);
 }

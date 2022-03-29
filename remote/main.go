@@ -27,7 +27,6 @@ func handleUDPConnection(conn *net.UDPConn) {
 	}
 
 	robotIP = (net.IP(buffer[:4]))
-
 	fmt.Println(robotIP.String())
 }
 

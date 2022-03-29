@@ -28,4 +28,6 @@ class MazeExplorer : public RobotDriver {
 
 	void start();
 	void pause();
+
+	uint8_t getCost(uint8_t x, uint8_t y);
 };
