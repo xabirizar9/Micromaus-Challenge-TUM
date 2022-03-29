@@ -4,6 +4,7 @@ export class Joystick {
   private gamepads: Record<number, Gamepad> = {};
   private loopIntervalHandle?: NodeJS.Timer | number;
   private internalSpeed: number = 0;
+  private internalDirection: number = 0;
 
   constructor(private com: Communicator) {
     window.addEventListener(
@@ -54,16 +55,24 @@ export class Joystick {
       const rt = gp.buttons[7].value;
       const lt = gp.buttons[6].value;
       const turbo = gp.buttons[0].value;
+      const sign = Math.sign(gp.axes[0]);
+      const newDirection =
+        gp.axes[0] == 0
+          ? 0
+          : (4000 - Math.min(Math.abs(gp.axes[0]), 120) * 4000) * sign;
+      const newSpeed = (rt ? 1 : lt ? -1 : 0) * (turbo ? 3000 : 500);
 
-      const newSpeed = (rt ? 1 : lt ? -1 : 0) * (turbo ? 1000 : 500);
-
-      if (newSpeed !== this.internalSpeed) {
+      if (
+        newSpeed !== this.internalSpeed ||
+        this.internalDirection !== newDirection
+      ) {
         this.com.send({
           control: {
             speed: newSpeed,
-            direction: 0,
+            direction: -Math.round(newDirection),
           },
         });
+        this.internalDirection = newDirection;
         this.internalSpeed = newSpeed;
       }
     }
