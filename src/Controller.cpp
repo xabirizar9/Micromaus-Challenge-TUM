@@ -84,7 +84,7 @@ void Controller::updatePosition() {
 	float left = this->getEncoder(MotorPosition::left)->getTotalCounter() * encoderTicksToMm;
 	float right = this->getEncoder(MotorPosition::right)->getTotalCounter() * encoderTicksToMm;
 
-	float center = (left + right) * 2.0;
+	float center = (left + right) / 2.0;
 
 	// current heading as theta
 	// our wheelDistance is the hypotenuse while right-left form the triangle side
@@ -103,9 +103,33 @@ void Controller::setDirection(int16_t direction) {
 	// TODO: implement
 }
 
-void Controller::drive(int16_t speed, int16_t direction) {
-	this->setSpeed(speed);
-	this->setDirection(direction);
+void Controller::drive(int16_t speed, int16_t radius) {
+	if (radius == 0) {
+		this->state.leftMotorSpeed = speed;
+		this->state.rightMotorSpeed = speed;
+	} else if (direction == INT16_MIN) {
+		this->state.leftMotorSpeed = -speed;
+		this->state.rightMotorSpeed = speed;
+		return;
+	} else if (direction == INT16_MAX) {
+		this->state.leftMotorSpeed = speed;
+		this->state.rightMotorSpeed = -speed;
+		return;
+	} else if (direction > 0) {
+		this->state.leftMotorSpeed = speed;
+		this->state.rightMotorSpeed = speed + (direction + wheelDistance);
+	} else {
+		this->state.leftMotorSpeed = speed + (direction + wheelDistance);
+		this->state.rightMotorSpeed = speed;
+	}
+
+	// update encoder values
+	this->leftSpeedTickTarget =
+		convertMillimetersToRevolutions((float)this->state.leftMotorSpeed) * ticksPerRevolution;
+	this->rightSpeedTickTarget =
+		convertMillimetersToRevolutions((float)this->state.rightMotorSpeed) * ticksPerRevolution;
+
+	return;
 }
 
 float Controller::getSpeedInTicks(MotorPosition position) {
