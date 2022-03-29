@@ -53,6 +53,19 @@
     "type_traits": "cpp",
     "utility": "cpp",
     "initializer_list": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "chrono": "cpp",
+    "codecvt": "cpp",
+    "condition_variable": "cpp",
+    "csignal": "cpp",
+    "cstring": "cpp",
+    "ctime": "cpp",
+    "list": "cpp",
+    "map": "cpp",
+    "ratio": "cpp",
+    "set": "cpp",
+    "future": "cpp",
+    "mutex": "cpp",
+    "thread": "cpp"
   }
 }

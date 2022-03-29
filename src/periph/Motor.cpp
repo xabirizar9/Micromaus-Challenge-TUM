@@ -1,5 +1,6 @@
 #include "periph/Motor.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 #include "support/LEDCChannelResource.hpp"
@@ -41,7 +42,7 @@ Motor::~Motor() {
 void Motor::setPWM(float val) {
 	constexpr float maxDuty = 1024;	 // depending on
 	bool reverse = (val < 0);
-	uint32_t duty = lroundf(fabs(val) * maxDuty);
+	uint32_t duty = lroundf(fabs(std::clamp(val, (float)-1.0, (float)1.0)) * maxDuty);
 
 	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, duty));
 
@@ -50,3 +51,9 @@ void Motor::setPWM(float val) {
 
 	ESP_ERROR_CHECK(ledc_update_duty(LEDC_LOW_SPEED_MODE, *channel));
 }
+
+void Motor::updatePidConfig(MsgEncoderCallibration config) {
+	this->kD = config.kD;
+	this->kI = config.kI;
+	this->kP = config.kP;
+};

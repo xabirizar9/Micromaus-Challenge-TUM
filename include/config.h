@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 namespace IO {
 
@@ -6,7 +7,7 @@ struct Encoder {
 	const uint8_t a;
 	const uint8_t b;
 
-	Encoder(uint8_t a, uint8_t b) : a(a), b(b) {};
+	Encoder(uint8_t a, uint8_t b) : a(a), b(b){};
 };
 
 struct Motor {
@@ -15,9 +16,8 @@ struct Motor {
 	const uint8_t ch2;
 	const Encoder encoder;
 
-	Motor(uint8_t en, uint8_t ch1, uint8_t ch2, Encoder encoder) :
-		en(en), ch1(ch1), ch2(ch2), encoder(encoder) {};
-
+	Motor(uint8_t en, uint8_t ch1, uint8_t ch2, Encoder encoder)
+		: en(en), ch1(ch1), ch2(ch2), encoder(encoder){};
 };
 #ifdef ESP32_S2_MAUS
 // gpio numbers

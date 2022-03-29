@@ -1,5 +1,6 @@
 #include "Controller.hpp"
 
+#include <math.h>
 #include <stdint.h>
 
 #include <algorithm>
@@ -7,122 +8,32 @@
 
 #include "IRSensor.hpp"
 #include "config.h"
+#include "drive/MotorPidTask.hpp"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 #include "freertos/task.h"
 #include "periph/Motor.hpp"
+#include "utils/units.hpp"
 
 static const char *TAG = "ctrl";
-struct PidTaskInitPayload {
-	Controller *controller;
-	MotorPosition position;
-};
-
-void motorPidTask(void *pvParameter) {
-	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
-
-	ESP_LOGI(TAG, "in %p, %d", payload, (*payload).position);
-
-	Controller *controller = payload->controller;
-	Motor *m = controller->getMotor(payload->position);
-	Encoder *enc = controller->getEncoder(payload->position);
-
-	ESP_LOGI(TAG, "pid task %d", payload->position);
-
-	// current speed target in ticks
-	int16_t target = 0;
-	uint32_t tick_diff = 0;
-	TickType_t lastTick = xTaskGetTickCount();
-	TickType_t curTick = 0;
-
-	int16_t curEncoderReading = 0;
-	int16_t curSpeed = 0;
-
-	int16_t lastError = 0;
-	int16_t curError = 0;
-	int16_t derError = 0;
-	int16_t errorSum = 0;
-
-	uint32_t timeInterval = 0;
-
-	float kP = 0.01;
-	float kD = 0.000;
-	float kI = 0.000;
-	float correction = 0;
-	float speed = 0;
-
-	vTaskDelay(pdMS_TO_TICKS(200));
-	while (true) {
-		// get speed target for selected motor
-		target = controller->getSpeedInTicks(payload->position);
-		curEncoderReading = enc->get();
-		curTick = xTaskGetTickCount();
-		tick_diff = curTick - lastTick;
-		if (tick_diff == 0) {
-			vTaskDelay(pdMS_TO_TICKS(50));
-			continue;
-		}
-
-		// compute duration since this method was last called
-		timeInterval = pdTICKS_TO_MS(curTick - lastTick);
-
-		// compute speed in ticks
-		// TODO: maybe omit division if this causes problems
-		curSpeed = curEncoderReading / timeInterval;
-		curError = target - curSpeed;
-		derError = (lastError - curError) / timeInterval;
-		// compute correction with momentum
-		correction = (kP * curError) + (kD * derError) + (kI * errorSum);
-		speed = std::clamp(speed + correction, (float)0.0, (float)1.0);
-
-		// copy step values for next step
-		lastError = curError;
-		lastTick = curTick;
-		errorSum += curError * timeInterval;
-
-		ESP_LOGI(
-			TAG, "m=%d s=%f i=%d e=%d", payload->position, speed, timeInterval, curEncoderReading);
-
-		// apply adjustments and clamp them to 0-100%
-		m->setPWM(speed);
-
-		// reset encoder to avoid overflows
-		enc->reset();
-
-		// add short interval
-		vTaskDelay(pdMS_TO_TICKS(50));
-	}
-}
-
-/* void laneControlTask(void* args){
-	Controller *controller = (Controller* )args;
-	PIDErrors wallDistance;
-	uint32_t timeInterval = 0;
-
-	kP
-	kD
-	kI
-
-	while (true){
-		timeInterval = pdTICKS_TO_MS(curTick - lastTick );
-		wallDistance.curError = d_left - d_right;
-		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
-		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) + (kI
-* wallDistance.errorSum);
-
-		wallDistance.lastError = wallDistance.curError;
-		wallDistance.errorSum += wallDistance.curError * timeInterval;
-
-		speed = std::clamp(speed + straightLine.correction + wallDistance.correction, (float)0.0,
-(float)1.0);
-	}
-};*/
 
 Controller::Controller()
 	: leftMotor(Motor(IO::MOTOR_L)),
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
-	  rightEncoder(Encoder(IO::MOTOR_R.encoder)) {
+	  rightEncoder(Encoder(IO::MOTOR_R.encoder)),
+	  leftSensor(IO::IR_SENSOR_LEFT),
+	  rightSensor(IO::IR_SENSOR_RIGHT),
+	  frontSensor(IO::IR_SENSOR_FRONT),
+	  battery(power::Battery(IO::VSENSE)) {
+	// init state stream object
+	this->state.has_position = true;
+	this->state.has_sensors = true;
+	this->state.position = Position_init_zero;
+	this->state.sensors = SensorPacket_init_zero;
+
+	// init pid payload
 	PidTaskInitPayload *leftPayload = new PidTaskInitPayload();
 	leftPayload->controller = this;
 	leftPayload->position = MotorPosition::left;
@@ -130,23 +41,12 @@ Controller::Controller()
 	rightPayload->controller = this;
 	rightPayload->position = MotorPosition::right;
 
-	ESP_LOGI(TAG, "out %p", &leftPayload);
-
 	// setup pids to control the motors
 	xTaskCreate(
-		motorPidTask, "pidLeftMotorTask", 4096, leftPayload, 1, &this->leftMotorPidTaskHandle);
+		motorPidTask, "pidLeftMotorTask", 2048, leftPayload, 1, &this->leftMotorPidTaskHandle);
 
 	xTaskCreate(
-		motorPidTask, "pidRightMotorTask", 4096, rightPayload, 1, &this->rightMotorPidTaskHandle);
-
-	/*xTaskCreate(
-		laneControlTask,
-		"laneControlTask",
-		4096,
-		this,
-		1,
-		&this->rightMotorPidTaskHandle
-	);*/
+		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
 }
 
 /******************************************************************
@@ -154,27 +54,101 @@ Controller::Controller()
  ******************************************************************/
 
 void Controller::setSpeed(int16_t speed) {
+	this->state.leftMotorSpeed = (float)speed;
+	this->state.rightMotorSpeed = (float)speed;
+
+	// since speed is given in mm/s and our PID is using ticks/s
+	// we have to convert them
+
 	// TODO: @wlad convert from mm/s to encoder ticks for now use some magic numbers
-	this->leftSpeedTickTarget = 2;
-	this->rightSpeedTickTarget = 2;
+	this->leftSpeedTickTarget = this->rightSpeedTickTarget =
+		convertMillimetersToRevolutions((float)speed) * ticksPerRevolution;
+}
+
+void Controller::updateSensors() {
+	this->state.sensors.left = leftSensor.measuredistance();
+	this->state.sensors.right = rightSensor.measuredistance();
+	this->state.sensors.front = frontSensor.measuredistance();
+}
+
+void Controller::updatePosition() {
+	// distance the wheels have traveled
+	float left = this->getEncoder(MotorPosition::left)->getTotalCounter() * encoderTicksToMm;
+	float right = this->getEncoder(MotorPosition::right)->getTotalCounter() * encoderTicksToMm;
+
+	float center = (left + right) / 2.0;
+
+	// current heading as theta
+	// our wheelDistance is the hypotenuse while right-left form the triangle side
+	this->state.position.heading = (right - left) / wheelDistance;
+
+	// to confirm we could compute the angle
+	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));
+
+	this->state.position.x = center * cos(this->state.position.heading) * encoderTicksToMm;
+	this->state.position.y = center * sin(this->state.position.heading) * encoderTicksToMm;
 }
 
 void Controller::setDirection(int16_t direction) {
+	this->state.position.heading = (float)direction;
 	this->direction = direction;
 	// TODO: implement
 }
 
-void Controller::drive(int16_t speed, int16_t direction) {
-	this->setSpeed(speed);
-	this->setDirection(direction);
+void Controller::drive(int16_t speed, int16_t radius) {
+	if (radius == 0) {
+		this->state.leftMotorSpeed = speed;
+		this->state.rightMotorSpeed = speed;
+	} else if (direction == INT16_MIN) {
+		this->state.leftMotorSpeed = -speed;
+		this->state.rightMotorSpeed = speed;
+		return;
+	} else if (direction == INT16_MAX) {
+		this->state.leftMotorSpeed = speed;
+		this->state.rightMotorSpeed = -speed;
+		return;
+	} else if (direction > 0) {
+		this->state.leftMotorSpeed = speed;
+		this->state.rightMotorSpeed = speed + (direction + wheelDistance);
+	} else {
+		this->state.leftMotorSpeed = speed + (direction + wheelDistance);
+		this->state.rightMotorSpeed = speed;
+	}
+
+	// update encoder values
+	this->leftSpeedTickTarget =
+		convertMillimetersToRevolutions((float)this->state.leftMotorSpeed) * ticksPerRevolution;
+	this->rightSpeedTickTarget =
+		convertMillimetersToRevolutions((float)this->state.rightMotorSpeed) * ticksPerRevolution;
+
+	return;
 }
 
-int16_t Controller::getSpeedInTicks(MotorPosition position) {
+float Controller::getSpeedInTicks(MotorPosition position) {
 	switch (position) {
 		case MotorPosition::left: return this->leftSpeedTickTarget;
 		case MotorPosition::right: return this->rightSpeedTickTarget;
 		default: return 0;
 	}
+}
+
+void Controller::turnOnSpot(float degree, int16_t speed) {
+	// vTaskDelay(pdMS_TO_TICKS(5000));
+	int8_t pre = -1;
+	if (degree < 0) {
+		pre = 1;
+	}
+	uint8_t rMaus = 60;
+	float dRad = abs(degree) * rMaus;
+	float duration = dRad / speed;
+
+	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
+	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
+
+	ESP_LOGI(TAG, "no time passed %f %f", leftSpeedTickTarget, rightSpeedTickTarget);
+
+	vTaskDelay(pdMS_TO_TICKS(duration));
+	this->setSpeed(0);
 }
 
 /******************************************************************
@@ -199,4 +173,49 @@ Motor *Controller::getMotor(MotorPosition position) {
 			// should be unreachable
 			return NULL;
 	}
+}
+
+NavigationPacket Controller::getState() {
+	this->state.timestamp = xTaskGetTickCount();
+	this->state.leftMotorSpeed = this->leftSpeedTickTarget;
+	this->state.rightMotorSpeed = this->rightSpeedTickTarget;
+	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	this->state.batPercentage = this->battery.getPercentage();
+	this->state.voltage = this->battery.getVoltage();
+	return this->state;
+}
+
+/******************************************************************
+ * Pid Tuning methods
+ ******************************************************************/
+void Controller::startPidTuning() {
+	if (this->pidTuningSamples) {
+		delete pidTuningSamples;
+	}
+	this->currentPidTuningSampleIndex = 0;
+	this->pidTuningSamples = new float[PID_TUNNING_BUFFER_SIZE];
+	this->isPidTuningEnabled = true;
+}
+
+void Controller::stopPidTuning() {
+	this->isPidTuningEnabled = false;
+}
+
+void Controller::appendPidTuningSample(float sample) {
+	if (this->currentPidTuningSampleIndex >= PID_TUNNING_BUFFER_SIZE) {
+		this->stopPidTuning();
+		return;
+	}
+
+	this->pidTuningSamples[this->currentPidTuningSampleIndex] = sample;
+	this->currentPidTuningSampleIndex++;
+}
+
+bool Controller::getIsPidTuningEnabled() {
+	return this->isPidTuningEnabled;
+}
+
+float *Controller::getPidTuningBuffer() {
+	return this->pidTuningSamples;
 }

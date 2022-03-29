@@ -10,7 +10,7 @@ IRSensor::IRSensor(uint8_t pin) : channel(ADC1::instance().configurePin(pin)) {
 }
 
 float IRSensor::measuredistance() {
-	float vol = channel.read() * (2.2 / 8192);
+	float vol = channel.read() * 0.001;
 	float distance = 0;
 
 	if (vol > 2.1) {
@@ -37,7 +37,7 @@ float IRSensor::measuredistance() {
 		distance = 0.001;
 	}
 
-	return vol;
+	return distance * 10;
 }
 
 void IRSensor::toggleled(float ms) {

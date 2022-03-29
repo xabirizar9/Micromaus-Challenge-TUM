@@ -6,7 +6,12 @@
 
 #include <string>
 
+#include "Controller.hpp"
+#include "MazeExplorer.hpp"
 #include "message.pb.h"
+
+#define SEND_BUFFER_SIZE 2048
+#define RECV_BUFFER_SIZE 2048
 
 namespace NetController {
 class Communicator {
@@ -21,21 +26,23 @@ class Communicator {
 	// virtual ~Communicator() = 0;
 
    private:
-	MessageBufferHandle_t cmdSenderMsgBuffer = xMessageBufferCreate(512);
-	MessageBufferHandle_t cmdReceiverMsgBuffer = xMessageBufferCreate(512);
+	MessageBufferHandle_t cmdSenderMsgBuffer = xMessageBufferCreate(SEND_BUFFER_SIZE);
+	MessageBufferHandle_t cmdReceiverMsgBuffer = xMessageBufferCreate(RECV_BUFFER_SIZE);
 };
 
 class Manager {
    private:
-	bool writeCmd(MausOutgoingMessage *msg);
+	bool writeCmd(MausOutgoingMessage* msg);
 
    public:
 	Manager(Communicator interface);
 
-	bool initCompleted;
-	uint8_t encodeBuffer[256];
-	uint8_t decodeBuffer[256];
+	bool initCompleted = false;
+	uint8_t encodeBuffer[SEND_BUFFER_SIZE];
+	uint8_t decodeBuffer[RECV_BUFFER_SIZE];
 	Communicator comInterface;
+	Controller* controller;
+	RobotDriver* driver;
 
 	template <typename T, int tag>
 	void writePacket(T packet);

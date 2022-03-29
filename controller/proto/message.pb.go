@@ -20,53 +20,121 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type MsgType int32
+type InfoCmdType int32
 
 const (
-	MsgType_Init       MsgType = 0
-	MsgType_SensorData MsgType = 1
-	MsgType_Control    MsgType = 2
+	InfoCmdType_Noop InfoCmdType = 0
+	// commands only intended for the go<->client communication
+	InfoCmdType_Connected        InfoCmdType = 100
+	InfoCmdType_MausConnected    InfoCmdType = 101
+	InfoCmdType_MausDisconnected InfoCmdType = 102
 )
 
-// Enum value maps for MsgType.
+// Enum value maps for InfoCmdType.
 var (
-	MsgType_name = map[int32]string{
-		0: "Init",
-		1: "SensorData",
-		2: "Control",
+	InfoCmdType_name = map[int32]string{
+		0:   "Noop",
+		100: "Connected",
+		101: "MausConnected",
+		102: "MausDisconnected",
 	}
-	MsgType_value = map[string]int32{
-		"Init":       0,
-		"SensorData": 1,
-		"Control":    2,
+	InfoCmdType_value = map[string]int32{
+		"Noop":             0,
+		"Connected":        100,
+		"MausConnected":    101,
+		"MausDisconnected": 102,
 	}
 )
 
-func (x MsgType) Enum() *MsgType {
-	p := new(MsgType)
+func (x InfoCmdType) Enum() *InfoCmdType {
+	p := new(InfoCmdType)
 	*p = x
 	return p
 }
 
-func (x MsgType) String() string {
+func (x InfoCmdType) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (MsgType) Descriptor() protoreflect.EnumDescriptor {
+func (InfoCmdType) Descriptor() protoreflect.EnumDescriptor {
 	return file_message_proto_enumTypes[0].Descriptor()
 }
 
-func (MsgType) Type() protoreflect.EnumType {
+func (InfoCmdType) Type() protoreflect.EnumType {
 	return &file_message_proto_enumTypes[0]
 }
 
-func (x MsgType) Number() protoreflect.EnumNumber {
+func (x InfoCmdType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use MsgType.Descriptor instead.
-func (MsgType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use InfoCmdType.Descriptor instead.
+func (InfoCmdType) EnumDescriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{0}
+}
+
+type DriveCmdType int32
+
+const (
+	DriveCmdType_Move            DriveCmdType = 0
+	DriveCmdType_MoveCells       DriveCmdType = 1
+	DriveCmdType_TurnAround      DriveCmdType = 2
+	DriveCmdType_TurnLeft        DriveCmdType = 3
+	DriveCmdType_TurnRight       DriveCmdType = 4
+	DriveCmdType_TurnLeftOnSpot  DriveCmdType = 5
+	DriveCmdType_TurnRightOnSpot DriveCmdType = 6
+	DriveCmdType_Stop            DriveCmdType = 7
+)
+
+// Enum value maps for DriveCmdType.
+var (
+	DriveCmdType_name = map[int32]string{
+		0: "Move",
+		1: "MoveCells",
+		2: "TurnAround",
+		3: "TurnLeft",
+		4: "TurnRight",
+		5: "TurnLeftOnSpot",
+		6: "TurnRightOnSpot",
+		7: "Stop",
+	}
+	DriveCmdType_value = map[string]int32{
+		"Move":            0,
+		"MoveCells":       1,
+		"TurnAround":      2,
+		"TurnLeft":        3,
+		"TurnRight":       4,
+		"TurnLeftOnSpot":  5,
+		"TurnRightOnSpot": 6,
+		"Stop":            7,
+	}
+)
+
+func (x DriveCmdType) Enum() *DriveCmdType {
+	p := new(DriveCmdType)
+	*p = x
+	return p
+}
+
+func (x DriveCmdType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DriveCmdType) Descriptor() protoreflect.EnumDescriptor {
+	return file_message_proto_enumTypes[1].Descriptor()
+}
+
+func (DriveCmdType) Type() protoreflect.EnumType {
+	return &file_message_proto_enumTypes[1]
+}
+
+func (x DriveCmdType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DriveCmdType.Descriptor instead.
+func (DriveCmdType) EnumDescriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{1}
 }
 
 type AckPacket struct {
@@ -170,6 +238,44 @@ func (x *Position) GetHeading() float32 {
 	return 0
 }
 
+type PongPacket struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *PongPacket) Reset() {
+	*x = PongPacket{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PongPacket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PongPacket) ProtoMessage() {}
+
+func (x *PongPacket) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PongPacket.ProtoReflect.Descriptor instead.
+func (*PongPacket) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{2}
+}
+
 type SensorPacket struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -183,7 +289,7 @@ type SensorPacket struct {
 func (x *SensorPacket) Reset() {
 	*x = SensorPacket{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[2]
+		mi := &file_message_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -196,7 +302,7 @@ func (x *SensorPacket) String() string {
 func (*SensorPacket) ProtoMessage() {}
 
 func (x *SensorPacket) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[2]
+	mi := &file_message_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -209,7 +315,7 @@ func (x *SensorPacket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SensorPacket.ProtoReflect.Descriptor instead.
 func (*SensorPacket) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{2}
+	return file_message_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SensorPacket) GetLeft() float32 {
@@ -238,14 +344,21 @@ type NavigationPacket struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sensors  *SensorPacket `protobuf:"bytes,1,opt,name=sensors,proto3" json:"sensors,omitempty"`
-	Position *Position     `protobuf:"bytes,2,opt,name=position,proto3" json:"position,omitempty"`
+	Sensors           *SensorPacket `protobuf:"bytes,1,opt,name=sensors,proto3" json:"sensors,omitempty"`
+	Position          *Position     `protobuf:"bytes,2,opt,name=position,proto3" json:"position,omitempty"`
+	LeftMotorSpeed    float32       `protobuf:"fixed32,3,opt,name=leftMotorSpeed,proto3" json:"leftMotorSpeed,omitempty"`
+	RightMotorSpeed   float32       `protobuf:"fixed32,4,opt,name=rightMotorSpeed,proto3" json:"rightMotorSpeed,omitempty"`
+	LeftEncoderTotal  int32         `protobuf:"varint,5,opt,name=leftEncoderTotal,proto3" json:"leftEncoderTotal,omitempty"`
+	RightEncoderTotal int32         `protobuf:"varint,6,opt,name=rightEncoderTotal,proto3" json:"rightEncoderTotal,omitempty"`
+	Voltage           float32       `protobuf:"fixed32,7,opt,name=voltage,proto3" json:"voltage,omitempty"`
+	BatPercentage     float32       `protobuf:"fixed32,8,opt,name=batPercentage,proto3" json:"batPercentage,omitempty"`
+	Timestamp         uint32        `protobuf:"varint,9,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 }
 
 func (x *NavigationPacket) Reset() {
 	*x = NavigationPacket{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[3]
+		mi := &file_message_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -258,7 +371,7 @@ func (x *NavigationPacket) String() string {
 func (*NavigationPacket) ProtoMessage() {}
 
 func (x *NavigationPacket) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[3]
+	mi := &file_message_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +384,7 @@ func (x *NavigationPacket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NavigationPacket.ProtoReflect.Descriptor instead.
 func (*NavigationPacket) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{3}
+	return file_message_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *NavigationPacket) GetSensors() *SensorPacket {
@@ -288,6 +401,149 @@ func (x *NavigationPacket) GetPosition() *Position {
 	return nil
 }
 
+func (x *NavigationPacket) GetLeftMotorSpeed() float32 {
+	if x != nil {
+		return x.LeftMotorSpeed
+	}
+	return 0
+}
+
+func (x *NavigationPacket) GetRightMotorSpeed() float32 {
+	if x != nil {
+		return x.RightMotorSpeed
+	}
+	return 0
+}
+
+func (x *NavigationPacket) GetLeftEncoderTotal() int32 {
+	if x != nil {
+		return x.LeftEncoderTotal
+	}
+	return 0
+}
+
+func (x *NavigationPacket) GetRightEncoderTotal() int32 {
+	if x != nil {
+		return x.RightEncoderTotal
+	}
+	return 0
+}
+
+func (x *NavigationPacket) GetVoltage() float32 {
+	if x != nil {
+		return x.Voltage
+	}
+	return 0
+}
+
+func (x *NavigationPacket) GetBatPercentage() float32 {
+	if x != nil {
+		return x.BatPercentage
+	}
+	return 0
+}
+
+func (x *NavigationPacket) GetTimestamp() uint32 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+type InfoPacket struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Cmd InfoCmdType `protobuf:"varint,1,opt,name=cmd,proto3,enum=InfoCmdType" json:"cmd,omitempty"`
+}
+
+func (x *InfoPacket) Reset() {
+	*x = InfoPacket{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *InfoPacket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InfoPacket) ProtoMessage() {}
+
+func (x *InfoPacket) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InfoPacket.ProtoReflect.Descriptor instead.
+func (*InfoPacket) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *InfoPacket) GetCmd() InfoCmdType {
+	if x != nil {
+		return x.Cmd
+	}
+	return InfoCmdType_Noop
+}
+
+type PidTuningInfo struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Err []float32 `protobuf:"fixed32,1,rep,packed,name=err,proto3" json:"err,omitempty"`
+}
+
+func (x *PidTuningInfo) Reset() {
+	*x = PidTuningInfo{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PidTuningInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PidTuningInfo) ProtoMessage() {}
+
+func (x *PidTuningInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PidTuningInfo.ProtoReflect.Descriptor instead.
+func (*PidTuningInfo) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PidTuningInfo) GetErr() []float32 {
+	if x != nil {
+		return x.Err
+	}
+	return nil
+}
+
 type MausOutgoingMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -296,13 +552,16 @@ type MausOutgoingMessage struct {
 	// Types that are assignable to Payload:
 	//	*MausOutgoingMessage_Ack
 	//	*MausOutgoingMessage_Nav
+	//	*MausOutgoingMessage_Pong
+	//	*MausOutgoingMessage_Info
+	//	*MausOutgoingMessage_PidTuning
 	Payload isMausOutgoingMessage_Payload `protobuf_oneof:"payload"`
 }
 
 func (x *MausOutgoingMessage) Reset() {
 	*x = MausOutgoingMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[4]
+		mi := &file_message_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -315,7 +574,7 @@ func (x *MausOutgoingMessage) String() string {
 func (*MausOutgoingMessage) ProtoMessage() {}
 
 func (x *MausOutgoingMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[4]
+	mi := &file_message_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -328,7 +587,7 @@ func (x *MausOutgoingMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MausOutgoingMessage.ProtoReflect.Descriptor instead.
 func (*MausOutgoingMessage) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{4}
+	return file_message_proto_rawDescGZIP(), []int{7}
 }
 
 func (m *MausOutgoingMessage) GetPayload() isMausOutgoingMessage_Payload {
@@ -352,6 +611,27 @@ func (x *MausOutgoingMessage) GetNav() *NavigationPacket {
 	return nil
 }
 
+func (x *MausOutgoingMessage) GetPong() *PongPacket {
+	if x, ok := x.GetPayload().(*MausOutgoingMessage_Pong); ok {
+		return x.Pong
+	}
+	return nil
+}
+
+func (x *MausOutgoingMessage) GetInfo() *InfoPacket {
+	if x, ok := x.GetPayload().(*MausOutgoingMessage_Info); ok {
+		return x.Info
+	}
+	return nil
+}
+
+func (x *MausOutgoingMessage) GetPidTuning() *PidTuningInfo {
+	if x, ok := x.GetPayload().(*MausOutgoingMessage_PidTuning); ok {
+		return x.PidTuning
+	}
+	return nil
+}
+
 type isMausOutgoingMessage_Payload interface {
 	isMausOutgoingMessage_Payload()
 }
@@ -364,9 +644,27 @@ type MausOutgoingMessage_Nav struct {
 	Nav *NavigationPacket `protobuf:"bytes,2,opt,name=nav,proto3,oneof"`
 }
 
+type MausOutgoingMessage_Pong struct {
+	Pong *PongPacket `protobuf:"bytes,3,opt,name=pong,proto3,oneof"`
+}
+
+type MausOutgoingMessage_Info struct {
+	Info *InfoPacket `protobuf:"bytes,4,opt,name=info,proto3,oneof"`
+}
+
+type MausOutgoingMessage_PidTuning struct {
+	PidTuning *PidTuningInfo `protobuf:"bytes,5,opt,name=pidTuning,proto3,oneof"`
+}
+
 func (*MausOutgoingMessage_Ack) isMausOutgoingMessage_Payload() {}
 
 func (*MausOutgoingMessage_Nav) isMausOutgoingMessage_Payload() {}
+
+func (*MausOutgoingMessage_Pong) isMausOutgoingMessage_Payload() {}
+
+func (*MausOutgoingMessage_Info) isMausOutgoingMessage_Payload() {}
+
+func (*MausOutgoingMessage_PidTuning) isMausOutgoingMessage_Payload() {}
 
 // command indicates remote client connection
 type MsgInit struct {
@@ -380,7 +678,7 @@ type MsgInit struct {
 func (x *MsgInit) Reset() {
 	*x = MsgInit{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[5]
+		mi := &file_message_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -393,7 +691,7 @@ func (x *MsgInit) String() string {
 func (*MsgInit) ProtoMessage() {}
 
 func (x *MsgInit) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[5]
+	mi := &file_message_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -406,7 +704,7 @@ func (x *MsgInit) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MsgInit.ProtoReflect.Descriptor instead.
 func (*MsgInit) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{5}
+	return file_message_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *MsgInit) GetVersion() int32 {
@@ -416,19 +714,57 @@ func (x *MsgInit) GetVersion() int32 {
 	return 0
 }
 
+type MsgPing struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgPing) Reset() {
+	*x = MsgPing{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgPing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgPing) ProtoMessage() {}
+
+func (x *MsgPing) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MsgPing.ProtoReflect.Descriptor instead.
+func (*MsgPing) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{9}
+}
+
 type MsgControl struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Direction int32 `protobuf:"varint,1,opt,name=direction,proto3" json:"direction,omitempty"`
-	Speed     int32 `protobuf:"varint,2,opt,name=speed,proto3" json:"speed,omitempty"`
+	Direction float32 `protobuf:"fixed32,1,opt,name=direction,proto3" json:"direction,omitempty"`
+	Speed     int32   `protobuf:"varint,2,opt,name=speed,proto3" json:"speed,omitempty"`
 }
 
 func (x *MsgControl) Reset() {
 	*x = MsgControl{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[6]
+		mi := &file_message_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -441,7 +777,7 @@ func (x *MsgControl) String() string {
 func (*MsgControl) ProtoMessage() {}
 
 func (x *MsgControl) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[6]
+	mi := &file_message_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -454,10 +790,10 @@ func (x *MsgControl) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MsgControl.ProtoReflect.Descriptor instead.
 func (*MsgControl) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{6}
+	return file_message_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *MsgControl) GetDirection() int32 {
+func (x *MsgControl) GetDirection() float32 {
 	if x != nil {
 		return x.Direction
 	}
@@ -471,6 +807,178 @@ func (x *MsgControl) GetSpeed() int32 {
 	return 0
 }
 
+type MsgDrive struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Type  DriveCmdType `protobuf:"varint,1,opt,name=type,proto3,enum=DriveCmdType" json:"type,omitempty"`
+	Value float32      `protobuf:"fixed32,2,opt,name=value,proto3" json:"value,omitempty"`
+	Speed float32      `protobuf:"fixed32,3,opt,name=speed,proto3" json:"speed,omitempty"`
+}
+
+func (x *MsgDrive) Reset() {
+	*x = MsgDrive{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgDrive) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgDrive) ProtoMessage() {}
+
+func (x *MsgDrive) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MsgDrive.ProtoReflect.Descriptor instead.
+func (*MsgDrive) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *MsgDrive) GetType() DriveCmdType {
+	if x != nil {
+		return x.Type
+	}
+	return DriveCmdType_Move
+}
+
+func (x *MsgDrive) GetValue() float32 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+func (x *MsgDrive) GetSpeed() float32 {
+	if x != nil {
+		return x.Speed
+	}
+	return 0
+}
+
+type MsgStop struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgStop) Reset() {
+	*x = MsgStop{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgStop) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgStop) ProtoMessage() {}
+
+func (x *MsgStop) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MsgStop.ProtoReflect.Descriptor instead.
+func (*MsgStop) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{12}
+}
+
+type MsgEncoderCallibration struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	KP         float32 `protobuf:"fixed32,1,opt,name=kP,proto3" json:"kP,omitempty"`
+	KI         float32 `protobuf:"fixed32,2,opt,name=kI,proto3" json:"kI,omitempty"`
+	KD         float32 `protobuf:"fixed32,3,opt,name=kD,proto3" json:"kD,omitempty"`
+	StreamData bool    `protobuf:"varint,4,opt,name=streamData,proto3" json:"streamData,omitempty"`
+}
+
+func (x *MsgEncoderCallibration) Reset() {
+	*x = MsgEncoderCallibration{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_message_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgEncoderCallibration) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgEncoderCallibration) ProtoMessage() {}
+
+func (x *MsgEncoderCallibration) ProtoReflect() protoreflect.Message {
+	mi := &file_message_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MsgEncoderCallibration.ProtoReflect.Descriptor instead.
+func (*MsgEncoderCallibration) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *MsgEncoderCallibration) GetKP() float32 {
+	if x != nil {
+		return x.KP
+	}
+	return 0
+}
+
+func (x *MsgEncoderCallibration) GetKI() float32 {
+	if x != nil {
+		return x.KI
+	}
+	return 0
+}
+
+func (x *MsgEncoderCallibration) GetKD() float32 {
+	if x != nil {
+		return x.KD
+	}
+	return 0
+}
+
+func (x *MsgEncoderCallibration) GetStreamData() bool {
+	if x != nil {
+		return x.StreamData
+	}
+	return false
+}
+
 type MausIncomingMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -479,13 +987,17 @@ type MausIncomingMessage struct {
 	// Types that are assignable to Payload:
 	//	*MausIncomingMessage_Init
 	//	*MausIncomingMessage_Control
+	//	*MausIncomingMessage_EncoderCallibration
+	//	*MausIncomingMessage_Ping
+	//	*MausIncomingMessage_Stop
+	//	*MausIncomingMessage_Drive
 	Payload isMausIncomingMessage_Payload `protobuf_oneof:"payload"`
 }
 
 func (x *MausIncomingMessage) Reset() {
 	*x = MausIncomingMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_message_proto_msgTypes[7]
+		mi := &file_message_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -498,7 +1010,7 @@ func (x *MausIncomingMessage) String() string {
 func (*MausIncomingMessage) ProtoMessage() {}
 
 func (x *MausIncomingMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[7]
+	mi := &file_message_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -511,7 +1023,7 @@ func (x *MausIncomingMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MausIncomingMessage.ProtoReflect.Descriptor instead.
 func (*MausIncomingMessage) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{7}
+	return file_message_proto_rawDescGZIP(), []int{14}
 }
 
 func (m *MausIncomingMessage) GetPayload() isMausIncomingMessage_Payload {
@@ -535,6 +1047,34 @@ func (x *MausIncomingMessage) GetControl() *MsgControl {
 	return nil
 }
 
+func (x *MausIncomingMessage) GetEncoderCallibration() *MsgEncoderCallibration {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_EncoderCallibration); ok {
+		return x.EncoderCallibration
+	}
+	return nil
+}
+
+func (x *MausIncomingMessage) GetPing() *MsgPing {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_Ping); ok {
+		return x.Ping
+	}
+	return nil
+}
+
+func (x *MausIncomingMessage) GetStop() *MsgStop {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_Stop); ok {
+		return x.Stop
+	}
+	return nil
+}
+
+func (x *MausIncomingMessage) GetDrive() *MsgDrive {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_Drive); ok {
+		return x.Drive
+	}
+	return nil
+}
+
 type isMausIncomingMessage_Payload interface {
 	isMausIncomingMessage_Payload()
 }
@@ -547,9 +1087,33 @@ type MausIncomingMessage_Control struct {
 	Control *MsgControl `protobuf:"bytes,3,opt,name=control,proto3,oneof"`
 }
 
+type MausIncomingMessage_EncoderCallibration struct {
+	EncoderCallibration *MsgEncoderCallibration `protobuf:"bytes,4,opt,name=encoderCallibration,proto3,oneof"`
+}
+
+type MausIncomingMessage_Ping struct {
+	Ping *MsgPing `protobuf:"bytes,5,opt,name=ping,proto3,oneof"`
+}
+
+type MausIncomingMessage_Stop struct {
+	Stop *MsgStop `protobuf:"bytes,6,opt,name=stop,proto3,oneof"`
+}
+
+type MausIncomingMessage_Drive struct {
+	Drive *MsgDrive `protobuf:"bytes,7,opt,name=drive,proto3,oneof"`
+}
+
 func (*MausIncomingMessage_Init) isMausIncomingMessage_Payload() {}
 
 func (*MausIncomingMessage_Control) isMausIncomingMessage_Payload() {}
+
+func (*MausIncomingMessage_EncoderCallibration) isMausIncomingMessage_Payload() {}
+
+func (*MausIncomingMessage_Ping) isMausIncomingMessage_Payload() {}
+
+func (*MausIncomingMessage_Stop) isMausIncomingMessage_Payload() {}
+
+func (*MausIncomingMessage_Drive) isMausIncomingMessage_Payload() {}
 
 var File_message_proto protoreflect.FileDescriptor
 
@@ -559,43 +1123,108 @@ var file_message_proto_rawDesc = []byte{
 	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0c, 0x0a, 0x01, 0x78, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x02, 0x52, 0x01, 0x78, 0x12, 0x0c, 0x0a, 0x01, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28,
 	0x02, 0x52, 0x01, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x68, 0x65, 0x61, 0x64, 0x69, 0x6e, 0x67, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x07, 0x68, 0x65, 0x61, 0x64, 0x69, 0x6e, 0x67, 0x22, 0x4e,
-	0x0a, 0x0c, 0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x12,
-	0x0a, 0x04, 0x6c, 0x65, 0x66, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x04, 0x6c, 0x65,
-	0x66, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x02, 0x52, 0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x72, 0x69, 0x67, 0x68,
-	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x05, 0x72, 0x69, 0x67, 0x68, 0x74, 0x22, 0x62,
-	0x0a, 0x10, 0x4e, 0x61, 0x76, 0x69, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x12, 0x27, 0x0a, 0x07, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x73, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x52, 0x07, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x73, 0x12, 0x25, 0x0a, 0x08, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e,
-	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69,
-	0x6f, 0x6e, 0x22, 0x67, 0x0a, 0x13, 0x4d, 0x61, 0x75, 0x73, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69,
-	0x6e, 0x67, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x1e, 0x0a, 0x03, 0x61, 0x63, 0x6b,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x41, 0x63, 0x6b, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x48, 0x00, 0x52, 0x03, 0x61, 0x63, 0x6b, 0x12, 0x25, 0x0a, 0x03, 0x6e, 0x61, 0x76,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x4e, 0x61, 0x76, 0x69, 0x67, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x03, 0x6e, 0x61, 0x76,
-	0x42, 0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x22, 0x23, 0x0a, 0x07, 0x4d,
-	0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f,
-	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e,
-	0x22, 0x40, 0x0a, 0x0a, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x12, 0x1c,
-	0x0a, 0x09, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x05, 0x52, 0x09, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05,
-	0x73, 0x70, 0x65, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x70, 0x65,
-	0x65, 0x64, 0x22, 0x69, 0x0a, 0x13, 0x4d, 0x61, 0x75, 0x73, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69,
-	0x6e, 0x67, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x1e, 0x0a, 0x04, 0x69, 0x6e, 0x69,
-	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69,
-	0x74, 0x48, 0x00, 0x52, 0x04, 0x69, 0x6e, 0x69, 0x74, 0x12, 0x27, 0x0a, 0x07, 0x63, 0x6f, 0x6e,
-	0x74, 0x72, 0x6f, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x4d, 0x73, 0x67,
-	0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x48, 0x00, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72,
-	0x6f, 0x6c, 0x42, 0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x2a, 0x30, 0x0a,
-	0x07, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x08, 0x0a, 0x04, 0x49, 0x6e, 0x69, 0x74,
-	0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x44, 0x61, 0x74, 0x61,
-	0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x10, 0x02, 0x42,
-	0x09, 0x5a, 0x07, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x07, 0x68, 0x65, 0x61, 0x64, 0x69, 0x6e, 0x67, 0x22, 0x0c,
+	0x0a, 0x0a, 0x50, 0x6f, 0x6e, 0x67, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x22, 0x4e, 0x0a, 0x0c,
+	0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x12, 0x0a, 0x04,
+	0x6c, 0x65, 0x66, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x04, 0x6c, 0x65, 0x66, 0x74,
+	0x12, 0x14, 0x0a, 0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52,
+	0x05, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x72, 0x69, 0x67, 0x68, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x05, 0x72, 0x69, 0x67, 0x68, 0x74, 0x22, 0xec, 0x02, 0x0a,
+	0x10, 0x4e, 0x61, 0x76, 0x69, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61, 0x63, 0x6b, 0x65,
+	0x74, 0x12, 0x27, 0x0a, 0x07, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x53, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x50, 0x61, 0x63, 0x6b, 0x65,
+	0x74, 0x52, 0x07, 0x73, 0x65, 0x6e, 0x73, 0x6f, 0x72, 0x73, 0x12, 0x25, 0x0a, 0x08, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x50,
+	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x26, 0x0a, 0x0e, 0x6c, 0x65, 0x66, 0x74, 0x4d, 0x6f, 0x74, 0x6f, 0x72, 0x53, 0x70,
+	0x65, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x0e, 0x6c, 0x65, 0x66, 0x74, 0x4d,
+	0x6f, 0x74, 0x6f, 0x72, 0x53, 0x70, 0x65, 0x65, 0x64, 0x12, 0x28, 0x0a, 0x0f, 0x72, 0x69, 0x67,
+	0x68, 0x74, 0x4d, 0x6f, 0x74, 0x6f, 0x72, 0x53, 0x70, 0x65, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x02, 0x52, 0x0f, 0x72, 0x69, 0x67, 0x68, 0x74, 0x4d, 0x6f, 0x74, 0x6f, 0x72, 0x53, 0x70,
+	0x65, 0x65, 0x64, 0x12, 0x2a, 0x0a, 0x10, 0x6c, 0x65, 0x66, 0x74, 0x45, 0x6e, 0x63, 0x6f, 0x64,
+	0x65, 0x72, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x10, 0x6c,
+	0x65, 0x66, 0x74, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x65, 0x72, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12,
+	0x2c, 0x0a, 0x11, 0x72, 0x69, 0x67, 0x68, 0x74, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x65, 0x72, 0x54,
+	0x6f, 0x74, 0x61, 0x6c, 0x18, 0x06, 0x20, 0x01, 0x28, 0x05, 0x52, 0x11, 0x72, 0x69, 0x67, 0x68,
+	0x74, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x65, 0x72, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x18, 0x0a,
+	0x07, 0x76, 0x6f, 0x6c, 0x74, 0x61, 0x67, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x02, 0x52, 0x07,
+	0x76, 0x6f, 0x6c, 0x74, 0x61, 0x67, 0x65, 0x12, 0x24, 0x0a, 0x0d, 0x62, 0x61, 0x74, 0x50, 0x65,
+	0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x02, 0x52, 0x0d,
+	0x62, 0x61, 0x74, 0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x12, 0x1c, 0x0a,
+	0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x22, 0x2c, 0x0a, 0x0a, 0x49,
+	0x6e, 0x66, 0x6f, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x1e, 0x0a, 0x03, 0x63, 0x6d, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x49, 0x6e, 0x66, 0x6f, 0x43, 0x6d, 0x64,
+	0x54, 0x79, 0x70, 0x65, 0x52, 0x03, 0x63, 0x6d, 0x64, 0x22, 0x21, 0x0a, 0x0d, 0x50, 0x69, 0x64,
+	0x54, 0x75, 0x6e, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x10, 0x0a, 0x03, 0x65, 0x72,
+	0x72, 0x18, 0x01, 0x20, 0x03, 0x28, 0x02, 0x52, 0x03, 0x65, 0x72, 0x72, 0x22, 0xdd, 0x01, 0x0a,
+	0x13, 0x4d, 0x61, 0x75, 0x73, 0x4f, 0x75, 0x74, 0x67, 0x6f, 0x69, 0x6e, 0x67, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x12, 0x1e, 0x0a, 0x03, 0x61, 0x63, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0a, 0x2e, 0x41, 0x63, 0x6b, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52,
+	0x03, 0x61, 0x63, 0x6b, 0x12, 0x25, 0x0a, 0x03, 0x6e, 0x61, 0x76, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x11, 0x2e, 0x4e, 0x61, 0x76, 0x69, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x61,
+	0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x03, 0x6e, 0x61, 0x76, 0x12, 0x21, 0x0a, 0x04, 0x70,
+	0x6f, 0x6e, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x50, 0x6f, 0x6e, 0x67,
+	0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x04, 0x70, 0x6f, 0x6e, 0x67, 0x12, 0x21,
+	0x0a, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x49,
+	0x6e, 0x66, 0x6f, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x04, 0x69, 0x6e, 0x66,
+	0x6f, 0x12, 0x2e, 0x0a, 0x09, 0x70, 0x69, 0x64, 0x54, 0x75, 0x6e, 0x69, 0x6e, 0x67, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x50, 0x69, 0x64, 0x54, 0x75, 0x6e, 0x69, 0x6e, 0x67,
+	0x49, 0x6e, 0x66, 0x6f, 0x48, 0x00, 0x52, 0x09, 0x70, 0x69, 0x64, 0x54, 0x75, 0x6e, 0x69, 0x6e,
+	0x67, 0x42, 0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x22, 0x23, 0x0a, 0x07,
+	0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69,
+	0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f,
+	0x6e, 0x22, 0x09, 0x0a, 0x07, 0x4d, 0x73, 0x67, 0x50, 0x69, 0x6e, 0x67, 0x22, 0x40, 0x0a, 0x0a,
+	0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x12, 0x1c, 0x0a, 0x09, 0x64, 0x69,
+	0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x09, 0x64,
+	0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x70, 0x65, 0x65,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64, 0x22, 0x59,
+	0x0a, 0x08, 0x4d, 0x73, 0x67, 0x44, 0x72, 0x69, 0x76, 0x65, 0x12, 0x21, 0x0a, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0d, 0x2e, 0x44, 0x72, 0x69, 0x76, 0x65,
+	0x43, 0x6d, 0x64, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x14, 0x0a,
+	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x02, 0x52, 0x05, 0x73, 0x70, 0x65, 0x65, 0x64, 0x22, 0x09, 0x0a, 0x07, 0x4d, 0x73, 0x67,
+	0x53, 0x74, 0x6f, 0x70, 0x22, 0x68, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x45, 0x6e, 0x63, 0x6f, 0x64,
+	0x65, 0x72, 0x43, 0x61, 0x6c, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e,
+	0x0a, 0x02, 0x6b, 0x50, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x02, 0x6b, 0x50, 0x12, 0x0e,
+	0x0a, 0x02, 0x6b, 0x49, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52, 0x02, 0x6b, 0x49, 0x12, 0x0e,
+	0x0a, 0x02, 0x6b, 0x44, 0x18, 0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x02, 0x6b, 0x44, 0x12, 0x1e,
+	0x0a, 0x0a, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x08, 0x52, 0x0a, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x44, 0x61, 0x74, 0x61, 0x22, 0x99,
+	0x02, 0x0a, 0x13, 0x4d, 0x61, 0x75, 0x73, 0x49, 0x6e, 0x63, 0x6f, 0x6d, 0x69, 0x6e, 0x67, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x1e, 0x0a, 0x04, 0x69, 0x6e, 0x69, 0x74, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67, 0x49, 0x6e, 0x69, 0x74, 0x48, 0x00,
+	0x52, 0x04, 0x69, 0x6e, 0x69, 0x74, 0x12, 0x27, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f,
+	0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e,
+	0x74, 0x72, 0x6f, 0x6c, 0x48, 0x00, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x12,
+	0x4b, 0x0a, 0x13, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x65, 0x72, 0x43, 0x61, 0x6c, 0x6c, 0x69, 0x62,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x4d,
+	0x73, 0x67, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x65, 0x72, 0x43, 0x61, 0x6c, 0x6c, 0x69, 0x62, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x13, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x65, 0x72,
+	0x43, 0x61, 0x6c, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1e, 0x0a, 0x04,
+	0x70, 0x69, 0x6e, 0x67, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67,
+	0x50, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x04, 0x70, 0x69, 0x6e, 0x67, 0x12, 0x1e, 0x0a, 0x04,
+	0x73, 0x74, 0x6f, 0x70, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x4d, 0x73, 0x67,
+	0x53, 0x74, 0x6f, 0x70, 0x48, 0x00, 0x52, 0x04, 0x73, 0x74, 0x6f, 0x70, 0x12, 0x21, 0x0a, 0x05,
+	0x64, 0x72, 0x69, 0x76, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x4d, 0x73,
+	0x67, 0x44, 0x72, 0x69, 0x76, 0x65, 0x48, 0x00, 0x52, 0x05, 0x64, 0x72, 0x69, 0x76, 0x65, 0x42,
+	0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x2a, 0x4f, 0x0a, 0x0b, 0x49, 0x6e,
+	0x66, 0x6f, 0x43, 0x6d, 0x64, 0x54, 0x79, 0x70, 0x65, 0x12, 0x08, 0x0a, 0x04, 0x4e, 0x6f, 0x6f,
+	0x70, 0x10, 0x00, 0x12, 0x0d, 0x0a, 0x09, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x65, 0x64,
+	0x10, 0x64, 0x12, 0x11, 0x0a, 0x0d, 0x4d, 0x61, 0x75, 0x73, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63,
+	0x74, 0x65, 0x64, 0x10, 0x65, 0x12, 0x14, 0x0a, 0x10, 0x4d, 0x61, 0x75, 0x73, 0x44, 0x69, 0x73,
+	0x63, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x65, 0x64, 0x10, 0x66, 0x2a, 0x87, 0x01, 0x0a, 0x0c,
+	0x44, 0x72, 0x69, 0x76, 0x65, 0x43, 0x6d, 0x64, 0x54, 0x79, 0x70, 0x65, 0x12, 0x08, 0x0a, 0x04,
+	0x4d, 0x6f, 0x76, 0x65, 0x10, 0x00, 0x12, 0x0d, 0x0a, 0x09, 0x4d, 0x6f, 0x76, 0x65, 0x43, 0x65,
+	0x6c, 0x6c, 0x73, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x54, 0x75, 0x72, 0x6e, 0x41, 0x72, 0x6f,
+	0x75, 0x6e, 0x64, 0x10, 0x02, 0x12, 0x0c, 0x0a, 0x08, 0x54, 0x75, 0x72, 0x6e, 0x4c, 0x65, 0x66,
+	0x74, 0x10, 0x03, 0x12, 0x0d, 0x0a, 0x09, 0x54, 0x75, 0x72, 0x6e, 0x52, 0x69, 0x67, 0x68, 0x74,
+	0x10, 0x04, 0x12, 0x12, 0x0a, 0x0e, 0x54, 0x75, 0x72, 0x6e, 0x4c, 0x65, 0x66, 0x74, 0x4f, 0x6e,
+	0x53, 0x70, 0x6f, 0x74, 0x10, 0x05, 0x12, 0x13, 0x0a, 0x0f, 0x54, 0x75, 0x72, 0x6e, 0x52, 0x69,
+	0x67, 0x68, 0x74, 0x4f, 0x6e, 0x53, 0x70, 0x6f, 0x74, 0x10, 0x06, 0x12, 0x08, 0x0a, 0x04, 0x53,
+	0x74, 0x6f, 0x70, 0x10, 0x07, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -610,31 +1239,48 @@ func file_message_proto_rawDescGZIP() []byte {
 	return file_message_proto_rawDescData
 }
 
-var file_message_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_message_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_message_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_message_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_message_proto_goTypes = []interface{}{
-	(MsgType)(0),                // 0: MsgType
-	(*AckPacket)(nil),           // 1: AckPacket
-	(*Position)(nil),            // 2: Position
-	(*SensorPacket)(nil),        // 3: SensorPacket
-	(*NavigationPacket)(nil),    // 4: NavigationPacket
-	(*MausOutgoingMessage)(nil), // 5: MausOutgoingMessage
-	(*MsgInit)(nil),             // 6: MsgInit
-	(*MsgControl)(nil),          // 7: MsgControl
-	(*MausIncomingMessage)(nil), // 8: MausIncomingMessage
+	(InfoCmdType)(0),               // 0: InfoCmdType
+	(DriveCmdType)(0),              // 1: DriveCmdType
+	(*AckPacket)(nil),              // 2: AckPacket
+	(*Position)(nil),               // 3: Position
+	(*PongPacket)(nil),             // 4: PongPacket
+	(*SensorPacket)(nil),           // 5: SensorPacket
+	(*NavigationPacket)(nil),       // 6: NavigationPacket
+	(*InfoPacket)(nil),             // 7: InfoPacket
+	(*PidTuningInfo)(nil),          // 8: PidTuningInfo
+	(*MausOutgoingMessage)(nil),    // 9: MausOutgoingMessage
+	(*MsgInit)(nil),                // 10: MsgInit
+	(*MsgPing)(nil),                // 11: MsgPing
+	(*MsgControl)(nil),             // 12: MsgControl
+	(*MsgDrive)(nil),               // 13: MsgDrive
+	(*MsgStop)(nil),                // 14: MsgStop
+	(*MsgEncoderCallibration)(nil), // 15: MsgEncoderCallibration
+	(*MausIncomingMessage)(nil),    // 16: MausIncomingMessage
 }
 var file_message_proto_depIdxs = []int32{
-	3, // 0: NavigationPacket.sensors:type_name -> SensorPacket
-	2, // 1: NavigationPacket.position:type_name -> Position
-	1, // 2: MausOutgoingMessage.ack:type_name -> AckPacket
-	4, // 3: MausOutgoingMessage.nav:type_name -> NavigationPacket
-	6, // 4: MausIncomingMessage.init:type_name -> MsgInit
-	7, // 5: MausIncomingMessage.control:type_name -> MsgControl
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	5,  // 0: NavigationPacket.sensors:type_name -> SensorPacket
+	3,  // 1: NavigationPacket.position:type_name -> Position
+	0,  // 2: InfoPacket.cmd:type_name -> InfoCmdType
+	2,  // 3: MausOutgoingMessage.ack:type_name -> AckPacket
+	6,  // 4: MausOutgoingMessage.nav:type_name -> NavigationPacket
+	4,  // 5: MausOutgoingMessage.pong:type_name -> PongPacket
+	7,  // 6: MausOutgoingMessage.info:type_name -> InfoPacket
+	8,  // 7: MausOutgoingMessage.pidTuning:type_name -> PidTuningInfo
+	1,  // 8: MsgDrive.type:type_name -> DriveCmdType
+	10, // 9: MausIncomingMessage.init:type_name -> MsgInit
+	12, // 10: MausIncomingMessage.control:type_name -> MsgControl
+	15, // 11: MausIncomingMessage.encoderCallibration:type_name -> MsgEncoderCallibration
+	11, // 12: MausIncomingMessage.ping:type_name -> MsgPing
+	14, // 13: MausIncomingMessage.stop:type_name -> MsgStop
+	13, // 14: MausIncomingMessage.drive:type_name -> MsgDrive
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_message_proto_init() }
@@ -668,7 +1314,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SensorPacket); i {
+			switch v := v.(*PongPacket); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -680,7 +1326,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NavigationPacket); i {
+			switch v := v.(*SensorPacket); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -692,7 +1338,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MausOutgoingMessage); i {
+			switch v := v.(*NavigationPacket); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -704,7 +1350,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgInit); i {
+			switch v := v.(*InfoPacket); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -716,7 +1362,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgControl); i {
+			switch v := v.(*PidTuningInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -728,6 +1374,90 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MausOutgoingMessage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgInit); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgPing); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgControl); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgDrive); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgStop); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgEncoderCallibration); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_message_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MausIncomingMessage); i {
 			case 0:
 				return &v.state
@@ -740,21 +1470,28 @@ func file_message_proto_init() {
 			}
 		}
 	}
-	file_message_proto_msgTypes[4].OneofWrappers = []interface{}{
+	file_message_proto_msgTypes[7].OneofWrappers = []interface{}{
 		(*MausOutgoingMessage_Ack)(nil),
 		(*MausOutgoingMessage_Nav)(nil),
+		(*MausOutgoingMessage_Pong)(nil),
+		(*MausOutgoingMessage_Info)(nil),
+		(*MausOutgoingMessage_PidTuning)(nil),
 	}
-	file_message_proto_msgTypes[7].OneofWrappers = []interface{}{
+	file_message_proto_msgTypes[14].OneofWrappers = []interface{}{
 		(*MausIncomingMessage_Init)(nil),
 		(*MausIncomingMessage_Control)(nil),
+		(*MausIncomingMessage_EncoderCallibration)(nil),
+		(*MausIncomingMessage_Ping)(nil),
+		(*MausIncomingMessage_Stop)(nil),
+		(*MausIncomingMessage_Drive)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_message_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   8,
+			NumEnums:      2,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -64,7 +64,6 @@ eagle.epf
 node_modules
 build
 yarn-error.log
-dist
 *.log
 controller/micromaus
 # latex

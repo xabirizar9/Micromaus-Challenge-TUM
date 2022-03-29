@@ -2,51 +2,106 @@ syntax = "proto3";
 
 option go_package = "./proto";
 
-enum MsgType {
-  Init = 0;
-  SensorData = 1;
-  Control = 2;
-}
-
 message AckPacket {}
 
 message Position {
-  float x = 1;
-  float y = 2;
-  float heading = 3;
+	float x = 1;
+	float y = 2;
+	float heading = 3;
 }
 
+message PongPacket {}
+
 message SensorPacket {
-  float left = 1;
-  float front = 2;
-  float right = 3;
+	float left = 1;
+	float front = 2;
+	float right = 3;
 }
 
 message NavigationPacket {
-  SensorPacket sensors = 1;
-  Position position = 2;
+	SensorPacket sensors = 1;
+	Position position = 2;
+	float leftMotorSpeed = 3;
+	float rightMotorSpeed = 4;
+	int32 leftEncoderTotal = 5;
+	int32 rightEncoderTotal = 6;
+	float voltage = 7;
+	float batPercentage = 8;
+	uint32 timestamp = 9;
+}
+
+enum InfoCmdType {
+	Noop = 0;
+
+	// commands only intended for the go<->client communication
+	Connected = 100;
+	MausConnected = 101;
+	MausDisconnected = 102;
+}
+
+message InfoPacket {
+	InfoCmdType cmd = 1;
+}
+
+message PidTuningInfo {
+	repeated float err = 1;
 }
 
 message MausOutgoingMessage {
-  oneof payload {
-    AckPacket ack = 1;
-    NavigationPacket nav = 2;
-  }
+	oneof payload {
+		AckPacket ack = 1;
+		NavigationPacket nav = 2;
+		PongPacket pong = 3;
+		InfoPacket info = 4;
+		PidTuningInfo pidTuning = 5;
+	}
 }
 
 // command indicates remote client connection
 message MsgInit {
-  int32 version = 1;
+	int32 version = 1;
 }
+
+message MsgPing {}
+
 message MsgControl {
-  float direction = 1;
-  int32 speed = 2;
+	float direction = 1;
+	int32 speed = 2;
 }
 
+enum DriveCmdType {
+	Move = 0;
+	MoveCells = 1;
+	TurnAround = 2;
+	TurnLeft = 3;
+	TurnRight = 4;
+	TurnLeftOnSpot = 5;
+	TurnRightOnSpot = 6;
+	Stop = 7;
+}
 
-message MausIncomingMessage { 
-  oneof payload {
-    MsgInit init = 2;
-    MsgControl control = 3;
-  }
+message MsgDrive {
+	DriveCmdType type = 1;
+	float value = 2;
+	float speed = 3;
+}
+
+message MsgStop {}
+
+message MsgEncoderCallibration {
+	float kP = 1;
+	float kI = 2;
+	float kD = 3;
+	bool streamData = 4;
+}
+
+message MausIncomingMessage {
+	oneof payload {
+		MsgInit init = 2;
+		MsgControl control = 3;
+		MsgEncoderCallibration encoderCallibration = 4;
+		MsgPing ping = 5;
+		MsgStop stop = 6;
+		MsgDrive drive = 7;
+	}
 }

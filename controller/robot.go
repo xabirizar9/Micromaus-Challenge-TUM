@@ -27,11 +27,18 @@ type Robot struct {
 	com RobotComInterface
 
 	Status RobotConnStatus
+
+	// channel on which to listen for messages
+	pongMsgChannel chan bool
+
+	// channel on which to listen for messages
+	IncomingMsg chan *pb.MausOutgoingMessage
 }
 
 type RobotConnectionOptions struct {
 	Baud int
 	Dev  string
+	Addr string
 }
 
 func (r *Robot) connect(ctx context.Context, address string) (err error) {
@@ -60,10 +67,13 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	l.Debug("connecting to robot")
 	r = &Robot{
 		//port:   s,
-		Status: Disconnected,
+		Status:      Disconnected,
+		IncomingMsg: make(chan *pb.MausOutgoingMessage),
+		// channel for incoming pong messages
+		pongMsgChannel: make(chan bool),
 	}
 
-	err = r.connect(context.TODO(), "waxn-maus.local:8888")
+	err = r.connect(context.TODO(), opt.Addr)
 	if err != nil {
 		l.Error("failed to connect to robot", zap.Error(err))
 		return
@@ -107,7 +117,7 @@ func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, []byte, error) {
 		return nil, buf[:n], err
 	}
 
-	log.Debug("got command", zap.String("cmd", cmd.String()))
+	// log.Debug("got command", zap.String("cmd", cmd.String()))
 
 	return cmd, buf[:n], nil
 }
@@ -141,6 +151,12 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 			return
 		}
 
+		if nav := ackCmd.GetNav(); nav != nil {
+			log.Debug("robot already streaming reconnecting...")
+			respChannel <- nil
+			return
+		}
+
 		if ack := ackCmd.GetAck(); ack != nil {
 			log.Debug("got ack packet stopping func")
 			respChannel <- nil
@@ -157,7 +173,65 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 	}
 }
 
-func (r *Robot) StartInitSequence() error {
+func executeWithRetries(ctx context.Context, maxRetries uint, f func(ctx context.Context, errChan chan error)) (err error) {
+	for i := uint(0); i < maxRetries; i++ {
+		errChan := make(chan error, 1)
+		go f(ctx, errChan)
+		select {
+		case err := <-errChan:
+			return err
+		case <-ctx.Done():
+			log.Error("context canceled")
+			return ctx.Err()
+		}
+	}
+	return err
+}
+
+// send recv ping pong messages from robot to make sure robot is still connected
+func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, maxRetries uint) {
+	pingCmd := &pb.MausIncomingMessage{
+
+		Payload: &pb.MausIncomingMessage_Ping{},
+	}
+
+	for {
+		ctx, cancel := context.WithTimeout(context.TODO(), timeout)
+
+		defer cancel()
+
+		err := executeWithRetries(ctx, maxRetries, func(ctx context.Context, errChan chan error) {
+			err := r.SendCmd(pingCmd)
+			if err != nil {
+				log.Error("failed to send ping", zap.Error(err))
+				errChan <- err
+				return
+			}
+
+			log.Info("waiting for pong", zap.Error(err))
+			// wait for pong
+			<-r.pongMsgChannel
+
+			log.Info("got something", zap.Error(err))
+
+			errChan <- nil
+		})
+
+		if err != nil {
+			log.Error("failed to send ping, disconnecting", zap.Error(err))
+			r.Status = Disconnected
+			log.Info("reconnecting")
+			r.Connect()
+			return
+		}
+		time.Sleep(interval)
+	}
+}
+
+func (r *Robot) Connect() error {
+	if r.Status == Connected {
+		return errors.New("already connected")
+	}
 	for {
 		ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
 		defer cancel()
@@ -176,6 +250,33 @@ func (r *Robot) StartInitSequence() error {
 		}
 		log.Debug("init completed")
 		r.Status = Connected
+
+		// start message handling routine
+		go func() {
+			for {
+				if r.Status == Disconnected {
+					return
+				}
+				cmd, _, err := r.ReadCmd()
+				if err != nil {
+					log.Error("failed to read command", zap.Error(err))
+					return
+				}
+
+				// internally handle ack messages
+				if pong := cmd.GetPong(); pong != nil {
+					log.Debug("got pong")
+					r.pongMsgChannel <- true
+					continue
+				}
+
+				r.IncomingMsg <- cmd
+			}
+		}()
+
+		// start ping pong routine
+		go r.startPingPong(10*time.Second, 5*time.Second, 3)
+
 		return nil
 	}
 }
