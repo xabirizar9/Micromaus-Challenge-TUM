@@ -8,10 +8,10 @@
 
 #include "IRSensor.hpp"
 #include "config.h"
-#include "drive/DriveTask.hpp"
 #include "drive/MotorPidTask.hpp"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 #include "freertos/task.h"
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
@@ -23,7 +23,7 @@ Controller::Controller()
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
 	  rightEncoder(Encoder(IO::MOTOR_R.encoder)),
-	  leftSensor(IO::IR_SENSOR_LEFT),
+	  leftSensor(IO::IR_SENSOR_πLEFT),
 	  rightSensor(IO::IR_SENSOR_RIGHT),
 	  frontSensor(IO::IR_SENSOR_FRONT),
 	  battery(power::Battery(IO::VSENSE)) {
@@ -47,14 +47,6 @@ Controller::Controller()
 
 	xTaskCreate(
 		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
-
-	// task intended for state update and abstracted driving controls
-	// like:
-	// - drive n blocks
-	// - drive 20mm
-	// - rotate
-	// - ...
-	xTaskCreate(driveTask, "driveTask", 2048, this, 1, &this->sensorRead);
 }
 
 /******************************************************************

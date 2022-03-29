@@ -15,7 +15,6 @@ class Controller {
    private:
 	TaskHandle_t leftMotorPidTaskHandle;
 	TaskHandle_t rightMotorPidTaskHandle;
-	TaskHandle_t sensorRead;
 
 	Motor leftMotor;
 	Motor rightMotor;
