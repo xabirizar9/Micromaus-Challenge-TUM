@@ -14,9 +14,9 @@
 
   const controller = new Joystick(com);
 
-  let kD = 0.0;
+  let kP = 0.4;
+  let kD = 0.00001;
   let kI = 0.0;
-  let kP = 0.0;
 
   let direction = 0;
   let speed = 0;
