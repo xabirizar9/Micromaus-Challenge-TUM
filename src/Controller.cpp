@@ -23,7 +23,7 @@ Controller::Controller()
 	  rightMotor(Motor(IO::MOTOR_R)),
 	  leftEncoder(Encoder(IO::MOTOR_L.encoder)),
 	  rightEncoder(Encoder(IO::MOTOR_R.encoder)),
-	  leftSensor(IO::IR_SENSOR_πLEFT),
+	  leftSensor(IO::IR_SENSOR_LEFT),
 	  rightSensor(IO::IR_SENSOR_RIGHT),
 	  frontSensor(IO::IR_SENSOR_FRONT),
 	  battery(power::Battery(IO::VSENSE)) {

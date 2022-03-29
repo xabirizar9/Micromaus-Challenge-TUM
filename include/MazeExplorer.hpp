@@ -34,12 +34,9 @@ class RobotDriver {
 class MazeExplorer : public RobotDriver {
 	uint8_t *state[MAZE_SIZE * MAZE_SIZE];
 
-   private:
-	Controller *controller;
-
    public:
-	MazeExplorer();
+	MazeExplorer(Controller *controller);
 
-	void start(Position target);
+	void start();
 	void pause();
 };

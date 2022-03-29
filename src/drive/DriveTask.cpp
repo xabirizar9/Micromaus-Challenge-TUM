@@ -33,9 +33,9 @@ void driveTask(void *arg) {
 			}
 		}
 
-		switch (cmd.type) {
-			case DriveCommandType::move: break;
-		}
+		// switch (cmd.type) {
+		// 	case DriveCommandType::move: break;
+		// }
 
 		curCmd = NULL;
 

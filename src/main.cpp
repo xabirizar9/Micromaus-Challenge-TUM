@@ -2,6 +2,7 @@
 #include <freertos/task.h>
 
 #include "Controller.hpp"
+#include "MazeExplorer.hpp"
 #include "config.h"
 #include "esp_log.h"
 #include "net/NetController.hpp"
@@ -22,6 +23,9 @@ void navigate(void* pvParameter) {
 NetController::Manager* netManager = NULL;
 Controller* mainController = NULL;
 
+// FIXME: @wlad move somewhere else
+MazeExplorer* explorer = NULL;
+
 extern "C" void app_main() {
 	// configure logging and other pre-run setup
 	esp_log_level_set(TAG, ESP_LOG_DEBUG);
@@ -34,6 +38,8 @@ extern "C" void app_main() {
 	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 	// pass controller to remote controller
 	netManager->controller = mainController;
+
+	explorer = new MazeExplorer(mainController);
 
 	// mainController->turnOnSpot(0.5 * 3.1416, 50);
 }

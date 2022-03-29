@@ -19,14 +19,9 @@ RobotDriver::~RobotDriver() {
 	vQueueDelete(this->executionQueue);
 }
 
-MazeExplorer::MazeExplorer() {
+MazeExplorer::MazeExplorer(Controller* controller) {
+	this->controller = controller;
 	// init labyrinth
 }
 
-void MazeExplorer::start() {
-	controller->turnOnSpot(30, 300);
-
-	controller->turnOnSpot(30, 300);
-
-	controller->turnOnSpot(30, 300);
-}
+void MazeExplorer::start() {}
