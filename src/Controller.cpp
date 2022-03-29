@@ -95,8 +95,8 @@ void Controller::setDirection(int16_t direction) {
 	// TODO: implement
 }
 
-void Controller::drive(int16_t speed, int16_t radius) {
-	switch (radius) {
+void Controller::drive(int16_t speed, int16_t R) {
+	switch (R) {
 		case 0:
 			this->state.leftMotorSpeed = speed;
 			this->state.rightMotorSpeed = speed;
@@ -110,17 +110,18 @@ void Controller::drive(int16_t speed, int16_t radius) {
 			this->state.rightMotorSpeed = -speed;
 			break;
 		default:
-			if (radius > 0) {
+			if (R > 0) {
 				this->state.rightMotorSpeed =
 					2 * speed *
-					(((radius - wheelDistance / 2) / (radius + wheelDistance / 2)) /
-					 (1 + (radius - wheelDistance / 2) / (radius + wheelDistance / 2)));
+					(((R - wheelDistance / 2) / (R + wheelDistance / 2)) /
+					 (1 + (R - wheelDistance / 2) / (R + wheelDistance / 2)));
 				this->state.leftMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
 			} else {
+				R = -R;
 				this->state.leftMotorSpeed =
 					2 * speed *
-					(((radius - wheelDistance / 2) / (radius + wheelDistance / 2)) /
-					 (1 + (radius - wheelDistance / 2) / (radius + wheelDistance / 2)));
+					(((R - wheelDistance / 2) / (R + wheelDistance / 2)) /
+					 (1 + (R - wheelDistance / 2) / (R + wheelDistance / 2)));
 				;  // + (radius + wheelDistance);
 				this->state.rightMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
 			}
