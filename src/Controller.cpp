@@ -111,14 +111,13 @@ void Controller::drive(int16_t speed, int16_t R) {
 			break;
 		default:
 			if (R > 0) {
-				this->state.rightMotorSpeed =
-					speed * (1 + 0.5 * wheelDistance / R) this->state.leftMotorSpeed =
-						2 * speed - this->state.rightMotorSpeed;
+				this->state.rightMotorSpeed = speed * (1 + 0.5 * wheelDistance / R);
+				this->state.leftMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
 			} else {
 				R = -R;
 				this->state.leftMotorSpeed =
 					speed * (1 + 0.5 * wheelDistance / R);	// + (radius + wheelDistance);
-				this->state.rightMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
+				this->state.rightMotorSpeed = 2 * speed - this->state.leftMotorSpeed;
 			}
 	}
 
