@@ -96,23 +96,34 @@ void Controller::setDirection(int16_t direction) {
 }
 
 void Controller::drive(int16_t speed, int16_t radius) {
-	if (radius == 0) {
-		this->state.leftMotorSpeed = speed;
-		this->state.rightMotorSpeed = speed;
-	} else if (direction == INT16_MIN) {
-		this->state.leftMotorSpeed = -speed;
-		this->state.rightMotorSpeed = speed;
-		return;
-	} else if (direction == INT16_MAX) {
-		this->state.leftMotorSpeed = speed;
-		this->state.rightMotorSpeed = -speed;
-		return;
-	} else if (direction > 0) {
-		this->state.leftMotorSpeed = speed;
-		this->state.rightMotorSpeed = speed + (direction + wheelDistance);
-	} else {
-		this->state.leftMotorSpeed = speed + (direction + wheelDistance);
-		this->state.rightMotorSpeed = speed;
+	switch (radius) {
+		case 0:
+			this->state.leftMotorSpeed = speed;
+			this->state.rightMotorSpeed = speed;
+			break;
+		case INT16_MIN:
+			this->state.leftMotorSpeed = -speed;
+			this->state.rightMotorSpeed = speed;
+			break;
+		case INT16_MAX:
+			this->state.leftMotorSpeed = speed;
+			this->state.rightMotorSpeed = -speed;
+			break;
+		default:
+			if (radius > 0) {
+				this->state.rightMotorSpeed =
+					2 * speed *
+					(((radius - wheelDistance / 2) / (radius + wheelDistance / 2)) /
+					 (1 + (radius - wheelDistance / 2) / (radius + wheelDistance / 2)));
+				this->state.leftMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
+			} else {
+				this->state.leftMotorSpeed =
+					2 * speed *
+					(((radius - wheelDistance / 2) / (radius + wheelDistance / 2)) /
+					 (1 + (radius - wheelDistance / 2) / (radius + wheelDistance / 2)));
+				;  // + (radius + wheelDistance);
+				this->state.rightMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
+			}
 	}
 
 	// update encoder values
