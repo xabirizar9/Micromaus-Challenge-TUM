@@ -4,6 +4,7 @@
 #include "MazeExplorer.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
+#include "message.pb.h"
 #include "periph/Motor.hpp"
 
 void driveTask(void *arg) {
@@ -13,10 +14,8 @@ void driveTask(void *arg) {
 	Controller *controller = driver->controller;
 	QueueHandle_t execQueue = driver->executionQueue;
 
-	DriveCommand cmd;
-	DriveCommand *curCmd;
-
-	bool working = false;
+	MsgDrive cmd;
+	MsgDrive *curCmd;
 
 	while (true) {
 		// update and get state

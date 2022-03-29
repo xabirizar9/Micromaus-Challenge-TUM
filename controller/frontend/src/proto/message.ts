@@ -5,10 +5,7 @@ import * as Long from "long";
 export const protobufPackage = "";
 
 export enum InfoCmdType {
-  Drive = 0,
-  TurnLeft = 1,
-  TurnRight = 2,
-  Stop = 3,
+  Noop = 0,
   /** Connected - commands only intended for the go<->client communication */
   Connected = 100,
   MausConnected = 101,
@@ -19,17 +16,8 @@ export enum InfoCmdType {
 export function infoCmdTypeFromJSON(object: any): InfoCmdType {
   switch (object) {
     case 0:
-    case "Drive":
-      return InfoCmdType.Drive;
-    case 1:
-    case "TurnLeft":
-      return InfoCmdType.TurnLeft;
-    case 2:
-    case "TurnRight":
-      return InfoCmdType.TurnRight;
-    case 3:
-    case "Stop":
-      return InfoCmdType.Stop;
+    case "Noop":
+      return InfoCmdType.Noop;
     case 100:
     case "Connected":
       return InfoCmdType.Connected;
@@ -48,20 +36,82 @@ export function infoCmdTypeFromJSON(object: any): InfoCmdType {
 
 export function infoCmdTypeToJSON(object: InfoCmdType): string {
   switch (object) {
-    case InfoCmdType.Drive:
-      return "Drive";
-    case InfoCmdType.TurnLeft:
-      return "TurnLeft";
-    case InfoCmdType.TurnRight:
-      return "TurnRight";
-    case InfoCmdType.Stop:
-      return "Stop";
+    case InfoCmdType.Noop:
+      return "Noop";
     case InfoCmdType.Connected:
       return "Connected";
     case InfoCmdType.MausConnected:
       return "MausConnected";
     case InfoCmdType.MausDisconnected:
       return "MausDisconnected";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export enum DriveCmdType {
+  Move = 0,
+  MoveCells = 1,
+  TurnAround = 2,
+  TurnLeft = 3,
+  TurnRight = 4,
+  TurnLeftOnSpot = 5,
+  TurnRightOnSpot = 6,
+  Stop = 7,
+  UNRECOGNIZED = -1,
+}
+
+export function driveCmdTypeFromJSON(object: any): DriveCmdType {
+  switch (object) {
+    case 0:
+    case "Move":
+      return DriveCmdType.Move;
+    case 1:
+    case "MoveCells":
+      return DriveCmdType.MoveCells;
+    case 2:
+    case "TurnAround":
+      return DriveCmdType.TurnAround;
+    case 3:
+    case "TurnLeft":
+      return DriveCmdType.TurnLeft;
+    case 4:
+    case "TurnRight":
+      return DriveCmdType.TurnRight;
+    case 5:
+    case "TurnLeftOnSpot":
+      return DriveCmdType.TurnLeftOnSpot;
+    case 6:
+    case "TurnRightOnSpot":
+      return DriveCmdType.TurnRightOnSpot;
+    case 7:
+    case "Stop":
+      return DriveCmdType.Stop;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return DriveCmdType.UNRECOGNIZED;
+  }
+}
+
+export function driveCmdTypeToJSON(object: DriveCmdType): string {
+  switch (object) {
+    case DriveCmdType.Move:
+      return "Move";
+    case DriveCmdType.MoveCells:
+      return "MoveCells";
+    case DriveCmdType.TurnAround:
+      return "TurnAround";
+    case DriveCmdType.TurnLeft:
+      return "TurnLeft";
+    case DriveCmdType.TurnRight:
+      return "TurnRight";
+    case DriveCmdType.TurnLeftOnSpot:
+      return "TurnLeftOnSpot";
+    case DriveCmdType.TurnRightOnSpot:
+      return "TurnRightOnSpot";
+    case DriveCmdType.Stop:
+      return "Stop";
     default:
       return "UNKNOWN";
   }
@@ -123,13 +173,9 @@ export interface MsgControl {
   speed: number;
 }
 
-export interface MsgTurn {
-  degree: number;
-  speed: number;
-}
-
 export interface MsgDrive {
-  distance: number;
+  type: DriveCmdType;
+  value: number;
   speed: number;
 }
 
@@ -147,7 +193,6 @@ export interface MausIncomingMessage {
   control: MsgControl | undefined;
   encoderCallibration: MsgEncoderCallibration | undefined;
   ping: MsgPing | undefined;
-  turn: MsgTurn | undefined;
   stop: MsgStop | undefined;
   drive: MsgDrive | undefined;
 }
@@ -924,75 +969,20 @@ export const MsgControl = {
   },
 };
 
-function createBaseMsgTurn(): MsgTurn {
-  return { degree: 0, speed: 0 };
-}
-
-export const MsgTurn = {
-  encode(message: MsgTurn, writer: Writer = Writer.create()): Writer {
-    if (message.degree !== 0) {
-      writer.uint32(13).float(message.degree);
-    }
-    if (message.speed !== 0) {
-      writer.uint32(16).int32(message.speed);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): MsgTurn {
-    const reader = input instanceof Reader ? input : new Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgTurn();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.degree = reader.float();
-          break;
-        case 2:
-          message.speed = reader.int32();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MsgTurn {
-    return {
-      degree: isSet(object.degree) ? Number(object.degree) : 0,
-      speed: isSet(object.speed) ? Number(object.speed) : 0,
-    };
-  },
-
-  toJSON(message: MsgTurn): unknown {
-    const obj: any = {};
-    message.degree !== undefined && (obj.degree = message.degree);
-    message.speed !== undefined && (obj.speed = Math.round(message.speed));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgTurn>, I>>(object: I): MsgTurn {
-    const message = createBaseMsgTurn();
-    message.degree = object.degree ?? 0;
-    message.speed = object.speed ?? 0;
-    return message;
-  },
-};
-
 function createBaseMsgDrive(): MsgDrive {
-  return { distance: 0, speed: 0 };
+  return { type: 0, value: 0, speed: 0 };
 }
 
 export const MsgDrive = {
   encode(message: MsgDrive, writer: Writer = Writer.create()): Writer {
-    if (message.distance !== 0) {
-      writer.uint32(8).int32(message.distance);
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
+    }
+    if (message.value !== 0) {
+      writer.uint32(21).float(message.value);
     }
     if (message.speed !== 0) {
-      writer.uint32(16).int32(message.speed);
+      writer.uint32(29).float(message.speed);
     }
     return writer;
   },
@@ -1005,10 +995,13 @@ export const MsgDrive = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.distance = reader.int32();
+          message.type = reader.int32() as any;
           break;
         case 2:
-          message.speed = reader.int32();
+          message.value = reader.float();
+          break;
+        case 3:
+          message.speed = reader.float();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1020,22 +1013,24 @@ export const MsgDrive = {
 
   fromJSON(object: any): MsgDrive {
     return {
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
+      type: isSet(object.type) ? driveCmdTypeFromJSON(object.type) : 0,
+      value: isSet(object.value) ? Number(object.value) : 0,
       speed: isSet(object.speed) ? Number(object.speed) : 0,
     };
   },
 
   toJSON(message: MsgDrive): unknown {
     const obj: any = {};
-    message.distance !== undefined &&
-      (obj.distance = Math.round(message.distance));
-    message.speed !== undefined && (obj.speed = Math.round(message.speed));
+    message.type !== undefined && (obj.type = driveCmdTypeToJSON(message.type));
+    message.value !== undefined && (obj.value = message.value);
+    message.speed !== undefined && (obj.speed = message.speed);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgDrive>, I>>(object: I): MsgDrive {
     const message = createBaseMsgDrive();
-    message.distance = object.distance ?? 0;
+    message.type = object.type ?? 0;
+    message.value = object.value ?? 0;
     message.speed = object.speed ?? 0;
     return message;
   },
@@ -1167,7 +1162,6 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
     control: undefined,
     encoderCallibration: undefined,
     ping: undefined,
-    turn: undefined,
     stop: undefined,
     drive: undefined,
   };
@@ -1193,14 +1187,11 @@ export const MausIncomingMessage = {
     if (message.ping !== undefined) {
       MsgPing.encode(message.ping, writer.uint32(42).fork()).ldelim();
     }
-    if (message.turn !== undefined) {
-      MsgTurn.encode(message.turn, writer.uint32(50).fork()).ldelim();
-    }
     if (message.stop !== undefined) {
-      MsgStop.encode(message.stop, writer.uint32(58).fork()).ldelim();
+      MsgStop.encode(message.stop, writer.uint32(50).fork()).ldelim();
     }
     if (message.drive !== undefined) {
-      MsgDrive.encode(message.drive, writer.uint32(66).fork()).ldelim();
+      MsgDrive.encode(message.drive, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -1228,12 +1219,9 @@ export const MausIncomingMessage = {
           message.ping = MsgPing.decode(reader, reader.uint32());
           break;
         case 6:
-          message.turn = MsgTurn.decode(reader, reader.uint32());
-          break;
-        case 7:
           message.stop = MsgStop.decode(reader, reader.uint32());
           break;
-        case 8:
+        case 7:
           message.drive = MsgDrive.decode(reader, reader.uint32());
           break;
         default:
@@ -1254,7 +1242,6 @@ export const MausIncomingMessage = {
         ? MsgEncoderCallibration.fromJSON(object.encoderCallibration)
         : undefined,
       ping: isSet(object.ping) ? MsgPing.fromJSON(object.ping) : undefined,
-      turn: isSet(object.turn) ? MsgTurn.fromJSON(object.turn) : undefined,
       stop: isSet(object.stop) ? MsgStop.fromJSON(object.stop) : undefined,
       drive: isSet(object.drive) ? MsgDrive.fromJSON(object.drive) : undefined,
     };
@@ -1274,8 +1261,6 @@ export const MausIncomingMessage = {
         : undefined);
     message.ping !== undefined &&
       (obj.ping = message.ping ? MsgPing.toJSON(message.ping) : undefined);
-    message.turn !== undefined &&
-      (obj.turn = message.turn ? MsgTurn.toJSON(message.turn) : undefined);
     message.stop !== undefined &&
       (obj.stop = message.stop ? MsgStop.toJSON(message.stop) : undefined);
     message.drive !== undefined &&
@@ -1303,10 +1288,6 @@ export const MausIncomingMessage = {
     message.ping =
       object.ping !== undefined && object.ping !== null
         ? MsgPing.fromPartial(object.ping)
-        : undefined;
-    message.turn =
-      object.turn !== undefined && object.turn !== null
-        ? MsgTurn.fromPartial(object.turn)
         : undefined;
     message.stop =
       object.stop !== undefined && object.stop !== null

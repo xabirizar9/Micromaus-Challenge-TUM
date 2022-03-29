@@ -72,7 +72,6 @@ export function drawGrid(
     for (let j = 0; j < mazeSize.height; j++) {
       const y = gap + (height + gap) * i;
       const x = gap + (width + gap) * j;
-      console.log(getGlobalStyle("--main-bg-secondary"));
       ctx.fillStyle = getGlobalStyle("--main-bg-secondary");
       roundRect(ctx, x, y, width, height, 15, true, false);
     }

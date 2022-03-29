@@ -39,9 +39,6 @@ PB_BIND(MsgPing, MsgPing, AUTO)
 PB_BIND(MsgControl, MsgControl, AUTO)
 
 
-PB_BIND(MsgTurn, MsgTurn, AUTO)
-
-
 PB_BIND(MsgDrive, MsgDrive, AUTO)
 
 
@@ -52,6 +49,7 @@ PB_BIND(MsgEncoderCallibration, MsgEncoderCallibration, AUTO)
 
 
 PB_BIND(MausIncomingMessage, MausIncomingMessage, AUTO)
+
 
 
 

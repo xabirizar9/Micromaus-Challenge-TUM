@@ -1,3 +1,4 @@
+#pragma once
 #include "Controller.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
@@ -5,20 +6,6 @@
 
 #define MAZE_SIZE 6
 
-enum DriveCommandType {
-	move,
-	moveCells,
-	turnAround,
-	turnLeft,
-	turnRight,
-	turnLeftOnSpot,
-	turnRightOnSpot,
-};
-
-struct DriveCommand {
-	DriveCommandType type;
-	float payload;
-};
 class RobotDriver {
 	TaskHandle_t driveTaskHandle;
 	// queue of drive commands to be executed;
@@ -27,12 +14,14 @@ class RobotDriver {
 	RobotDriver();
 	~RobotDriver();
 
+	void addCmd(DriveCmdType type, float value, float speed);
+
 	xQueueHandle executionQueue;
 	Controller *controller;
 };
 
 class MazeExplorer : public RobotDriver {
-	uint8_t *state[MAZE_SIZE * MAZE_SIZE];
+	uint8_t state[MAZE_SIZE * MAZE_SIZE];
 
    public:
 	MazeExplorer(Controller *controller);

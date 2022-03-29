@@ -7,6 +7,8 @@
   import Grid from "./components/Grid.svelte";
   import Button from "./components/Button.svelte";
   import { Joystick } from "./Joystick";
+  import { testFloodFill } from "./utils/floodFill";
+  import { DriveCmdType } from "./proto/message";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
@@ -21,11 +23,9 @@
   let direction = 0;
   let speed = 0;
 
-  let turnDegree = 0;
-  let turnSpeed = 0;
-
-  let driveDistance = 0;
+  let driveValue = 0;
   let driveSpeed = 0;
+  let driveCmdType = DriveCmdType.Move;
 
   const onUpdateMotorCalibration = (
     evt: SubmitEvent | CustomEvent<MouseEvent>
@@ -53,22 +53,12 @@
     });
   };
 
-  const onTurn = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
-    console.log({ turnDegree, turnSpeed });
-    evt.preventDefault();
-    com.send({
-      turn: {
-        degree: turnDegree,
-        speed: turnSpeed,
-      },
-    });
-  };
-
   const onDrive = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
     evt.preventDefault();
     com.send({
       drive: {
-        distance: driveDistance,
+        type: DriveCmdType,
+        value: driveValue,
         speed: driveSpeed,
       },
     });
@@ -94,6 +84,13 @@
     });
     isPidTuningActive = !isPidTuningActive;
   };
+
+  // list of all valid drive commands
+  const driveOptions = Object.entries(DriveCmdType).filter(
+    ([key, value]) => typeof value === "number" && value >= 0
+  );
+
+  testFloodFill();
 </script>
 
 <Toaster />
@@ -113,49 +110,6 @@
     </div>
 
     <div class="card">
-      <h2>Turn</h2>
-      <form on:submit={onTurn}>
-        <Grid>
-          <Input
-            label="Degree"
-            step="0.001"
-            type="number"
-            bind:value={turnDegree}
-          />
-
-          <Input
-            label="Speed"
-            step="0.001"
-            type="number"
-            bind:value={turnSpeed}
-          />
-        </Grid>
-        <Button type="submit">Turn</Button>
-      </form>
-    </div>
-    <div class="card">
-      <h2>Drive</h2>
-      <form on:submit={onDrive}>
-        <Grid>
-          <Input
-            label="Degree"
-            step="0.001"
-            type="number"
-            bind:value={driveDistance}
-          />
-
-          <Input
-            label="Speed"
-            step="0.001"
-            type="number"
-            bind:value={driveSpeed}
-          />
-        </Grid>
-        <Button type="submit">Drive</Button>
-      </form>
-    </div>
-
-    <div class="card">
       <h2>Tuning</h2>
       <form on:submit={onUpdateMotorCalibration}>
         <Grid>
@@ -164,6 +118,32 @@
           <Input step="0.000001" label="kI" type="number" bind:value={kI} />
         </Grid>
         <Button type="submit">Update</Button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Drive</h2>
+      <form on:submit={onDrive}>
+        <select bind:value={driveCmdType}>
+          {#each driveOptions as [key, value], i}<option {value}>{key}</option
+            >{/each}
+        </select>
+        <Grid>
+          <Input
+            label="Speed"
+            step="0.001"
+            type="number"
+            bind:value={driveValue}
+          />
+
+          <Input
+            label="Value"
+            step="0.001"
+            type="number"
+            bind:value={driveValue}
+          />
+        </Grid>
+        <Button type="submit">Drive</Button>
       </form>
     </div>
   </div>

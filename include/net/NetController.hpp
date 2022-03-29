@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Controller.hpp"
+#include "MazeExplorer.hpp"
 #include "message.pb.h"
 
 #define SEND_BUFFER_SIZE 2048
@@ -41,6 +42,7 @@ class Manager {
 	uint8_t decodeBuffer[RECV_BUFFER_SIZE];
 	Communicator comInterface;
 	Controller* controller;
+	RobotDriver* driver;
 
 	template <typename T, int tag>
 	void writePacket(T packet);
