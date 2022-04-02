@@ -9,6 +9,8 @@ static const char* TAG = "[explorer]";
 RobotDriver::RobotDriver() {
 	this->executionQueue = xQueueCreate(3, sizeof(MsgDrive));
 
+	this->eventHandle = xEventGroupCreate();
+
 	// task intended for state update and abstracted driving controls
 	// like:
 	// - drive n blocks
@@ -31,6 +33,19 @@ void RobotDriver::addCmd(DriveCmdType type, float value, float speed) {
 	cmd.speed = speed;
 
 	xQueueSend(this->executionQueue, &cmd, 0);
+}
+
+void waitForDriveCompletion(EventGroupHandle_t handle) {
+	EventBits_t event;
+	const TickType_t waitTicks = 100 / portTICK_PERIOD_MS;
+	while (true) {
+		event = xEventGroupWaitBits(handle, DRIVE_EVT_COMPLETED_BIT, true, true, waitTicks);
+		if (event & DRIVE_EVT_COMPLETED_BIT == DRIVE_EVT_COMPLETED_BIT) {
+			return;
+		}
+
+		vTaskDelay(waitTicks);
+	}
 }
 
 // _____________
@@ -105,9 +120,13 @@ void MazeExplorer::start() {
 						 speed);
 		}
 
+		waitForDriveCompletion(this->eventHandle);
+
 		// TODO: wait for command to be completed
 
 		this->addCmd(DriveCmdType::DriveCmdType_Move, 1, speed);
+
+		waitForDriveCompletion(this->eventHandle);
 
 		vTaskDelay(pdMS_TO_TICKS(200));
 	}

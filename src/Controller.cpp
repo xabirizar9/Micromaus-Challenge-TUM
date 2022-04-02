@@ -191,6 +191,12 @@ NavigationPacket Controller::getState() {
 	return this->state;
 }
 
+void Controller::setPosition(float x, float y, float heading) {
+	this->state.position.x = x;
+	this->state.position.y = y;
+	this->state.position.heading = heading;
+}
+
 /******************************************************************
  * Pid Tuning methods
  ******************************************************************/

@@ -27,6 +27,9 @@ PB_BIND(InfoPacket, InfoPacket, AUTO)
 PB_BIND(PidTuningInfo, PidTuningInfo, AUTO)
 
 
+PB_BIND(MazeStatePacket, MazeStatePacket, AUTO)
+
+
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)
 
 
@@ -40,6 +43,9 @@ PB_BIND(MsgControl, MsgControl, AUTO)
 
 
 PB_BIND(MsgDrive, MsgDrive, AUTO)
+
+
+PB_BIND(MsgSetPosition, MsgSetPosition, AUTO)
 
 
 PB_BIND(MsgStop, MsgStop, AUTO)
