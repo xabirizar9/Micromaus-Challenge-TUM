@@ -10,8 +10,8 @@ static const char *TAG = "lane-ctrl";
 void clampAndIntegrate(float &correction,
 					   float &intError,
 					   uint32_t &timeInterval,
-					   float minValue = -1.0,
-					   float maxValue = 1.0) {
+					   int16_t minValue = INT16_MIN,
+					   int16_t maxValue = INT16_MAX) {
 	if (correction < minValue) {
 		correction = minValue;
 	} else if (correction > maxValue) {
@@ -28,7 +28,7 @@ void laneControlTask(void *args) {
 	Motor *rightMotor = controller->getMotor(right);
 
 	PIDErrors wallDistance;
-	static uint32_t timeInterval = 100;
+	static uint32_t timeInterval = 50;
 
 	// declare variables for sensor distances
 	int8_t dLeft;
@@ -63,11 +63,8 @@ void laneControlTask(void *args) {
 
 		// Update speed of right motor
 		clampAndIntegrate(wallDistance.correction, wallDistance.intError, timeInterval);
-		leftMotor->setPWM(curSpeedTicks + updateConst * mmsToTicks(wallDistance.correction));
-		rightMotor->setPWM(curSpeedTicks - updateConst * mmsToTicks(wallDistance.correction));
-
 		// direction = 0;	// Compute somehow direction from left/right speeds
-		// controller->setDirection(direction);
+		controller->setDirection(wallDistance.correction);
 
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}
