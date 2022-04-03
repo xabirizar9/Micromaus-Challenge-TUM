@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"net/http"
+	"os/exec"
+	"runtime"
 
 	"go.uber.org/zap"
 )
@@ -31,6 +34,25 @@ func handleUDPConnection(conn *net.UDPConn) {
 
 	robotIP = (net.IP(buffer[:4]))
 	log.Info("got maus IP", zap.String("ip", robotIP.String()))
+}
+
+func openbrowser(url string) {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		log.Error("failed to open browser", zap.Error(err))
+	}
+
 }
 
 func main() {
