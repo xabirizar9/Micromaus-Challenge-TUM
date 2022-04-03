@@ -101,6 +101,8 @@ void Controller::setDirection(int16_t direction) {
 	this->state.position.heading = (float)direction;
 	this->direction = direction;
 	// TODO: implement
+
+	this->drive()
 }
 
 void Controller::drive(int16_t speed, int16_t R) {
@@ -143,6 +145,10 @@ float Controller::getSpeedInTicks(MotorPosition position) {
 		case MotorPosition::right: return this->rightSpeedTickTarget;
 		default: return 0;
 	}
+}
+
+int16_t Controller::getSpeed() {
+	return this->speed;
 }
 
 void Controller::turnOnSpot(float degree, int16_t speed) {

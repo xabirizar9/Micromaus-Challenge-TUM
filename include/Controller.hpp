@@ -23,6 +23,7 @@ class Controller {
 	IRSensor leftSensor;
 	IRSensor rightSensor;
 	IRSensor frontSensor;
+	int16_t speed;
 
 	bool isPidTuningEnabled = false;
 	uint32_t currentPidTuningSampleIndex = 0;
