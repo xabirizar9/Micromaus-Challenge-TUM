@@ -47,6 +47,10 @@ typedef struct _MsgStop {
     char dummy_field;
 } MsgStop;
 
+typedef struct _PathPacket { 
+    pb_callback_t cmd; 
+} PathPacket;
+
 typedef struct _PidTuningInfo { 
     pb_callback_t err; 
 } PidTuningInfo;
@@ -163,6 +167,7 @@ extern "C" {
 #define InfoPacket_init_default                  {_InfoCmdType_MIN}
 #define PidTuningInfo_init_default               {{{NULL}, NULL}}
 #define MazeStatePacket_init_default             {{{NULL}, NULL}}
+#define PathPacket_init_default                  {{{NULL}, NULL}}
 #define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
 #define MsgPing_init_default                     {0}
@@ -180,6 +185,7 @@ extern "C" {
 #define InfoPacket_init_zero                     {_InfoCmdType_MIN}
 #define PidTuningInfo_init_zero                  {{{NULL}, NULL}}
 #define MazeStatePacket_init_zero                {{{NULL}, NULL}}
+#define PathPacket_init_zero                     {{{NULL}, NULL}}
 #define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
 #define MsgPing_init_zero                        {0}
@@ -192,6 +198,7 @@ extern "C" {
 
 /* Field tags (for use in manual encoding/decoding) */
 #define MazeStatePacket_state_tag                1
+#define PathPacket_cmd_tag                       1
 #define PidTuningInfo_err_tag                    1
 #define InfoPacket_cmd_tag                       1
 #define MsgControl_direction_tag                 1
@@ -291,6 +298,12 @@ X(a, CALLBACK, SINGULAR, BYTES,    state,             1)
 #define MazeStatePacket_CALLBACK pb_default_field_callback
 #define MazeStatePacket_DEFAULT NULL
 
+#define PathPacket_FIELDLIST(X, a) \
+X(a, CALLBACK, REPEATED, MESSAGE,  cmd,               1)
+#define PathPacket_CALLBACK pb_default_field_callback
+#define PathPacket_DEFAULT NULL
+#define PathPacket_cmd_MSGTYPE MsgDrive
+
 #define MausOutgoingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ack,payload.ack),   1) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,nav,payload.nav),   2) \
@@ -376,6 +389,7 @@ extern const pb_msgdesc_t NavigationPacket_msg;
 extern const pb_msgdesc_t InfoPacket_msg;
 extern const pb_msgdesc_t PidTuningInfo_msg;
 extern const pb_msgdesc_t MazeStatePacket_msg;
+extern const pb_msgdesc_t PathPacket_msg;
 extern const pb_msgdesc_t MausOutgoingMessage_msg;
 extern const pb_msgdesc_t MsgInit_msg;
 extern const pb_msgdesc_t MsgPing_msg;
@@ -395,6 +409,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define InfoPacket_fields &InfoPacket_msg
 #define PidTuningInfo_fields &PidTuningInfo_msg
 #define MazeStatePacket_fields &MazeStatePacket_msg
+#define PathPacket_fields &PathPacket_msg
 #define MausOutgoingMessage_fields &MausOutgoingMessage_msg
 #define MsgInit_fields &MsgInit_msg
 #define MsgPing_fields &MsgPing_msg
@@ -408,6 +423,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 /* Maximum encoded size of messages (where known) */
 /* PidTuningInfo_size depends on runtime parameters */
 /* MazeStatePacket_size depends on runtime parameters */
+/* PathPacket_size depends on runtime parameters */
 /* MausOutgoingMessage_size depends on runtime parameters */
 #define AckPacket_size                           0
 #define InfoPacket_size                          2

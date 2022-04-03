@@ -49,6 +49,9 @@ message PidTuningInfo {
 
 message MazeStatePacket {
 	bytes state = 1;
+	bytes walls = 2;
+	Position position = 3;
+	Position target = 4;
 }
 
 message PathPacket {

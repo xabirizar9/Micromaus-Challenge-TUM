@@ -1,10 +1,10 @@
 #include "drive/DriveTask.hpp"
 
 #include "Controller.hpp"
-#include "MazeExplorer.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
+#include "nav/MazeSolver.hpp"
 #include "periph/Motor.hpp"
 
 void driveTask(void *arg) {

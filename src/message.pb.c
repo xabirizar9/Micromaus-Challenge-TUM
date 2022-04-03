@@ -30,6 +30,9 @@ PB_BIND(PidTuningInfo, PidTuningInfo, AUTO)
 PB_BIND(MazeStatePacket, MazeStatePacket, AUTO)
 
 
+PB_BIND(PathPacket, PathPacket, AUTO)
+
+
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)
 
 
