@@ -72,13 +72,13 @@ void driveTask(void* arg) {
 				interval = gridMM * cmd.value / cmd.speed * 1000;
 				averageEncoder1 = averageEncoder(controller);
 
-				controller->drive(cmd.speed, 0);
-				vTaskDelay(pdMS_TO_TICKS(interval));
-				// check motor postition again if pulses are prooving wanted distance
-				averageEncoder2 = averageEncoder(controller);
-				dif = averageEncoder2 - averageEncoder1;
-				if (dif < 1790 || dif > 1804) {
-					// TODO: correction
+				// vTaskDelay(pdMS_TO_TICKS(interval));
+				//  check motor postition again if pulses are prooving wanted distance
+				while (dif < 1790 * cmd.value) {
+					vTaskDelay(pdMS_TO_TICKS(20));
+					controller->drive(cmd.speed, 0);
+					averageEncoder2 = averageEncoder(controller);
+					dif = averageEncoder2 - averageEncoder1;
 				}
 				controller->drive(0, 0);
 				vTaskSuspend(laneControllTaskHandle);
