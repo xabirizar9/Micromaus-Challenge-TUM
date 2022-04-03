@@ -19,7 +19,9 @@
 
   const data: Vector2D[] = [];
 
-  const fromMmToUnits = (mm: number) => mm / 160 / 6;
+  const fromMmToUnits = (mm: number) => mm / 180 / 6;
+
+  const fromUnitToMms = (unit: number) => unit * 180 * 6;
 
   const drawSensorDot = (nav: NavigationPacket, sensor: keyof SensorPacket) => {
     const width = canvas.clientWidth;
@@ -83,9 +85,31 @@
       (evt: MessageEvent<MausOutgoingMessage>) => {
         if (evt.data.nav) {
           onNavPacket(evt.data.nav);
+          if (maus) {
+            maus.style.left = `${
+              100 * (fromMmToUnits(evt.data.nav.position.x) / mazeSize.width)
+            }%`;
+            console.log(
+              evt.data.nav.position.y,
+              fromMmToUnits(evt.data.nav.position.y),
+
+              mazeSize.height -
+                fromMmToUnits(evt.data.nav.position.y) / mazeSize.height
+            );
+            maus.style.bottom = `${
+              ((fromMmToUnits(evt.data.nav.position.y) - 1) / mazeSize.height) *
+              100
+            }%`;
+          }
         }
       }
     );
+  }
+
+  let maus: HTMLDivElement;
+
+  function MausEl(node: HTMLDivElement) {
+    maus = node;
   }
 
   let pathChart: ReturnType<typeof ConnectedScatterplot>;
@@ -115,24 +139,60 @@
       y: Math.random() * 6,
     });
   };
+
+  const setPosition = (x: number, y: number) => {
+    com.send({
+      setPosition: {
+        heading: 0,
+        x: fromUnitToMms(x + 0.5),
+        y: fromUnitToMms(6 - y + 0.5),
+      },
+    });
+  };
 </script>
 
 <div class="card map">
-  <canvas use:CanvasEl />
-
-  <div use:RobotPath />
-
-  <div>
-    <button on:click={addPoint}>Add point test</button>
-  </div>
   <div class="maze-grid">
     {#each Array(36) as _, i}
-      <div class="maze-item">{i + 1}</div>
+      <div
+        on:click={() => setPosition(i % 6, Math.floor(i / 6))}
+        class="maze-item"
+      >
+        {i + 1}
+      </div>
     {/each}
+  </div>
+
+  <div class="path" use:RobotPath />
+  <canvas class="sensor" use:CanvasEl />
+  <div class="path">
+    <button on:click={addPoint}>Add point test</button>
+  </div>
+  <div class="path">
+    <div class="maus" use:MausEl />
   </div>
 </div>
 
 <style lang="scss">
+  .maus {
+    position: absolute;
+    display: block;
+    content: " ";
+    left: 0%;
+    bottom: 0%;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: hotpink;
+    opacity: 0.5;
+  }
+
+  .sensor,
+  .path {
+    position: relative;
+    pointer-events: none;
+  }
+
   .maze-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
