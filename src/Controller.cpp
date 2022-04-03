@@ -90,11 +90,10 @@ void Controller::updatePosition() {
 }
 
 void Controller::setDirection(int16_t direction) {
-	this->state.position.heading = (float)direction;
 	this->direction = direction;
 	// TODO: implement
 
-	this->drive()
+	this->drive(this->speed, direction);
 }
 
 void Controller::drive(int16_t speed, int16_t R) {

@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "Controller.hpp"
+#include "drive/LaneTask.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
@@ -10,18 +11,28 @@
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
 
+float averageEncoder(Controller* controller) {
+	int64_t right = controller->getEncoder(MotorPosition::right)->getTotalCounter();
+	int64_t left = controller->getEncoder(MotorPosition::left)->getTotalCounter();
+	return 0.5 * (right + left);
+}
 void driveTask(void* arg) {
+	TaskHandle_t LaneControllTaskHandle;
+
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t navInterval = 100;
 	NavigationPacket state;
 	Controller* controller = driver->controller;
 	QueueHandle_t execQueue = driver->executionQueue;
-	float gridMM = 160;
+	float gridMM = 180;
 	float gridPulses = 1797.46;
 	float interval = 0;
 
 	MsgDrive cmd;
 	MsgDrive* curCmd;
+
+	xTaskCreate(laneControlTask, "laneControltask", 2048, controller, 1, &LaneControllTaskHandle);
+	vTaskSuspend(&LaneControllTaskHandle);
 
 	while (true) {
 		// update and get state
@@ -40,11 +51,11 @@ void driveTask(void* arg) {
 		}
 
 		switch (cmd.type) {
-			case _DriveCmdType::DriveCmdType_Move: break;
+			case DriveCmdType::DriveCmdType_Move: break;
 
-			case _DriveCmdType::DriveCmdType_MoveCells: {
+			case DriveCmdType::DriveCmdType_MoveCells: {
 				//_MsgTurn payload =
-
+				vTaskResume(&LaneControllTaskHandle);
 				// NavigationPacket *data = &controller->getState();
 
 				// get current motor postition in ticks
@@ -53,6 +64,7 @@ void driveTask(void* arg) {
 				float averageEncoder1 = averageEncoder(controller);
 
 				controller->drive(cmd.speed, 0);
+
 				vTaskDelay(pdMS_TO_TICKS(interval));
 				// check motor postition again if pulses are prooving wanted distance
 				float averageEncoder2 = averageEncoder(controller);
@@ -61,10 +73,11 @@ void driveTask(void* arg) {
 					// TODO: correction
 				}
 				controller->drive(0, 0);
+				vTaskSuspend(&LaneControllTaskHandle);
 				break;
 			}
-			case _DriveCmdType::DriveCmdType_TurnAround: break;
-			case _DriveCmdType::DriveCmdType_TurnLeft:
+			case DriveCmdType::DriveCmdType_TurnAround: break;
+			case DriveCmdType::DriveCmdType_TurnLeft:
 				float d = ((3.14 / 2) * cmd.value);
 				interval = d / cmd.speed;
 				controller->drive(cmd.speed, INT16_MIN);
@@ -72,12 +85,12 @@ void driveTask(void* arg) {
 				controller->drive(0, 0);
 				// ToDo: time!!!
 				break;
-			case _DriveCmdType::DriveCmdType_TurnRight:
+			case DriveCmdType::DriveCmdType_TurnRight:
 				// controller.drive(speed, 90);
 				//  ToDo: time!!!
 				break;
-			case _DriveCmdType::DriveCmdType_TurnLeftOnSpot: break;
-			case _DriveCmdType::DriveCmdType_TurnRightOnSpot: break;
+			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: break;
+			case DriveCmdType::DriveCmdType_TurnRightOnSpot: break;
 		}
 
 		curCmd = NULL;
@@ -154,9 +167,3 @@ void turn() {
 	this->setSpeed(0);
 }
 */
-
-float averageEncoder(Controller* controller) {
-	int64_t right = controller->getEncoder(MotorPosition::right)->getTotalCounter();
-	int64_t left = controller->getEncoder(MotorPosition::left)->getTotalCounter();
-	return 0.5 * (right + left);
-}
