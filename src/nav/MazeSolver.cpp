@@ -30,6 +30,7 @@ void waitForDriveCompletion(EventGroupHandle_t handle) {
 
 MazeSolver::MazeSolver(Controller* controller) {
 	this->controller = controller;
+	this->addCmd(DriveCmdType::DriveCmdType_MoveCells, 1, 300);
 }
 
 void MazeSolver::updateWalls() {}

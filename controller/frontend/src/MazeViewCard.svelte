@@ -89,13 +89,6 @@
             maus.style.left = `${
               100 * (fromMmToUnits(evt.data.nav.position.x) / mazeSize.width)
             }%`;
-            console.log(
-              evt.data.nav.position.y,
-              fromMmToUnits(evt.data.nav.position.y),
-
-              mazeSize.height -
-                fromMmToUnits(evt.data.nav.position.y) / mazeSize.height
-            );
             maus.style.bottom = `${
               ((fromMmToUnits(evt.data.nav.position.y) - 1) / mazeSize.height) *
               100

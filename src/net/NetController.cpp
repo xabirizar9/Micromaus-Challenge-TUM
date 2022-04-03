@@ -211,9 +211,9 @@ NetController::Manager::Manager(NetController::Communicator interface) {
 	this->comInterface = interface;
 	ESP_LOGI(tag, "Manager()");
 
-	xTaskCreate(receiverTask, "receiverTask", 4096, this, 5, NULL);
+	xTaskCreate(receiverTask, "receiverTask", 9000, this, 5, NULL);
 
-	xTaskCreate(&infoStreamerTask, "infoStreamerTask", 4096, this, 5, NULL);
+	xTaskCreate(&infoStreamerTask, "infoStreamerTask", 9000, this, 5, NULL);
 };
 
 /**

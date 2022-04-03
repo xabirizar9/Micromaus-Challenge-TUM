@@ -41,6 +41,6 @@ extern "C" void app_main() {
 	netManager->controller = mainController;
 
 	explorer = new MazeSolver(mainController);
-
+	netManager->driver = explorer;
 	// mainController->turnOnSpot(0.5 * 3.1416, 50);
 }

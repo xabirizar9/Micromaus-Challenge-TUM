@@ -58,7 +58,7 @@
     evt.preventDefault();
     com.send({
       drive: {
-        type: DriveCmdType,
+        type: driveCmdType,
         value: driveValue,
         speed: driveSpeed,
       },
@@ -134,7 +134,7 @@
             label="Speed"
             step="0.001"
             type="number"
-            bind:value={driveValue}
+            bind:value={driveSpeed}
           />
 
           <Input

@@ -8,7 +8,7 @@
 #include "nav/RobotDriver.hpp"
 #include "net/NetController.hpp"
 
-class MazeSolver : RobotDriver {
+class MazeSolver : public RobotDriver {
    private:
 	Maze maze;
 

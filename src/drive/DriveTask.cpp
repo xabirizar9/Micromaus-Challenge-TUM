@@ -12,19 +12,20 @@
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
 
+static const char* tag = "[drive-task]";
+
 float averageEncoder(Controller* controller) {
 	int64_t right = controller->getEncoder(MotorPosition::right)->getTotalCounter();
 	int64_t left = controller->getEncoder(MotorPosition::left)->getTotalCounter();
 	return 0.5 * (right + left);
 }
 void driveTask(void* arg) {
-	TaskHandle_t LaneControllTaskHandle;
+	TaskHandle_t laneControllTaskHandle;
 
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t navInterval = 100;
 	NavigationPacket state;
 	Controller* controller = driver->controller;
-	QueueHandle_t execQueue = driver->executionQueue;
 	float gridMM = 180;
 	float gridPulses = 1797.46;
 	float interval = 0;
@@ -36,8 +37,8 @@ void driveTask(void* arg) {
 	MsgDrive cmd;
 	MsgDrive* curCmd;
 
-	xTaskCreate(laneControlTask, "laneControltask", 2048, controller, 1, &LaneControllTaskHandle);
-	vTaskSuspend(&LaneControllTaskHandle);
+	xTaskCreate(laneControlTask, "laneControltask", 2048, controller, 1, &laneControllTaskHandle);
+	vTaskSuspend(laneControllTaskHandle);
 
 	while (true) {
 		// update and get state
@@ -46,7 +47,8 @@ void driveTask(void* arg) {
 		state = controller->getState();
 
 		if (curCmd == NULL) {
-			if (xQueueReceive(execQueue, &cmd, 0)) {
+			if (xQueueReceive(driver->executionQueue, &cmd, 0)) {
+				ESP_LOGI(tag, "recv");
 				curCmd = &cmd;
 				xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_STARTED_BIT);
 			} else {
@@ -55,21 +57,22 @@ void driveTask(void* arg) {
 			}
 		}
 
+		ESP_LOGI(tag, "drive %d %f %f", cmd.type, cmd.value, cmd.speed);
+
 		switch (cmd.type) {
 			case DriveCmdType::DriveCmdType_Move: break;
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				//_MsgTurn payload =
-				vTaskResume(&LaneControllTaskHandle);
+				vTaskResume(laneControllTaskHandle);
 				// NavigationPacket *data = &controller->getState();
 
 				// get current motor postition in ticks
 				// float speed->cmd.speed;
-				interval = gridMM / cmd.speed;
+				interval = gridMM * cmd.value / cmd.speed * 1000;
 				averageEncoder1 = averageEncoder(controller);
 
 				controller->drive(cmd.speed, 0);
-
 				vTaskDelay(pdMS_TO_TICKS(interval));
 				// check motor postition again if pulses are prooving wanted distance
 				averageEncoder2 = averageEncoder(controller);
@@ -78,7 +81,7 @@ void driveTask(void* arg) {
 					// TODO: correction
 				}
 				controller->drive(0, 0);
-				vTaskSuspend(&LaneControllTaskHandle);
+				vTaskSuspend(laneControllTaskHandle);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
@@ -100,6 +103,7 @@ void driveTask(void* arg) {
 			default: break;
 		}
 
+		ESP_LOGI(tag, "4");
 		curCmd = NULL;
 
 		// TODO: send this event when command is completed
