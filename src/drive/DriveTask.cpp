@@ -1,3 +1,4 @@
+
 #include "drive/DriveTask.hpp"
 
 #include <cmath>
@@ -27,6 +28,8 @@ void driveTask(void* arg) {
 	float gridMM = 180;
 	float gridPulses = 1797.46;
 	float interval = 0;
+
+	float d = 0.0;
 
 	MsgDrive cmd;
 	MsgDrive* curCmd;
@@ -78,13 +81,14 @@ void driveTask(void* arg) {
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
 			case DriveCmdType::DriveCmdType_TurnLeft:
-				float d = ((3.14 / 2) * cmd.value);
+				d = ((3.14 / 2) * cmd.value);
 				interval = d / cmd.speed;
 				controller->drive(cmd.speed, INT16_MIN);
 				vTaskDelay(pdMS_TO_TICKS(interval));
 				controller->drive(0, 0);
 				// ToDo: time!!!
 				break;
+
 			case DriveCmdType::DriveCmdType_TurnRight:
 				// controller.drive(speed, 90);
 				//  ToDo: time!!!
@@ -111,18 +115,18 @@ void computeTrajectories(void* arg) {
 	int tickEnd = mmsToTicks(500);
 	int vStart = controller->getSpeed();
 	int vEnd = 50;
-	int tStart = xTaskGetTickCount();
-	uint64_t tEnd = pdMS_TO_TICKS(1000 / (vMax * 0.9));
+	TickType_t tStart = xTaskGetTickCount();
+	TickType_t tEnd = pdMS_TO_TICKS(1000 / (vMax * 0.9));
 
 	uint64_t time = xTaskGetTickCount() - tStart;
 
-	int a0, a1, a2, a3 = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, tStart, tEnd);
+	float* resp = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, tStart, tEnd);
 }
 
-int getMotionProfilePolynom(
-	int64_t& tickStart, int& tickEnd, int& vStart, int& vEnd, float& tStart, float& tEnd) {
+float* getMotionProfilePolynom(
+	int64_t& tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
+	static float* resp = new float[4];
 	int b0, b1, b2, b3;
-	float a0, a1, a2, a3;
 	float ticksTime, tDiff, tickDiff;
 	float tEnd2, tStart2, tEnd3, tStart3;
 
@@ -140,13 +144,13 @@ int getMotionProfilePolynom(
 	tEnd2 = pow(tEnd, 2);
 	tEnd3 = pow(tEnd, 3);
 
-	a3 = b3 / (tEnd2 + tStart2 + 4 * tEnd * tStart);
-	a2 = (a3 * (2 * tStart2 - tEnd2 + 2 * tEnd * tStart) - b2) / tDiff;
-	a1 = (b1 - a2 * (tEnd2 - tStart2) - a3 * (tEnd3 - tStart3)) / tDiff;
-	a0 = b0 - a1 * tStart + a2 * tStart2 + a3 * tStart3;
+	resp[3] = b3 / (tEnd2 + tStart2 + 4 * tEnd * tStart);
+	resp[2] = (resp[3] * (2 * tStart2 - tEnd2 + 2 * tEnd * tStart) - b2) / tDiff;
+	resp[1] = (b1 - resp[2] * (tEnd2 - tStart2) - resp[3] * (tEnd3 - tStart3)) / tDiff;
+	resp[0] = b0 - resp[1] * tStart + resp[2] * tStart2 + resp[3] * tStart3;
 
-	return a0, a1, a2, a3;
-};
+	return resp;
+}
 /*
 void turn() {
 	// vTaskDelay(pdMS_TO_TICKS(5000));
