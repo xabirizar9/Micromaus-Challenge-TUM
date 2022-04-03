@@ -168,20 +168,10 @@ void receiverTask(void *pvParameter) {
 				break;
 
 			case MausIncomingMessage_drive_tag:
-				// TODO: call method on controller
-				ESP_LOGI(
-					tag, "Dist=%d, speed=%d", msg.payload.drive.distance, msg.payload.drive.speed);
-				break;
-
-			case MausIncomingMessage_stop_tag:
-				// TODO: call method on controller
-
-				break;
-
-			case MausIncomingMessage_turn_tag:
-				manager->controller->turnOnSpot(msg.payload.turn.degree, msg.payload.turn.speed);
-				// TODO: call method on controller
-
+				if (manager->driver != NULL) {
+					manager->driver->addCmd(
+						msg.payload.drive.type, msg.payload.drive.speed, msg.payload.drive.value);
+				}
 				break;
 		}
 	}

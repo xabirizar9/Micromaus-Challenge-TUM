@@ -29,6 +29,8 @@ class UdpCommunicator {
 
 	int read(uint8_t *buf, size_t bufLen);
 	int write(uint8_t *buf, size_t msgLen);
+	// send own IP to remote server
+	void sendOwnIP();
 };
 class WifiCommunicator : public NetController::Communicator {
    public:

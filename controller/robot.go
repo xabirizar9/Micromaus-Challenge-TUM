@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"errors"
+	"io/ioutil"
 	"net"
+	"net/http"
 	"time"
 
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
@@ -75,8 +77,28 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 
 	err = r.connect(context.TODO(), opt.Addr)
 	if err != nil {
-		l.Error("failed to connect to robot", zap.Error(err))
-		return
+		l.Warn("direct connection failed using fallback", zap.Error(err))
+		// if initial connect fails try using remote address
+		resp, err := http.Get("http://iamwlad.com:7777/maus")
+		if err != nil {
+			l.Error("failed to connect to robot", zap.Error(err))
+			return nil, err
+		}
+
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			l.Error("failed to connect to robot", zap.Error(err))
+			return nil, err
+		}
+
+		str := string(body)
+
+		err = r.connect(context.TODO(), str+":8888")
+		if err != nil {
+			l.Error("failed to connect to robot", zap.Error(err))
+			return nil, err
+		}
+		return r, nil
 	}
 
 	// start listening on the serial port

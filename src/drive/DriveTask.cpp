@@ -13,11 +13,14 @@ void driveTask(void *arg) {
 	NavigationPacket state;
 	Controller *controller = driver->controller;
 	QueueHandle_t execQueue = driver->executionQueue;
+	float gridCM = 0.16;
+	float gridPulses = 1797.46;
+	float interval = 0;
 
-	DriveCommand cmd;
-	DriveCommand *curCmd
+	MsgDrive cmd;
+	MsgDrive *curCmd;
 
-		while (true) {
+	while (true) {
 		// update and get state
 		controller->updateSensors();
 		controller->updatePosition();
@@ -33,19 +36,40 @@ void driveTask(void *arg) {
 		}
 
 		switch (cmd.type) {
-			case DriveCommandType::move: break;
-			case DriveCommandType::moveCells: {
-				_MsgTurn payload = NavigationPacket data = controller.getstate();
-				float encoderPos->data.speed;
-				float speed->data.speed;
-				controller.drive();
+			case _DriveCmdType::DriveCmdType_Move: break;
+
+			case _DriveCmdType::moveCells: {
+				//_MsgTurn payload =
+
+				NavigationPacket *data = &controller->getState();
+				controller->getEncoder(right);
+				controller->getEncoder(left);
+				float averageEncoder =
+					// get current motor postition in ticks
+					// float speed->cmd.speed;
+					interval = gridCM / cmd.speed;
+
+				controller.drive(set);
+				vTaskDelay(pdMS_TO_TICKS(interval));
+				// check motor postition again if pulses are prooving wanted distance
+				controller.drive(0);
 				break
 			};
-			case DriveCommandType::turnAround: break;
-			case DriveCommandType::turnLeft: break;
-			case DriveCommandType::turnRight: break;
-			case DriveCommandType::turnLeftOnSpot: break;
-			case DriveCommandType::turnRightOnSpot: break;
+			case _DriveCmdType::turnAround: break;
+			case _DriveCmdType::turnLeft:
+				float d = ((3.14 / 2) * cmd.value);
+				interval = d / cmd.speed;
+				controller.drive(speed, 90);
+				vTaskDelay(pdMS_TO_TICKS(interval));
+				controller.drive(speed, 90);
+				// ToDo: time!!!
+				break;
+			case _DriveCmdType::turnRight:
+				controller.drive(speed, 90);
+				// ToDo: time!!!
+				break;
+			case _DriveCmdType::turnLeftOnSpot: break;
+			case _DriveCmdType::turnRightOnSpot: break;
 		}
 
 		curCmd = NULL;

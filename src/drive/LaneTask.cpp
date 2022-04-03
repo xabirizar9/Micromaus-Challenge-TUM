@@ -28,7 +28,7 @@ void laneControlTask(void *args) {
 	Motor *rightMotor = controller->getMotor(right);
 
 	PIDErrors wallDistance;
-	uint32_t timeInterval = 100;
+	static uint32_t timeInterval = 100;
 
 	// declare variables for sensor distances
 	int8_t dLeft;

@@ -31,10 +31,7 @@ message NavigationPacket {
 }
 
 enum InfoCmdType {
-	Drive = 0;
-	TurnLeft = 1;
-	TurnRight = 2;
-	Stop = 3;
+	Noop = 0;
 
 	// commands only intended for the go<->client communication
 	Connected = 100;
@@ -72,14 +69,21 @@ message MsgControl {
 	int32 speed = 2;
 }
 
-message MsgTurn {
-	float degree = 1;
-	int32 speed = 2;
+enum DriveCmdType {
+	Move = 0;
+	MoveCells = 1;
+	TurnAround = 2;
+	TurnLeft = 3;
+	TurnRight = 4;
+	TurnLeftOnSpot = 5;
+	TurnRightOnSpot = 6;
+	Stop = 7;
 }
 
 message MsgDrive {
-	int32 distance = 1;
-	int32 speed = 2;
+	DriveCmdType type = 1;
+	float value = 2;
+	float speed = 3;
 }
 
 message MsgStop {}
@@ -97,8 +101,7 @@ message MausIncomingMessage {
 		MsgControl control = 3;
 		MsgEncoderCallibration encoderCallibration = 4;
 		MsgPing ping = 5;
-		MsgTurn turn = 6;
-		MsgStop stop = 7;
-		MsgDrive drive = 8;
+		MsgStop stop = 6;
+		MsgDrive drive = 7;
 	}
 }
