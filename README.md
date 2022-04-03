@@ -21,5 +21,14 @@ Das Weltkoordinatensystem hat seinen Ursprung bei der linken unteren Ecke.
 Die X-Achse zeigt nach rechts, die Y-Ache nach oben und die Z-Achse aus
 der Ebene heraus.
 
+## Web Interface
 
-## Regen
+To build and run web interface go to `./controller` director and run
+
+```bash
+cd ./controller
+go build . && ./micromaus
+
+```
+
+Then you can visit the dashboard at [dashboard](http://localhot:8080)
