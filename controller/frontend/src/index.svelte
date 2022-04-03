@@ -9,6 +9,7 @@
   import { Joystick } from "./Joystick";
   import { testFloodFill } from "./utils/floodFill";
   import { DriveCmdType } from "./proto/message";
+  import PowerView from "./components/PowerView.svelte";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
@@ -153,6 +154,10 @@
     <Button inline on:click={onTunePid}
       >{isPidTuningActive ? "STOP" : "START"} AutoTune PID</Button
     >
+  </div>
+  <div class="card">
+    <h2>Power</h2>
+    <PowerView {com} />
   </div>
   <div class="card full"><SensorTable {com} /></div>
 </main>

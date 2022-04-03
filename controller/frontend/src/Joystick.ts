@@ -61,7 +61,7 @@ export class Joystick {
           ? 0
           : (4000 - Math.min(Math.abs(gp.axes[0]), 120) * 4000) * sign;
       const newSpeed = (rt ? 1 : lt ? -1 : 0) * (turbo ? 3000 : 500);
-
+      console.log(newDirection);
       if (
         newSpeed !== this.internalSpeed ||
         this.internalDirection !== newDirection

@@ -19,7 +19,6 @@ export class Communicator extends EventTarget {
       message as MausIncomingMessage
     ).finish();
     toaster.success(`CMD send: size=${msg.length}`);
-    console.log("sending", { message });
     this.socket?.send(msg);
   }
 

@@ -35,10 +35,6 @@ typedef struct _AckPacket {
     char dummy_field;
 } AckPacket;
 
-typedef struct _MazeStatePacket { 
-    pb_callback_t state; 
-} MazeStatePacket;
-
 typedef struct _MsgPing { 
     char dummy_field;
 } MsgPing;
@@ -117,6 +113,15 @@ typedef struct _MausIncomingMessage {
     } payload; 
 } MausIncomingMessage;
 
+typedef struct _MazeStatePacket { 
+    pb_callback_t state; 
+    pb_callback_t walls; 
+    bool has_position;
+    Position position; 
+    bool has_target;
+    Position target; 
+} MazeStatePacket;
+
 typedef struct _NavigationPacket { 
     bool has_sensors;
     SensorPacket sensors; 
@@ -166,7 +171,7 @@ extern "C" {
 #define NavigationPacket_init_default            {false, SensorPacket_init_default, false, Position_init_default, 0, 0, 0, 0, 0, 0, 0}
 #define InfoPacket_init_default                  {_InfoCmdType_MIN}
 #define PidTuningInfo_init_default               {{{NULL}, NULL}}
-#define MazeStatePacket_init_default             {{{NULL}, NULL}}
+#define MazeStatePacket_init_default             {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_default, false, Position_init_default}
 #define PathPacket_init_default                  {{{NULL}, NULL}}
 #define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
@@ -184,7 +189,7 @@ extern "C" {
 #define NavigationPacket_init_zero               {false, SensorPacket_init_zero, false, Position_init_zero, 0, 0, 0, 0, 0, 0, 0}
 #define InfoPacket_init_zero                     {_InfoCmdType_MIN}
 #define PidTuningInfo_init_zero                  {{{NULL}, NULL}}
-#define MazeStatePacket_init_zero                {{{NULL}, NULL}}
+#define MazeStatePacket_init_zero                {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_zero, false, Position_init_zero}
 #define PathPacket_init_zero                     {{{NULL}, NULL}}
 #define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
@@ -197,7 +202,6 @@ extern "C" {
 #define MausIncomingMessage_init_zero            {0, {MsgInit_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define MazeStatePacket_state_tag                1
 #define PathPacket_cmd_tag                       1
 #define PidTuningInfo_err_tag                    1
 #define InfoPacket_cmd_tag                       1
@@ -227,6 +231,10 @@ extern "C" {
 #define MausIncomingMessage_stop_tag             6
 #define MausIncomingMessage_drive_tag            7
 #define MausIncomingMessage_setPosition_tag      8
+#define MazeStatePacket_state_tag                1
+#define MazeStatePacket_walls_tag                2
+#define MazeStatePacket_position_tag             3
+#define MazeStatePacket_target_tag               4
 #define NavigationPacket_sensors_tag             1
 #define NavigationPacket_position_tag            2
 #define NavigationPacket_leftMotorSpeed_tag      3
@@ -294,9 +302,14 @@ X(a, CALLBACK, REPEATED, FLOAT,    err,               1)
 #define PidTuningInfo_DEFAULT NULL
 
 #define MazeStatePacket_FIELDLIST(X, a) \
-X(a, CALLBACK, SINGULAR, BYTES,    state,             1)
+X(a, CALLBACK, SINGULAR, BYTES,    state,             1) \
+X(a, CALLBACK, SINGULAR, BYTES,    walls,             2) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  position,          3) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  target,            4)
 #define MazeStatePacket_CALLBACK pb_default_field_callback
 #define MazeStatePacket_DEFAULT NULL
+#define MazeStatePacket_position_MSGTYPE Position
+#define MazeStatePacket_target_MSGTYPE Position
 
 #define PathPacket_FIELDLIST(X, a) \
 X(a, CALLBACK, REPEATED, MESSAGE,  cmd,               1)
