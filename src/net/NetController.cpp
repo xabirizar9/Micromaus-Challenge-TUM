@@ -175,9 +175,15 @@ void receiverTask(void *pvParameter) {
 				break;
 
 			case MausIncomingMessage_setPosition_tag:
+				ESP_LOGI(tag,
+						 "set pos cmd x=%f y=%f h=%f",
+						 msg.payload.setPosition.x,
+						 msg.payload.setPosition.y,
+						 msg.payload.setPosition.heading);
 				manager->controller->setPosition(msg.payload.setPosition.x,
 												 msg.payload.setPosition.y,
 												 msg.payload.setPosition.heading);
+				break;
 		}
 	}
 }

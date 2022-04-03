@@ -34,7 +34,9 @@ MazeSolver::MazeSolver(Controller* controller) {
 
 void MazeSolver::updateWalls() {}
 
-void MazeSolver::updateFloodFill() {}
+void MazeSolver::updateFloodFill() {
+	// static bool visited = new bool[MAZE_SIZE * MAZE_SIZE];
+}
 
 void MazeSolver::updateCosts(uint8_t* costs, uint8_t x, uint8_t y) {
 	costs[Maze::Heading::North] = this->maze.getCost(x, y + 1);

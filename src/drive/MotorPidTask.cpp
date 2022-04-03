@@ -19,7 +19,7 @@ void motorPidTask(void *pvParameter) {
 	delete payload;
 
 	// PID interval in ms
-	uint16_t monitorInterval = 100;
+	uint16_t monitorInterval = 40;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
 	float secondFraction = (float)monitorInterval / 1000.0;
@@ -56,7 +56,6 @@ void motorPidTask(void *pvParameter) {
 
 		// get target speed for a given PID interval
 		target = controller->getSpeedInTicks(pos) * secondFraction;
-
 		// if speed target changed set it directly and let PID fine tune
 		if (target == 0.0) {
 			// stop motor if target changed
@@ -88,21 +87,23 @@ void motorPidTask(void *pvParameter) {
 		correction += (kP * error) + (kD * derError) + (kI * intError);
 
 #ifdef DEBUG_PID
-		if (pos == MotorPosition::left) {
-			ESP_LOGI(TAG,
-					 "PID: t=%.3f errCur=%.3f. cor=%.3f pwm=%.3f enc=%d time=%d",
-					 target,
-					 error,
-					 correction,
-					 correction * oneOverMaxSpeed,
-					 curEncoderReading,
-					 pdTICKS_TO_MS(xTaskGetTickCount() - lastTicks));
-		}
+		// if (pos == MotorPosition::left) {
+		ESP_LOGI(TAG,
+				 "%d t=%.3f errCur=%.3f. cor=%.3f pwm=%.3f enc=%d time=%d",
+				 pos,
+				 target,
+				 error,
+				 correction,
+				 correction * oneOverMaxSpeed,
+				 curEncoderReading,
+				 pdTICKS_TO_MS(xTaskGetTickCount() - lastTicks));
+		//}
 		lastTicks = xTaskGetTickCount();
 #endif
 
 		// copy step values for next step
 		lastError = error;
+		lastSpeed = target;
 
 		m->setPWM(correction * oneOverMaxSpeed);
 

@@ -72,9 +72,14 @@ void Controller::updateSensors() {
 }
 
 void Controller::updatePosition() {
+	static int64_t leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	static int64_t rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
+
 	// distance the wheels have traveled
-	float left = this->getEncoder(MotorPosition::left)->getTotalCounter() * encoderTicksToMm;
-	float right = this->getEncoder(MotorPosition::right)->getTotalCounter() * encoderTicksToMm;
+	float left =
+		(this->getEncoder(MotorPosition::left)->getTotalCounter() - leftTicks) * encoderTicksToMm;
+	float right =
+		(this->getEncoder(MotorPosition::right)->getTotalCounter() - rightTicks) * encoderTicksToMm;
 
 	float center = (left + right) / 2.0;
 
@@ -85,8 +90,11 @@ void Controller::updatePosition() {
 	// to confirm we could compute the angle
 	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));
 
-	this->state.position.x = center * cos(this->state.position.heading) * encoderTicksToMm;
-	this->state.position.y = center * sin(this->state.position.heading) * encoderTicksToMm;
+	this->state.position.x += center * cos(this->state.position.heading) * encoderTicksToMm;
+	this->state.position.y += center * sin(this->state.position.heading) * encoderTicksToMm;
+
+	leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
 }
 
 void Controller::setDirection(int16_t direction) {
