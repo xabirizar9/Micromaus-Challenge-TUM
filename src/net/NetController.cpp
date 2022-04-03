@@ -173,6 +173,11 @@ void receiverTask(void *pvParameter) {
 						msg.payload.drive.type, msg.payload.drive.speed, msg.payload.drive.value);
 				}
 				break;
+
+			case MausIncomingMessage_setPosition_tag:
+				manager->controller->setPosition(msg.payload.setPosition.x,
+												 msg.payload.setPosition.y,
+												 msg.payload.setPosition.heading);
 		}
 	}
 }

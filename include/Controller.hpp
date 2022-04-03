@@ -89,6 +89,8 @@ class Controller {
 	Encoder *getEncoder(MotorPosition position);
 	Motor *getMotor(MotorPosition position);
 
+	void setPosition(float x, float y, float heading);
+
 	// PID tuning routine
 	void startPidTuning();
 	void stopPidTuning();

@@ -74,13 +74,6 @@
     }
     ctx = canvas.getContext("2d");
     const gap = 5;
-    drawGrid(
-      ctx,
-      (width - gap) / mazeSize.width - gap,
-      (height - gap) / mazeSize.height - gap,
-      gap,
-      mazeSize
-    );
 
     ctx.beginPath();
     ctx.moveTo(0, 0);
@@ -126,13 +119,43 @@
 
 <div class="card map">
   <canvas use:CanvasEl />
+
   <div use:RobotPath />
+
   <div>
     <button on:click={addPoint}>Add point test</button>
+  </div>
+  <div class="maze-grid">
+    {#each Array(36) as _, i}
+      <div class="maze-item">{i + 1}</div>
+    {/each}
   </div>
 </div>
 
 <style lang="scss">
+  .maze-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 5px;
+  }
+
+  .maze-item {
+    aspect-ratio: 1;
+    background-color: var(--main-bg-secondary);
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--border-color);
+
+    &:hover {
+      background-color: var(--primary-color);
+      color: var(--primary-color-text);
+    }
+  }
+
   .map {
     min-width: 25vw;
     padding: 0;
