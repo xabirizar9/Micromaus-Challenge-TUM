@@ -27,6 +27,10 @@ void driveTask(void* arg) {
 	float gridMM = 180;
 	float gridPulses = 1797.46;
 	float interval = 0;
+	float distance = 0;
+	float averageEncoder1 = 0;
+	float averageEncoder2 = 0;
+	float dif = 0;
 
 	MsgDrive cmd;
 	MsgDrive* curCmd;
@@ -61,14 +65,14 @@ void driveTask(void* arg) {
 				// get current motor postition in ticks
 				// float speed->cmd.speed;
 				interval = gridMM / cmd.speed;
-				float averageEncoder1 = averageEncoder(controller);
+				averageEncoder1 = averageEncoder(controller);
 
 				controller->drive(cmd.speed, 0);
 
 				vTaskDelay(pdMS_TO_TICKS(interval));
 				// check motor postition again if pulses are prooving wanted distance
-				float averageEncoder2 = averageEncoder(controller);
-				float dif = averageEncoder2 - averageEncoder1;
+				averageEncoder2 = averageEncoder(controller);
+				dif = averageEncoder2 - averageEncoder1;
 				if (dif < 1790 || dif > 1804) {
 					// TODO: correction
 				}
@@ -78,8 +82,8 @@ void driveTask(void* arg) {
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
 			case DriveCmdType::DriveCmdType_TurnLeft:
-				float d = ((3.14 / 2) * cmd.value);
-				interval = d / cmd.speed;
+				distance = ((3.14 / 2) * cmd.value);
+				interval = distance / cmd.speed;
 				controller->drive(cmd.speed, INT16_MIN);
 				vTaskDelay(pdMS_TO_TICKS(interval));
 				controller->drive(0, 0);
@@ -91,6 +95,7 @@ void driveTask(void* arg) {
 				break;
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: break;
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: break;
+			default: break;
 		}
 
 		curCmd = NULL;
