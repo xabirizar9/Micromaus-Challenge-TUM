@@ -16,6 +16,9 @@ void driveTask(void* arg) {
 	NavigationPacket state;
 	Controller* controller = driver->controller;
 	QueueHandle_t execQueue = driver->executionQueue;
+	float gridMM = 160;
+	float gridPulses = 1797.46;
+	float interval = 0;
 
 	MsgDrive cmd;
 	MsgDrive* curCmd;
@@ -36,9 +39,46 @@ void driveTask(void* arg) {
 			}
 		}
 
-		// switch (cmd.type) {
-		// 	case DriveCommandType::move: break;
-		// }
+		switch (cmd.type) {
+			case _DriveCmdType::DriveCmdType_Move: break;
+
+			case _DriveCmdType::DriveCmdType_MoveCells: {
+				//_MsgTurn payload =
+
+				// NavigationPacket *data = &controller->getState();
+
+				// get current motor postition in ticks
+				// float speed->cmd.speed;
+				interval = gridMM / cmd.speed;
+				float averageEncoder1 = averageEncoder(controller);
+
+				controller->drive(cmd.speed, 0);
+				vTaskDelay(pdMS_TO_TICKS(interval));
+				// check motor postition again if pulses are prooving wanted distance
+				float averageEncoder2 = averageEncoder(controller);
+				float dif = averageEncoder2 - averageEncoder1;
+				if (dif < 1790 || dif > 1804) {
+					// TODO: correction
+				}
+				controller->drive(0, 0);
+				break;
+			}
+			case _DriveCmdType::DriveCmdType_TurnAround: break;
+			case _DriveCmdType::DriveCmdType_TurnLeft:
+				float d = ((3.14 / 2) * cmd.value);
+				interval = d / cmd.speed;
+				controller->drive(cmd.speed, INT16_MIN);
+				vTaskDelay(pdMS_TO_TICKS(interval));
+				controller->drive(0, 0);
+				// ToDo: time!!!
+				break;
+			case _DriveCmdType::DriveCmdType_TurnRight:
+				// controller.drive(speed, 90);
+				//  ToDo: time!!!
+				break;
+			case _DriveCmdType::DriveCmdType_TurnLeftOnSpot: break;
+			case _DriveCmdType::DriveCmdType_TurnRightOnSpot: break;
+		}
 
 		curCmd = NULL;
 
@@ -94,3 +134,29 @@ int getMotionProfilePolynom(
 
 	return a0, a1, a2, a3;
 };
+/*
+void turn() {
+	// vTaskDelay(pdMS_TO_TICKS(5000));
+	int8_t pre = -1;
+	if (degree < 0) {
+		pre = 1;
+	}
+	uint8_t rMaus = 60;
+	float dRad = abs(degree) * rMaus;
+	float duration = dRad / speed;
+
+	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
+	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
+
+	ESP_LOGI(TAG, "no time passed %f %f", leftSpeedTickTarget, rightSpeedTickTarget);
+
+	vTaskDelay(pdMS_TO_TICKS(duration));
+	this->setSpeed(0);
+}
+*/
+
+float averageEncoder(Controller* controller) {
+	int64_t right = controller->getEncoder(MotorPosition::right)->getTotalCounter();
+	int64_t left = controller->getEncoder(MotorPosition::left)->getTotalCounter();
+	return 0.5 * (right + left);
+}
