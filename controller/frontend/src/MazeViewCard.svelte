@@ -14,14 +14,28 @@
 
   export let com: Communicator;
 
+  const sensorOffsets = {
+    left: { x: -25, y: 0 },
+    front: { x: 0, y: 25 },
+    right: { x: 25, y: 0 },
+  };
+
   let canvas: HTMLCanvasElement;
+  let maus: HTMLDivElement;
+  let pathChart: ReturnType<typeof ConnectedScatterplot>;
+
   let ctx: CanvasRenderingContext2D;
-
   const data: Vector2D[] = [];
+  let currentRotationInRad = 0.0;
 
-  const fromMmToUnits = (mm: number) => mm / 180 / 6;
+  const fromMmToUnits = (mm: number) => mm / 180 / mazeSize.width;
+  const fromUnitToMms = (unit: number) => unit * 180 * mazeSize.width;
 
-  const fromUnitToMms = (unit: number) => unit * 180 * 6;
+  const getRenderPosUnit = (pos: Position) => {
+    const x = (fromMmToUnits(pos.x) + 0.5) / 6;
+    const y = (fromMmToUnits(pos.y) - 0.5) / 6;
+    return { x, y };
+  };
 
   const drawSensorDot = (nav: NavigationPacket, sensor: keyof SensorPacket) => {
     const width = canvas.clientWidth;
@@ -32,13 +46,17 @@
       return;
     }
 
-    const x = fromMmToUnits(nav.position.x) * width;
-    const y = height - fromMmToUnits(nav.position.y) * height;
+    // add static offset from wall
+    let { x, y } = getRenderPosUnit(nav.position);
+    x *= width;
+    y = height - y * height;
 
     ctx.beginPath();
 
-    let sensorX = x;
-    let sensorY = y;
+    let sensorX =
+      x + fromMmToUnits(sensorOffsets[sensor].x) * canvas.clientWidth;
+    let sensorY =
+      y + fromMmToUnits(sensorOffsets[sensor].y) * canvas.clientHeight;
 
     switch (sensor) {
       case "left":
@@ -62,6 +80,7 @@
     drawSensorDot(nav, "left");
     drawSensorDot(nav, "front");
     drawSensorDot(nav, "right");
+    currentRotationInRad = nav.position.heading;
     // addPoint();
   };
 
@@ -86,26 +105,24 @@
         if (evt.data.nav) {
           onNavPacket(evt.data.nav);
           if (maus) {
-            maus.style.left = `${
-              100 * (fromMmToUnits(evt.data.nav.position.x) / mazeSize.width)
-            }%`;
-            maus.style.bottom = `${
-              ((fromMmToUnits(evt.data.nav.position.y) - 1) / mazeSize.height) *
-              100
-            }%`;
+            const x = fromMmToUnits(evt.data.nav.position.x) + 0.5;
+            const y = fromMmToUnits(evt.data.nav.position.y) - 0.5;
+            maus.style.left = `${100 * (x / mazeSize.width)}%`;
+            maus.style.bottom = `${100 * ((y - 0.5) / mazeSize.height)}%`;
+
+            pathChart.appendPoint({
+              x: x,
+              y: y,
+            });
           }
         }
       }
     );
   }
 
-  let maus: HTMLDivElement;
-
   function MausEl(node: HTMLDivElement) {
     maus = node;
   }
-
-  let pathChart: ReturnType<typeof ConnectedScatterplot>;
 
   function RobotPath(node: HTMLElement) {
     const rect = node.getBoundingClientRect();
@@ -125,20 +142,12 @@
     node.appendChild(pathChart);
   }
 
-  const addPoint = () => {
-    console.log("add point");
-    pathChart.appendPoint({
-      x: Math.random() * 6,
-      y: Math.random() * 6,
-    });
-  };
-
   const setPosition = (x: number, y: number) => {
     com.send({
       setPosition: {
         heading: 0,
-        x: fromUnitToMms(x + 0.5),
-        y: fromUnitToMms(6 - y + 0.5),
+        x: fromUnitToMms(x),
+        y: fromUnitToMms(6 - y),
       },
     });
   };
@@ -146,24 +155,31 @@
 
 <div class="card map">
   <div class="maze-grid">
-    {#each Array(36) as _, i}
+    {#each Array(mazeSize.width * mazeSize.width) as _, i}
       <div
-        on:click={() => setPosition(i % 6, Math.floor(i / 6))}
+        on:click={() =>
+          setPosition(i % mazeSize.width, Math.floor(i / mazeSize.width))}
         class="maze-item"
       >
-        {i + 1}
+        {0}
       </div>
     {/each}
   </div>
 
   <div class="path" use:RobotPath />
-  <canvas class="sensor" use:CanvasEl />
-  <div class="path">
+  <!-- <div class="path">
     <button on:click={addPoint}>Add point test</button>
-  </div>
+  </div> -->
   <div class="path">
-    <div class="maus" use:MausEl />
+    <div
+      class="maus"
+      style={`transform: translate(-50%, -50%) rotate(${currentRotationInRad}rad)`}
+      use:MausEl
+    >
+      <div class="head" />
+    </div>
   </div>
+  <canvas class="sensor" use:CanvasEl />
 </div>
 
 <style lang="scss">
@@ -171,17 +187,33 @@
     position: absolute;
     display: block;
     content: " ";
-    left: 0%;
-    bottom: 0%;
+    left: 15px;
+    bottom: 30px;
     width: 30px;
+    transform: translate(-50%, -50%);
     height: 30px;
-    border-radius: 15px;
-    background-color: hotpink;
-    opacity: 0.5;
+    border-radius: 17px;
+    background-color: white;
+    border: 2px solid black;
+    opacity: 0.9;
+
+    .head {
+      display: block;
+      position: absolute;
+      left: 15px;
+      top: 0px;
+      width: 10px;
+      transform: translate(-50%, -50%);
+      border-radius: 15px;
+      height: 10px;
+      background-color: black;
+      border: 1px solid #eee;
+    }
   }
 
   .sensor,
   .path {
+    box-sizing: border-box;
     position: relative;
     pointer-events: none;
   }
@@ -217,9 +249,8 @@
 
     > * {
       position: absolute;
-      margin: 0.5rem;
-      width: calc(100% - 1rem);
-      height: calc(100% - 1rem);
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

@@ -170,7 +170,7 @@ void receiverTask(void *pvParameter) {
 			case MausIncomingMessage_drive_tag:
 				if (manager->driver != NULL) {
 					manager->driver->addCmd(
-						msg.payload.drive.type, msg.payload.drive.speed, msg.payload.drive.value);
+						msg.payload.drive.type, msg.payload.drive.value, msg.payload.drive.speed);
 				}
 				break;
 

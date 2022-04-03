@@ -70,7 +70,7 @@ type ConnectedScatterPlotOptions = {
 // Released under the ISC license.
 // https://observablehq.com/@d3/connected-scatterplot
 export function ConnectedScatterplot<T extends Vector2D>(
-  data,
+  initialData = [],
   {
     dotRadius = 3, // (fixed) radius of dots, in pixels
     curve = d3.curveCatmullRom, // curve generator for the line
@@ -82,7 +82,7 @@ export function ConnectedScatterplot<T extends Vector2D>(
     yType = d3.scaleLinear, // type of y-scale
     yDomain = [0, 6], // [ymin, ymax]
     yRange = [height, 0], // [bottom, top]
-    fill = "white", // fill color of dots
+    fill = "currentColor", // fill color of dots
     stroke = "currentColor", // stroke color of line and dots
     strokeWidth = 2, // stroke width of line and dots
     strokeLinecap = "round", // stroke line cap of line
@@ -90,6 +90,7 @@ export function ConnectedScatterplot<T extends Vector2D>(
     duration = 0, // intro animation in milliseconds (0 to disable)}: Partial<
   }: Partial<ConnectedScatterPlotOptions> = {}
 ) {
+  let data = initialData;
   const X = d3.map<T, number>(data, (d) => d.x);
   const Y = d3.map<T, number>(data, (d) => d.y);
 
@@ -163,9 +164,10 @@ export function ConnectedScatterplot<T extends Vector2D>(
   }
 
   const renderPath = (data: T[]) => {
-    const X = d3.map<T, number>(data, (d) => d.x);
+    const X = d3.map<T, number>(data, (d, ...args) => {
+      return d.x;
+    });
     const Y = d3.map<T, number>(data, (d) => d.y);
-
     const I = d3.range(X.length);
 
     // Construct scales and axes.
@@ -207,8 +209,20 @@ export function ConnectedScatterplot<T extends Vector2D>(
     renderPath(newData);
   };
 
+  let lastPoint: T;
+
   const appendPoint = (point: T) => {
-    renderPath([...data, point]);
+    if (
+      lastPoint &&
+      Math.abs(lastPoint.x - point.x) <= 0.4 &&
+      Math.abs(lastPoint.y - point.y) <= 0.4
+    ) {
+      lastPoint = point;
+      return;
+    }
+
+    data = [...data, point];
+    renderPath(data);
   };
 
   animate();

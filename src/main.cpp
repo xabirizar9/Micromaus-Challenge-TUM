@@ -31,16 +31,13 @@ extern "C" void app_main() {
 	// configure logging and other pre-run setup
 	esp_log_level_set(TAG, ESP_LOG_DEBUG);
 
-	// enable if you want network streaming
-
 	// start main robot controller interface with motors and encoders
 	mainController = new Controller();
+
+	explorer = new MazeSolver(mainController);
 
 	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 	// pass controller to remote controller
 	netManager->controller = mainController;
-
-	explorer = new MazeSolver(mainController);
 	netManager->driver = explorer;
-	// mainController->turnOnSpot(0.5 * 3.1416, 50);
 }

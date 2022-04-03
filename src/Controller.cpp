@@ -90,8 +90,8 @@ void Controller::updatePosition() {
 	// to confirm we could compute the angle
 	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));
 
-	this->state.position.x += center * cos(this->state.position.heading) * encoderTicksToMm;
-	this->state.position.y += center * sin(this->state.position.heading) * encoderTicksToMm;
+	this->state.position.x += center * cos(this->state.position.heading);
+	this->state.position.y += center * sin(this->state.position.heading);
 
 	leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();

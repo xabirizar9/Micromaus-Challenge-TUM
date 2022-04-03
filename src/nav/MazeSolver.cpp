@@ -30,13 +30,20 @@ void waitForDriveCompletion(EventGroupHandle_t handle) {
 
 MazeSolver::MazeSolver(Controller* controller) {
 	this->controller = controller;
-	this->addCmd(DriveCmdType::DriveCmdType_MoveCells, 1, 300);
 }
 
-void MazeSolver::updateWalls() {}
+void MazeSolver::updateWalls() {
+	// TODO: update maze here
+}
 
 void MazeSolver::updateFloodFill() {
-	// static bool visited = new bool[MAZE_SIZE * MAZE_SIZE];
+	static bool* visited = new bool[MAZE_SIZE * MAZE_SIZE];
+
+	while (true) {
+		uint8_t x;
+		uint8_t y;
+		Maze::Heading dir;   
+	}
 }
 
 void MazeSolver::updateCosts(uint8_t* costs, uint8_t x, uint8_t y) {
@@ -59,7 +66,6 @@ void MazeSolver::startExploration() {
 	// TODO: split into task
 
 	while (true) {
-		// TODO: check wall collisions here
 		this->updateWalls();
 
 		// TODO: rerun flood on all cells

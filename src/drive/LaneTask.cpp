@@ -35,7 +35,7 @@ void laneControlTask(void *args) {
 	int8_t dRight;
 
 	const float updateConst = 0.01;
-	float kP = 0.5;
+	float kP = 0.1;
 	float kD = 0;
 	float kI = 0;
 
@@ -52,19 +52,18 @@ void laneControlTask(void *args) {
 		dRight = controller->getState().sensors.right;
 		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
 
-		ESP_LOGI(TAG, "dLeft=%d, dRight=%d", dLeft, dRight);
-
 		wallDistance.curError = dLeft - dRight;
 		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
-		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) +
-								  (kI * wallDistance.intError);
+		wallDistance.correction += (kP * wallDistance.curError) + (kD * wallDistance.derError) +
+								   (kI * wallDistance.intError);
 
 		wallDistance.lastError = wallDistance.curError;
+		ESP_LOGI(TAG, "dLeft=%d, dRight=%d c=%f", dLeft, dRight, wallDistance.correction);
 
 		// Update speed of right motor
 		clampAndIntegrate(wallDistance.correction, wallDistance.intError, timeInterval);
 		// direction = 0;	// Compute somehow direction from left/right speeds
-		controller->setDirection(wallDistance.correction);
+		// controller->setDirection(wallDistance.correction);
 
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}
