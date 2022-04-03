@@ -10,6 +10,7 @@
   import { testFloodFill } from "./utils/floodFill";
   import { DriveCmdType } from "./proto/message";
   import PowerView from "./components/PowerView.svelte";
+  import StatusView from "./components/StatusView.svelte";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
@@ -155,10 +156,18 @@
       >{isPidTuningActive ? "STOP" : "START"} AutoTune PID</Button
     >
   </div>
-  <div class="card">
-    <h2>Power</h2>
-    <PowerView {com} />
+
+  <div class="subgrid">
+    <div class="card">
+      <h2>Status</h2>
+      <StatusView {com} />
+    </div>
+    <div class="card">
+      <h2>Power</h2>
+      <PowerView {com} />
+    </div>
   </div>
+
   <div class="card full"><SensorTable {com} /></div>
 </main>
 
@@ -196,10 +205,16 @@
   :global(body) {
     padding: 0;
     margin: 0;
-    font-size: 18px;
+    font-size: 14px;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     box-sizing: border-box;
+
+    h2 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin: 0.5rem 0.25rem;
+    }
   }
 
   :global(body) {

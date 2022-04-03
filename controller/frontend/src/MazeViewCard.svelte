@@ -49,7 +49,7 @@
     // add static offset from wall
     let { x, y } = getRenderPosUnit(nav.position);
     x *= width;
-    y = height - y * height;
+    y = height - (y + 1 / 6) * height;
 
     ctx.beginPath();
 
@@ -106,7 +106,7 @@
           onNavPacket(evt.data.nav);
           if (maus) {
             const x = fromMmToUnits(evt.data.nav.position.x) + 0.5;
-            const y = fromMmToUnits(evt.data.nav.position.y) - 0.5;
+            const y = fromMmToUnits(evt.data.nav.position.y) + 0.5;
             maus.style.left = `${100 * (x / mazeSize.width)}%`;
             maus.style.bottom = `${100 * ((y - 0.5) / mazeSize.height)}%`;
 
@@ -147,7 +147,7 @@
       setPosition: {
         heading: 0,
         x: fromUnitToMms(x),
-        y: fromUnitToMms(6 - y),
+        y: fromUnitToMms(5 - y),
       },
     });
   };
