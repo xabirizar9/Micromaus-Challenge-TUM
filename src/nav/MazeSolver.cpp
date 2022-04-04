@@ -5,6 +5,8 @@
 #include "nav/Maze.hpp"
 #include "stdbool.h"
 
+using nav::CardinalDirection;
+
 static const char* TAG = "[solver]";
 
 MazeSolver::MazeSolver(Controller* controller) {
@@ -21,20 +23,20 @@ void MazeSolver::updateWalls() {
  * @param x
  * @param y
  */
-Maze::Heading MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
+CardinalDirection MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	// costs for north, east, south, west
 	uint8_t costs[4];
-	Maze::Heading heading = Maze::Heading::North;
+	CardinalDirection heading = CardinalDirection::NORTH;
 	// TODO: find more optimal solution
-	costs[Maze::Heading::North] = this->maze.getCost(x, y + 1);
-	costs[Maze::Heading::East] = this->maze.getCost(x + 1, y);
-	costs[Maze::Heading::South] = this->maze.getCost(x, y - 1);
-	costs[Maze::Heading::West] = this->maze.getCost(x - 1, y);
+	costs[CardinalDirection::NORTH] = this->maze.getCost(x, y + 1);
+	costs[CardinalDirection::EAST] = this->maze.getCost(x + 1, y);
+	costs[CardinalDirection::SOUTH] = this->maze.getCost(x, y - 1);
+	costs[CardinalDirection::WEST] = this->maze.getCost(x - 1, y);
 
 	ESP_LOGI(TAG, "[%d, %d, %d, %d]", costs[0], costs[1], costs[2], costs[3]);
 
-	for (uint i = 0; i < 4; i++) {
-		heading = static_cast<Maze::Heading>(costs[i] < costs[heading] ? i : heading);
+	for (uint8_t i = 0; i < 4; i++) {
+		heading = costs[i] < costs[heading] ? CardinalDirection(i) : heading;
 	}
 
 	return heading;
@@ -56,8 +58,8 @@ void MazeSolver::startExploration() {
 	uint8_t x = 0;
 	uint8_t y = 0;
 
-	Maze::Heading heading = Maze::Heading::North;
-	Maze::Heading newHeading = Maze::Heading::North;
+	CardinalDirection heading = CardinalDirection::NORTH;
+	CardinalDirection newHeading = CardinalDirection::NORTH;
 	uint16_t speed = 100;
 	// TODO: split into task
 
@@ -97,20 +99,20 @@ void MazeSolver::startExploration() {
 		// update position based on heading
 		// TODO: maybe use robot position here
 		switch (newHeading) {
-			case Maze::Heading::North:
-				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x, y + 1);
+			case CardinalDirection::NORTH:
+				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y + 1);
 				y += 1;
 				break;
-			case Maze::Heading::East:
-				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x + 1, y);
+			case CardinalDirection::EAST:
+				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x + 1, y);
 				x += 1;
 				break;
-			case Maze::Heading::South:
-				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x, y - 1);
+			case CardinalDirection::SOUTH:
+				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y - 1);
 				y -= 1;
 				break;
-			case Maze::Heading::West:
-				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x - 1, y);
+			case CardinalDirection::WEST:
+				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x - 1, y);
 				x -= 1;
 				break;
 		}

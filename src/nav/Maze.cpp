@@ -10,6 +10,7 @@
 
 static const char *TAG = "[maze]";
 
+using nav::CardinalDirection;
 // #define PRINT_MAZE
 
 HardwareSerial ser(1, 3);
@@ -27,9 +28,9 @@ Maze::Maze() {
 		this->wallState[i] = 0;
 	}
 
-	this->setWall(0, 0, Maze::Heading::East, true);
-	// this->setWall(0, 0, Maze::Heading::North, true);
-	this->setWall(0, 2, Maze::Heading::East, true);
+	this->setWall(0, 0, CardinalDirection::EAST, true);
+	// this->setWall(0, 0, CardinalDirection::NORTH, true);
+	this->setWall(0, 2, CardinalDirection::EAST, true);
 }
 
 void Maze::resetVisited() {
@@ -59,16 +60,16 @@ void Maze::fill(uint8_t x, uint8_t y, uint8_t distance) {
 		getCost(x, y) > distance) {
 		setCost(x, y, distance);
 
-		if (!getWall(x, y, Maze::East)) {
+		if (!getWall(x, y, CardinalDirection::EAST)) {
 			fill(x + 1, y, distance + 1);
 		}
-		if (!getWall(x, y, Maze::West)) {
+		if (!getWall(x, y, CardinalDirection::WEST)) {
 			fill(x - 1, y, distance + 1);
 		}
-		if (!getWall(x, y, Maze::North)) {
+		if (!getWall(x, y, CardinalDirection::NORTH)) {
 			fill(x, y + 1, distance + 1);
 		}
-		if (!getWall(x, y, Maze::South)) {
+		if (!getWall(x, y, CardinalDirection::SOUTH)) {
 			fill(x, y - 1, distance + 1);
 		}
 	}
@@ -78,7 +79,7 @@ void Maze::printMaze(uint8_t robotX, uint8_t robotY) {
 	char str[10];
 	for (uint8_t y = size - 1; y != UINT8_MAX; y--) {
 		for (uint8_t x = 0; x < size; x++) {
-			ser.write(getWall(x, y, Heading::West) ? "|" : " ");
+			ser.write(getWall(x, y, CardinalDirection::WEST) ? "|" : " ");
 			if (getCost(x, y) == UINT8_MAX) {
 				ser.write(" . ");
 			} else {
@@ -89,7 +90,7 @@ void Maze::printMaze(uint8_t robotX, uint8_t robotY) {
 		ser.write("\n");
 
 		for (uint8_t x = 0; x < size; x++) {
-			ser.write(getWall(x, y, Heading::South) ? "___" : "   ");
+			ser.write(getWall(x, y, CardinalDirection::SOUTH) ? "___" : "   ");
 		}
 		ser.write("\n");
 	}
@@ -138,7 +139,7 @@ uint8_t Maze::getCost(uint8_t x, uint8_t y) {
 	return this->state[x + y * this->size];
 }
 
-void Maze::setWall(uint8_t x, uint8_t y, Heading dir, bool setOpposing = true) {
+void Maze::setWall(uint8_t x, uint8_t y, CardinalDirection dir, bool setOpposing = true) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {
 		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);
@@ -148,15 +149,19 @@ void Maze::setWall(uint8_t x, uint8_t y, Heading dir, bool setOpposing = true) {
 
 	if (setOpposing) {
 		switch (dir) {
-			case Heading::North: setWall(x, y + 1, Heading::South, false); break;
-			case Heading::East: setWall(x + 1, y, Heading::West, false); break;
-			case Heading::South: setWall(x, y - 1, Heading::North, false); break;
-			case Heading::West: setWall(x - 1, y, Heading::East, false); break;
+			case CardinalDirection::NORTH:
+				setWall(x, y + 1, CardinalDirection::SOUTH, false);
+				break;
+			case CardinalDirection::EAST: setWall(x + 1, y, CardinalDirection::WEST, false); break;
+			case CardinalDirection::SOUTH:
+				setWall(x, y - 1, CardinalDirection::NORTH, false);
+				break;
+			case CardinalDirection::WEST: setWall(x - 1, y, CardinalDirection::EAST, false); break;
 		}
 	}
 }
 
-bool Maze::getWall(uint8_t x, uint8_t y, Heading dir) {
+bool Maze::getWall(uint8_t x, uint8_t y, CardinalDirection dir) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {
 		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);

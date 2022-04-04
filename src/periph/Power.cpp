@@ -1,73 +1,62 @@
 #include "periph/Power.hpp"
-#include "support/ADC.hpp"
 
+#include <esp_log.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#include <esp_log.h>
+
+#include "support/ADC.hpp"
 
 using namespace power;
 
-VoltageGauge::VoltageGauge(const uint8_t pin, const float scale, const float offset):
-	channel(new ADCChannel(ADC1::instance().configurePin(pin))),
-	scale(scale), offset(offset), reading(0.f)
-{}
+VoltageGauge::VoltageGauge(const uint8_t pin, const float scale, const float offset)
+	: channel(new ADCChannel(ADC1::instance().configurePin(pin))),
+	  scale(scale),
+	  offset(offset),
+	  reading(0.f) {}
 
-VoltageGauge::~VoltageGauge()
-{
+VoltageGauge::~VoltageGauge() {
 	delete channel;
 }
 
-float VoltageGauge::read()
-{
+float VoltageGauge::read() {
 	int raw = channel->read();
 	reading = (raw - offset) * scale;
 	return reading;
 }
 
-void Battery::update()
-{
+void Battery::update() {
 	voltage.read();
 }
 
-float Battery::getVoltage() const
-{
+float Battery::getVoltage() const {
 	return voltage.getReading();
 }
 
-bool Battery::isConnected() const
-{
+bool Battery::isConnected() const {
 	// 6.6V is the point under which we switch to USB power
-	return getVoltage() >= 6.6; 
+	return getVoltage() >= 6.6;
 }
 
-float Battery::getPercentage() const
-{
+float Battery::getPercentage() const {
 	// this is super coarse
 	return 100.f * (getVoltage() / 1.4 - 5.f);
 }
 
-bool Battery::isLow() const
-{
+bool Battery::isLow() const {
 	return getVoltage() <= 7.2;
 }
 
-PowerManagement::PowerManagement(uint8_t batteryPin):
-	bat(batteryPin)
-{
-	xTaskCreate((void(*)(void*)) PowerManagement::_run, "pwr_mgmt",
-			512, this, 1, &taskHandle);
+PowerManagement::PowerManagement(uint8_t batteryPin) : bat(batteryPin) {
+	xTaskCreate((void (*)(void*))PowerManagement::_run, "pwr_mgmt", 512, this, 1, &taskHandle);
 }
 
-PowerManagement::~PowerManagement()
-{
+PowerManagement::~PowerManagement() {
 	vTaskDelete(taskHandle);
 }
 
-void PowerManagement::run()
-{
+void PowerManagement::run() {
 	while (true) {
 		bat.update();
 		vTaskDelay(pdMS_TO_TICKS(10'000));
 	}
 }
-
