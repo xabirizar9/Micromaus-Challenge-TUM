@@ -19,6 +19,7 @@ class RobotDriver {
 	~RobotDriver();
 
 	void addCmd(DriveCmdType type, float value, float speed);
+	void addCmdAndWait(DriveCmdType type, float value, float speed);
 
 	EventGroupHandle_t eventHandle;
 	xQueueHandle executionQueue;

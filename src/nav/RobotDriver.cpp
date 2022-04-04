@@ -35,3 +35,28 @@ void RobotDriver::addCmd(DriveCmdType type, float value, float speed) {
 
 	xQueueSend(this->executionQueue, &cmd, 0);
 }
+
+void waitForDriveCompletion(EventGroupHandle_t handle) {
+	EventBits_t event;
+	const TickType_t waitTicks = 100 / portTICK_PERIOD_MS;
+	while (true) {
+		event = xEventGroupWaitBits(handle, DRIVE_EVT_COMPLETED_BIT, true, true, waitTicks);
+		if ((event & DRIVE_EVT_COMPLETED_BIT) == DRIVE_EVT_COMPLETED_BIT) {
+			return;
+		}
+
+		vTaskDelay(waitTicks);
+	}
+}
+
+/**
+ * @brief the same as addCmd but waits for its completion
+ *
+ * @param type
+ * @param value
+ * @param speed
+ */
+void RobotDriver::addCmdAndWait(DriveCmdType type, float value, float speed) {
+	this->addCmd(type, value, speed);
+	waitForDriveCompletion(this->eventHandle);
+}
