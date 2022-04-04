@@ -21,7 +21,7 @@
 #include "net/WifiCommunicator.hpp"
 
 static const char *tag = "NET";
-static const uint16_t sensorSendInterval = pdMS_TO_TICKS(200);
+static const uint16_t sensorSendInterval = pdMS_TO_TICKS(300);
 
 using namespace NetController;
 
@@ -32,6 +32,8 @@ using namespace NetController;
  */
 void infoStreamerTask(void *pvParameter) {
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
+	Maze *maze;
+	MazeStatePacket packet;
 	while (true) {
 		if (manager->controller == NULL || !manager->initCompleted) {
 			vTaskDelay(sensorSendInterval);
@@ -41,7 +43,15 @@ void infoStreamerTask(void *pvParameter) {
 		if (manager->initCompleted) {
 			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(
 				manager->controller->getState());
+
+			// if (manager->driver != NULL) {
+			// 	packet = manager->driver->getMaze()->getEncodedValue();
+
+			// 	// write and encode the command
+			// 	manager->writePacket<MazeStatePacket, MausOutgoingMessage_mazeState_tag>(packet);
+			// }
 		}
+
 		vTaskDelay(sensorSendInterval);
 	}
 }
@@ -117,11 +127,18 @@ void receiverTask(void *pvParameter) {
 
 		switch (msg.which_payload) {
 			case MausIncomingMessage_init_tag:
+				if (manager->initCompleted) {
+					break;
+				}
 				ESP_LOGI(tag, "connected to connector v.%d", msg.payload.init.version);
 				// TODO: improve memory management
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
+				vTaskDelay(pdMS_TO_TICKS(20));
+				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
+				vTaskDelay(pdMS_TO_TICKS(20));
+				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
 				manager->initCompleted = true;
-
+				vTaskDelay(pdMS_TO_TICKS(20));
 				// set okay status LED
 				LedController((gpio_num_t)3).set(1);
 

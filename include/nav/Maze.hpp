@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "message.pb.h"
+
 // _____________
 // |_|_|_|_|_|_|
 // |_|_|_|_|_|_|
@@ -32,6 +34,8 @@ struct Maze {
 
 	void fill(uint8_t x, uint8_t y, uint8_t distance);
 	void update();
+
+	MazeStatePacket getEncodedValue();
 
 	Maze();
 	~Maze();

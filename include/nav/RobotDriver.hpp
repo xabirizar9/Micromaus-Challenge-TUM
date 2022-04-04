@@ -4,6 +4,7 @@
 #include "freertos/event_groups.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
+#include "nav/Maze.hpp"
 
 #define MAZE_SIZE 6
 
@@ -24,6 +25,9 @@ class RobotDriver {
 	virtual void startExploration(){};
 	virtual void startGoHome(){};
 	virtual void startFastRun(){};
+	virtual Maze* getMaze() {
+		return NULL;
+	};
 
 	EventGroupHandle_t eventHandle;
 	xQueueHandle executionQueue;

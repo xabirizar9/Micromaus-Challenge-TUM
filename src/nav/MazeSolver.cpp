@@ -40,6 +40,10 @@ Maze::Heading MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	return heading;
 }
 
+Maze* MazeSolver::getMaze() {
+	return &this->maze;
+}
+
 void MazeSolver::startFastRun() {
 	// TODO: implement
 }

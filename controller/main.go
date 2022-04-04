@@ -90,6 +90,6 @@ func main() {
 	})
 
 	log.Info("server started")
-	openbrowser("http://localhost:8080")
+	// openbrowser("http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }

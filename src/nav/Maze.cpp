@@ -4,9 +4,11 @@
 #include <stdint.h>
 
 #include "esp_log.h"
+#include "message.pb.h"
+#include "pb_encode.h"
 #include "periph/Serial.hpp"
 
-static const char* TAG = "[maze]";
+static const char *TAG = "[maze]";
 
 // #define PRINT_MAZE
 
@@ -162,6 +164,49 @@ bool Maze::getWall(uint8_t x, uint8_t y, Heading dir) {
 	}
 	// 1 << dir is masking value
 	return 1 << dir & this->wallState[x + y * this->size];
+}
+
+bool encodeMaze(pb_ostream_t *ostream, const pb_field_t *field, void *const *arg) {
+	Maze *maze = (Maze *)(*arg);
+
+	ESP_LOGI(TAG, "tag=%d", field->tag);
+
+	// encode all numbers
+	if (!pb_encode_tag_for_field(ostream, field)) {
+		const char *error = PB_GET_ERROR(ostream);
+		return false;
+	}
+
+	uint8_t len = maze->size * maze->size;
+
+	uint8_t value = 0;
+	for (int i = 0; i < len; i++) {
+		value = maze->state[i];
+		if (!pb_encode_fixed32(ostream, &value)) {
+			const char *error = PB_GET_ERROR(ostream);
+			return false;
+		}
+		// ESP_LOGI(TAG, "%d %d", i, ostream->bytes_written);
+	}
+
+	return true;
+}
+
+MazeStatePacket Maze::getEncodedValue() {
+	static MazeStatePacket state = MazeStatePacket_init_zero;
+	state.has_position = true;
+	state.has_target = true;
+	state.position = Position_init_zero;
+	state.target = Position_init_zero;
+
+	// todo use wall encoder
+	state.walls.arg = this;
+	state.walls.funcs.encode = encodeMaze;
+
+	state.state.arg = this;
+	state.state.funcs.encode = encodeMaze;
+
+	return state;
 }
 
 Maze::~Maze() {

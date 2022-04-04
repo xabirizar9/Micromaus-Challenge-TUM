@@ -13,11 +13,12 @@ class MazeSolver : public RobotDriver {
 	Maze maze;
 
    public:
-	MazeSolver(Controller *controller);
+	MazeSolver(Controller* controller);
 
 	void startExploration() override;
 	void startGoHome() override;
 	void startFastRun() override;
+	Maze* getMaze() override;
 	void start();
 	void pause();
 	void updateWalls();

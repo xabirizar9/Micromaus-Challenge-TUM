@@ -279,9 +279,9 @@ func (r *Robot) Connect() error {
 				if r.Status == Disconnected {
 					return
 				}
-				cmd, _, err := r.ReadCmd()
+				cmd, buf, err := r.ReadCmd()
 				if err != nil {
-					log.Error("failed to read command", zap.Error(err))
+					log.Error("failed to read command", zap.Error(err), zap.Binary("buf", buf), zap.Int("len", len(buf)))
 					return
 				}
 

@@ -116,6 +116,10 @@
             });
           }
         }
+
+        if (evt.data.mazeState) {
+          console.log(evt.data.mazeState);
+        }
       }
     );
   }
