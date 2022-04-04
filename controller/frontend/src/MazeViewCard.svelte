@@ -179,13 +179,13 @@
       >
         {v}
         {#if (1 << 0) & wallState[getWallIndex(i)]}
-          <div class="north" />{/if}
-        {#if (1 << 1) & wallState[getWallIndex(i)]}
           <div class="east" />{/if}
+        {#if (1 << 1) & wallState[getWallIndex(i)]}
+          <div class="north" />{/if}
         {#if (1 << 2) & wallState[getWallIndex(i)]}
-          <div class="south" />{/if}
-        {#if (1 << 3) & wallState[getWallIndex(i)]}
           <div class="west" />{/if}
+        {#if (1 << 3) & wallState[getWallIndex(i)]}
+          <div class="south" />{/if}
       </div>
     {/each}
   </div>
