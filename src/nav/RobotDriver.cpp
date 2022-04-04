@@ -30,8 +30,8 @@ void RobotDriver::addCmd(DriveCmdType type, float value, float speed) {
 	static MsgDrive cmd;
 
 	cmd.type = type;
-	cmd.value = 4;
-	cmd.speed = 300;
+	cmd.value = value;
+	cmd.speed = speed;
 
 	xQueueSend(this->executionQueue, &cmd, 0);
 }

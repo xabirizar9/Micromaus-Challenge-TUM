@@ -57,8 +57,6 @@ void driveTask(void* arg) {
 			}
 		}
 
-		ESP_LOGI(tag, "drive %d %f %f", cmd.type, cmd.value, cmd.speed);
-
 		switch (cmd.type) {
 			case DriveCmdType::DriveCmdType_Move: break;
 

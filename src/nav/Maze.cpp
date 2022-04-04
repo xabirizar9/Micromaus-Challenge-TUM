@@ -82,7 +82,7 @@ void Maze::update() {
 void Maze::setCost(uint8_t x, uint8_t y, uint8_t value) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {
-		ESP_LOGE(TAG, "required coordinates outside the bounds of maze [1..%d]", this->size);
+		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);
 		return;
 	}
 	this->state[x + y * this->size] = value;
@@ -91,7 +91,7 @@ void Maze::setCost(uint8_t x, uint8_t y, uint8_t value) {
 uint8_t Maze::getCost(uint8_t x, uint8_t y) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {
-		ESP_LOGE(TAG, "required coordinates outside the bounds of maze [1..%d]", this->size);
+		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);
 		return UINT8_MAX;
 	}
 	return this->state[x + y * this->size];
@@ -100,7 +100,7 @@ uint8_t Maze::getCost(uint8_t x, uint8_t y) {
 void Maze::setWall(uint8_t x, uint8_t y, Heading dir, bool setOpposing = true) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {
-		ESP_LOGE(TAG, "required coordinates outside the bounds of maze [1..%d]", this->size);
+		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);
 		return;
 	}
 	this->wallState[x + y * this->size] |= 1 << dir;
@@ -118,7 +118,7 @@ void Maze::setWall(uint8_t x, uint8_t y, Heading dir, bool setOpposing = true) {
 bool Maze::getWall(uint8_t x, uint8_t y, Heading dir) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {
-		ESP_LOGE(TAG, "required coordinates outside the bounds of maze [1..%d]", this->size);
+		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);
 		return true;
 	}
 	// 1 << dir is masking walue
