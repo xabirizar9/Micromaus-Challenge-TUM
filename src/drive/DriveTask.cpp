@@ -30,6 +30,7 @@ void driveTask(void* arg) {
 	float gridPulses = 1797.46;
 	float interval = 0;
 	float distance = 0;
+	int64_t encoderTemp = 0;
 	float averageEncoder1 = 0;
 	float averageEncoder2 = 0;
 	float dif = 0;
@@ -56,24 +57,20 @@ void driveTask(void* arg) {
 				continue;
 			}
 		}
-		ESP_LOGI(tag, "cmd type:%d", cmd.type);
+		// ESP_LOGI(tag, "cmd type:%d", cmd.type);
+
 		switch (cmd.type) {
 			case DriveCmdType::DriveCmdType_Move: break;
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
-				//_MsgTurn payload =
-				vTaskResume(laneControllTaskHandle);
-				// NavigationPacket *data = &controller->getState();
 
-				// get current motor postition in ticks
-				// float speed->cmd.speed;
-				interval = gridMM * cmd.value / cmd.speed * 1000;
+				vTaskResume(laneControllTaskHandle);
+
+				// interval = gridMM * cmd.value / cmd.speed * 1000;
 				averageEncoder1 = averageEncoder(controller);
 
-				// vTaskDelay(pdMS_TO_TICKS(interval));
-				//  check motor postition again if pulses are prooving wanted distance
-				while (dif < 1790 * cmd.value) {
+				while (dif < (1790 * cmd.value)) {
 					vTaskDelay(pdMS_TO_TICKS(20));
 					controller->drive(cmd.speed, 0);
 					averageEncoder2 = averageEncoder(controller);
@@ -85,12 +82,13 @@ void driveTask(void* arg) {
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
+
 			case DriveCmdType::DriveCmdType_TurnLeft:
 				distance = ((3.14 / 2) * cmd.value);
 				interval = distance / cmd.speed;
 				controller->drive(cmd.speed, INT16_MIN);
 				vTaskDelay(pdMS_TO_TICKS(interval));
-				controller->drive(0, 0);
+				controller->drive(INT16_MIN, 0);
 				// ToDo: time!!!
 				break;
 
@@ -98,8 +96,40 @@ void driveTask(void* arg) {
 				// controller.drive(speed, 90);
 				//  ToDo: time!!!
 				break;
-			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: break;
-			case DriveCmdType::DriveCmdType_TurnRightOnSpot: break;
+			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: {
+				ESP_LOGI(tag, "DriveLeftOnSpot");
+				vTaskResume(laneControllTaskHandle);
+				encoderTemp = controller->getEncoder(MotorPosition::right)->getTotalCounter();
+				while (
+					(controller->getEncoder(MotorPosition::right)->getTotalCounter() - encoderTemp <
+					 (1056 * cmd.value))) {
+					// vTaskDelay(pdMS_TO_TICKS(10));
+
+					controller->drive(cmd.speed, INT16_MIN);
+				}
+
+				encoderTemp = 0;
+				controller->drive(0, 0);
+				vTaskSuspend(laneControllTaskHandle);
+				break;
+			}
+			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
+				ESP_LOGI(tag, "DriveRightOnSpot");
+				vTaskResume(laneControllTaskHandle);
+				encoderTemp = controller->getEncoder(MotorPosition::left)->getTotalCounter();
+				while (
+					(controller->getEncoder(MotorPosition::left)->getTotalCounter() - encoderTemp <
+					 (1056 * cmd.value))) {
+					// vTaskDelay(pdMS_TO_TICKS(10));
+
+					controller->drive(cmd.speed, INT16_MAX);
+				}
+
+				encoderTemp = 0;
+				controller->drive(0, 0);
+				vTaskSuspend(laneControllTaskHandle);
+				break;
+			}
 			default: break;
 		}
 

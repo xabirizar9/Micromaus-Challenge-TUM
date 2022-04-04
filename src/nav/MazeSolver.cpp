@@ -58,7 +58,7 @@ void MazeSolver::startExploration() {
 
 	Maze::Heading heading = Maze::Heading::North;
 	Maze::Heading newHeading = Maze::Heading::North;
-	uint16_t speed = 300;
+	uint16_t speed = 100;
 	// TODO: split into task
 
 	while (true) {
