@@ -17,18 +17,18 @@ Heading Heading::normalized() const {
 	return Heading(f);
 }
 
-Heading Heading::approximateCardinalDirection() const {
+CardinalDirection Heading::approximateCardinalDirection() const {
 	const float f = normalized().angle;
 	constexpr float dtr = PI / 180;
 	if (f <= 45 * dtr || f > 315 * dtr) {
-		return EAST;
+		return CardinalDirection::EAST;
 	} else if (f <= 135 * dtr) {
-		return NORTH;
+		return CardinalDirection::NORTH;
 	} else if (f <= 225 * dtr) {
-		return WEST;
+		return CardinalDirection::WEST;
 	} else if (f <= 315 * dtr) {
-		return SOUTH;
+		return CardinalDirection::SOUTH;
 	}
-	return EAST;
+	return CardinalDirection::EAST;
 }
 
