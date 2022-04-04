@@ -5,6 +5,7 @@
 #include "freertos/queue.h"
 #include "message.pb.h"
 #include "nav/Maze.hpp"
+#include "nav/Position.hpp"
 #include "nav/RobotDriver.hpp"
 #include "net/NetController.hpp"
 
@@ -23,5 +24,5 @@ class MazeSolver : public RobotDriver {
 	void pause();
 	void updateWalls();
 
-	Maze::Heading getNewHeading(uint8_t x, uint8_t y);
+	nav::CardinalDirection getNewHeading(uint8_t x, uint8_t y);
 };
