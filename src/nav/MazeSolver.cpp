@@ -60,7 +60,6 @@ void MazeSolver::startExploration() {
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
-		ESP_LOGI(TAG, "new heading %d", newHeading);
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
@@ -77,10 +76,22 @@ void MazeSolver::startExploration() {
 		// update position based on heading
 		// TODO: maybe use robot position here
 		switch (newHeading) {
-			case Maze::Heading::North: x += 1; break;
-			case Maze::Heading::East: y += 1; break;
-			case Maze::Heading::South: y -= 1; break;
-			case Maze::Heading::West: x -= 1; break;
+			case Maze::Heading::North:
+				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x + 1, y);
+				x += 1;
+				break;
+			case Maze::Heading::East:
+				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x, y + 1);
+				y += 1;
+				break;
+			case Maze::Heading::South:
+				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x, y - 1);
+				y -= 1;
+				break;
+			case Maze::Heading::West:
+				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x - 1, y);
+				x -= 1;
+				break;
 		}
 
 		// we can probably remove this timeout since the should be enough time while waiting for
