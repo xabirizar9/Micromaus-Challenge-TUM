@@ -8,6 +8,8 @@
 using namespace std;
 #endif
 
+#include "nav/Position.hpp"
+
 /**
  * For each wall, represents the probability that the wall is placed.
  *
@@ -30,8 +32,6 @@ using namespace std;
  */
 class MapBelief {
    public:
-	enum Direction { NORTH, SOUTH, EAST, WEST };
-
 	/**
 	 * prior: prior probability that a wall is set
 	 */
@@ -43,14 +43,14 @@ class MapBelief {
 		// set all border walls to fixed
 		// at() performs bounds checking so we immediately see if i fucked up
 		for (int x = 0; x <= width; ++x) {
-			fixed.at(locate(x, 0, SOUTH)) = true;
-			fixed.at(locate(x, height, SOUTH)) = true;
-			fixed.at(locate(x, height, WEST)) = true;
+			fixed.at(locate(x, 0, nav::CardinalDirection::SOUTH)) = true;
+			fixed.at(locate(x, height, nav::CardinalDirection::SOUTH)) = true;
+			fixed.at(locate(x, height, nav::CardinalDirection::WEST)) = true;
 		}
 		for (int y = 0; y <= height; ++y) {
-			fixed.at(locate(0, y, WEST)) = true;
-			fixed.at(locate(width, y, WEST)) = true;
-			fixed.at(locate(width, y, SOUTH)) = true;
+			fixed.at(locate(0, y, nav::CardinalDirection::WEST)) = true;
+			fixed.at(locate(width, y, nav::CardinalDirection::WEST)) = true;
+			fixed.at(locate(width, y, nav::CardinalDirection::SOUTH)) = true;
 		}
 	}
 
@@ -68,7 +68,7 @@ class MapBelief {
 	 * Throws std::invalid_argument when a wall outside the field is
 	 * accessed.
 	 */
-	void set(int x, int y, Direction d, float f) {
+	void set(int x, int y, nav::CardinalDirection d, float f) {
 		if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) {
 			throw std::invalid_argument("MapBelief write access out of bounds");
 		}
@@ -83,7 +83,7 @@ class MapBelief {
 	 * Walls outside the field are always regarded as placed,
 	 * so if accessing a coordinate outside the field, returns 1.0.
 	 */
-	float get(int x, int y, Direction d) const {
+	float get(int x, int y, nav::CardinalDirection d) const {
 		if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) {
 			return 1.0;	 // all walls outside the field are set
 		}
@@ -96,7 +96,7 @@ class MapBelief {
 		return probabilities[loc];
 	}
 
-	void setFixed(int x, int y, Direction d, bool fix) {
+	void setFixed(int x, int y, nav::CardinalDirection d, bool fix) {
 		fixed.at(locate(x, y, d)) = fix;
 	}
 
@@ -105,7 +105,7 @@ class MapBelief {
 		for (int y = height; y >= 0; y--) {
 			// west walls
 			for (int x = 0; x <= width; x++) {
-				int loc = locate(x, y, WEST);
+				int loc = locate(x, y, nav::CardinalDirection::WEST);
 				if (fixed[loc]) {
 					cout << "\033[0;31m";
 				} else {
@@ -116,7 +116,7 @@ class MapBelief {
 			cout << endl;
 			// south walls
 			for (int x = 0; x <= width; x++) {
-				int loc = locate(x, y, SOUTH);
+				int loc = locate(x, y, nav::CardinalDirection::SOUTH);
 				if (fixed[loc])
 					cout << "\033[0;31m";
 				else
@@ -130,14 +130,14 @@ class MapBelief {
 
    private:
 	/// transform x/y/d coordinate to array index.
-	int locate(int x, int y, Direction d) const {
-		if (d == EAST) {
-			return locate(x + 1, y, WEST);
+	int locate(int x, int y, nav::CardinalDirection d) const {
+		if (d == nav::CardinalDirection::EAST) {
+			return locate(x + 1, y, nav::CardinalDirection::WEST);
 		}
-		if (d == NORTH) {
-			return locate(x, y + 1, SOUTH);
+		if (d == nav::CardinalDirection::NORTH) {
+			return locate(x, y + 1, nav::CardinalDirection::SOUTH);
 		}
-		return x * (width + 1) + y + ((d == WEST) ? (width + 1) * (height + 1) : 0);
+		return x * (width + 1) + y + ((d == nav::CardinalDirection::WEST) ? (width + 1) * (height + 1) : 0);
 	}
 
 	const int width;
