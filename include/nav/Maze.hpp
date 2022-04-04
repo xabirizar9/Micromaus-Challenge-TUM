@@ -25,6 +25,8 @@ struct Maze {
 	void setCost(uint8_t x, uint8_t y, uint8_t value);
 	uint8_t getCost(uint8_t x, uint8_t y);
 
+	void printMaze(uint8_t robotX, uint8_t robotY);
+
 	void resetVisited();
 	void resetCosts();
 

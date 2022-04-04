@@ -8,7 +8,7 @@
   import Button from "./components/Button.svelte";
   import { Joystick } from "./Joystick";
   import { testFloodFill } from "./utils/floodFill";
-  import { DriveCmdType } from "./proto/message";
+  import { DriveCmdType, SolveCmdType } from "./proto/message";
   import PowerView from "./components/PowerView.svelte";
   import StatusView from "./components/StatusView.svelte";
 
@@ -92,7 +92,29 @@
     ([key, value]) => typeof value === "number" && value >= 0
   );
 
-  testFloodFill();
+  const onFastRun = () => {
+    com.send({
+      solve: {
+        type: SolveCmdType.FastRun,
+      },
+    });
+  };
+
+  const onStartExplore = () => {
+    com.send({
+      solve: {
+        type: SolveCmdType.Explore,
+      },
+    });
+  };
+
+  const onGoToStart = () => {
+    com.send({
+      solve: {
+        type: SolveCmdType.GoHome,
+      },
+    });
+  };
 </script>
 
 <Toaster />
@@ -152,9 +174,9 @@
   <div class="card">
     <h2>Actions</h2>
     <Button inline on:click={onStop}>STOP!</Button>
-    <Button inline on:click={onTunePid}
-      >{isPidTuningActive ? "STOP" : "START"} AutoTune PID</Button
-    >
+    <Button inline on:click={onStartExplore}>Explore</Button>
+    <Button inline on:click={onGoToStart}>Go To Start</Button>
+    <Button inline on:click={onFastRun}>Fast Run</Button>
   </div>
 
   <div class="subgrid">

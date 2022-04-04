@@ -21,6 +21,10 @@ class RobotDriver {
 	void addCmd(DriveCmdType type, float value, float speed);
 	void addCmdAndWait(DriveCmdType type, float value, float speed);
 
+	virtual void startExploration(){};
+	virtual void startGoHome(){};
+	virtual void startFastRun(){};
+
 	EventGroupHandle_t eventHandle;
 	xQueueHandle executionQueue;
 	Controller* controller;

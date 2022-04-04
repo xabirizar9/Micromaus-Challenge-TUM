@@ -123,6 +123,44 @@ export function driveCmdTypeToJSON(object: DriveCmdType): string {
   }
 }
 
+export enum SolveCmdType {
+  Explore = 0,
+  GoHome = 1,
+  FastRun = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function solveCmdTypeFromJSON(object: any): SolveCmdType {
+  switch (object) {
+    case 0:
+    case "Explore":
+      return SolveCmdType.Explore;
+    case 1:
+    case "GoHome":
+      return SolveCmdType.GoHome;
+    case 2:
+    case "FastRun":
+      return SolveCmdType.FastRun;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return SolveCmdType.UNRECOGNIZED;
+  }
+}
+
+export function solveCmdTypeToJSON(object: SolveCmdType): string {
+  switch (object) {
+    case SolveCmdType.Explore:
+      return "Explore";
+    case SolveCmdType.GoHome:
+      return "GoHome";
+    case SolveCmdType.FastRun:
+      return "FastRun";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export interface AckPacket {}
 
 export interface Position {
@@ -197,6 +235,10 @@ export interface MsgDrive {
   speed: number;
 }
 
+export interface MsgSolve {
+  type: SolveCmdType;
+}
+
 export interface MsgSetPosition {
   x: number;
   y: number;
@@ -220,6 +262,7 @@ export interface MausIncomingMessage {
   stop: MsgStop | undefined;
   drive: MsgDrive | undefined;
   setPosition: MsgSetPosition | undefined;
+  solve: MsgSolve | undefined;
 }
 
 function createBaseAckPacket(): AckPacket {
@@ -1248,6 +1291,55 @@ export const MsgDrive = {
   },
 };
 
+function createBaseMsgSolve(): MsgSolve {
+  return { type: 0 };
+}
+
+export const MsgSolve = {
+  encode(message: MsgSolve, writer: Writer = Writer.create()): Writer {
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSolve {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSolve();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.type = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSolve {
+    return {
+      type: isSet(object.type) ? solveCmdTypeFromJSON(object.type) : 0,
+    };
+  },
+
+  toJSON(message: MsgSolve): unknown {
+    const obj: any = {};
+    message.type !== undefined && (obj.type = solveCmdTypeToJSON(message.type));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSolve>, I>>(object: I): MsgSolve {
+    const message = createBaseMsgSolve();
+    message.type = object.type ?? 0;
+    return message;
+  },
+};
+
 function createBaseMsgSetPosition(): MsgSetPosition {
   return { x: 0, y: 0, heading: 0 };
 }
@@ -1446,6 +1538,7 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
     stop: undefined,
     drive: undefined,
     setPosition: undefined,
+    solve: undefined,
   };
 }
 
@@ -1481,6 +1574,9 @@ export const MausIncomingMessage = {
         writer.uint32(66).fork()
       ).ldelim();
     }
+    if (message.solve !== undefined) {
+      MsgSolve.encode(message.solve, writer.uint32(74).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -1515,6 +1611,9 @@ export const MausIncomingMessage = {
         case 8:
           message.setPosition = MsgSetPosition.decode(reader, reader.uint32());
           break;
+        case 9:
+          message.solve = MsgSolve.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1538,6 +1637,7 @@ export const MausIncomingMessage = {
       setPosition: isSet(object.setPosition)
         ? MsgSetPosition.fromJSON(object.setPosition)
         : undefined,
+      solve: isSet(object.solve) ? MsgSolve.fromJSON(object.solve) : undefined,
     };
   },
 
@@ -1563,6 +1663,8 @@ export const MausIncomingMessage = {
       (obj.setPosition = message.setPosition
         ? MsgSetPosition.toJSON(message.setPosition)
         : undefined);
+    message.solve !== undefined &&
+      (obj.solve = message.solve ? MsgSolve.toJSON(message.solve) : undefined);
     return obj;
   },
 
@@ -1598,6 +1700,10 @@ export const MausIncomingMessage = {
     message.setPosition =
       object.setPosition !== undefined && object.setPosition !== null
         ? MsgSetPosition.fromPartial(object.setPosition)
+        : undefined;
+    message.solve =
+      object.solve !== undefined && object.solve !== null
+        ? MsgSolve.fromPartial(object.solve)
         : undefined;
     return message;
   },

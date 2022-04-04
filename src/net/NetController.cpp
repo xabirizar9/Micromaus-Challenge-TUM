@@ -113,7 +113,7 @@ void receiverTask(void *pvParameter) {
 			continue;
 		}
 
-		ESP_LOGI(tag, "got msg ID=%d", msg.which_payload);
+		ESP_LOGD(tag, "got msg ID=%d", msg.which_payload);
 
 		switch (msg.which_payload) {
 			case MausIncomingMessage_init_tag:
@@ -127,7 +127,7 @@ void receiverTask(void *pvParameter) {
 
 				break;
 			case MausIncomingMessage_encoderCallibration_tag:
-				ESP_LOGI(tag,
+				ESP_LOGD(tag,
 						 "updated motors to kP=%f kD=%f kI=%f",
 						 msg.payload.encoderCallibration.kP,
 						 msg.payload.encoderCallibration.kD,
@@ -143,7 +143,7 @@ void receiverTask(void *pvParameter) {
 					manager->controller->startPidTuning();
 					wasPidCalibrationStarted = true;
 				} else if (wasPidCalibrationStarted) {
-					ESP_LOGI(tag, "pid monitor stopped");
+					ESP_LOGD(tag, "pid monitor stopped");
 					wasPidCalibrationStarted = false;
 					PidTuningInfo info = PidTuningInfo_init_zero;
 					info.err.arg = manager->controller->getPidTuningBuffer();
@@ -154,14 +154,14 @@ void receiverTask(void *pvParameter) {
 				break;
 			// ping pong interface
 			case MausIncomingMessage_ping_tag:
-				ESP_LOGI(tag, "ping<->pong");
+				ESP_LOGD(tag, "ping<->pong");
 				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
 					PongPacket_init_zero);
 				break;
 			case MausIncomingMessage_control_tag:
 				manager->controller->drive(msg.payload.control.speed,
 										   msg.payload.control.direction);
-				ESP_LOGI(tag,
+				ESP_LOGD(tag,
 						 "rcv ctrl cmd s=%d d=%f",
 						 msg.payload.control.speed,
 						 msg.payload.control.direction);
@@ -175,7 +175,7 @@ void receiverTask(void *pvParameter) {
 				break;
 
 			case MausIncomingMessage_setPosition_tag:
-				ESP_LOGI(tag,
+				ESP_LOGD(tag,
 						 "set pos cmd x=%f y=%f h=%f",
 						 msg.payload.setPosition.x,
 						 msg.payload.setPosition.y,
@@ -184,6 +184,14 @@ void receiverTask(void *pvParameter) {
 												 msg.payload.setPosition.y,
 												 msg.payload.setPosition.heading);
 				break;
+
+			case MausIncomingMessage_solve_tag:
+				ESP_LOGD(tag, "got solve cmd type=%d", msg.payload.solve.type);
+				switch (msg.payload.solve.type) {
+					case SolveCmdType_Explore: manager->driver->startExploration(); break;
+					case SolveCmdType_FastRun: manager->driver->startFastRun(); break;
+					case SolveCmdType_GoHome: manager->driver->startGoHome(); break;
+				}
 		}
 	}
 }

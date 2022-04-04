@@ -1,6 +1,7 @@
 #include "nav/RobotDriver.hpp"
 
 #include "drive/DriveTask.hpp"
+#include "esp_log.h"
 #include "message.pb.h"
 #include "stdbool.h"
 
@@ -21,7 +22,7 @@ RobotDriver::RobotDriver() {
 }
 
 RobotDriver::~RobotDriver() {
-	ESP_LOGI(TAG, "deleting...");
+	ESP_LOGD(TAG, "deleting...");
 	vTaskDelete(this->driveTaskHandle);
 	vQueueDelete(this->executionQueue);
 }
@@ -42,6 +43,7 @@ void waitForDriveCompletion(EventGroupHandle_t handle) {
 	while (true) {
 		event = xEventGroupWaitBits(handle, DRIVE_EVT_COMPLETED_BIT, true, true, waitTicks);
 		if ((event & DRIVE_EVT_COMPLETED_BIT) == DRIVE_EVT_COMPLETED_BIT) {
+			ESP_LOGD(TAG, "got cmd completed event");
 			return;
 		}
 

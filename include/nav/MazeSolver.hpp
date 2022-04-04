@@ -15,7 +15,10 @@ class MazeSolver : public RobotDriver {
    public:
 	MazeSolver(Controller *controller);
 
-	void startExploration();
+	void startExploration() override;
+	void startGoHome() override;
+	void startFastRun() override;
+	void start();
 	void pause();
 	void updateWalls();
 

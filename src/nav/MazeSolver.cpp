@@ -23,19 +23,29 @@ void MazeSolver::updateWalls() {
  */
 Maze::Heading MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	// costs for north, east, south, west
-	static uint8_t costs[4];
-	static Maze::Heading heading = Maze::Heading::North;
+	uint8_t costs[4];
+	Maze::Heading heading = Maze::Heading::North;
 	// TODO: find more optimal solution
 	costs[Maze::Heading::North] = this->maze.getCost(x, y + 1);
 	costs[Maze::Heading::East] = this->maze.getCost(x + 1, y);
 	costs[Maze::Heading::South] = this->maze.getCost(x, y - 1);
 	costs[Maze::Heading::West] = this->maze.getCost(x - 1, y);
 
+	ESP_LOGI(TAG, "[%d, %d, %d, %d]", costs[0], costs[1], costs[2], costs[3]);
+
 	for (uint i = 0; i < 4; i++) {
 		heading = static_cast<Maze::Heading>(costs[i] < costs[heading] ? i : heading);
 	}
 
 	return heading;
+}
+
+void MazeSolver::startFastRun() {
+	// TODO: implement
+}
+
+void MazeSolver::startGoHome() {
+	// TODO: implement
 }
 
 void MazeSolver::startExploration() {
@@ -50,13 +60,20 @@ void MazeSolver::startExploration() {
 	while (true) {
 		if (this->maze.getCost(x, y) == 0) {
 			// TODO: add what need to be done when center found
-			ESP_LOGI(TAG, "found center");
+			ESP_LOGI(TAG, "!!! We found the center");
+			this->maze.printMaze(x, y);
+			vTaskDelete(xTaskGetCurrentTaskHandle());
+			continue;
 		}
 
 		this->updateWalls();
 
 		// rerun flood fill
 		this->maze.update();
+
+		this->maze.printMaze(x, y);
+		// give us some time to print
+		vTaskDelay(pdMS_TO_TICKS(100));
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
@@ -77,25 +94,25 @@ void MazeSolver::startExploration() {
 		// TODO: maybe use robot position here
 		switch (newHeading) {
 			case Maze::Heading::North:
-				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x + 1, y);
-				x += 1;
-				break;
-			case Maze::Heading::East:
-				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x, y + 1);
+				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x, y + 1);
 				y += 1;
 				break;
+			case Maze::Heading::East:
+				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x + 1, y);
+				x += 1;
+				break;
 			case Maze::Heading::South:
-				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x, y - 1);
+				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x, y - 1);
 				y -= 1;
 				break;
 			case Maze::Heading::West:
-				ESP_LOGI(TAG, "(%d, %d) -> (%d, %d)", x, y, x - 1, y);
+				ESP_LOGI(TAG, "h:%d (%d, %d) -> (%d, %d)", heading, x, y, x - 1, y);
 				x -= 1;
 				break;
 		}
 
 		// we can probably remove this timeout since the should be enough time while waiting for
 		// commands
-		vTaskDelay(pdMS_TO_TICKS(50));
+		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
 }

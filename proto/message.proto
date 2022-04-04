@@ -99,6 +99,16 @@ message MsgDrive {
 	float speed = 3;
 }
 
+enum SolveCmdType {
+	Explore = 0;
+	GoHome = 1;
+	FastRun = 2;
+}
+
+message MsgSolve {
+	SolveCmdType type = 1;
+}
+
 message MsgSetPosition {
 	float x = 1;
 	float y = 2;
@@ -123,5 +133,6 @@ message MausIncomingMessage {
 		MsgStop stop = 6;
 		MsgDrive drive = 7;
 		MsgSetPosition setPosition = 8;
+		MsgSolve solve = 9;
 	}
 }

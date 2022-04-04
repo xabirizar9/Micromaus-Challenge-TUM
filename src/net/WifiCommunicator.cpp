@@ -280,7 +280,7 @@ UdpCommunicator::UdpCommunicator(uint16_t port) {
 		vTaskDelete(NULL);
 		return;
 	}
-	ESP_LOGI(TAG, "socket created");
+	ESP_LOGD(TAG, "socket created");
 
 	int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
 	if (err < 0) {
@@ -291,7 +291,7 @@ UdpCommunicator::UdpCommunicator(uint16_t port) {
 };
 
 int UdpCommunicator::read(uint8_t *buf, size_t bufLen) {
-	ESP_LOGI(TAG, "reading data");
+	ESP_LOGD(TAG, "reading data");
 	return recvfrom(
 		this->sock, buf, bufLen, 0, (struct sockaddr *)&this->sourceAddr, &this->socklen);
 };

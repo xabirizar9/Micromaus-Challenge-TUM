@@ -4,8 +4,13 @@
 #include <stdint.h>
 
 #include "esp_log.h"
+#include "periph/Serial.hpp"
 
 static const char* TAG = "[maze]";
+
+// #define PRINT_MAZE
+
+HardwareSerial ser(1, 3);
 
 Maze::Maze() {
 	this->size = 6;
@@ -13,7 +18,16 @@ Maze::Maze() {
 	this->wallState = new uint8_t[size * size];
 	this->visited = new bool[size * size];
 
+	this->resetVisited();
 	this->resetCosts();
+
+	for (uint8_t i = 0; i < size * size; i++) {
+		this->wallState[i] = 0;
+	}
+
+	this->setWall(0, 0, Maze::Heading::East, true);
+	// this->setWall(0, 0, Maze::Heading::North, true);
+	this->setWall(0, 2, Maze::Heading::East, true);
 }
 
 void Maze::resetVisited() {
@@ -30,7 +44,7 @@ void Maze::resetCosts() {
 }
 
 void Maze::fill(uint8_t x, uint8_t y, uint8_t distance) {
-	if (x < 0 || x >= size || y < 0 || y >= size) {
+	if (x >= size || y >= size) {
 		return;
 	}
 
@@ -58,6 +72,27 @@ void Maze::fill(uint8_t x, uint8_t y, uint8_t distance) {
 	}
 }
 
+void Maze::printMaze(uint8_t robotX, uint8_t robotY) {
+	char str[10];
+	for (uint8_t y = size - 1; y != UINT8_MAX; y--) {
+		for (uint8_t x = 0; x < size; x++) {
+			ser.write(getWall(x, y, Heading::West) ? "|" : " ");
+			if (getCost(x, y) == UINT8_MAX) {
+				ser.write(" . ");
+			} else {
+				sprintf(str, " %d%c", getCost(x, y), robotX == x && robotY == y ? '*' : ' ');
+				ser.write(str);
+			}
+		}
+		ser.write("\n");
+
+		for (uint8_t x = 0; x < size; x++) {
+			ser.write(getWall(x, y, Heading::South) ? "___" : "   ");
+		}
+		ser.write("\n");
+	}
+}
+
 void Maze::update() {
 	this->resetCosts();
 	this->resetVisited();
@@ -77,6 +112,10 @@ void Maze::update() {
 		fill(center + 1, center, 0);
 		fill(center + 1, center + 1, 0);
 	}
+
+#ifdef PRINT_MAZE
+	this->printMaze(UINT8_MAX, UINT8_MAX);
+#endif
 }
 
 void Maze::setCost(uint8_t x, uint8_t y, uint8_t value) {
@@ -121,7 +160,7 @@ bool Maze::getWall(uint8_t x, uint8_t y, Heading dir) {
 		ESP_LOGE(TAG, "out of bounds [1..%d]: %d, %d", this->size, x, y);
 		return true;
 	}
-	// 1 << dir is masking walue
+	// 1 << dir is masking value
 	return 1 << dir & this->wallState[x + y * this->size];
 }
 

@@ -30,6 +30,12 @@ typedef enum _DriveCmdType {
     DriveCmdType_Stop = 8 
 } DriveCmdType;
 
+typedef enum _SolveCmdType { 
+    SolveCmdType_Explore = 0, 
+    SolveCmdType_GoHome = 1, 
+    SolveCmdType_FastRun = 2 
+} SolveCmdType;
+
 /* Struct definitions */
 typedef struct _AckPacket { 
     char dummy_field;
@@ -88,6 +94,10 @@ typedef struct _MsgSetPosition {
     float heading; 
 } MsgSetPosition;
 
+typedef struct _MsgSolve { 
+    SolveCmdType type; 
+} MsgSolve;
+
 typedef struct _Position { 
     float x; 
     float y; 
@@ -110,6 +120,7 @@ typedef struct _MausIncomingMessage {
         MsgStop stop;
         MsgDrive drive;
         MsgSetPosition setPosition;
+        MsgSolve solve;
     } payload; 
 } MausIncomingMessage;
 
@@ -158,6 +169,10 @@ typedef struct _MausOutgoingMessage {
 #define _DriveCmdType_MAX DriveCmdType_Stop
 #define _DriveCmdType_ARRAYSIZE ((DriveCmdType)(DriveCmdType_Stop+1))
 
+#define _SolveCmdType_MIN SolveCmdType_Explore
+#define _SolveCmdType_MAX SolveCmdType_FastRun
+#define _SolveCmdType_ARRAYSIZE ((SolveCmdType)(SolveCmdType_FastRun+1))
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -178,6 +193,7 @@ extern "C" {
 #define MsgPing_init_default                     {0}
 #define MsgControl_init_default                  {0, 0}
 #define MsgDrive_init_default                    {_DriveCmdType_MIN, 0, 0}
+#define MsgSolve_init_default                    {_SolveCmdType_MIN}
 #define MsgSetPosition_init_default              {0, 0, 0}
 #define MsgStop_init_default                     {0}
 #define MsgEncoderCallibration_init_default      {0, 0, 0, 0}
@@ -196,6 +212,7 @@ extern "C" {
 #define MsgPing_init_zero                        {0}
 #define MsgControl_init_zero                     {0, 0}
 #define MsgDrive_init_zero                       {_DriveCmdType_MIN, 0, 0}
+#define MsgSolve_init_zero                       {_SolveCmdType_MIN}
 #define MsgSetPosition_init_zero                 {0, 0, 0}
 #define MsgStop_init_zero                        {0}
 #define MsgEncoderCallibration_init_zero         {0, 0, 0, 0}
@@ -218,6 +235,7 @@ extern "C" {
 #define MsgSetPosition_x_tag                     1
 #define MsgSetPosition_y_tag                     2
 #define MsgSetPosition_heading_tag               3
+#define MsgSolve_type_tag                        1
 #define Position_x_tag                           1
 #define Position_y_tag                           2
 #define Position_heading_tag                     3
@@ -231,6 +249,7 @@ extern "C" {
 #define MausIncomingMessage_stop_tag             6
 #define MausIncomingMessage_drive_tag            7
 #define MausIncomingMessage_setPosition_tag      8
+#define MausIncomingMessage_solve_tag            9
 #define MazeStatePacket_state_tag                1
 #define MazeStatePacket_walls_tag                2
 #define MazeStatePacket_position_tag             3
@@ -356,6 +375,11 @@ X(a, STATIC,   SINGULAR, FLOAT,    speed,             3)
 #define MsgDrive_CALLBACK NULL
 #define MsgDrive_DEFAULT NULL
 
+#define MsgSolve_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UENUM,    type,              1)
+#define MsgSolve_CALLBACK NULL
+#define MsgSolve_DEFAULT NULL
+
 #define MsgSetPosition_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, FLOAT,    x,                 1) \
 X(a, STATIC,   SINGULAR, FLOAT,    y,                 2) \
@@ -383,7 +407,8 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,encoderCallibration,payload.encoderC
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ping,payload.ping),   5) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,stop,payload.stop),   6) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,drive,payload.drive),   7) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,setPosition,payload.setPosition),   8)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,setPosition,payload.setPosition),   8) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,solve,payload.solve),   9)
 #define MausIncomingMessage_CALLBACK NULL
 #define MausIncomingMessage_DEFAULT NULL
 #define MausIncomingMessage_payload_init_MSGTYPE MsgInit
@@ -393,6 +418,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,setPosition,payload.setPosition),   
 #define MausIncomingMessage_payload_stop_MSGTYPE MsgStop
 #define MausIncomingMessage_payload_drive_MSGTYPE MsgDrive
 #define MausIncomingMessage_payload_setPosition_MSGTYPE MsgSetPosition
+#define MausIncomingMessage_payload_solve_MSGTYPE MsgSolve
 
 extern const pb_msgdesc_t AckPacket_msg;
 extern const pb_msgdesc_t Position_msg;
@@ -408,6 +434,7 @@ extern const pb_msgdesc_t MsgInit_msg;
 extern const pb_msgdesc_t MsgPing_msg;
 extern const pb_msgdesc_t MsgControl_msg;
 extern const pb_msgdesc_t MsgDrive_msg;
+extern const pb_msgdesc_t MsgSolve_msg;
 extern const pb_msgdesc_t MsgSetPosition_msg;
 extern const pb_msgdesc_t MsgStop_msg;
 extern const pb_msgdesc_t MsgEncoderCallibration_msg;
@@ -428,6 +455,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MsgPing_fields &MsgPing_msg
 #define MsgControl_fields &MsgControl_msg
 #define MsgDrive_fields &MsgDrive_msg
+#define MsgSolve_fields &MsgSolve_msg
 #define MsgSetPosition_fields &MsgSetPosition_msg
 #define MsgStop_fields &MsgStop_msg
 #define MsgEncoderCallibration_fields &MsgEncoderCallibration_msg
@@ -447,6 +475,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MsgInit_size                             11
 #define MsgPing_size                             0
 #define MsgSetPosition_size                      15
+#define MsgSolve_size                            2
 #define MsgStop_size                             0
 #define NavigationPacket_size                    82
 #define PongPacket_size                          0

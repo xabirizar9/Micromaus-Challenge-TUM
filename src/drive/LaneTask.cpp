@@ -27,7 +27,7 @@ void laneControlTask(void *args) {
 	Motor *leftMotor = controller->getMotor(left);
 	Motor *rightMotor = controller->getMotor(right);
 
-	PIDErrors wallDistance;
+	PIDErrors pErr;
 	static uint32_t timeInterval = 50;
 
 	// declare variables for sensor distances
@@ -52,18 +52,21 @@ void laneControlTask(void *args) {
 		dRight = controller->getState().sensors.right;
 		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
 
-		wallDistance.curError = dLeft - dRight;
-		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
-		wallDistance.correction += (kP * wallDistance.curError) + (kD * wallDistance.derError) +
-								   (kI * wallDistance.intError);
+		pErr.curError = dLeft - dRight;
+		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval;
+		pErr.correction += (kP * pErr.curError) + (kD * pErr.derError) + (kI * pErr.intError);
 
-		wallDistance.lastError = wallDistance.curError;
-		ESP_LOGI(TAG, "dLeft=%d, dRight=%d c=%f", dLeft, dRight, wallDistance.correction);
+		pErr.lastError = pErr.curError;
+
+		// TODO: since direction changes are inverse to the error e.g.
+		// small adjustments are large values and large ones are little we need to remap/rescale
+		// @xavier take a look at this
 
 		// Update speed of right motor
-		clampAndIntegrate(wallDistance.correction, wallDistance.intError, timeInterval);
-		// direction = 0;	// Compute somehow direction from left/right speeds
-		// controller->setDirection(wallDistance.correction);
+		clampAndIntegrate(pErr.correction, pErr.intError, timeInterval, -4000, 4000);
+		ESP_LOGI(TAG, "dLeft=%d, dRight=%d c=%f", dLeft, dRight, pErr.correction);
+
+		// controller->setDirection(4000 - pErr.correction);
 
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}

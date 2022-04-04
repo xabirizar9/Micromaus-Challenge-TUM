@@ -12,7 +12,7 @@
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
 
-static const char* tag = "[drive-task]";
+static const char* tag = "[drive]";
 
 float averageEncoder(Controller* controller) {
 	int64_t right = controller->getEncoder(MotorPosition::right)->getTotalCounter();
@@ -101,10 +101,10 @@ void driveTask(void* arg) {
 			default: break;
 		}
 
-		ESP_LOGI(tag, "4");
 		curCmd = NULL;
 
 		// TODO: send this event when command is completed
+		ESP_LOGI(tag, "cmd completed");
 		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
 
 		vTaskDelay(pdMS_TO_TICKS(navInterval));
