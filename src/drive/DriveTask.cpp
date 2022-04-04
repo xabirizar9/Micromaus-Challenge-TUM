@@ -105,11 +105,10 @@ void driveTask(void* arg) {
 					 (1056 * cmd.value))) {
 					// vTaskDelay(pdMS_TO_TICKS(10));
 
-					controller->drive(cmd.speed, INT16_MIN);
+					controller->drive(65, INT16_MIN);
 				}
-
-				encoderTemp = 0;
 				controller->drive(0, 0);
+				encoderTemp = 0;
 				vTaskSuspend(laneControllTaskHandle);
 				break;
 			}
@@ -122,11 +121,11 @@ void driveTask(void* arg) {
 					 (1056 * cmd.value))) {
 					// vTaskDelay(pdMS_TO_TICKS(10));
 
-					controller->drive(cmd.speed, INT16_MAX);
+					controller->drive(65, INT16_MAX);
 				}
 
-				encoderTemp = 0;
 				controller->drive(0, 0);
+				encoderTemp = 0;
 				vTaskSuspend(laneControllTaskHandle);
 				break;
 			}
