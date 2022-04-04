@@ -1,7 +1,8 @@
 #include "nav/Position.hpp"
-#include "support/Linalg.hpp"
 
 #include <cmath>
+
+#include "support/Linalg.hpp"
 
 using namespace nav;
 using namespace linalg;
@@ -31,4 +32,3 @@ CardinalDirection Heading::approximateCardinalDirection() const {
 	}
 	return CardinalDirection::EAST;
 }
-
