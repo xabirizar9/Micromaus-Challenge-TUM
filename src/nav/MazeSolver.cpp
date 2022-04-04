@@ -39,8 +39,8 @@ Maze::Heading MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 }
 
 void MazeSolver::startExploration() {
-	uint8_t x = 1;
-	uint8_t y = 1;
+	uint8_t x = 0;
+	uint8_t y = 0;
 
 	Maze::Heading heading = Maze::Heading::North;
 	Maze::Heading newHeading = Maze::Heading::North;
@@ -48,6 +48,11 @@ void MazeSolver::startExploration() {
 	// TODO: split into task
 
 	while (true) {
+		if (this->maze.getCost(x, y) == 0) {
+			// TODO: add what need to be done when center found
+			ESP_LOGI(TAG, "found center");
+		}
+
 		this->updateWalls();
 
 		// rerun flood fill
@@ -55,6 +60,7 @@ void MazeSolver::startExploration() {
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
+		ESP_LOGI(TAG, "new heading %d", newHeading);
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
@@ -63,10 +69,22 @@ void MazeSolver::startExploration() {
 									: DriveCmdType::DriveCmdType_TurnRightOnSpot,
 								std::abs(heading - newHeading),
 								speed);
+			heading = newHeading;
 		}
 
 		this->addCmdAndWait(DriveCmdType::DriveCmdType_Move, 1, speed);
 
-		vTaskDelay(pdMS_TO_TICKS(200));
+		// update position based on heading
+		// TODO: maybe use robot position here
+		switch (newHeading) {
+			case Maze::Heading::North: x += 1; break;
+			case Maze::Heading::East: y += 1; break;
+			case Maze::Heading::South: y -= 1; break;
+			case Maze::Heading::West: x -= 1; break;
+		}
+
+		// we can probably remove this timeout since the should be enough time while waiting for
+		// commands
+		vTaskDelay(pdMS_TO_TICKS(50));
 	}
 }
