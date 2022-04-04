@@ -10,8 +10,8 @@ static const char *TAG = "lane-ctrl";
 void clampAndIntegrate(float &correction,
 					   float &intError,
 					   uint32_t &timeInterval,
-					   float minValue = -1.0,
-					   float maxValue = 1.0) {
+					   int16_t minValue = INT16_MIN,
+					   int16_t maxValue = INT16_MAX) {
 	if (correction < minValue) {
 		correction = minValue;
 	} else if (correction > maxValue) {
@@ -27,15 +27,15 @@ void laneControlTask(void *args) {
 	Motor *leftMotor = controller->getMotor(left);
 	Motor *rightMotor = controller->getMotor(right);
 
-	PIDErrors wallDistance;
-	uint32_t timeInterval = 100;
+	PIDErrors pErr;
+	static uint32_t timeInterval = 50;
 
 	// declare variables for sensor distances
 	int8_t dLeft;
 	int8_t dRight;
 
 	const float updateConst = 0.01;
-	float kP = 0.5;
+	float kP = 0.1;
 	float kD = 0;
 	float kI = 0;
 
@@ -52,22 +52,21 @@ void laneControlTask(void *args) {
 		dRight = controller->getState().sensors.right;
 		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
 
-		ESP_LOGI(TAG, "dLeft=%d, dRight=%d", dLeft, dRight);
+		pErr.curError = dLeft - dRight;
+		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval;
+		pErr.correction += (kP * pErr.curError) + (kD * pErr.derError) + (kI * pErr.intError);
 
-		wallDistance.curError = dLeft - dRight;
-		wallDistance.derError = (wallDistance.lastError - wallDistance.curError) / timeInterval;
-		wallDistance.correction = (kP * wallDistance.curError) + (kD * wallDistance.derError) +
-								  (kI * wallDistance.intError);
+		pErr.lastError = pErr.curError;
 
-		wallDistance.lastError = wallDistance.curError;
+		// TODO: since direction changes are inverse to the error e.g.
+		// small adjustments are large values and large ones are little we need to remap/rescale
+		// @xavier take a look at this
 
 		// Update speed of right motor
-		clampAndIntegrate(wallDistance.correction, wallDistance.intError, timeInterval);
-		leftMotor->setPWM(curSpeedTicks + updateConst * mmsToTicks(wallDistance.correction));
-		rightMotor->setPWM(curSpeedTicks - updateConst * mmsToTicks(wallDistance.correction));
+		clampAndIntegrate(pErr.correction, pErr.intError, timeInterval, -4000, 4000);
+		ESP_LOGI(TAG, "dLeft=%d, dRight=%d c=%f", dLeft, dRight, pErr.correction);
 
-		// direction = 0;	// Compute somehow direction from left/right speeds
-		// controller->setDirection(direction);
+		// controller->setDirection(4000 - pErr.correction);
 
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}

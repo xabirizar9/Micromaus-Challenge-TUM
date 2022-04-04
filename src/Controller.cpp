@@ -72,9 +72,14 @@ void Controller::updateSensors() {
 }
 
 void Controller::updatePosition() {
+	static int64_t leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	static int64_t rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
+
 	// distance the wheels have traveled
-	float left = this->getEncoder(MotorPosition::left)->getTotalCounter() * encoderTicksToMm;
-	float right = this->getEncoder(MotorPosition::right)->getTotalCounter() * encoderTicksToMm;
+	float left =
+		(this->getEncoder(MotorPosition::left)->getTotalCounter() - leftTicks) * encoderTicksToMm;
+	float right =
+		(this->getEncoder(MotorPosition::right)->getTotalCounter() - rightTicks) * encoderTicksToMm;
 
 	float center = (left + right) / 2.0;
 
@@ -85,34 +90,43 @@ void Controller::updatePosition() {
 	// to confirm we could compute the angle
 	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));
 
-	this->state.position.x = center * cos(this->state.position.heading) * encoderTicksToMm;
-	this->state.position.y = center * sin(this->state.position.heading) * encoderTicksToMm;
+	this->state.position.x += center * cos(this->state.position.heading);
+	this->state.position.y += center * sin(this->state.position.heading);
+
+	leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
 }
 
 void Controller::setDirection(int16_t direction) {
-	this->state.position.heading = (float)direction;
 	this->direction = direction;
 	// TODO: implement
+
+	this->drive(this->speed, direction);
 }
 
-void Controller::drive(int16_t speed, int16_t radius) {
-	if (radius == 0) {
-		this->state.leftMotorSpeed = speed;
-		this->state.rightMotorSpeed = speed;
-	} else if (direction == INT16_MIN) {
-		this->state.leftMotorSpeed = -speed;
-		this->state.rightMotorSpeed = speed;
-		return;
-	} else if (direction == INT16_MAX) {
-		this->state.leftMotorSpeed = speed;
-		this->state.rightMotorSpeed = -speed;
-		return;
-	} else if (direction > 0) {
-		this->state.leftMotorSpeed = speed;
-		this->state.rightMotorSpeed = speed + (direction + wheelDistance);
-	} else {
-		this->state.leftMotorSpeed = speed + (direction + wheelDistance);
-		this->state.rightMotorSpeed = speed;
+void Controller::drive(int16_t speed, int16_t R) {
+	switch (R) {
+		case 0:
+			this->state.leftMotorSpeed = speed;
+			this->state.rightMotorSpeed = speed;
+			break;
+		case INT16_MIN:
+			this->state.leftMotorSpeed = -speed;
+			this->state.rightMotorSpeed = speed;
+			break;
+		case INT16_MAX:
+			this->state.leftMotorSpeed = speed;
+			this->state.rightMotorSpeed = -speed;
+			break;
+		default:
+			if (R > 0) {
+				this->state.rightMotorSpeed = speed * (1 + 0.5 * wheelDistance / R);
+				this->state.leftMotorSpeed = 2 * speed - this->state.rightMotorSpeed;
+			} else {
+				R = -R;
+				this->state.leftMotorSpeed = speed * (1 + 0.5 * wheelDistance / R);
+				this->state.rightMotorSpeed = 2 * speed - this->state.leftMotorSpeed;
+			}
 	}
 
 	// update encoder values
@@ -130,6 +144,10 @@ float Controller::getSpeedInTicks(MotorPosition position) {
 		case MotorPosition::right: return this->rightSpeedTickTarget;
 		default: return 0;
 	}
+}
+
+int16_t Controller::getSpeed() {
+	return this->speed;
 }
 
 void Controller::turnOnSpot(float degree, int16_t speed) {
@@ -184,6 +202,12 @@ NavigationPacket Controller::getState() {
 	this->state.batPercentage = this->battery.getPercentage();
 	this->state.voltage = this->battery.getVoltage();
 	return this->state;
+}
+
+void Controller::setPosition(float x, float y, float heading) {
+	this->state.position.x = x;
+	this->state.position.y = y;
+	this->state.position.heading = heading;
 }
 
 /******************************************************************

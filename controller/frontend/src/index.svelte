@@ -8,7 +8,9 @@
   import Button from "./components/Button.svelte";
   import { Joystick } from "./Joystick";
   import { testFloodFill } from "./utils/floodFill";
-  import { DriveCmdType } from "./proto/message";
+  import { DriveCmdType, SolveCmdType } from "./proto/message";
+  import PowerView from "./components/PowerView.svelte";
+  import StatusView from "./components/StatusView.svelte";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
@@ -57,7 +59,7 @@
     evt.preventDefault();
     com.send({
       drive: {
-        type: DriveCmdType,
+        type: driveCmdType,
         value: driveValue,
         speed: driveSpeed,
       },
@@ -90,7 +92,29 @@
     ([key, value]) => typeof value === "number" && value >= 0
   );
 
-  testFloodFill();
+  const onFastRun = () => {
+    com.send({
+      solve: {
+        type: SolveCmdType.FastRun,
+      },
+    });
+  };
+
+  const onStartExplore = () => {
+    com.send({
+      solve: {
+        type: SolveCmdType.Explore,
+      },
+    });
+  };
+
+  const onGoToStart = () => {
+    com.send({
+      solve: {
+        type: SolveCmdType.GoHome,
+      },
+    });
+  };
 </script>
 
 <Toaster />
@@ -133,7 +157,7 @@
             label="Speed"
             step="0.001"
             type="number"
-            bind:value={driveValue}
+            bind:value={driveSpeed}
           />
 
           <Input
@@ -150,10 +174,22 @@
   <div class="card">
     <h2>Actions</h2>
     <Button inline on:click={onStop}>STOP!</Button>
-    <Button inline on:click={onTunePid}
-      >{isPidTuningActive ? "STOP" : "START"} AutoTune PID</Button
-    >
+    <Button inline on:click={onStartExplore}>Explore</Button>
+    <Button inline on:click={onGoToStart}>Go To Start</Button>
+    <Button inline on:click={onFastRun}>Fast Run</Button>
   </div>
+
+  <div class="subgrid">
+    <div class="card">
+      <h2>Status</h2>
+      <StatusView {com} />
+    </div>
+    <div class="card">
+      <h2>Power</h2>
+      <PowerView {com} />
+    </div>
+  </div>
+
   <div class="card full"><SensorTable {com} /></div>
 </main>
 
@@ -191,10 +227,16 @@
   :global(body) {
     padding: 0;
     margin: 0;
-    font-size: 18px;
+    font-size: 14px;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     box-sizing: border-box;
+
+    h2 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin: 0.5rem 0.25rem;
+    }
   }
 
   :global(body) {

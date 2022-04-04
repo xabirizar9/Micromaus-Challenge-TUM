@@ -21,7 +21,7 @@
 #include "net/WifiCommunicator.hpp"
 
 static const char *tag = "NET";
-static const uint16_t sensorSendInterval = pdMS_TO_TICKS(200);
+static const uint16_t sensorSendInterval = pdMS_TO_TICKS(300);
 
 using namespace NetController;
 
@@ -32,6 +32,8 @@ using namespace NetController;
  */
 void infoStreamerTask(void *pvParameter) {
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
+	Maze *maze;
+	MazeStatePacket packet;
 	while (true) {
 		if (manager->controller == NULL || !manager->initCompleted) {
 			vTaskDelay(sensorSendInterval);
@@ -41,7 +43,15 @@ void infoStreamerTask(void *pvParameter) {
 		if (manager->initCompleted) {
 			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(
 				manager->controller->getState());
+
+			// if (manager->driver != NULL) {
+			// 	packet = manager->driver->getMaze()->getEncodedValue();
+
+			// 	// write and encode the command
+			// 	manager->writePacket<MazeStatePacket, MausOutgoingMessage_mazeState_tag>(packet);
+			// }
 		}
+
 		vTaskDelay(sensorSendInterval);
 	}
 }
@@ -113,21 +123,28 @@ void receiverTask(void *pvParameter) {
 			continue;
 		}
 
-		ESP_LOGI(tag, "got msg ID=%d", msg.which_payload);
+		ESP_LOGD(tag, "got msg ID=%d", msg.which_payload);
 
 		switch (msg.which_payload) {
 			case MausIncomingMessage_init_tag:
+				if (manager->initCompleted) {
+					break;
+				}
 				ESP_LOGI(tag, "connected to connector v.%d", msg.payload.init.version);
 				// TODO: improve memory management
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
+				vTaskDelay(pdMS_TO_TICKS(20));
+				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
+				vTaskDelay(pdMS_TO_TICKS(20));
+				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
 				manager->initCompleted = true;
-
+				vTaskDelay(pdMS_TO_TICKS(20));
 				// set okay status LED
 				LedController((gpio_num_t)3).set(1);
 
 				break;
 			case MausIncomingMessage_encoderCallibration_tag:
-				ESP_LOGI(tag,
+				ESP_LOGD(tag,
 						 "updated motors to kP=%f kD=%f kI=%f",
 						 msg.payload.encoderCallibration.kP,
 						 msg.payload.encoderCallibration.kD,
@@ -143,7 +160,7 @@ void receiverTask(void *pvParameter) {
 					manager->controller->startPidTuning();
 					wasPidCalibrationStarted = true;
 				} else if (wasPidCalibrationStarted) {
-					ESP_LOGI(tag, "pid monitor stopped");
+					ESP_LOGD(tag, "pid monitor stopped");
 					wasPidCalibrationStarted = false;
 					PidTuningInfo info = PidTuningInfo_init_zero;
 					info.err.arg = manager->controller->getPidTuningBuffer();
@@ -154,14 +171,14 @@ void receiverTask(void *pvParameter) {
 				break;
 			// ping pong interface
 			case MausIncomingMessage_ping_tag:
-				ESP_LOGI(tag, "ping<->pong");
+				ESP_LOGD(tag, "ping<->pong");
 				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
 					PongPacket_init_zero);
 				break;
 			case MausIncomingMessage_control_tag:
 				manager->controller->drive(msg.payload.control.speed,
 										   msg.payload.control.direction);
-				ESP_LOGI(tag,
+				ESP_LOGD(tag,
 						 "rcv ctrl cmd s=%d d=%f",
 						 msg.payload.control.speed,
 						 msg.payload.control.direction);
@@ -170,9 +187,28 @@ void receiverTask(void *pvParameter) {
 			case MausIncomingMessage_drive_tag:
 				if (manager->driver != NULL) {
 					manager->driver->addCmd(
-						msg.payload.drive.type, msg.payload.drive.speed, msg.payload.drive.value);
+						msg.payload.drive.type, msg.payload.drive.value, msg.payload.drive.speed);
 				}
 				break;
+
+			case MausIncomingMessage_setPosition_tag:
+				ESP_LOGD(tag,
+						 "set pos cmd x=%f y=%f h=%f",
+						 msg.payload.setPosition.x,
+						 msg.payload.setPosition.y,
+						 msg.payload.setPosition.heading);
+				manager->controller->setPosition(msg.payload.setPosition.x,
+												 msg.payload.setPosition.y,
+												 msg.payload.setPosition.heading);
+				break;
+
+			case MausIncomingMessage_solve_tag:
+				ESP_LOGD(tag, "got solve cmd type=%d", msg.payload.solve.type);
+				switch (msg.payload.solve.type) {
+					case SolveCmdType_Explore: manager->driver->startExploration(); break;
+					case SolveCmdType_FastRun: manager->driver->startFastRun(); break;
+					case SolveCmdType_GoHome: manager->driver->startGoHome(); break;
+				}
 		}
 	}
 }
@@ -200,9 +236,9 @@ NetController::Manager::Manager(NetController::Communicator interface) {
 	this->comInterface = interface;
 	ESP_LOGI(tag, "Manager()");
 
-	xTaskCreate(receiverTask, "receiverTask", 4096, this, 5, NULL);
+	xTaskCreate(receiverTask, "receiverTask", 9000, this, 5, NULL);
 
-	xTaskCreate(&infoStreamerTask, "infoStreamerTask", 4096, this, 5, NULL);
+	xTaskCreate(&infoStreamerTask, "infoStreamerTask", 9000, this, 5, NULL);
 };
 
 /**

@@ -47,6 +47,17 @@ message PidTuningInfo {
 	repeated float err = 1;
 }
 
+message MazeStatePacket {
+	bytes state = 1;
+	bytes walls = 2;
+	Position position = 3;
+	Position target = 4;
+}
+
+message PathPacket {
+	repeated MsgDrive cmd = 1;
+}
+
 message MausOutgoingMessage {
 	oneof payload {
 		AckPacket ack = 1;
@@ -54,6 +65,7 @@ message MausOutgoingMessage {
 		PongPacket pong = 3;
 		InfoPacket info = 4;
 		PidTuningInfo pidTuning = 5;
+		MazeStatePacket mazeState = 6;
 	}
 }
 
@@ -77,13 +89,30 @@ enum DriveCmdType {
 	TurnRight = 4;
 	TurnLeftOnSpot = 5;
 	TurnRightOnSpot = 6;
-	Stop = 7;
+	StartMazeNavigation = 7;
+	Stop = 8;
 }
 
 message MsgDrive {
 	DriveCmdType type = 1;
 	float value = 2;
 	float speed = 3;
+}
+
+enum SolveCmdType {
+	Explore = 0;
+	GoHome = 1;
+	FastRun = 2;
+}
+
+message MsgSolve {
+	SolveCmdType type = 1;
+}
+
+message MsgSetPosition {
+	float x = 1;
+	float y = 2;
+	float heading = 3;
 }
 
 message MsgStop {}
@@ -103,5 +132,7 @@ message MausIncomingMessage {
 		MsgPing ping = 5;
 		MsgStop stop = 6;
 		MsgDrive drive = 7;
+		MsgSetPosition setPosition = 8;
+		MsgSolve solve = 9;
 	}
 }

@@ -57,7 +57,8 @@ export enum DriveCmdType {
   TurnRight = 4,
   TurnLeftOnSpot = 5,
   TurnRightOnSpot = 6,
-  Stop = 7,
+  StartMazeNavigation = 7,
+  Stop = 8,
   UNRECOGNIZED = -1,
 }
 
@@ -85,6 +86,9 @@ export function driveCmdTypeFromJSON(object: any): DriveCmdType {
     case "TurnRightOnSpot":
       return DriveCmdType.TurnRightOnSpot;
     case 7:
+    case "StartMazeNavigation":
+      return DriveCmdType.StartMazeNavigation;
+    case 8:
     case "Stop":
       return DriveCmdType.Stop;
     case -1:
@@ -110,8 +114,48 @@ export function driveCmdTypeToJSON(object: DriveCmdType): string {
       return "TurnLeftOnSpot";
     case DriveCmdType.TurnRightOnSpot:
       return "TurnRightOnSpot";
+    case DriveCmdType.StartMazeNavigation:
+      return "StartMazeNavigation";
     case DriveCmdType.Stop:
       return "Stop";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export enum SolveCmdType {
+  Explore = 0,
+  GoHome = 1,
+  FastRun = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function solveCmdTypeFromJSON(object: any): SolveCmdType {
+  switch (object) {
+    case 0:
+    case "Explore":
+      return SolveCmdType.Explore;
+    case 1:
+    case "GoHome":
+      return SolveCmdType.GoHome;
+    case 2:
+    case "FastRun":
+      return SolveCmdType.FastRun;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return SolveCmdType.UNRECOGNIZED;
+  }
+}
+
+export function solveCmdTypeToJSON(object: SolveCmdType): string {
+  switch (object) {
+    case SolveCmdType.Explore:
+      return "Explore";
+    case SolveCmdType.GoHome:
+      return "GoHome";
+    case SolveCmdType.FastRun:
+      return "FastRun";
     default:
       return "UNKNOWN";
   }
@@ -153,12 +197,24 @@ export interface PidTuningInfo {
   err: number[];
 }
 
+export interface MazeStatePacket {
+  state: Uint8Array;
+  walls: Uint8Array;
+  position: Position | undefined;
+  target: Position | undefined;
+}
+
+export interface PathPacket {
+  cmd: MsgDrive[];
+}
+
 export interface MausOutgoingMessage {
   ack: AckPacket | undefined;
   nav: NavigationPacket | undefined;
   pong: PongPacket | undefined;
   info: InfoPacket | undefined;
   pidTuning: PidTuningInfo | undefined;
+  mazeState: MazeStatePacket | undefined;
 }
 
 /** command indicates remote client connection */
@@ -179,6 +235,16 @@ export interface MsgDrive {
   speed: number;
 }
 
+export interface MsgSolve {
+  type: SolveCmdType;
+}
+
+export interface MsgSetPosition {
+  x: number;
+  y: number;
+  heading: number;
+}
+
 export interface MsgStop {}
 
 export interface MsgEncoderCallibration {
@@ -195,6 +261,8 @@ export interface MausIncomingMessage {
   ping: MsgPing | undefined;
   stop: MsgStop | undefined;
   drive: MsgDrive | undefined;
+  setPosition: MsgSetPosition | undefined;
+  solve: MsgSolve | undefined;
 }
 
 function createBaseAckPacket(): AckPacket {
@@ -693,6 +761,172 @@ export const PidTuningInfo = {
   },
 };
 
+function createBaseMazeStatePacket(): MazeStatePacket {
+  return {
+    state: new Uint8Array(),
+    walls: new Uint8Array(),
+    position: undefined,
+    target: undefined,
+  };
+}
+
+export const MazeStatePacket = {
+  encode(message: MazeStatePacket, writer: Writer = Writer.create()): Writer {
+    if (message.state.length !== 0) {
+      writer.uint32(10).bytes(message.state);
+    }
+    if (message.walls.length !== 0) {
+      writer.uint32(18).bytes(message.walls);
+    }
+    if (message.position !== undefined) {
+      Position.encode(message.position, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.target !== undefined) {
+      Position.encode(message.target, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MazeStatePacket {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMazeStatePacket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.state = reader.bytes();
+          break;
+        case 2:
+          message.walls = reader.bytes();
+          break;
+        case 3:
+          message.position = Position.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.target = Position.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MazeStatePacket {
+    return {
+      state: isSet(object.state)
+        ? bytesFromBase64(object.state)
+        : new Uint8Array(),
+      walls: isSet(object.walls)
+        ? bytesFromBase64(object.walls)
+        : new Uint8Array(),
+      position: isSet(object.position)
+        ? Position.fromJSON(object.position)
+        : undefined,
+      target: isSet(object.target)
+        ? Position.fromJSON(object.target)
+        : undefined,
+    };
+  },
+
+  toJSON(message: MazeStatePacket): unknown {
+    const obj: any = {};
+    message.state !== undefined &&
+      (obj.state = base64FromBytes(
+        message.state !== undefined ? message.state : new Uint8Array()
+      ));
+    message.walls !== undefined &&
+      (obj.walls = base64FromBytes(
+        message.walls !== undefined ? message.walls : new Uint8Array()
+      ));
+    message.position !== undefined &&
+      (obj.position = message.position
+        ? Position.toJSON(message.position)
+        : undefined);
+    message.target !== undefined &&
+      (obj.target = message.target
+        ? Position.toJSON(message.target)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MazeStatePacket>, I>>(
+    object: I
+  ): MazeStatePacket {
+    const message = createBaseMazeStatePacket();
+    message.state = object.state ?? new Uint8Array();
+    message.walls = object.walls ?? new Uint8Array();
+    message.position =
+      object.position !== undefined && object.position !== null
+        ? Position.fromPartial(object.position)
+        : undefined;
+    message.target =
+      object.target !== undefined && object.target !== null
+        ? Position.fromPartial(object.target)
+        : undefined;
+    return message;
+  },
+};
+
+function createBasePathPacket(): PathPacket {
+  return { cmd: [] };
+}
+
+export const PathPacket = {
+  encode(message: PathPacket, writer: Writer = Writer.create()): Writer {
+    for (const v of message.cmd) {
+      MsgDrive.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PathPacket {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePathPacket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.cmd.push(MsgDrive.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PathPacket {
+    return {
+      cmd: Array.isArray(object?.cmd)
+        ? object.cmd.map((e: any) => MsgDrive.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: PathPacket): unknown {
+    const obj: any = {};
+    if (message.cmd) {
+      obj.cmd = message.cmd.map((e) => (e ? MsgDrive.toJSON(e) : undefined));
+    } else {
+      obj.cmd = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PathPacket>, I>>(
+    object: I
+  ): PathPacket {
+    const message = createBasePathPacket();
+    message.cmd = object.cmd?.map((e) => MsgDrive.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 function createBaseMausOutgoingMessage(): MausOutgoingMessage {
   return {
     ack: undefined,
@@ -700,6 +934,7 @@ function createBaseMausOutgoingMessage(): MausOutgoingMessage {
     pong: undefined,
     info: undefined,
     pidTuning: undefined,
+    mazeState: undefined,
   };
 }
 
@@ -724,6 +959,12 @@ export const MausOutgoingMessage = {
       PidTuningInfo.encode(
         message.pidTuning,
         writer.uint32(42).fork()
+      ).ldelim();
+    }
+    if (message.mazeState !== undefined) {
+      MazeStatePacket.encode(
+        message.mazeState,
+        writer.uint32(50).fork()
       ).ldelim();
     }
     return writer;
@@ -751,6 +992,9 @@ export const MausOutgoingMessage = {
         case 5:
           message.pidTuning = PidTuningInfo.decode(reader, reader.uint32());
           break;
+        case 6:
+          message.mazeState = MazeStatePacket.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -770,6 +1014,9 @@ export const MausOutgoingMessage = {
       pidTuning: isSet(object.pidTuning)
         ? PidTuningInfo.fromJSON(object.pidTuning)
         : undefined,
+      mazeState: isSet(object.mazeState)
+        ? MazeStatePacket.fromJSON(object.mazeState)
+        : undefined,
     };
   },
 
@@ -788,6 +1035,10 @@ export const MausOutgoingMessage = {
     message.pidTuning !== undefined &&
       (obj.pidTuning = message.pidTuning
         ? PidTuningInfo.toJSON(message.pidTuning)
+        : undefined);
+    message.mazeState !== undefined &&
+      (obj.mazeState = message.mazeState
+        ? MazeStatePacket.toJSON(message.mazeState)
         : undefined);
     return obj;
   },
@@ -815,6 +1066,10 @@ export const MausOutgoingMessage = {
     message.pidTuning =
       object.pidTuning !== undefined && object.pidTuning !== null
         ? PidTuningInfo.fromPartial(object.pidTuning)
+        : undefined;
+    message.mazeState =
+      object.mazeState !== undefined && object.mazeState !== null
+        ? MazeStatePacket.fromPartial(object.mazeState)
         : undefined;
     return message;
   },
@@ -1036,6 +1291,124 @@ export const MsgDrive = {
   },
 };
 
+function createBaseMsgSolve(): MsgSolve {
+  return { type: 0 };
+}
+
+export const MsgSolve = {
+  encode(message: MsgSolve, writer: Writer = Writer.create()): Writer {
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSolve {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSolve();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.type = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSolve {
+    return {
+      type: isSet(object.type) ? solveCmdTypeFromJSON(object.type) : 0,
+    };
+  },
+
+  toJSON(message: MsgSolve): unknown {
+    const obj: any = {};
+    message.type !== undefined && (obj.type = solveCmdTypeToJSON(message.type));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSolve>, I>>(object: I): MsgSolve {
+    const message = createBaseMsgSolve();
+    message.type = object.type ?? 0;
+    return message;
+  },
+};
+
+function createBaseMsgSetPosition(): MsgSetPosition {
+  return { x: 0, y: 0, heading: 0 };
+}
+
+export const MsgSetPosition = {
+  encode(message: MsgSetPosition, writer: Writer = Writer.create()): Writer {
+    if (message.x !== 0) {
+      writer.uint32(13).float(message.x);
+    }
+    if (message.y !== 0) {
+      writer.uint32(21).float(message.y);
+    }
+    if (message.heading !== 0) {
+      writer.uint32(29).float(message.heading);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetPosition {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPosition();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.x = reader.float();
+          break;
+        case 2:
+          message.y = reader.float();
+          break;
+        case 3:
+          message.heading = reader.float();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetPosition {
+    return {
+      x: isSet(object.x) ? Number(object.x) : 0,
+      y: isSet(object.y) ? Number(object.y) : 0,
+      heading: isSet(object.heading) ? Number(object.heading) : 0,
+    };
+  },
+
+  toJSON(message: MsgSetPosition): unknown {
+    const obj: any = {};
+    message.x !== undefined && (obj.x = message.x);
+    message.y !== undefined && (obj.y = message.y);
+    message.heading !== undefined && (obj.heading = message.heading);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetPosition>, I>>(
+    object: I
+  ): MsgSetPosition {
+    const message = createBaseMsgSetPosition();
+    message.x = object.x ?? 0;
+    message.y = object.y ?? 0;
+    message.heading = object.heading ?? 0;
+    return message;
+  },
+};
+
 function createBaseMsgStop(): MsgStop {
   return {};
 }
@@ -1164,6 +1537,8 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
     ping: undefined,
     stop: undefined,
     drive: undefined,
+    setPosition: undefined,
+    solve: undefined,
   };
 }
 
@@ -1192,6 +1567,15 @@ export const MausIncomingMessage = {
     }
     if (message.drive !== undefined) {
       MsgDrive.encode(message.drive, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.setPosition !== undefined) {
+      MsgSetPosition.encode(
+        message.setPosition,
+        writer.uint32(66).fork()
+      ).ldelim();
+    }
+    if (message.solve !== undefined) {
+      MsgSolve.encode(message.solve, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -1224,6 +1608,12 @@ export const MausIncomingMessage = {
         case 7:
           message.drive = MsgDrive.decode(reader, reader.uint32());
           break;
+        case 8:
+          message.setPosition = MsgSetPosition.decode(reader, reader.uint32());
+          break;
+        case 9:
+          message.solve = MsgSolve.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1244,6 +1634,10 @@ export const MausIncomingMessage = {
       ping: isSet(object.ping) ? MsgPing.fromJSON(object.ping) : undefined,
       stop: isSet(object.stop) ? MsgStop.fromJSON(object.stop) : undefined,
       drive: isSet(object.drive) ? MsgDrive.fromJSON(object.drive) : undefined,
+      setPosition: isSet(object.setPosition)
+        ? MsgSetPosition.fromJSON(object.setPosition)
+        : undefined,
+      solve: isSet(object.solve) ? MsgSolve.fromJSON(object.solve) : undefined,
     };
   },
 
@@ -1265,6 +1659,12 @@ export const MausIncomingMessage = {
       (obj.stop = message.stop ? MsgStop.toJSON(message.stop) : undefined);
     message.drive !== undefined &&
       (obj.drive = message.drive ? MsgDrive.toJSON(message.drive) : undefined);
+    message.setPosition !== undefined &&
+      (obj.setPosition = message.setPosition
+        ? MsgSetPosition.toJSON(message.setPosition)
+        : undefined);
+    message.solve !== undefined &&
+      (obj.solve = message.solve ? MsgSolve.toJSON(message.solve) : undefined);
     return obj;
   },
 
@@ -1297,9 +1697,51 @@ export const MausIncomingMessage = {
       object.drive !== undefined && object.drive !== null
         ? MsgDrive.fromPartial(object.drive)
         : undefined;
+    message.setPosition =
+      object.setPosition !== undefined && object.setPosition !== null
+        ? MsgSetPosition.fromPartial(object.setPosition)
+        : undefined;
+    message.solve =
+      object.solve !== undefined && object.solve !== null
+        ? MsgSolve.fromPartial(object.solve)
+        : undefined;
     return message;
   },
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
+
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
+}
+
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  for (const byte of arr) {
+    bin.push(String.fromCharCode(byte));
+  }
+  return btoa(bin.join(""));
+}
 
 type Builtin =
   | Date

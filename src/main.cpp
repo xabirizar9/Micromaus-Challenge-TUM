@@ -2,9 +2,10 @@
 #include <freertos/task.h>
 
 #include "Controller.hpp"
-#include "MazeExplorer.hpp"
 #include "config.h"
 #include "esp_log.h"
+#include "nav/MazeSolver.hpp"
+#include "nav/RobotDriver.hpp"
 #include "net/NetController.hpp"
 #include "net/WifiCommunicator.hpp"
 #include "periph/Encoder.hpp"
@@ -24,22 +25,19 @@ NetController::Manager* netManager = NULL;
 Controller* mainController = NULL;
 
 // FIXME: @wlad move somewhere else
-MazeExplorer* explorer = NULL;
+MazeSolver* explorer = NULL;
 
 extern "C" void app_main() {
 	// configure logging and other pre-run setup
 	esp_log_level_set(TAG, ESP_LOG_DEBUG);
 
-	// enable if you want network streaming
-
 	// start main robot controller interface with motors and encoders
 	mainController = new Controller();
+
+	explorer = new MazeSolver(mainController);
 
 	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 	// pass controller to remote controller
 	netManager->controller = mainController;
-
-	explorer = new MazeExplorer(mainController);
-
-	// mainController->turnOnSpot(0.5 * 3.1416, 50);
+	netManager->driver = explorer;
 }

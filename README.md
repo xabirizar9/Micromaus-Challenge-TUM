@@ -10,7 +10,7 @@
 
 [L298B](https://www.mouser.de/datasheet/2/389/cd00000240-1795236.pdf)
 
-## Koordinatensysteme
+## Koordinatensysteme 
 ### Roboter
 X zeigt nach vorne, Y nach links, Z nach oben.
 Die Y-Achse ist die gemeinsame Drehachse der Motoren, der Ursprung liegt
@@ -21,5 +21,14 @@ Das Weltkoordinatensystem hat seinen Ursprung bei der linken unteren Ecke.
 Die X-Achse zeigt nach rechts, die Y-Ache nach oben und die Z-Achse aus
 der Ebene heraus.
 
+## Web Interface
 
-## Regen
+To build and run web interface go to `./controller` director and run
+
+```bash
+cd ./controller
+go build . && ./micromaus
+
+```
+
+Then you can visit the dashboard at [dashboard](http://localhot:8080)

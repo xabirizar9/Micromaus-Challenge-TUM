@@ -7,8 +7,9 @@
 #include <string>
 
 #include "Controller.hpp"
-#include "MazeExplorer.hpp"
 #include "message.pb.h"
+#include "nav/MazeSolver.hpp"
+#include "nav/RobotDriver.hpp"
 
 #define SEND_BUFFER_SIZE 2048
 #define RECV_BUFFER_SIZE 2048
