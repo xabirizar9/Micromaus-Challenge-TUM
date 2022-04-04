@@ -1,7 +1,7 @@
 #pragma once
 
 #include "filter/MapBelief.hpp"
-#include "filter/Position.hpp"
+#include "nav/Position.hpp"
 
 class Mapper {
    public:
@@ -11,7 +11,7 @@ class Mapper {
 		return bel;
 	}
 
-	void update(const RobotPosition& currentPos);
+	void update(const nav::RobotPosition& currentPos);
 
    private:
 	MapBelief bel;
