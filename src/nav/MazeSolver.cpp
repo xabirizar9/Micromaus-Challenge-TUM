@@ -91,16 +91,16 @@ void MazeSolver::startExploration() {
 		newHeading = this->getNewHeading(x, y);
 
 		// rotate based on optimal index
-		// if (heading != newHeading) {
-		// 	this->addCmdAndWait(heading - newHeading < 0
-		// 							? DriveCmdType::DriveCmdType_TurnLeftOnSpot
-		// 							: DriveCmdType::DriveCmdType_TurnRightOnSpot,
-		// 						std::abs(heading - newHeading),
-		// 						speed);
-		// 	heading = newHeading;
-		// }
+		if (heading != newHeading) {
+			this->addCmdAndWait(heading - newHeading < 0
+									? DriveCmdType::DriveCmdType_TurnLeftOnSpot
+									: DriveCmdType::DriveCmdType_TurnRightOnSpot,
+								std::abs(heading - newHeading),
+								speed);
+			heading = newHeading;
+		}
 
-		// this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+		this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
 
 		// update position based on heading
 		// TODO: maybe use robot position here
