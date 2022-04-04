@@ -4,6 +4,7 @@
 #include "freertos/event_groups.h"
 #include "freertos/queue.h"
 #include "nav/Maze.hpp"
+#include "nav/Position.hpp"
 #include "nav/RobotDriver.hpp"
 
 class MazeSolver : public RobotDriver {
@@ -21,5 +22,5 @@ class MazeSolver : public RobotDriver {
 	void pause();
 	void updateWalls();
 
-	Maze::Heading getNewHeading(uint8_t x, uint8_t y);
+	nav::CardinalDirection getNewHeading(uint8_t x, uint8_t y);
 };

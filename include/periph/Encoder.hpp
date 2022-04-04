@@ -20,8 +20,7 @@ class Encoder {
 	int16_t get() const;
 
 	int64_t getTotalCounter() const;
-
-	/**
+	/*
 	 * @brief resets the current encoder counter
 	 * the counter is to totalCounter
 	 */
@@ -29,6 +28,5 @@ class Encoder {
 
    protected:
 	void onOverflow();
-
 	PulseCounterResource* unit;
 };

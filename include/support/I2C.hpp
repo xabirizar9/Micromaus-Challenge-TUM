@@ -2,9 +2,8 @@
 
 #include <cstdint>
 
-class I2CMaster
-{
-public:
+class I2CMaster {
+   public:
 	I2CMaster(uint8_t sclPin, uint8_t sdaPin);
 	~I2CMaster();
 
@@ -13,4 +12,3 @@ public:
 	void selectRegister(uint8_t deviceAddr, uint8_t regNo);
 	uint8_t readByte(uint8_t deviceAddr);
 };
-

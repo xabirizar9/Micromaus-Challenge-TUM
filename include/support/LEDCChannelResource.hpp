@@ -19,4 +19,3 @@ class LEDCChannelResource {
    private:
 	CountedResource<ledc_channel_t, LEDC_CHANNEL_MAX> impl;
 };
-
