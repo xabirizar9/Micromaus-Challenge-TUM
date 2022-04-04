@@ -92,7 +92,7 @@ void MazeSolver::startExploration() {
 			heading = newHeading;
 		}
 
-		this->addCmdAndWait(DriveCmdType::DriveCmdType_Move, 1, speed);
+		this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
 
 		// update position based on heading
 		// TODO: maybe use robot position here
@@ -117,6 +117,6 @@ void MazeSolver::startExploration() {
 
 		// we can probably remove this timeout since the should be enough time while waiting for
 		// commands
-		vTaskDelay(pdMS_TO_TICKS(2000));
+		vTaskDelay(pdMS_TO_TICKS(200));
 	}
 }

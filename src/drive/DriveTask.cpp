@@ -56,11 +56,12 @@ void driveTask(void* arg) {
 				continue;
 			}
 		}
-
+		ESP_LOGI(tag, "cmd type:%d", cmd.type);
 		switch (cmd.type) {
 			case DriveCmdType::DriveCmdType_Move: break;
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
+				ESP_LOGI(tag, "DriveCell");
 				//_MsgTurn payload =
 				vTaskResume(laneControllTaskHandle);
 				// NavigationPacket *data = &controller->getState();
@@ -78,6 +79,7 @@ void driveTask(void* arg) {
 					averageEncoder2 = averageEncoder(controller);
 					dif = averageEncoder2 - averageEncoder1;
 				}
+				dif = 0;
 				controller->drive(0, 0);
 				vTaskSuspend(laneControllTaskHandle);
 				break;
