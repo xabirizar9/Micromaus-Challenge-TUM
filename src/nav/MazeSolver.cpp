@@ -3,6 +3,7 @@
 #include "drive/DriveTask.hpp"
 #include "message.pb.h"
 #include "nav/Maze.hpp"
+#include "net/NetController.hpp"
 #include "stdbool.h"
 
 static const char* TAG = "[solver]";
@@ -31,8 +32,6 @@ Maze::Heading MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	costs[Maze::Heading::South] = this->maze.getCost(x, y - 1);
 	costs[Maze::Heading::West] = this->maze.getCost(x - 1, y);
 
-	ESP_LOGI(TAG, "[%d, %d, %d, %d]", costs[0], costs[1], costs[2], costs[3]);
-
 	for (uint i = 0; i < 4; i++) {
 		heading = static_cast<Maze::Heading>(costs[i] < costs[heading] ? i : heading);
 	}
@@ -58,7 +57,8 @@ void MazeSolver::startExploration() {
 
 	Maze::Heading heading = Maze::Heading::North;
 	Maze::Heading newHeading = Maze::Heading::North;
-	uint16_t speed = 100;
+	uint16_t speed = 200;
+	MazeStatePacket packet;
 	// TODO: split into task
 
 	while (true) {
@@ -66,8 +66,7 @@ void MazeSolver::startExploration() {
 			// TODO: add what need to be done when center found
 			ESP_LOGI(TAG, "!!! We found the center");
 			this->maze.printMaze(x, y);
-			vTaskDelete(xTaskGetCurrentTaskHandle());
-			continue;
+			return;
 		}
 
 		this->updateWalls();
@@ -75,24 +74,31 @@ void MazeSolver::startExploration() {
 		// rerun flood fill
 		this->maze.update();
 
-		this->maze.printMaze(x, y);
+		// send update over network
+
+		packet = this->getMaze()->getEncodedValue();
+
+		// write and encode the command
+		NetController::Manager::getInstance().writeMazeState(packet);
+
+		// this->maze.printMaze(x, y);
 		// give us some time to print
-		vTaskDelay(pdMS_TO_TICKS(100));
+		vTaskDelay(pdMS_TO_TICKS(200));
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
 
 		// rotate based on optimal index
-		if (heading != newHeading) {
-			this->addCmdAndWait(heading - newHeading < 0
-									? DriveCmdType::DriveCmdType_TurnLeftOnSpot
-									: DriveCmdType::DriveCmdType_TurnRightOnSpot,
-								std::abs(heading - newHeading),
-								speed);
-			heading = newHeading;
-		}
+		// if (heading != newHeading) {
+		// 	this->addCmdAndWait(heading - newHeading < 0
+		// 							? DriveCmdType::DriveCmdType_TurnLeftOnSpot
+		// 							: DriveCmdType::DriveCmdType_TurnRightOnSpot,
+		// 						std::abs(heading - newHeading),
+		// 						speed);
+		// 	heading = newHeading;
+		// }
 
-		this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+		// this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
 
 		// update position based on heading
 		// TODO: maybe use robot position here
@@ -115,6 +121,7 @@ void MazeSolver::startExploration() {
 				break;
 		}
 
+		// write and encode the command
 		// we can probably remove this timeout since the should be enough time while waiting for
 		// commands
 		vTaskDelay(pdMS_TO_TICKS(200));

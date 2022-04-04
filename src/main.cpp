@@ -36,8 +36,7 @@ extern "C" void app_main() {
 
 	explorer = new MazeSolver(mainController);
 
-	netManager = new NetController::Manager(WifiCommunicator::getInstance());
 	// pass controller to remote controller
-	netManager->controller = mainController;
-	netManager->driver = explorer;
+	NetController::Manager::getInstance().controller = mainController;
+	NetController::Manager::getInstance().driver = explorer;
 }

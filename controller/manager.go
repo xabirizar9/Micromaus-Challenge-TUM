@@ -101,6 +101,8 @@ func (m *Manager) recvFromMausRoutine() {
 		case *pb.MausOutgoingMessage_Nav:
 			fmt.Printf(".")
 			m.broadcastChannel <- cmd
+		case *pb.MausOutgoingMessage_MazeState:
+			m.broadcastChannel <- cmd
 		}
 
 	}

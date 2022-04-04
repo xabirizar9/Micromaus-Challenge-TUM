@@ -3,10 +3,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
 #include "freertos/queue.h"
-#include "message.pb.h"
 #include "nav/Maze.hpp"
 #include "nav/RobotDriver.hpp"
-#include "net/NetController.hpp"
 
 class MazeSolver : public RobotDriver {
    private:

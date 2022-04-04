@@ -36,7 +36,12 @@ class Manager {
 	bool writeCmd(MausOutgoingMessage* msg);
 
    public:
-	Manager(Communicator interface);
+	static Manager& getInstance() {
+		static Manager instance;
+		return instance;
+	}
+
+	Manager();
 
 	bool initCompleted = false;
 	uint8_t encodeBuffer[SEND_BUFFER_SIZE];
@@ -47,6 +52,9 @@ class Manager {
 
 	template <typename T, int tag>
 	void writePacket(T packet);
+
+	void writeMazeState(MazeStatePacket state);
 };
 
+extern Manager* netManager;
 };	// namespace NetController

@@ -14,6 +14,10 @@
 
   export let com: Communicator;
 
+  let mazeState = new Uint8Array(mazeSize.width * mazeSize.width).map(
+    (_, i) => 255
+  );
+  let wallState = new Uint8Array(mazeSize.width * mazeSize.width);
   const sensorOffsets = {
     left: { x: -25, y: 0 },
     front: { x: 0, y: 25 },
@@ -81,7 +85,6 @@
     drawSensorDot(nav, "front");
     drawSensorDot(nav, "right");
     currentRotationInRad = nav.position.heading;
-    // addPoint();
   };
 
   function CanvasEl(node: HTMLCanvasElement) {
@@ -118,7 +121,8 @@
         }
 
         if (evt.data.mazeState) {
-          console.log(evt.data.mazeState);
+          mazeState = evt.data.mazeState.state;
+          wallState = evt.data.mazeState.walls;
         }
       }
     );
@@ -155,17 +159,33 @@
       },
     });
   };
+
+  const getWallIndex = (i: number) => {
+    return (
+      mazeSize.width * (5 - Math.floor(i / mazeSize.width)) +
+      (i % mazeSize.width)
+    );
+  };
 </script>
 
 <div class="card map">
   <div class="maze-grid">
-    {#each Array(mazeSize.width * mazeSize.width) as _, i}
+    {#each mazeState as v, i}
       <div
+        class:goal={v == 0}
         on:click={() =>
           setPosition(i % mazeSize.width, Math.floor(i / mazeSize.width))}
         class="maze-item"
       >
-        {0}
+        {v}
+        {#if (1 << 0) & wallState[getWallIndex(i)]}
+          <div class="north" />{/if}
+        {#if (1 << 1) & wallState[getWallIndex(i)]}
+          <div class="east" />{/if}
+        {#if (1 << 2) & wallState[getWallIndex(i)]}
+          <div class="south" />{/if}
+        {#if (1 << 3) & wallState[getWallIndex(i)]}
+          <div class="west" />{/if}
       </div>
     {/each}
   </div>
@@ -230,6 +250,7 @@
   }
 
   .maze-item {
+    position: relative;
     aspect-ratio: 1;
     background-color: var(--main-bg-secondary);
     border-radius: 0.5rem;
@@ -242,6 +263,49 @@
     &:hover {
       background-color: var(--primary-color);
       color: var(--primary-color-text);
+    }
+
+    &.goal {
+      background-color: #f1c40f;
+      color: #fff;
+      &:hover {
+        background-color: #f39c12;
+        color: #fff;
+      }
+    }
+
+    > div {
+      background-color: orange;
+      border-radius: 3px;
+      position: absolute;
+
+      &.east {
+        right: -5px;
+        top: 5px;
+        bottom: 5px;
+        width: 5px;
+      }
+
+      &.north {
+        right: 5px;
+        left: 5px;
+        top: -5px;
+        height: 5px;
+      }
+
+      &.south {
+        right: 5px;
+        left: 5px;
+        bottom: -5px;
+        height: 5px;
+      }
+
+      &.west {
+        left: -5px;
+        top: 5px;
+        bottom: 5px;
+        width: 5px;
+      }
     }
   }
 
