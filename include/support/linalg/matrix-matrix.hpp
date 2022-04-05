@@ -23,3 +23,11 @@ std::common_type_t<T, S> dot(const Mat<T, A, 1>& l, const Mat<S, A, 1>& r) {
 	}
 	return std::move(out);
 }
+
+/**
+ * Vec2 cross product, returns z component of result
+ */
+template <typename T, typename S>
+std::common_type_t<T, S> cross(const Mat<T, 2, 1>& l, const Mat<S, 2, 1>& r) {
+	return l.data[0] * r.data[1] - l.data[1] * r.data[0];
+}
