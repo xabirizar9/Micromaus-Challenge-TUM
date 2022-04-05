@@ -39,6 +39,14 @@ struct Vec : public Mat<T, R, 1> {
 
 	constexpr Vec(const Mat<T, R, 1>& m) : Mat<T, R, 1>(m.data) {}
 
+	template <unsigned int X = R>
+	constexpr Vec(const T x, const T y, typename std::enable_if_t<X == 2, bool> = true)
+		: Mat<T, R, 1>({x, y}) {}
+
+	template <unsigned int X = R>
+	constexpr Vec(const T x, const T y, const T z, typename std::enable_if_t<X == 3, bool> = true)
+		: Mat<T, R, 1>({x, y, z}) {}
+
 	T& at(unsigned int r) {
 		return Mat<T, R, 1>::at(r, 1);
 	}
