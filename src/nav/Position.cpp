@@ -5,10 +5,10 @@
 #include "support/Linalg.hpp"
 
 using namespace nav;
-using namespace linalg;
+using namespace la;
 
-Vec<float> Heading::toVector() const {
-	return {std::cos(angle), std::sin(angle), 0.f};
+Vec2f Heading::toVector() const {
+	return {std::cos(angle), std::sin(angle)};
 }
 
 Heading Heading::normalized() const {
