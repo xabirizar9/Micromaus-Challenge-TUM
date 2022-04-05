@@ -92,6 +92,8 @@ class Controller {
 
 	void setPosition(float x, float y, float heading);
 
+	float averageEncoder();
+
 	// PID tuning routine
 	void startPidTuning();
 	void stopPidTuning();

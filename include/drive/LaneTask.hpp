@@ -1,3 +1,5 @@
 #pragma once
+#include "Controller.hpp"
+#include "message.pb.h"
 
-void laneControlTask(void *args);
+void laneControlTask(Controller *controller, MsgDrive *cmd);

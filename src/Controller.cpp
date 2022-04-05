@@ -246,3 +246,9 @@ bool Controller::getIsPidTuningEnabled() {
 float *Controller::getPidTuningBuffer() {
 	return this->pidTuningSamples;
 }
+
+float Controller::averageEncoder() {
+	int64_t right = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	int64_t left = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	return 0.5 * (right + left);
+}
