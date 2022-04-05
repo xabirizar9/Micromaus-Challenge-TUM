@@ -109,6 +109,9 @@ void Controller::drive(int16_t speed, int16_t R) {
 		case 0:
 			this->state.leftMotorSpeed = speed;
 			this->state.rightMotorSpeed = speed;
+			// leftMotor.brakeMotor(1);
+			// rightMotor.brakeMotor(1);
+			// vTaskDelay(pdMS_TO_TICKS(7000));
 			break;
 		case INT16_MIN:
 			this->state.leftMotorSpeed = -speed;

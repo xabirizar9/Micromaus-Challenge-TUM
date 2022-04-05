@@ -174,24 +174,44 @@ bool Maze::getWall(uint8_t x, uint8_t y, CardinalDirection dir) {
 bool encodeMaze(pb_ostream_t *ostream, const pb_field_t *field, void *const *arg) {
 	Maze *maze = (Maze *)(*arg);
 
-	ESP_LOGI(TAG, "tag=%d", field->tag);
+	// ESP_LOGI(TAG, "tag=%d", field->tag);
 
 	// encode all numbers
 	if (!pb_encode_tag_for_field(ostream, field)) {
 		const char *error = PB_GET_ERROR(ostream);
+		ESP_LOGI(TAG, "pb_err=%s", error);
 		return false;
 	}
 
-	uint8_t len = maze->size * maze->size;
+	size_t len = maze->size * maze->size;
 
-	uint8_t value = 0;
-	for (int i = 0; i < len; i++) {
-		value = maze->state[i];
-		if (!pb_encode_fixed32(ostream, &value)) {
-			const char *error = PB_GET_ERROR(ostream);
-			return false;
-		}
-		// ESP_LOGI(TAG, "%d %d", i, ostream->bytes_written);
+	if (!pb_encode_string(ostream, maze->state, len)) {
+		const char *error = PB_GET_ERROR(ostream);
+		ESP_LOGI(TAG, "pb_err=%s", error);
+		return false;
+	}
+
+	return true;
+}
+
+bool encodeWalls(pb_ostream_t *ostream, const pb_field_t *field, void *const *arg) {
+	Maze *maze = (Maze *)(*arg);
+
+	// ESP_LOGI(TAG, "tag=%d", field->tag);
+
+	// encode all numbers
+	if (!pb_encode_tag_for_field(ostream, field)) {
+		const char *error = PB_GET_ERROR(ostream);
+		ESP_LOGI(TAG, "pb_err=%s", error);
+		return false;
+	}
+
+	size_t len = maze->size * maze->size;
+
+	if (!pb_encode_string(ostream, maze->wallState, len)) {
+		const char *error = PB_GET_ERROR(ostream);
+		ESP_LOGI(TAG, "pb_err=%s", error);
+		return false;
 	}
 
 	return true;
@@ -204,9 +224,8 @@ MazeStatePacket Maze::getEncodedValue() {
 	state.position = Position_init_zero;
 	state.target = Position_init_zero;
 
-	// todo use wall encoder
 	state.walls.arg = this;
-	state.walls.funcs.encode = encodeMaze;
+	state.walls.funcs.encode = encodeWalls;
 
 	state.state.arg = this;
 	state.state.funcs.encode = encodeMaze;

@@ -353,8 +353,9 @@ WifiCommunicator::WifiCommunicator() {
 	xTaskCreate(udpReceiverTask, "udpReceiverTask", 4096, (void *)AF_INET, 3, NULL);
 	xTaskCreate(udpSenderTask, "udpSenderTask", 4096, (void *)AF_INET, 3, NULL);
 
+#ifdef USE_802_1x
 	this->com->sendOwnIP();
-
+#endif
 	led1.set(false);
 }
 

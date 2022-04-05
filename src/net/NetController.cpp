@@ -33,7 +33,6 @@ using namespace NetController;
 void infoStreamerTask(void *pvParameter) {
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
 	Maze *maze;
-	MazeStatePacket packet;
 	while (true) {
 		if (manager->controller == NULL || !manager->initCompleted) {
 			vTaskDelay(sensorSendInterval);
@@ -43,13 +42,6 @@ void infoStreamerTask(void *pvParameter) {
 		if (manager->initCompleted) {
 			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(
 				manager->controller->getState());
-
-			// if (manager->driver != NULL) {
-			// 	packet = manager->driver->getMaze()->getEncodedValue();
-
-			// 	// write and encode the command
-			// 	manager->writePacket<MazeStatePacket, MausOutgoingMessage_mazeState_tag>(packet);
-			// }
 		}
 
 		vTaskDelay(sensorSendInterval);
@@ -232,8 +224,8 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 	return true;
 };
 
-NetController::Manager::Manager(NetController::Communicator interface) {
-	this->comInterface = interface;
+NetController::Manager::Manager() {
+	this->comInterface = WifiCommunicator::getInstance();
 	ESP_LOGI(tag, "Manager()");
 
 	xTaskCreate(receiverTask, "receiverTask", 9000, this, 5, NULL);
@@ -257,3 +249,8 @@ void NetController::Manager::writePacket(T packet) {
 
 	writeCmd(&msg);
 };
+
+void NetController::Manager::writeMazeState(MazeStatePacket packet) {
+	ESP_LOGI(tag, "writing packet");
+	return this->writePacket<MazeStatePacket, MausOutgoingMessage_mazeState_tag>(packet);
+}

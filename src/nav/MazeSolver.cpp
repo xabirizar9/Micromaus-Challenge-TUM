@@ -3,6 +3,7 @@
 #include "drive/DriveTask.hpp"
 #include "message.pb.h"
 #include "nav/Maze.hpp"
+#include "net/NetController.hpp"
 #include "stdbool.h"
 
 using nav::CardinalDirection;
@@ -33,8 +34,6 @@ CardinalDirection MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	costs[CardinalDirection::SOUTH] = this->maze.getCost(x, y - 1);
 	costs[CardinalDirection::WEST] = this->maze.getCost(x - 1, y);
 
-	ESP_LOGI(TAG, "[%d, %d, %d, %d]", costs[0], costs[1], costs[2], costs[3]);
-
 	for (uint8_t i = 0; i < 4; i++) {
 		heading = costs[i] < costs[heading] ? CardinalDirection(i) : heading;
 	}
@@ -60,6 +59,7 @@ void MazeSolver::startExploration() {
 
 	CardinalDirection heading = CardinalDirection::NORTH;
 	CardinalDirection newHeading = CardinalDirection::NORTH;
+	MazeStatePacket packet;
 	uint16_t speed = 100;
 	// TODO: split into task
 
@@ -68,8 +68,7 @@ void MazeSolver::startExploration() {
 			// TODO: add what need to be done when center found
 			ESP_LOGI(TAG, "!!! We found the center");
 			this->maze.printMaze(x, y);
-			vTaskDelete(xTaskGetCurrentTaskHandle());
-			continue;
+			return;
 		}
 
 		this->updateWalls();
@@ -77,9 +76,16 @@ void MazeSolver::startExploration() {
 		// rerun flood fill
 		this->maze.update();
 
-		this->maze.printMaze(x, y);
+		// send update over network
+
+		packet = this->getMaze()->getEncodedValue();
+
+		// write and encode the command
+		NetController::Manager::getInstance().writeMazeState(packet);
+
+		// this->maze.printMaze(x, y);
 		// give us some time to print
-		vTaskDelay(pdMS_TO_TICKS(100));
+		vTaskDelay(pdMS_TO_TICKS(200));
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
@@ -117,6 +123,7 @@ void MazeSolver::startExploration() {
 				break;
 		}
 
+		// write and encode the command
 		// we can probably remove this timeout since the should be enough time while waiting for
 		// commands
 		vTaskDelay(pdMS_TO_TICKS(200));

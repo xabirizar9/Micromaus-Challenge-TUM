@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"os/exec"
@@ -36,6 +37,9 @@ func openbrowser(url string) {
 }
 
 func main() {
+	var forceMDNS = flag.Bool("force-mdns", false, "if enabled only mDNS mouses will be discovered")
+	flag.Parse()
+
 	c := Config{}
 	c.getConf()
 	m := NewManager()
@@ -44,9 +48,10 @@ func main() {
 		for {
 			log.Info("connecting to robot...")
 			r, err := NewRobot(log, RobotConnectionOptions{
-				Baud: 115200,
-				Dev:  "/dev/cu.MAUS_BT_SERIAL",
-				Addr: c.MausAddr,
+				Baud:     115200,
+				Dev:      "/dev/cu.MAUS_BT_SERIAL",
+				Addr:     c.MausAddr,
+				OnlyMDNS: *forceMDNS,
 			})
 			if err != nil {
 

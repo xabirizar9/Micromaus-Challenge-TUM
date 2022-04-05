@@ -38,9 +38,10 @@ type Robot struct {
 }
 
 type RobotConnectionOptions struct {
-	Baud int
-	Dev  string
-	Addr string
+	Baud     int
+	Dev      string
+	Addr     string
+	OnlyMDNS bool
 }
 
 func (r *Robot) connect(ctx context.Context, address string) (err error) {
@@ -76,7 +77,9 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	}
 
 	err = r.connect(context.TODO(), opt.Addr)
-	if err != nil {
+	if err != nil && !opt.OnlyMDNS {
+		l.Info("WHat the hell!!!!")
+
 		l.Warn("direct connection failed using fallback", zap.Error(err))
 		// if initial connect fails try using remote address
 		resp, err := http.Get("http://iamwlad.com:7777/maus")
@@ -234,7 +237,7 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 			// wait for pong
 			<-r.pongMsgChannel
 
-			log.Info("got something", zap.Error(err))
+			log.Info("got pong", zap.Error(err))
 
 			errChan <- nil
 		})
