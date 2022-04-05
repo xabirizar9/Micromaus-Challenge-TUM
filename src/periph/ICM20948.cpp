@@ -6,7 +6,7 @@
 #include "periph/icm_registers.hpp"
 #include "support/I2C.hpp"
 
-using namespace linalg;
+using namespace la;
 
 static const char* TAG = "icm";
 
@@ -160,25 +160,25 @@ void ICM20948::magnetometerWrite(uint8_t reg, uint8_t data) {
 	}
 }
 
-Vec<int16_t> ICM20948::readAccelRaw() {
+Vec<int16_t, 3> ICM20948::readAccelRaw() {
 	switchBank(0);
-	Vec<int16_t> out;
-	spi.read<int16_t>(REG::ACCEL_XOUT_H, out.buffer.data(), out.buffer.size());
+	Vec<int16_t, 3> out;
+	spi.read<int16_t>(REG::ACCEL_XOUT_H, out.data.data(), out.data.size());
 	return out;
 }
 
-Vec<int16_t> ICM20948::readGyroRaw() {
+Vec<int16_t, 3> ICM20948::readGyroRaw() {
 	switchBank(0);
-	Vec<int16_t> out;
-	spi.read<int16_t>(REG::GYRO_XOUT_H, out.buffer.data(), out.buffer.size());
+	Vec<int16_t, 3> out;
+	spi.read<int16_t>(REG::GYRO_XOUT_H, out.data.data(), out.data.size());
 	return out;
 }
 
-Vec<int16_t> ICM20948::readMagRaw() {
+Vec<int16_t, 3> ICM20948::readMagRaw() {
 	switchBank(0);
-	Vec<int16_t> d;
+	Vec<int16_t, 3> d;
 	// TODO do something with the status registers
-	spi.read<int16_t>(REG::EXT_SLV_SENS_DATA_01, d.buffer.data(), d.buffer.size());
+	spi.read<int16_t>(REG::EXT_SLV_SENS_DATA_01, d.data.data(), d.data.size());
 	return d;
 }
 
@@ -187,17 +187,17 @@ int16_t ICM20948::readTempRaw() {
 	return spi.read<int16_t>(REG::TEMP_OUT_H);
 }
 
-Vec<float> ICM20948::readAccel() {
+Vec3f ICM20948::readAccel() {
 	auto v = readAccelRaw();
 	return v / accelScale;
 }
 
-Vec<float> ICM20948::readGyro() {
+Vec3f ICM20948::readGyro() {
 	auto v = readGyroRaw();
 	return v / gyroScale;
 }
 
-Vec<float> ICM20948::readMag() {
+Vec3f ICM20948::readMag() {
 	auto v = readMagRaw();
 	return v * MAGNETOMETER_SCALE;
 }
