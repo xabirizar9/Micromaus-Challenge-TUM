@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"net"
 	"net/http"
 
@@ -8,8 +10,8 @@ import (
 )
 
 var (
-	robotIP net.IP
-	log, _  = zap.NewDevelopment()
+	robots map[string]net.IP = make(map[string]net.IP)
+	log, _                   = zap.NewDevelopment()
 )
 
 func handleUDPConnection(conn *net.UDPConn) {
@@ -24,13 +26,16 @@ func handleUDPConnection(conn *net.UDPConn) {
 		return
 	}
 
-	if n != 4 {
+	if n != 8 {
 		log.Error("invalid maus address length", zap.Int("length", n))
 		return
 	}
 
-	robotIP = (net.IP(buffer[:4]))
-	log.Info("got maus IP", zap.String("ip", robotIP.String()))
+	robotMac := fmt.Sprintf("%02X:%02X:%02X:%02X", buffer[0], buffer[1], buffer[2], buffer[3])
+	robotIP := (net.IP(buffer[4:8]))
+
+	log.Info("registered maus", zap.String("mac", robotMac), zap.String("ip", robotIP.String()))
+	robots[robotMac] = robotIP
 }
 
 func main() {
@@ -66,8 +71,25 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 			)
 			l.Info("maus requested")
-			w.Write([]byte(robotIP.String()))
+
+			type Robots struct {
+				Robots map[string]net.IP `json:"robots"`
+			}
+
+			robots := Robots{
+				Robots: robots,
+			}
+
+			buf, err := json.Marshal(robots)
+			if err != nil {
+				l.Error("failed to marshal robots", zap.Error(err))
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
+
+			w.Write(buf)
 		})
 
 		log.Info("server started")

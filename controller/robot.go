@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"time"
 
+	"github.com/c-bata/go-prompt"
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
@@ -59,6 +61,22 @@ func (r *Robot) connect(ctx context.Context, address string) (err error) {
 	return
 }
 
+func robotSelector(robots map[string]net.IP) prompt.Completer {
+	return func(d prompt.Document) []prompt.Suggest {
+		s := []prompt.Suggest{
+			{Text: "users", Description: "Store the username and age"},
+			{Text: "articles", Description: "Store the article text posted by user"},
+			{Text: "comments", Description: "Store the text commented to articles"},
+		}
+
+		for k, v := range robots {
+			s = append(s, prompt.Suggest{Text: v.String(), Description: k})
+		}
+
+		return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+	}
+}
+
 func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	/*c := &serial.Config{Name: opt.Dev, Baud: opt.Baud}
 	s, err := serial.OpenPort(c)
@@ -78,7 +96,6 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 
 	err = r.connect(context.TODO(), opt.Addr)
 	if err != nil && !opt.OnlyMDNS {
-		l.Info("WHat the hell!!!!")
 
 		l.Warn("direct connection failed using fallback", zap.Error(err))
 		// if initial connect fails try using remote address
@@ -88,15 +105,42 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 			return nil, err
 		}
 
+		type maus struct {
+			Robots map[string]net.IP `json:"robots"`
+		}
+
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			l.Error("failed to connect to robot", zap.Error(err))
 			return nil, err
 		}
 
-		str := string(body)
+		var (
+			m    maus
+			addr string
+		)
 
-		err = r.connect(context.TODO(), str+":8888")
+		err = json.Unmarshal(body, &m)
+		if err != nil {
+			l.Error("failed to decode remote response", zap.Error(err))
+			return nil, err
+		}
+
+		if len(m.Robots) == 0 {
+			err = errors.New("no robots found on remote server")
+			l.Error("failed to decode remote response", zap.Error(err))
+			return nil, err
+		}
+
+		if len(m.Robots) == 1 {
+			for _, v := range m.Robots {
+				addr = v.String()
+			}
+		} else {
+			addr = prompt.Input("Select Maus > ", robotSelector(m.Robots))
+		}
+
+		err = r.connect(context.TODO(), addr+":8888")
 		if err != nil {
 			l.Error("failed to connect to robot", zap.Error(err))
 			return nil, err
