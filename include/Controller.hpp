@@ -25,7 +25,7 @@ class Controller {
 	IRSensor frontSensor;
 	int16_t speed;
 
-	MsgEncoderCallibration lanePidConfig = {0.002, 0.0, 0.0, false};
+	MsgEncoderCallibration lanePidConfig = {80, 0.0, 0.0, false};
 
 	bool isPidTuningEnabled = false;
 	uint32_t currentPidTuningSampleIndex = 0;
