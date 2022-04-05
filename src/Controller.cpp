@@ -67,9 +67,9 @@ void Controller::setSpeed(int16_t speed) {
 
 void Controller::updateSensors() {
 	// update sensor readings with offset
-	this->state.sensors.left = leftSensorOffsetY + leftSensor.measuredistance();
-	this->state.sensors.right = rightSensorOffsetY + rightSensor.measuredistance();
-	this->state.sensors.front = frontSensorOffsetX + leftSensor.measuredistance();
+	this->state.sensors.left = leftSensor.measuredistance();
+	this->state.sensors.right = rightSensor.measuredistance();
+	this->state.sensors.front = leftSensor.measuredistance();
 }
 
 void Controller::updatePosition() {
