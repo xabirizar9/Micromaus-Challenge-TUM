@@ -134,5 +134,6 @@ message MausIncomingMessage {
 		MsgDrive drive = 7;
 		MsgSetPosition setPosition = 8;
 		MsgSolve solve = 9;
+		MsgEncoderCallibration laneCallibration = 10;
 	}
 }

@@ -121,6 +121,7 @@ typedef struct _MausIncomingMessage {
         MsgDrive drive;
         MsgSetPosition setPosition;
         MsgSolve solve;
+        MsgEncoderCallibration laneCallibration;
     } payload; 
 } MausIncomingMessage;
 
@@ -250,6 +251,7 @@ extern "C" {
 #define MausIncomingMessage_drive_tag            7
 #define MausIncomingMessage_setPosition_tag      8
 #define MausIncomingMessage_solve_tag            9
+#define MausIncomingMessage_laneCallibration_tag 10
 #define MazeStatePacket_state_tag                1
 #define MazeStatePacket_walls_tag                2
 #define MazeStatePacket_position_tag             3
@@ -408,7 +410,8 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ping,payload.ping),   5) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,stop,payload.stop),   6) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,drive,payload.drive),   7) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,setPosition,payload.setPosition),   8) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,solve,payload.solve),   9)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,solve,payload.solve),   9) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,laneCallibration,payload.laneCallibration),  10)
 #define MausIncomingMessage_CALLBACK NULL
 #define MausIncomingMessage_DEFAULT NULL
 #define MausIncomingMessage_payload_init_MSGTYPE MsgInit
@@ -419,6 +422,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,solve,payload.solve),   9)
 #define MausIncomingMessage_payload_drive_MSGTYPE MsgDrive
 #define MausIncomingMessage_payload_setPosition_MSGTYPE MsgSetPosition
 #define MausIncomingMessage_payload_solve_MSGTYPE MsgSolve
+#define MausIncomingMessage_payload_laneCallibration_MSGTYPE MsgEncoderCallibration
 
 extern const pb_msgdesc_t AckPacket_msg;
 extern const pb_msgdesc_t Position_msg;

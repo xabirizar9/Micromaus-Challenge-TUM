@@ -21,6 +21,9 @@
   let kP = 0.4;
   let kD = 0.00001;
   let kI = 0.0;
+  let lkP = 0.02;
+  let lkD = 0.0;
+  let lkI = 0.0;
 
   let direction = 0;
   let speed = 0;
@@ -38,6 +41,19 @@
         kD,
         kI,
         kP,
+        streamData: false,
+      },
+    });
+  };
+  const onUpdateLaneCalibration = (
+    evt: SubmitEvent | CustomEvent<MouseEvent>
+  ) => {
+    evt.preventDefault();
+    com.send({
+      laneCallibration: {
+        kD: lkD,
+        kI: lkI,
+        kP: lkP,
         streamData: false,
       },
     });
@@ -140,6 +156,15 @@
           <Input step="0.000001" label="kP" type="number" bind:value={kP} />
           <Input step="0.000001" label="kD" type="number" bind:value={kD} />
           <Input step="0.000001" label="kI" type="number" bind:value={kI} />
+        </Grid>
+        <Button type="submit">Update</Button>
+      </form>
+      <h2>Lane tuning</h2>
+      <form on:submit={onUpdateLaneCalibration}>
+        <Grid>
+          <Input step="0.000001" label="kP" type="number" bind:value={lkP} />
+          <Input step="0.000001" label="kD" type="number" bind:value={lkD} />
+          <Input step="0.000001" label="kI" type="number" bind:value={lkI} />
         </Grid>
         <Button type="submit">Update</Button>
       </form>

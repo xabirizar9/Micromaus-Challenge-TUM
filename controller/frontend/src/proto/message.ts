@@ -263,6 +263,7 @@ export interface MausIncomingMessage {
   drive: MsgDrive | undefined;
   setPosition: MsgSetPosition | undefined;
   solve: MsgSolve | undefined;
+  laneCallibration: MsgEncoderCallibration | undefined;
 }
 
 function createBaseAckPacket(): AckPacket {
@@ -1539,6 +1540,7 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
     drive: undefined,
     setPosition: undefined,
     solve: undefined,
+    laneCallibration: undefined,
   };
 }
 
@@ -1577,6 +1579,12 @@ export const MausIncomingMessage = {
     if (message.solve !== undefined) {
       MsgSolve.encode(message.solve, writer.uint32(74).fork()).ldelim();
     }
+    if (message.laneCallibration !== undefined) {
+      MsgEncoderCallibration.encode(
+        message.laneCallibration,
+        writer.uint32(82).fork()
+      ).ldelim();
+    }
     return writer;
   },
 
@@ -1614,6 +1622,12 @@ export const MausIncomingMessage = {
         case 9:
           message.solve = MsgSolve.decode(reader, reader.uint32());
           break;
+        case 10:
+          message.laneCallibration = MsgEncoderCallibration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1638,6 +1652,9 @@ export const MausIncomingMessage = {
         ? MsgSetPosition.fromJSON(object.setPosition)
         : undefined,
       solve: isSet(object.solve) ? MsgSolve.fromJSON(object.solve) : undefined,
+      laneCallibration: isSet(object.laneCallibration)
+        ? MsgEncoderCallibration.fromJSON(object.laneCallibration)
+        : undefined,
     };
   },
 
@@ -1665,6 +1682,10 @@ export const MausIncomingMessage = {
         : undefined);
     message.solve !== undefined &&
       (obj.solve = message.solve ? MsgSolve.toJSON(message.solve) : undefined);
+    message.laneCallibration !== undefined &&
+      (obj.laneCallibration = message.laneCallibration
+        ? MsgEncoderCallibration.toJSON(message.laneCallibration)
+        : undefined);
     return obj;
   },
 
@@ -1704,6 +1725,10 @@ export const MausIncomingMessage = {
     message.solve =
       object.solve !== undefined && object.solve !== null
         ? MsgSolve.fromPartial(object.solve)
+        : undefined;
+    message.laneCallibration =
+      object.laneCallibration !== undefined && object.laneCallibration !== null
+        ? MsgEncoderCallibration.fromPartial(object.laneCallibration)
         : undefined;
     return message;
   },

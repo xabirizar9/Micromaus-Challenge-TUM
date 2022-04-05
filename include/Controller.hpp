@@ -25,6 +25,8 @@ class Controller {
 	IRSensor frontSensor;
 	int16_t speed;
 
+	MsgEncoderCallibration lanePidConfig = {0.002, 0.0, 0.0, false};
+
 	bool isPidTuningEnabled = false;
 	uint32_t currentPidTuningSampleIndex = 0;
 	float *pidTuningSamples = NULL;
@@ -93,6 +95,9 @@ class Controller {
 	void setPosition(float x, float y, float heading);
 
 	float averageEncoder();
+
+	MsgEncoderCallibration getLanePidConfig();
+	void updateLanePid(MsgEncoderCallibration config);
 
 	// PID tuning routine
 	void startPidTuning();

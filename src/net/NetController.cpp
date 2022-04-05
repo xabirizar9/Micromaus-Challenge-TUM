@@ -161,6 +161,18 @@ void receiverTask(void *pvParameter) {
 				}
 
 				break;
+
+			case MausIncomingMessage_laneCallibration_tag:
+				ESP_LOGD(tag,
+						 "updated lane PID to kP=%f kD=%f kI=%f",
+						 msg.payload.laneCallibration.kP,
+						 msg.payload.laneCallibration.kD,
+						 msg.payload.laneCallibration.kI);
+				// update values for both motors
+				manager->controller->updateLanePid(msg.payload.laneCallibration);
+
+				break;
+
 			// ping pong interface
 			case MausIncomingMessage_ping_tag:
 				ESP_LOGD(tag, "ping<->pong");

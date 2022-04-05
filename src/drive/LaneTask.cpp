@@ -37,9 +37,7 @@ void laneControlTask(Controller *controller, MsgDrive *cmd) {
 	NavigationPacket state;
 
 	// const float updateConst = 0.01;
-	float kP = 0.02;
-	float kD = 0;
-	float kI = 0;
+	MsgEncoderCallibration config;
 
 	float dif = 0;
 	float averageEncoderValue1 = 0;
@@ -53,6 +51,7 @@ void laneControlTask(Controller *controller, MsgDrive *cmd) {
 	// get first encoder count to compare traveled distance
 	averageEncoderValue1 = controller->averageEncoder();
 	while ((dif < (1790 * cmd->value)) && flag) {
+		config = controller->getLanePidConfig();
 		/*
 		Get left and right sensor readings + current speed
 		d_left = get_left_sensor_distance()

@@ -69,7 +69,7 @@ void Controller::updateSensors() {
 	// update sensor readings with offset
 	this->state.sensors.left = leftSensor.measuredistance();
 	this->state.sensors.right = rightSensor.measuredistance();
-	this->state.sensors.front = leftSensor.measuredistance();
+	this->state.sensors.front = frontSensor.measuredistance();
 }
 
 void Controller::updatePosition() {
@@ -203,6 +203,7 @@ NavigationPacket Controller::getState() {
 	this->state.rightMotorSpeed = this->rightSpeedTickTarget;
 	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	this->updateSensors();
 	this->state.batPercentage = this->battery.getPercentage();
 	this->state.voltage = this->battery.getVoltage();
 	return this->state;
@@ -217,6 +218,15 @@ void Controller::setPosition(float x, float y, float heading) {
 /******************************************************************
  * Pid Tuning methods
  ******************************************************************/
+
+void Controller::updateLanePid(MsgEncoderCallibration config) {
+	this->lanePidConfig = config;
+}
+
+MsgEncoderCallibration Controller::getLanePidConfig() {
+	return this->lanePidConfig;
+}
+
 void Controller::startPidTuning() {
 	if (this->pidTuningSamples) {
 		delete pidTuningSamples;

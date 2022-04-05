@@ -12,8 +12,8 @@ class LEDCChannelResource;
 class Motor {
    public:
 	// PID tuning for motors
-	float kP = 0.005;
-	float kD = 0.0000075;
+	float kP = 0.03;
+	float kD = 0.0000175;
 	float kI = 0.00000000;
 
 	Motor(IO::Motor);
