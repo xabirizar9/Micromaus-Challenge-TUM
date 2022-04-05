@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "support/LEDCChannelResource.hpp"
 
 Motor::Motor(uint8_t forwardPin, uint8_t backwardPin, uint8_t enPin)
@@ -50,6 +52,13 @@ void Motor::setPWM(float val) {
 	gpio_set_level((gpio_num_t)backwardPin, reverse);
 
 	ESP_ERROR_CHECK(ledc_update_duty(LEDC_LOW_SPEED_MODE, *channel));
+}
+
+void Motor::brakeMotor(float val) {
+	gpio_set_level((gpio_num_t)forwardPin, 1);
+	gpio_set_level((gpio_num_t)backwardPin, 1);
+	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, val));
+	// vTaskDelay(pdMS_TO_TICKS(20));
 }
 
 void Motor::updatePidConfig(MsgEncoderCallibration config) {

@@ -19,7 +19,7 @@ void motorPidTask(void *pvParameter) {
 	delete payload;
 
 	// PID interval in ms
-	uint16_t monitorInterval = 40;
+	uint16_t monitorInterval = 20;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
 	float secondFraction = (float)monitorInterval / 1000.0;
@@ -60,6 +60,7 @@ void motorPidTask(void *pvParameter) {
 		if (target == 0.0) {
 			// stop motor if target changed
 			m->setPWM(0);
+			// m->brakeMotor(1);
 			intError = 0;
 			derError = 0;
 			// reset encoder to avoid overflows
@@ -85,6 +86,7 @@ void motorPidTask(void *pvParameter) {
 
 		// compute correction
 		correction += (kP * error) + (kD * derError) + (kI * intError);
+		// correction = 1;
 
 #ifdef DEBUG_PID
 		// if (pos == MotorPosition::left) {
