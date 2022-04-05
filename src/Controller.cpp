@@ -66,9 +66,16 @@ void Controller::setSpeed(int16_t speed) {
 }
 
 void Controller::updateSensors() {
-	this->state.sensors.left = leftSensor.measuredistance();
-	this->state.sensors.right = rightSensor.measuredistance();
-	this->state.sensors.front = frontSensor.measuredistance();
+	// update sensor readings with offset
+	this->state.sensors.left =
+		leftSensorOffsetY +
+		(leftSensor.measuredistance() < 0.2 ? 500000 : leftSensor.measuredistance());
+	this->state.sensors.right =
+		rightSensorOffsetY +
+		(rightSensor.measuredistance() < 0.2 ? 500000 : rightSensor.measuredistance());
+	this->state.sensors.front =
+		frontSensorOffsetX +
+		(leftSensor.measuredistance() < 0.2 ? 500000 : leftSensor.measuredistance());
 }
 
 void Controller::updatePosition() {
@@ -85,7 +92,7 @@ void Controller::updatePosition() {
 
 	// current heading as theta
 	// our wheelDistance is the hypotenuse while right-left form the triangle side
-	this->state.position.heading = (right - left) / wheelDistance;
+	this->state.position.heading = M_PI_2 + (right - left) / wheelDistance;
 
 	// to confirm we could compute the angle
 	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));
@@ -210,7 +217,7 @@ NavigationPacket Controller::getState() {
 void Controller::setPosition(float x, float y, float heading) {
 	this->state.position.x = x;
 	this->state.position.y = y;
-	this->state.position.heading = heading;
+	this->state.position.heading = M_PI_2 + heading;
 }
 
 /******************************************************************

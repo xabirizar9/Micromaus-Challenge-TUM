@@ -177,6 +177,7 @@
     <Button inline on:click={onStartExplore}>Explore</Button>
     <Button inline on:click={onGoToStart}>Go To Start</Button>
     <Button inline on:click={onFastRun}>Fast Run</Button>
+    <Button inline on:click={onTunePid}>Tune PID</Button>
   </div>
 
   <div class="subgrid">

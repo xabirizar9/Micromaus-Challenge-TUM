@@ -27,10 +27,6 @@ Maze::Maze() {
 	for (uint8_t i = 0; i < size * size; i++) {
 		this->wallState[i] = 0;
 	}
-
-	this->setWall(0, 0, CardinalDirection::EAST, true);
-	// this->setWall(0, 0, CardinalDirection::NORTH, true);
-	this->setWall(0, 2, CardinalDirection::EAST, true);
 }
 
 void Maze::resetVisited() {

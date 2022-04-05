@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -63,19 +64,18 @@ func (r *Robot) connect(ctx context.Context, address string) (err error) {
 
 func robotSelector(robots map[string]net.IP) prompt.Completer {
 	return func(d prompt.Document) []prompt.Suggest {
-		s := []prompt.Suggest{
-			{Text: "users", Description: "Store the username and age"},
-			{Text: "articles", Description: "Store the article text posted by user"},
-			{Text: "comments", Description: "Store the text commented to articles"},
-		}
+		s := []prompt.Suggest{}
 
 		for k, v := range robots {
 			s = append(s, prompt.Suggest{Text: v.String(), Description: k})
 		}
-
 		return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 	}
 }
+
+var (
+	lastAddr string
+)
 
 func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	/*c := &serial.Config{Name: opt.Dev, Baud: opt.Baud}
@@ -95,6 +95,19 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	}
 
 	err = r.connect(context.TODO(), opt.Addr)
+
+	// connect using last address
+	if err != nil && lastAddr != "" {
+		err = r.connect(context.TODO(), lastAddr+":8888")
+		if err != nil {
+			l.Error("failed to connect to robot", zap.Error(err))
+			lastAddr = ""
+			return nil, err
+		}
+		return r, nil
+	}
+
+	// connect using remote server
 	if err != nil && !opt.OnlyMDNS {
 
 		l.Warn("direct connection failed using fallback", zap.Error(err))
@@ -137,7 +150,15 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 				addr = v.String()
 			}
 		} else {
+			fmt.Printf("Found multiple Maus robots:\n")
+			for k, v := range m.Robots {
+				fmt.Printf("%s: %s\n", k, v.String())
+			}
+
 			addr = prompt.Input("Select Maus > ", robotSelector(m.Robots))
+			if addr == "" {
+				return nil, errors.New("no robot selected")
+			}
 		}
 
 		err = r.connect(context.TODO(), addr+":8888")
@@ -145,6 +166,10 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 			l.Error("failed to connect to robot", zap.Error(err))
 			return nil, err
 		}
+
+		// store address for quicker reconnect & to avoid reselection
+		lastAddr = addr
+
 		return r, nil
 	}
 

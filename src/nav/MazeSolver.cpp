@@ -14,8 +14,46 @@ MazeSolver::MazeSolver(Controller* controller) {
 	this->controller = controller;
 }
 
-void MazeSolver::updateWalls() {
-	// TODO: update maze here
+void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
+	static NavigationPacket state;
+
+	float maxWallDistance = 7;
+
+	bool walls[3];
+	bool scanWalls = true;
+	while (scanWalls) {
+		this->controller->updateSensors();
+		state = this->controller->getState();
+
+		// rescane walls while they are unstable
+		if (walls[0] !=
+				(maxWallDistance >
+				 this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH))) &&
+			walls[1] !=
+				(maxWallDistance >
+				 this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::WEST))) &&
+			walls[2] !=
+				(maxWallDistance >
+				 this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::EAST)))) {
+			scanWalls = true;
+			walls[2] = maxWallDistance >
+					   this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH));
+			walls[1] = maxWallDistance >
+					   this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::WEST));
+			walls[0] = maxWallDistance >
+					   this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::EAST));
+
+			vTaskDelay(pdMS_TO_TICKS(10));
+			continue;
+		}
+
+		scanWalls = false;
+	}
+
+	// update walls
+	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH), walls[2]);
+	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::WEST), walls[1]);
+	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::EAST), walls[0]);
 }
 
 /**
@@ -60,7 +98,7 @@ void MazeSolver::startExploration() {
 	CardinalDirection heading = CardinalDirection::NORTH;
 	CardinalDirection newHeading = CardinalDirection::NORTH;
 	MazeStatePacket packet;
-	uint16_t speed = 100;
+	uint16_t speed = 200;
 	// TODO: split into task
 
 	while (true) {
@@ -71,7 +109,7 @@ void MazeSolver::startExploration() {
 			return;
 		}
 
-		this->updateWalls();
+		this->updateWalls(x, y, heading);
 
 		// rerun flood fill
 		this->maze.update();
