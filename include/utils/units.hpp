@@ -33,3 +33,7 @@ inline float mmsToTicks(float millis) {
 inline float convertMMsToTPS(float millis) {
 	return convertMillimetersToRevolutions(millis) * ticksPerRevolution;
 }
+
+inline bool isSensorValid(float value) {
+	return value > 0.02;
+}

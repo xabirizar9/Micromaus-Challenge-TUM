@@ -31,6 +31,7 @@ void laneControlTask(Controller *controller, MsgDrive *cmd) {
 
 	PIDErrors pErr;
 	static uint32_t timeInterval = 20;
+	float timeFactor = timeInterval / 1000;
 
 	// declare variables for sensor distances
 	NavigationPacket state;
@@ -69,15 +70,15 @@ void laneControlTask(Controller *controller, MsgDrive *cmd) {
 		dif = averageEncoderValue2 - averageEncoderValue1;
 
 		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
-		if (state.sensors.left < 0.1) {
+		if (!isSensorValid(state.sensors.left)) {
 			pErr.curError = -20;
 		}
-		if (state.sensors.right < 0.1) {
+		if (!isSensorValid(state.sensors.right)) {
 			pErr.curError = 20;
 		} else {
 			pErr.curError = state.sensors.left - state.sensors.right;
 		}
-		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval;
+		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval);
 		pErr.correction += (kP * pErr.curError) + (kD * pErr.derError) + (kI * pErr.intError);
 
 		pErr.lastError = pErr.curError;
@@ -108,7 +109,7 @@ void laneControlTask(Controller *controller, MsgDrive *cmd) {
 		ESP_LOGI(
 			TAG, "lane Direction: %f", copysign((4000 - abs(pErr.correction)), pErr.correction));
 
-		if (state.sensors.front > 0.02 && state.sensors.front < 30) {
+		if (isSensorValid(state.sensors.front) && (state.sensors.front - frontSensorOffsetX) < 30) {
 			controller->setSpeed(0);
 			flag = false;
 			controller->drive(0, 0);
