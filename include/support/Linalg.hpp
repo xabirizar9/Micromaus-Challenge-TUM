@@ -55,4 +55,8 @@ struct Vec : public Mat<T, R, 1> {
 #include "support/linalg/matrix-matrix.hpp"
 #include "support/linalg/matrix-scalar.hpp"
 
+using Vec2f = Vec<float, 2>;
+using Vec3f = Vec<float, 3>;
+using Mat3f = Mat<float, 3>;
+
 }  // namespace la
