@@ -1,53 +1,70 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <type_traits>
 
-namespace linalg {
+namespace la {
 
-template <typename T>
-struct Vec {
-	union {
-		std::array<T, 3> buffer;
-		struct {
-			T x;
-			T y;
-			T z;
-		};
-	};
+template <typename T, unsigned int R, unsigned int C>
+struct Mat {
+	std::array<T, R * C> data;
+
+	constexpr Mat() : data() {}
+	constexpr Mat(const std::array<T, R * C>& l) : data(l) {}
+
+	T& at(unsigned int r, unsigned int c) {
+		return data.at(r * C + c);
+	}
+
+	const T& at(unsigned int r, unsigned int c) const {
+		return data.at(r * C + c);
+	}
+
+	Mat<T, C, R> trans() const {
+		Mat<T, C, R> out;
+		for (unsigned int c = 0; c < C; ++c) {
+			for (unsigned int r = 0; r < R; ++r) {
+				out.at(c, r) = at(r, c);
+			}
+		}
+		return std::move(out);
+	}
 };
 
-template <typename T, typename S>
-Vec<std::common_type_t<T, S>> operator*(const Vec<T>& v, const S& t) {
-	return {v.x * t, v.y * t, v.z * t};
-}
+template <typename T, unsigned int R>
+struct Vec : public Mat<T, R, 1> {
+	using Mat<T, R, 1>::Mat;
 
-template <typename T, typename S>
-Vec<std::common_type_t<T, S>> operator*(const S& t, const Vec<T>& v) {
-	return v * t;
-}
+	constexpr Vec(const Mat<T, R, 1>& m) : Mat<T, R, 1>(m.data) {}
 
-template <typename T, typename S>
-Vec<std::common_type_t<T, S>> operator+(const Vec<T>& v, const Vec<S>& w) {
-	return {v.x + w.x, v.y + w.y, v.z + w.z};
-}
+	template <unsigned int X = R>
+	constexpr Vec(const T x, const T y, typename std::enable_if_t<X == 2, bool> = true)
+		: Mat<T, R, 1>({x, y}) {}
 
-template <typename T, typename S>
-Vec<std::common_type_t<T, S>> operator-(const Vec<T>& v, const Vec<S>& w) {
-	return {v.x - w.x, v.y - w.y, v.z - w.z};
-}
+	template <unsigned int X = R>
+	constexpr Vec(const T x, const T y, const T z, typename std::enable_if_t<X == 3, bool> = true)
+		: Mat<T, R, 1>({x, y, z}) {}
 
-template <typename T, typename S>
-Vec<std::common_type_t<T, S>> operator/(const Vec<T>& v, const S& t) {
-	return {v.x / t, v.y / t, v.z / t};
-}
+	T& at(unsigned int r) {
+		return Mat<T, R, 1>::at(r, 1);
+	}
 
-}  // namespace linalg
+	const T& at(unsigned int r) const {
+		return Mat<T, R, 1>::at(r, 1);
+	}
 
-/*
-template<typename T>
-linalg::Vec<T> operator+(const linalg::Vec<T>& v, const linalg::Vec<T>& w) {
-	return {v.x + w.x, v.y + w.y, v.z + w.z};
-}
-*/
+	operator Mat<T, R, 1>&() {
+		return *this;
+	}
+};
+
+#include "support/linalg/matrix-matrix.hpp"
+#include "support/linalg/matrix-scalar.hpp"
+
+using Vec2f = Vec<float, 2>;
+using Vec3f = Vec<float, 3>;
+using Mat3f = Mat<float, 3, 3>;
+
+}  // namespace la

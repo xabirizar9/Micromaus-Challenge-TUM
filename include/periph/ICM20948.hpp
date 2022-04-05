@@ -42,22 +42,22 @@ class ICM20948 {
 	/* set gyroscope sensitivity */
 	void setGyroSensitivity(GyroSensitivity);
 
-	linalg::Vec<int16_t> readAccelRaw();
-	linalg::Vec<int16_t> readGyroRaw();
-	linalg::Vec<int16_t> readMagRaw();
+	la::Vec<int16_t, 3> readAccelRaw();
+	la::Vec<int16_t, 3> readGyroRaw();
+	la::Vec<int16_t, 3> readMagRaw();
 	int16_t readTempRaw();
 
 	/// read temperature in celsius
 	float readTemp();
 
 	/// read acceleration in units of g
-	linalg::Vec<float> readAccel();
+	la::Vec3f readAccel();
 
 	/// read gyroscope in units of degrees per second
-	linalg::Vec<float> readGyro();
+	la::Vec3f readGyro();
 
 	/// read magnetometer data in microtesla
-	linalg::Vec<float> readMag();
+	la::Vec3f readMag();
 
    private:
 	static constexpr float ROOM_TEMP_OFFSET = 0;  // LSB
