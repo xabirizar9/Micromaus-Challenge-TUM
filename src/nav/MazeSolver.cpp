@@ -27,9 +27,9 @@ void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 		this->controller->updateSensors();
 		state = this->controller->getState();
 
-		newWalls[0] = isValidSensor(state.sensors.left) && state.sensors.left <= maxWallDistance;
-		newWalls[1] = isValidSensor(state.sensors.front) && state.sensors.front <= maxWallDistance;
-		newWalls[2] = isValidSensor(state.sensors.right) && state.sensors.right <= maxWallDistance;
+		newWalls[0] = isSensorValid(state.sensors.left) && state.sensors.left <= maxWallDistance;
+		newWalls[1] = isSensorValid(state.sensors.front) && state.sensors.front <= maxWallDistance;
+		newWalls[2] = isSensorValid(state.sensors.right) && state.sensors.right <= maxWallDistance;
 
 		if (newWalls[0] == walls[0] && newWalls[1] == walls[1] && newWalls[2] == walls[2]) {
 			scanWalls = false;
