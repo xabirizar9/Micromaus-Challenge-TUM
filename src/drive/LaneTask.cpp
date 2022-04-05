@@ -78,7 +78,7 @@ void laneControlTask(Controller *controller, MsgDrive *cmd) {
 		} else {
 			pErr.curError = state.sensors.left - state.sensors.right;
 		}
-		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval);
+		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval;
 		pErr.correction += (kP * pErr.curError) + (kD * pErr.derError) + (kI * pErr.intError);
 
 		pErr.lastError = pErr.curError;
