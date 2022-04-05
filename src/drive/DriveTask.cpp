@@ -11,14 +11,8 @@
 #include "nav/MazeSolver.hpp"
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
-
 static const char* tag = "[drive]";
 
-float averageEncoder(Controller* controller) {
-	int64_t right = controller->getEncoder(MotorPosition::right)->getTotalCounter();
-	int64_t left = controller->getEncoder(MotorPosition::left)->getTotalCounter();
-	return 0.5 * (right + left);
-}
 void driveTask(void* arg) {
 	TaskHandle_t laneControllTaskHandle;
 
@@ -38,12 +32,12 @@ void driveTask(void* arg) {
 	MsgDrive cmd;
 	MsgDrive* curCmd;
 
-	xTaskCreate(laneControlTask, "laneControltask", 2048, controller, 1, &laneControllTaskHandle);
-	vTaskSuspend(laneControllTaskHandle);
+	// xTaskCreate(laneControlTask, "laneControltask", 2048, controller, 1,
+	// &laneControllTaskHandle); vTaskSuspend(laneControllTaskHandle);
 
 	while (true) {
 		// update and get state
-		controller->updateSensors();
+		// controller->updateSensors();
 		controller->updatePosition();
 		state = controller->getState();
 
@@ -64,21 +58,7 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
-
-				vTaskResume(laneControllTaskHandle);
-
-				// interval = gridMM * cmd.value / cmd.speed * 1000;
-				averageEncoder1 = averageEncoder(controller);
-
-				while (dif < (1790 * cmd.value)) {
-					vTaskDelay(pdMS_TO_TICKS(20));
-					controller->drive(cmd.speed, 0);
-					averageEncoder2 = averageEncoder(controller);
-					dif = averageEncoder2 - averageEncoder1;
-				}
-				dif = 0;
-				controller->drive(0, 0);
-				vTaskSuspend(laneControllTaskHandle);
+				laneControlTask(controller, &cmd);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
@@ -98,7 +78,7 @@ void driveTask(void* arg) {
 				break;
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: {
 				ESP_LOGI(tag, "DriveLeftOnSpot");
-				vTaskResume(laneControllTaskHandle);
+				// vTaskResume(laneControllTaskHandle);
 				encoderTemp = controller->getEncoder(MotorPosition::right)->getTotalCounter();
 				while (
 					(controller->getEncoder(MotorPosition::right)->getTotalCounter() - encoderTemp <
@@ -109,12 +89,12 @@ void driveTask(void* arg) {
 				}
 				controller->drive(0, 0);
 				encoderTemp = 0;
-				vTaskSuspend(laneControllTaskHandle);
+				// vTaskSuspend(laneControllTaskHandle);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
 				ESP_LOGI(tag, "DriveRightOnSpot");
-				vTaskResume(laneControllTaskHandle);
+				// vTaskResume(laneControllTaskHandle);
 				encoderTemp = controller->getEncoder(MotorPosition::left)->getTotalCounter();
 				while (
 					(controller->getEncoder(MotorPosition::left)->getTotalCounter() - encoderTemp <
@@ -126,7 +106,7 @@ void driveTask(void* arg) {
 
 				controller->drive(0, 0);
 				encoderTemp = 0;
-				vTaskSuspend(laneControllTaskHandle);
+				// vTaskSuspend(laneControllTaskHandle);
 				break;
 			}
 			default: break;

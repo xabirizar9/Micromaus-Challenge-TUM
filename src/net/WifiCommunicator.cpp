@@ -323,9 +323,17 @@ void UdpCommunicator::sendOwnIP() {
 	((struct sockaddr_in *)res->ai_addr)->sin_port = htons(8888);
 	uint8_t retries = 2;
 
+	// construct buffer with current IP and mac of robot for identification
+	uint8_t buf[8];
+
+	// copy mac address
+	ESP_ERROR_CHECK(esp_efuse_mac_get_default(buf));
+
+	// copy ip address
+	memcpy(buf + 4, &s_ip_addr, 4);
+
 	while (retries > 0) {
-		int len = sendto(
-			this->sock, &s_ip_addr, sizeof(esp_ip4_addr_t), 0, res->ai_addr, res->ai_addrlen);
+		int len = sendto(this->sock, buf, 8, 0, res->ai_addr, res->ai_addrlen);
 		retries--;
 		ESP_LOGI(TAG, "sending remote packet len=%d", len);
 		vTaskDelay(pdMS_TO_TICKS(20));

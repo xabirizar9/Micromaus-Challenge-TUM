@@ -42,7 +42,7 @@ class Heading {
 		return angle / PI * 180.f;
 	}
 
-	linalg::Vec<float> toVector() const;
+	la::Vec2f toVector() const;
 
 	/**
 	 * returns Heading with its angle normalized to the interval
