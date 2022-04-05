@@ -5,6 +5,7 @@
 #include "nav/Maze.hpp"
 #include "net/NetController.hpp"
 #include "stdbool.h"
+#include "utils/units.hpp"
 
 using nav::CardinalDirection;
 
@@ -19,41 +20,30 @@ void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 
 	float maxWallDistance = 7;
 
+	bool newWalls[3];
 	bool walls[3];
 	bool scanWalls = true;
 	while (scanWalls) {
 		this->controller->updateSensors();
 		state = this->controller->getState();
 
-		// rescane walls while they are unstable
-		if (walls[0] !=
-				(maxWallDistance >
-				 this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH))) &&
-			walls[1] !=
-				(maxWallDistance >
-				 this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::WEST))) &&
-			walls[2] !=
-				(maxWallDistance >
-				 this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::EAST)))) {
-			scanWalls = true;
-			walls[2] = maxWallDistance >
-					   this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH));
-			walls[1] = maxWallDistance >
-					   this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::WEST));
-			walls[0] = maxWallDistance >
-					   this->maze.getWall(x, y, CardinalDirection(dir - CardinalDirection::EAST));
+		newWalls[0] = isValidSensor(state.sensors.left) && state.sensors.left <= maxWallDistance;
+		newWalls[1] = isValidSensor(state.sensors.front) && state.sensors.front <= maxWallDistance;
+		newWalls[2] = isValidSensor(state.sensors.right) && state.sensors.right <= maxWallDistance;
 
-			vTaskDelay(pdMS_TO_TICKS(10));
+		if (newWalls[0] == walls[0] && newWalls[1] == walls[1] && newWalls[2] == walls[2]) {
+			scanWalls = false;
 			continue;
 		}
 
-		scanWalls = false;
+		vTaskDelay(pdMS_TO_TICKS(10));
+		continue;
 	}
 
 	// update walls
-	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH), walls[2]);
-	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::WEST), walls[1]);
-	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::EAST), walls[0]);
+	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::WEST), walls[0]);
+	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH), walls[1]);
+	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::EAST), walls[2]);
 }
 
 /**
