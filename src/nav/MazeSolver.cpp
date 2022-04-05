@@ -21,7 +21,8 @@ void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 	float maxWallDistance = 7;
 
 	bool newWalls[3];
-	bool walls[3];
+	bool walls[3] = {false, false, false};
+
 	bool scanWalls = true;
 	while (scanWalls) {
 		this->controller->updateSensors();
