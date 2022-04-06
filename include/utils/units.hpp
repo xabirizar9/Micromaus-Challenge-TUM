@@ -18,8 +18,11 @@ static const float encoderTicksToMm = 0.0892497913;
 
 static const float mazeCellSize = 180.0;
 
-// distance between the wheels in millimeters
+// bot measurements:
+//  distance between the wheels in millimeters
 static const float wheelDistance = 122.0;
+static const float InnercurveRadius = 30;
+static const float OutercurveRadius = 150;
 
 // conversion from mm -> to wheel rotation
 static const float mmToRp = 0.0053051648;  // 1 / (2 * PI * 30)
