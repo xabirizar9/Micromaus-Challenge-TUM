@@ -17,9 +17,9 @@
 <h2>{title}</h2>
 <form on:submit={internalOnSubmit}>
   <Grid>
-    <Input step="0.00001" label="kP" type="number" bind:value={config.kP} />
-    <Input step="0.00001" label="kD" type="number" bind:value={config.kD} />
-    <Input step="0.00001" label="kI" type="number" bind:value={config.kI} />
+    <Input step="0.000000001" label="kP" type="number" bind:value={config.kP} />
+    <Input step="0.000000001" label="kD" type="number" bind:value={config.kD} />
+    <Input step="0.000000001" label="kI" type="number" bind:value={config.kI} />
   </Grid>
   <Button type="submit">Update</Button>
 </form>

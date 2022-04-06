@@ -136,6 +136,7 @@ func (m *Manager) recvFromMausRoutine() {
 			m.Robot.Config = cmd.GetMausConfig()
 			m.broadcastChannel <- cmd
 		case *pb.MausOutgoingMessage_Nav:
+			l.Info("got nav packet")
 			m.broadcastChannel <- cmd
 		case *pb.MausOutgoingMessage_MazeState:
 			m.broadcastChannel <- cmd
