@@ -69,11 +69,11 @@ class RobotPosition {
 	 */
 	constexpr RobotPosition(float x, float y, Heading h) : pos{x, y, 0}, heading(h) {}
 
-	const linalg::Vec<float>& getPosition() const {
+	const la::Vec2f& getPosition() const {
 		return pos;
 	}
 
-	linalg::Vec<float>& getPosition() {
+	la::Vec2f& getPosition() {
 		return pos;
 	}
 
@@ -86,7 +86,7 @@ class RobotPosition {
 	}
 
    private:
-	linalg::Vec<float> pos;
+	la::Vec2f pos;
 	Heading heading;
 };
 
