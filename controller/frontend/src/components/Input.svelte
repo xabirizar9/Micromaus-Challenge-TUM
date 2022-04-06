@@ -55,6 +55,7 @@
 
     input {
       max-width: 100%;
+      width: 100%;
       box-sizing: border-box;
       display: inline-block;
       min-width: 0;

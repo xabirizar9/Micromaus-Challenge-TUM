@@ -10,31 +10,28 @@
 
   const internalOnSubmit = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
     evt.preventDefault();
+
+    if (typeof config.kD === "string") {
+      config.kD = parseFloat(config.kD);
+    }
+    if (typeof config.kP === "string") {
+      config.kP = parseFloat(config.kP);
+    }
+    if (typeof config.kI === "string") {
+      config.kI = parseFloat(config.kI);
+    }
+
     onSubmit(config);
+    console.log(config);
   };
 </script>
 
 <h2>{title}</h2>
 <form on:submit={internalOnSubmit}>
   <Grid>
-    <Input
-      step="0.0000000000000000001"
-      label="kP"
-      type="number"
-      bind:value={config.kP}
-    />
-    <Input
-      step="0.0000000000000000001"
-      label="kD"
-      type="number"
-      bind:value={config.kD}
-    />
-    <Input
-      step="0.0000000000000000001"
-      label="kI"
-      type="number"
-      bind:value={config.kI}
-    />
+    <Input label="kP" bind:value={config.kP} />
+    <Input label="kD" bind:value={config.kD} />
+    <Input label="kI" bind:value={config.kI} />
   </Grid>
   <Button type="submit">Update</Button>
 </form>
