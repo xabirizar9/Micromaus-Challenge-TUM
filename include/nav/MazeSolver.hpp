@@ -10,7 +10,12 @@
 class MazeSolver : public RobotDriver {
    private:
 	Maze maze;
-	Position pos;
+	uint8_t x = 0;
+	uint8_t y = 0;
+	CardinalDirection heading = CardinalDirection::NORTH;
+
+	void driveToNextCell(float speed);
+	void sendSolverState();
 
    public:
 	MazeSolver(Controller* controller);

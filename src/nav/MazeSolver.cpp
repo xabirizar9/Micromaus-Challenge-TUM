@@ -15,10 +15,21 @@ MazeSolver::MazeSolver(Controller* controller) {
 	this->controller = controller;
 }
 
+void MazeSolver::sendSolverState() {
+	static MazeStatePacket packet;
+	// send update over network
+	packet = this->getMaze()->getEncodedValue();
+	packet.position = Position_init_zero;
+	packet.position.x = (float)x;
+	packet.position.y = (float)y;
+	packet.position.heading = (float)heading;
+
+	// write and encode the command
+	NetController::Manager::getInstance().writeMazeState(packet);
+}
+
 void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 	static NavigationPacket state;
-
-	float maxWallDistance = 70;
 
 	bool newWalls[3];
 	bool walls[3] = {false, false, false};
@@ -103,37 +114,98 @@ Maze* MazeSolver::getMaze() {
 	return &this->maze;
 }
 
+void MazeSolver::driveToNextCell(float speed) {
+	// find cell will lover cost/distance to center;
+	CardinalDirection newHeading = this->getNewHeading(x, y);
+
+	// rotate based on optimal index
+	if (heading != newHeading) {
+		DriveCmdType direction;
+		float turns = std::abs(heading - newHeading) == 3 ? 1 : std::abs(heading - newHeading);
+		if (heading < newHeading) {
+			direction = DriveCmdType::DriveCmdType_TurnLeftOnSpot;
+		} else {
+			direction = DriveCmdType::DriveCmdType_TurnRightOnSpot;
+		}
+
+		if (std::abs(heading - newHeading) == 3) {
+			direction = direction == DriveCmdType::DriveCmdType_TurnLeftOnSpot
+							? DriveCmdType::DriveCmdType_TurnRightOnSpot
+							: DriveCmdType::DriveCmdType_TurnLeftOnSpot;
+		}
+
+		this->addCmdAndWait(direction, turns, speed);
+		heading = newHeading;
+	}
+
+	this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+
+	// update position based on heading
+	// TODO: maybe use robot position here
+	switch (newHeading) {
+		case CardinalDirection::NORTH:
+			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y + 1);
+			y += 1;
+			break;
+		case CardinalDirection::EAST:
+			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x + 1, y);
+			x += 1;
+			break;
+		case CardinalDirection::SOUTH:
+			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y - 1);
+			y -= 1;
+			break;
+		case CardinalDirection::WEST:
+			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x - 1, y);
+			x -= 1;
+			break;
+	}
+}
+
 void MazeSolver::startFastRun() {
 	// TODO: implement
 }
 
 void MazeSolver::startGoHome() {
+	MazeStatePacket packet;
+	uint16_t speed = 280;
+	// reset maze
+	this->maze.resetCosts();
+
+	while (true) {
+		// broadcast current solver state
+		sendSolverState();
+
+		if (this->maze.getCost(x, y) == 0) {
+			// TODO: add what need to be done when center found
+			return;
+		}
+
+		this->updateWalls(x, y, heading);
+
+		// rerun flood fill
+		this->maze.fillFrom(0, 0);
+
+		driveToNextCell(speed);
+	}
 	// TODO: implement
 }
 
 void MazeSolver::startExploration() {
-	uint8_t x = 0;
-	uint8_t y = 0;
-
 	// reset maze
 	this->maze.resetCosts();
 	this->maze.resetWalls();
 
-	CardinalDirection heading = CardinalDirection::NORTH;
 	CardinalDirection newHeading = CardinalDirection::NORTH;
-	MazeStatePacket packet;
-	uint16_t speed = 150;
+	uint16_t speed = 200;
 	// TODO: split into task
 
 	while (true) {
+		// broadcast current solver state
+		sendSolverState();
+
 		if (this->maze.getCost(x, y) == 0) {
-			// write and encode the command
-			NetController::Manager::getInstance().writeMazeState(packet);
-			// give us some time to print
-			vTaskDelay(pdMS_TO_TICKS(200));
 			// TODO: add what need to be done when center found
-			ESP_LOGI(TAG, "!!! We found the center");
-			this->maze.printMaze(x, y);
 			return;
 		}
 
@@ -142,81 +214,10 @@ void MazeSolver::startExploration() {
 		// rerun flood fill
 		this->maze.update();
 
-		// send update over network
-
-		packet = this->getMaze()->getEncodedValue();
-		packet.position = Position_init_zero;
-		packet.position.x = (float)x;
-		packet.position.y = (float)y;
-		packet.position.heading = (float)heading;
-
-		// write and encode the command
-		NetController::Manager::getInstance().writeMazeState(packet);
+		driveToNextCell(speed);
 		// give us some time to print
-		vTaskDelay(pdMS_TO_TICKS(200));
 
 		// this->maze.printMaze(x, y);
 		// give us some time to print
-
-		// find cell will lover cost/distance to center;
-		newHeading = this->getNewHeading(x, y);
-
-		// rotate based on optimal index
-		if (heading != newHeading) {
-			DriveCmdType direction;
-			float turns = std::abs(heading - newHeading) == 3 ? 1 : std::abs(heading - newHeading);
-			if (heading < newHeading) {
-				direction = DriveCmdType::DriveCmdType_TurnLeftOnSpot;
-			} else {
-				direction = DriveCmdType::DriveCmdType_TurnRightOnSpot;
-			}
-
-			if (std::abs(heading - newHeading) == 3) {
-				direction = direction == DriveCmdType::DriveCmdType_TurnLeftOnSpot
-								? DriveCmdType::DriveCmdType_TurnRightOnSpot
-								: DriveCmdType::DriveCmdType_TurnLeftOnSpot;
-			}
-
-			this->addCmdAndWait(direction, turns, speed);
-			heading = newHeading;
-		}
-
-		this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
-
-		// update position based on heading
-		// TODO: maybe use robot position here
-		switch (newHeading) {
-			case CardinalDirection::NORTH:
-				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y + 1);
-				y += 1;
-				break;
-			case CardinalDirection::EAST:
-				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x + 1, y);
-				x += 1;
-				break;
-			case CardinalDirection::SOUTH:
-				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y - 1);
-				y -= 1;
-				break;
-			case CardinalDirection::WEST:
-				ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x - 1, y);
-				x -= 1;
-				break;
-		}
-
-		// write and encode the command
-		NetController::Manager::getInstance().writeMazeState(packet);
-		// give us some time to print
-		vTaskDelay(pdMS_TO_TICKS(200));
-
-		// write and encode the command
-		NetController::Manager::getInstance().writeMazeState(packet);
-		// give us some time to print
-		vTaskDelay(pdMS_TO_TICKS(200));
-
-		// write and encode the command
-		// we can probably remove this timeout since the should be enough time while waiting for
-		// commands
-		vTaskDelay(pdMS_TO_TICKS(200));
 	}
 }
