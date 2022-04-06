@@ -25,6 +25,13 @@ message SensorPacket {
 	float right = 3;
 }
 
+message PosDistribution {
+	repeated float positionMean = 1;
+	repeated float velocityMean = 2;
+	repeated float positionStd = 3;
+	repeated float velocityStd = 4;
+}
+
 message NavigationPacket {
 	SensorPacket sensors = 1;
 	Position position = 2;
@@ -35,6 +42,7 @@ message NavigationPacket {
 	float voltage = 7;
 	float batPercentage = 8;
 	uint32 timestamp = 9;
+	PosDistribution posDistribution = 10;
 }
 
 enum InfoCmdType {

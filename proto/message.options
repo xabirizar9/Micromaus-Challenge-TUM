@@ -1,0 +1,8 @@
+PosDistribution.positionMean max_count:3
+PosDistribution.positionMean fixed_count:true
+PosDistribution.velocityMean max_count:3
+PosDistribution.velocityMean fixed_count:true
+PosDistribution.positionStd max_count:9
+PosDistribution.positionStd fixed_count:true
+PosDistribution.velocityStd max_count:9
+PosDistribution.velocityStd fixed_count:true
