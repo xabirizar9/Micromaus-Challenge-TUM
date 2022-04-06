@@ -100,7 +100,6 @@ void driveTask(void* arg) {
 				// to avoid overshooting we stop even when we are a couple of ticks away from
 				// target
 				while (target - cur > targetDiffRange) {
-					ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
 					cur = controller->getEncoder(pos)->getTotalCounter();
 					vTaskDelay(pdMS_TO_TICKS(1));
 				}
@@ -114,6 +113,7 @@ void driveTask(void* arg) {
 		curCmd = NULL;
 
 		// notify driver about event completion
+		ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
 		ESP_LOGI(tag, "cmd completed");
 		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
 
