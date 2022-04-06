@@ -78,10 +78,18 @@ CardinalDirection MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	uint8_t costs[4];
 	CardinalDirection heading = CardinalDirection::NORTH;
 	// TODO: find more optimal solution
-	costs[CardinalDirection::NORTH] = this->maze.getCost(x, y + 1);
-	costs[CardinalDirection::EAST] = this->maze.getCost(x + 1, y);
-	costs[CardinalDirection::SOUTH] = this->maze.getCost(x, y - 1);
-	costs[CardinalDirection::WEST] = this->maze.getCost(x - 1, y);
+	costs[CardinalDirection::NORTH] = !this->maze.getWall(x, y, CardinalDirection::NORTH)
+										  ? this->maze.getCost(x, y + 1)
+										  : UINT8_MAX;
+	costs[CardinalDirection::EAST] = !this->maze.getWall(x, y, CardinalDirection::EAST)
+										 ? this->maze.getCost(x + 1, y)
+										 : UINT8_MAX;
+	costs[CardinalDirection::SOUTH] = !this->maze.getWall(x, y, CardinalDirection::SOUTH)
+										  ? this->maze.getCost(x, y - 1)
+										  : UINT8_MAX;
+	costs[CardinalDirection::WEST] = !this->maze.getWall(x, y, CardinalDirection::WEST)
+										 ? this->maze.getCost(x - 1, y)
+										 : UINT8_MAX;
 
 	for (uint8_t i = 0; i < 4; i++) {
 		// TODO: @alex help us
@@ -149,6 +157,9 @@ void MazeSolver::startExploration() {
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
+
+		vTaskDelay(pdMS_TO_TICKS(200));
+		continue;
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
