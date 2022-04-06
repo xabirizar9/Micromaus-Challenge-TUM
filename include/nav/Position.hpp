@@ -64,4 +64,35 @@ class Heading {
 	float angle;  // hading in radians, between global X and robot X axis
 };
 
+class RobotPosition {
+   public:
+	/**
+	 * x: position in x direction in centimeters
+	 * y: position in y direction in centimeters
+	 * w: rotation in rad around global z axis; if w == 0, robot x
+	 * axis(forward) is aligned with global x axis
+	 */
+	constexpr RobotPosition(float x, float y, Heading h) : pos{x, y, 0}, heading(h) {}
+
+	const la::Vec2f& getPosition() const {
+		return pos;
+	}
+
+	la::Vec2f& getPosition() {
+		return pos;
+	}
+
+	const Heading& getHeading() const {
+		return heading;
+	}
+
+	Heading& getHeading() {
+		return heading;
+	}
+
+   private:
+	la::Vec2f pos;
+	Heading heading;
+};
+
 }  // namespace nav

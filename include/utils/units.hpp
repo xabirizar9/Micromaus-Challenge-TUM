@@ -1,5 +1,9 @@
 #include <stdint.h>
 
+static constexpr float PI = 3.141592653589793238462643383279502884;
+
+static constexpr float radPerDegree = PI / 180.f;
+
 // sensor offset from maus center‚
 static const float leftSensorOffsetY = -53.0;
 static const float leftSensorOffsetX = 32.0;

@@ -14,6 +14,11 @@ struct Mat {
 	constexpr Mat() : data() {}
 	constexpr Mat(const std::array<T, R * C>& l) : data(l) {}
 
+	Mat<T, R, C>& operator=(const std::array<T, R * C>& r) {
+		data = r;
+		return *this;
+	}
+
 	T& at(unsigned int r, unsigned int c) {
 		return data.at(r * C + c);
 	}
@@ -30,6 +35,36 @@ struct Mat {
 			}
 		}
 		return std::move(out);
+	}
+
+	template <bool ON = (C == 1) && (R > 0)>
+	std::enable_if_t<ON, T&> x() {
+		return data[0];
+	}
+
+	template <bool ON = (C == 1) && (R > 0)>
+	const std::enable_if_t<ON, T&> x() const {
+		return data[0];
+	}
+
+	template <bool ON = (C == 1) && (R > 1)>
+	std::enable_if_t<ON, T&> y() {
+		return data[1];
+	}
+
+	template <bool ON = (C == 1) && (R > 1)>
+	const std::enable_if_t<ON, T&> y() const {
+		return data[1];
+	}
+
+	template <bool ON = (C == 1) && (R > 2)>
+	std::enable_if_t<ON, T&> z() {
+		return data[2];
+	}
+
+	template <bool ON = (C == 1) && (R > 2)>
+	const std::enable_if_t<ON, T&> z() const {
+		return data[2];
 	}
 };
 

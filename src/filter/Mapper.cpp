@@ -1,5 +1,7 @@
 #include "filter/Mapper.hpp"
 
+using namespace nav;
+
 Mapper::Mapper() : bel(6, 6, 0.5) {}
 
 void update(const RobotPosition& currentPos) {
