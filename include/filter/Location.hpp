@@ -17,7 +17,7 @@ class Location {
 	 * Initialize the distribution of the robot position to the given one.
 	 */
 	void setDistribution(const RobotPositionDistribution& n) {
-		rdp = n;
+		rpd = n;
 	}
 
 	/**
