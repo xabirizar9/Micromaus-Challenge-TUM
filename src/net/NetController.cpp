@@ -132,13 +132,13 @@ void receiverTask(void *pvParameter) {
 				config.motorPid.kI = manager->controller->getMotor(MotorPosition::left)->kI;
 				config.lanePid = manager->controller->getLanePidConfig();
 				manager->writePacket<MausConfigPacket, MausOutgoingMessage_mausConfig_tag>(config);
-				break;
 
 				ESP_LOGI(tag, "connected to connector v.%d", msg.payload.init.version);
 				// set okay status LED
 				LedController((gpio_num_t)3).set(1);
 
 				manager->initCompleted = true;
+				break;
 			}
 			case MausIncomingMessage_encoderCallibration_tag:
 				ESP_LOGD(tag,
