@@ -47,7 +47,7 @@ class Controller {
 
 	power::Battery battery;
 
-	NavigationPacket getState();
+	const NavigationPacket &getState();
 
 	/**
 	 * @brief Get global robot speed (both motors) in mm/s
