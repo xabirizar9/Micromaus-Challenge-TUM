@@ -127,6 +127,10 @@ void MazeSolver::startExploration() {
 
 	while (true) {
 		if (this->maze.getCost(x, y) == 0) {
+			// write and encode the command
+			NetController::Manager::getInstance().writeMazeState(packet);
+			// give us some time to print
+			vTaskDelay(pdMS_TO_TICKS(200));
 			// TODO: add what need to be done when center found
 			ESP_LOGI(TAG, "!!! We found the center");
 			this->maze.printMaze(x, y);
@@ -151,15 +155,11 @@ void MazeSolver::startExploration() {
 		// give us some time to print
 		vTaskDelay(pdMS_TO_TICKS(200));
 
-		this->maze.printMaze(x, y);
+		// this->maze.printMaze(x, y);
 		// give us some time to print
-		vTaskDelay(pdMS_TO_TICKS(200));
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
-
-		vTaskDelay(pdMS_TO_TICKS(200));
-		continue;
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
@@ -193,6 +193,16 @@ void MazeSolver::startExploration() {
 				x -= 1;
 				break;
 		}
+
+		// write and encode the command
+		NetController::Manager::getInstance().writeMazeState(packet);
+		// give us some time to print
+		vTaskDelay(pdMS_TO_TICKS(200));
+
+		// write and encode the command
+		NetController::Manager::getInstance().writeMazeState(packet);
+		// give us some time to print
+		vTaskDelay(pdMS_TO_TICKS(200));
 
 		// write and encode the command
 		// we can probably remove this timeout since the should be enough time while waiting for
