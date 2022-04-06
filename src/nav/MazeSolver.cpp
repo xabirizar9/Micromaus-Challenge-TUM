@@ -140,6 +140,8 @@ void MazeSolver::startExploration() {
 
 		// write and encode the command
 		NetController::Manager::getInstance().writeMazeState(packet);
+		// give us some time to print
+		vTaskDelay(pdMS_TO_TICKS(200));
 
 		this->maze.printMaze(x, y);
 		// give us some time to print
