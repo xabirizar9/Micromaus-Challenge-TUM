@@ -1,9 +1,5 @@
-import Test from "./index.svelte";
+import Dashboard from "./index.svelte";
 
-const setupFrontend = () => {};
-
-setupFrontend();
-
-new Test({
+new Dashboard({
   target: document.body,
 });

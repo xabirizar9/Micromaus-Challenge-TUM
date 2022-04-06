@@ -60,9 +60,10 @@ void motorPidTask(void *pvParameter) {
 		if (target == 0.0) {
 			// stop motor if target changed
 			m->setPWM(0);
-		 	m->brakeMotor(1);
+			m->brakeMotor(1);
 			intError = 0;
 			derError = 0;
+			curEncoderReading = enc->get();
 			// reset encoder to avoid overflows
 			enc->reset();
 			// add short interval
@@ -85,7 +86,7 @@ void motorPidTask(void *pvParameter) {
 		derError = lastError - error;
 
 		// compute correction
-		correction += (kP * error) + (kD * derError) + (kI * intError);
+		correction = (kP * error) + (kD * derError) + (kI * intError);
 		// correction = 1;
 
 #ifdef DEBUG_PID

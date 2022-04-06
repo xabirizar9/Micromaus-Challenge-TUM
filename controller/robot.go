@@ -1,15 +1,19 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 
-	"github.com/c-bata/go-prompt"
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
@@ -37,6 +41,8 @@ type Robot struct {
 
 	// channel on which to listen for messages
 	IncomingMsg chan *pb.MausOutgoingMessage
+
+	Config *pb.MausConfigPacket
 }
 
 type RobotConnectionOptions struct {
@@ -61,21 +67,44 @@ func (r *Robot) connect(ctx context.Context, address string) (err error) {
 	return
 }
 
-func robotSelector(robots map[string]net.IP) prompt.Completer {
-	return func(d prompt.Document) []prompt.Suggest {
-		s := []prompt.Suggest{
-			{Text: "users", Description: "Store the username and age"},
-			{Text: "articles", Description: "Store the article text posted by user"},
-			{Text: "comments", Description: "Store the text commented to articles"},
-		}
+func robotSelector(robots map[string]net.IP) string {
 
-		for k, v := range robots {
-			s = append(s, prompt.Suggest{Text: v.String(), Description: k})
-		}
+	i := 1
+	ips := make([]net.IP, len(robots))
 
-		return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+	fmt.Printf("Please select robot by typing the robot number\n")
+
+	for k, v := range robots {
+		fmt.Printf("%d) %s: %s\n", i, k, v.String())
+		ips[i-1] = v
+		i++
 	}
+	for {
+
+		fmt.Printf("->")
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+		// convert CRLF to LF
+
+		text = strings.Replace(text, "\n", "", -1)
+		intVar, err := strconv.Atoi(text)
+		if err != nil {
+			continue
+		}
+
+		if intVar > i || intVar < 1 {
+			fmt.Println("invalid option selected")
+			continue
+		}
+
+		return ips[i-1].String()
+	}
+
 }
+
+var (
+	lastAddr string
+)
 
 func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	/*c := &serial.Config{Name: opt.Dev, Baud: opt.Baud}
@@ -95,6 +124,19 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	}
 
 	err = r.connect(context.TODO(), opt.Addr)
+
+	// connect using last address
+	if err != nil && lastAddr != "" {
+		err = r.connect(context.TODO(), lastAddr+":8888")
+		if err != nil {
+			l.Error("failed to connect to robot", zap.Error(err))
+			lastAddr = ""
+			return nil, err
+		}
+		return r, nil
+	}
+
+	// connect using remote server
 	if err != nil && !opt.OnlyMDNS {
 
 		l.Warn("direct connection failed using fallback", zap.Error(err))
@@ -137,7 +179,12 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 				addr = v.String()
 			}
 		} else {
-			addr = prompt.Input("Select Maus > ", robotSelector(m.Robots))
+			fmt.Printf("Found multiple Maus robots:\n")
+
+			addr = robotSelector(m.Robots)
+			if addr == "" {
+				return nil, errors.New("no robot selected")
+			}
 		}
 
 		err = r.connect(context.TODO(), addr+":8888")
@@ -145,6 +192,10 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 			l.Error("failed to connect to robot", zap.Error(err))
 			return nil, err
 		}
+
+		// store address for quicker reconnect & to avoid reselection
+		lastAddr = addr
+
 		return r, nil
 	}
 
@@ -214,9 +265,22 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 		}
 		log.Debug("waiting for init ack")
 		ackCmd, _, err := r.ReadCmd()
-		log.Debug("received response", zap.Error(err))
+		log.Debug("received response", zap.String("cmd", ackCmd.String()))
 		if err != nil {
 			respChannel <- errors.New("invalid robot response to init packet")
+			return
+		}
+
+		if ack := ackCmd.GetAck(); ack != nil {
+			log.Debug("got ack packet stopping func")
+			respChannel <- nil
+			return
+		}
+
+		if conf := ackCmd.GetMausConfig(); conf != nil {
+			r.Config = conf
+			log.Debug("got config packet stopping func")
+			respChannel <- nil
 			return
 		}
 
@@ -226,11 +290,6 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 			return
 		}
 
-		if ack := ackCmd.GetAck(); ack != nil {
-			log.Debug("got ack packet stopping func")
-			respChannel <- nil
-			return
-		}
 	}()
 
 	select {
@@ -277,11 +336,10 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 				return
 			}
 
-			log.Info("waiting for pong", zap.Error(err))
+			log.Info("ping->")
 			// wait for pong
 			<-r.pongMsgChannel
-
-			log.Info("got pong", zap.Error(err))
+			log.Info("<-pong")
 
 			errChan <- nil
 		})
@@ -334,7 +392,6 @@ func (r *Robot) Connect() error {
 
 				// internally handle ack messages
 				if pong := cmd.GetPong(); pong != nil {
-					log.Debug("got pong")
 					r.pongMsgChannel <- true
 					continue
 				}

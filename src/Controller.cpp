@@ -66,6 +66,7 @@ void Controller::setSpeed(int16_t speed) {
 }
 
 void Controller::updateSensors() {
+	// update sensor readings with offset
 	this->state.sensors.left = leftSensor.measuredistance();
 	this->state.sensors.right = rightSensor.measuredistance();
 	this->state.sensors.front = frontSensor.measuredistance();
@@ -85,7 +86,7 @@ void Controller::updatePosition() {
 
 	// current heading as theta
 	// our wheelDistance is the hypotenuse while right-left form the triangle side
-	this->state.position.heading = (right - left) / wheelDistance;
+	this->state.position.heading = M_PI_2 + (right - left) / wheelDistance;
 
 	// to confirm we could compute the angle
 	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));
@@ -202,6 +203,7 @@ NavigationPacket Controller::getState() {
 	this->state.rightMotorSpeed = this->rightSpeedTickTarget;
 	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	this->updateSensors();
 	this->state.batPercentage = this->battery.getPercentage();
 	this->state.voltage = this->battery.getVoltage();
 	return this->state;
@@ -210,12 +212,21 @@ NavigationPacket Controller::getState() {
 void Controller::setPosition(float x, float y, float heading) {
 	this->state.position.x = x;
 	this->state.position.y = y;
-	this->state.position.heading = heading;
+	this->state.position.heading = M_PI_2 + heading;
 }
 
 /******************************************************************
  * Pid Tuning methods
  ******************************************************************/
+
+void Controller::updateLanePid(MsgEncoderCallibration config) {
+	this->lanePidConfig = config;
+}
+
+MsgEncoderCallibration Controller::getLanePidConfig() {
+	return this->lanePidConfig;
+}
+
 void Controller::startPidTuning() {
 	if (this->pidTuningSamples) {
 		delete pidTuningSamples;
@@ -247,7 +258,7 @@ float *Controller::getPidTuningBuffer() {
 	return this->pidTuningSamples;
 }
 
-float Controller::averageEncoder() {
+int64_t Controller::getAverageEncoderTicks() {
 	int64_t right = this->getEncoder(MotorPosition::right)->getTotalCounter();
 	int64_t left = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	return 0.5 * (right + left);

@@ -19,23 +19,17 @@ Maze::Maze() {
 	this->size = 6;
 	this->state = new uint8_t[size * size];
 	this->wallState = new uint8_t[size * size];
-	this->visited = new bool[size * size];
-
-	this->resetVisited();
+	this->resetWalls();
 	this->resetCosts();
 
 	for (uint8_t i = 0; i < size * size; i++) {
 		this->wallState[i] = 0;
 	}
-
-	this->setWall(0, 0, CardinalDirection::EAST, true);
-	// this->setWall(0, 0, CardinalDirection::NORTH, true);
-	this->setWall(0, 2, CardinalDirection::EAST, true);
 }
 
-void Maze::resetVisited() {
+void Maze::resetWalls() {
 	for (uint8_t i = 0; i < size * size; i++) {
-		this->visited[i] = false;
+		this->wallState[i] = 0;
 	}
 }
 
@@ -98,7 +92,6 @@ void Maze::printMaze(uint8_t robotX, uint8_t robotY) {
 
 void Maze::update() {
 	this->resetCosts();
-	this->resetVisited();
 
 	int center = size / 2 - 1;
 	bool isEven = size % 2 == 0;
@@ -236,5 +229,4 @@ MazeStatePacket Maze::getEncodedValue() {
 Maze::~Maze() {
 	delete this->state;
 	delete this->wallState;
-	delete this->visited;
 }

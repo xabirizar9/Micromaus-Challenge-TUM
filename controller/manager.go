@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -42,6 +42,15 @@ func (m *Manager) AddClient(c *websocket.Conn) string {
 
 	m.Clients[client.ID] = client
 
+	// send mouse config to newly registered client
+	if m.Robot != nil && m.Robot.Config != nil {
+		var msg pb.MausOutgoingMessage
+		msg.Payload = &pb.MausOutgoingMessage_MausConfig{
+			MausConfig: m.Robot.Config,
+		}
+
+		m.sendCmdToClient(client.ID, &msg)
+	}
 	// TODO: remove clients when connection is closed
 	go m.onClientMsg(client)
 
@@ -61,6 +70,28 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 	}
 
 	return nil
+}
+
+func (m *Manager) sendCmdToClient(ID string, cmd *pb.MausOutgoingMessage) error {
+	l := m.getLogger()
+	// re encode message
+	buf, err := proto.Marshal(cmd)
+	if err != nil {
+		l.Error("failed to encode proto message", zap.Error(err))
+		return err
+	}
+
+	if c, ok := m.Clients[ID]; ok {
+		c.conn.WriteMessage(websocket.BinaryMessage, buf)
+		if err != nil {
+			l.Error("failed to write to client", zap.Error(err), zap.String("client", c.ID))
+			return err
+		}
+		return nil
+	} else {
+		l.Error("client not found", zap.String("client", ID))
+		return errors.New("client not found")
+	}
 }
 
 func (m *Manager) broadCastRoutine() {
@@ -96,10 +127,15 @@ func (m *Manager) recvFromMausRoutine() {
 		}
 
 		cmd := <-r.IncomingMsg
+		l.Info("got message", zap.String("type", cmd.String()))
 
 		switch cmd.Payload.(type) {
+		case *pb.MausOutgoingMessage_MausConfig:
+			l.Info("received config from robot")
+			// store mouse config
+			m.Robot.Config = cmd.GetMausConfig()
+			m.broadcastChannel <- cmd
 		case *pb.MausOutgoingMessage_Nav:
-			fmt.Printf(".")
 			m.broadcastChannel <- cmd
 		case *pb.MausOutgoingMessage_MazeState:
 			m.broadcastChannel <- cmd

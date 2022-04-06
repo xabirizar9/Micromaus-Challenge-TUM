@@ -10,6 +10,7 @@
 class MazeSolver : public RobotDriver {
    private:
 	Maze maze;
+	Position pos;
 
    public:
 	MazeSolver(Controller* controller);
@@ -20,7 +21,7 @@ class MazeSolver : public RobotDriver {
 	Maze* getMaze() override;
 	void start();
 	void pause();
-	void updateWalls();
+	void updateWalls(uint8_t x, uint8_t y, nav::CardinalDirection dir);
 
 	nav::CardinalDirection getNewHeading(uint8_t x, uint8_t y);
 };

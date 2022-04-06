@@ -204,6 +204,11 @@ export interface MazeStatePacket {
   target: Position | undefined;
 }
 
+export interface MausConfigPacket {
+  motorPid: MsgEncoderCallibration | undefined;
+  lanePid: MsgEncoderCallibration | undefined;
+}
+
 export interface PathPacket {
   cmd: MsgDrive[];
 }
@@ -215,6 +220,7 @@ export interface MausOutgoingMessage {
   info: InfoPacket | undefined;
   pidTuning: PidTuningInfo | undefined;
   mazeState: MazeStatePacket | undefined;
+  mausConfig: MausConfigPacket | undefined;
 }
 
 /** command indicates remote client connection */
@@ -263,6 +269,7 @@ export interface MausIncomingMessage {
   drive: MsgDrive | undefined;
   setPosition: MsgSetPosition | undefined;
   solve: MsgSolve | undefined;
+  laneCallibration: MsgEncoderCallibration | undefined;
 }
 
 function createBaseAckPacket(): AckPacket {
@@ -870,6 +877,94 @@ export const MazeStatePacket = {
   },
 };
 
+function createBaseMausConfigPacket(): MausConfigPacket {
+  return { motorPid: undefined, lanePid: undefined };
+}
+
+export const MausConfigPacket = {
+  encode(message: MausConfigPacket, writer: Writer = Writer.create()): Writer {
+    if (message.motorPid !== undefined) {
+      MsgEncoderCallibration.encode(
+        message.motorPid,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.lanePid !== undefined) {
+      MsgEncoderCallibration.encode(
+        message.lanePid,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MausConfigPacket {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMausConfigPacket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.motorPid = MsgEncoderCallibration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 2:
+          message.lanePid = MsgEncoderCallibration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MausConfigPacket {
+    return {
+      motorPid: isSet(object.motorPid)
+        ? MsgEncoderCallibration.fromJSON(object.motorPid)
+        : undefined,
+      lanePid: isSet(object.lanePid)
+        ? MsgEncoderCallibration.fromJSON(object.lanePid)
+        : undefined,
+    };
+  },
+
+  toJSON(message: MausConfigPacket): unknown {
+    const obj: any = {};
+    message.motorPid !== undefined &&
+      (obj.motorPid = message.motorPid
+        ? MsgEncoderCallibration.toJSON(message.motorPid)
+        : undefined);
+    message.lanePid !== undefined &&
+      (obj.lanePid = message.lanePid
+        ? MsgEncoderCallibration.toJSON(message.lanePid)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MausConfigPacket>, I>>(
+    object: I
+  ): MausConfigPacket {
+    const message = createBaseMausConfigPacket();
+    message.motorPid =
+      object.motorPid !== undefined && object.motorPid !== null
+        ? MsgEncoderCallibration.fromPartial(object.motorPid)
+        : undefined;
+    message.lanePid =
+      object.lanePid !== undefined && object.lanePid !== null
+        ? MsgEncoderCallibration.fromPartial(object.lanePid)
+        : undefined;
+    return message;
+  },
+};
+
 function createBasePathPacket(): PathPacket {
   return { cmd: [] };
 }
@@ -935,6 +1030,7 @@ function createBaseMausOutgoingMessage(): MausOutgoingMessage {
     info: undefined,
     pidTuning: undefined,
     mazeState: undefined,
+    mausConfig: undefined,
   };
 }
 
@@ -967,6 +1063,12 @@ export const MausOutgoingMessage = {
         writer.uint32(50).fork()
       ).ldelim();
     }
+    if (message.mausConfig !== undefined) {
+      MausConfigPacket.encode(
+        message.mausConfig,
+        writer.uint32(58).fork()
+      ).ldelim();
+    }
     return writer;
   },
 
@@ -995,6 +1097,9 @@ export const MausOutgoingMessage = {
         case 6:
           message.mazeState = MazeStatePacket.decode(reader, reader.uint32());
           break;
+        case 7:
+          message.mausConfig = MausConfigPacket.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1016,6 +1121,9 @@ export const MausOutgoingMessage = {
         : undefined,
       mazeState: isSet(object.mazeState)
         ? MazeStatePacket.fromJSON(object.mazeState)
+        : undefined,
+      mausConfig: isSet(object.mausConfig)
+        ? MausConfigPacket.fromJSON(object.mausConfig)
         : undefined,
     };
   },
@@ -1039,6 +1147,10 @@ export const MausOutgoingMessage = {
     message.mazeState !== undefined &&
       (obj.mazeState = message.mazeState
         ? MazeStatePacket.toJSON(message.mazeState)
+        : undefined);
+    message.mausConfig !== undefined &&
+      (obj.mausConfig = message.mausConfig
+        ? MausConfigPacket.toJSON(message.mausConfig)
         : undefined);
     return obj;
   },
@@ -1070,6 +1182,10 @@ export const MausOutgoingMessage = {
     message.mazeState =
       object.mazeState !== undefined && object.mazeState !== null
         ? MazeStatePacket.fromPartial(object.mazeState)
+        : undefined;
+    message.mausConfig =
+      object.mausConfig !== undefined && object.mausConfig !== null
+        ? MausConfigPacket.fromPartial(object.mausConfig)
         : undefined;
     return message;
   },
@@ -1539,6 +1655,7 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
     drive: undefined,
     setPosition: undefined,
     solve: undefined,
+    laneCallibration: undefined,
   };
 }
 
@@ -1577,6 +1694,12 @@ export const MausIncomingMessage = {
     if (message.solve !== undefined) {
       MsgSolve.encode(message.solve, writer.uint32(74).fork()).ldelim();
     }
+    if (message.laneCallibration !== undefined) {
+      MsgEncoderCallibration.encode(
+        message.laneCallibration,
+        writer.uint32(82).fork()
+      ).ldelim();
+    }
     return writer;
   },
 
@@ -1614,6 +1737,12 @@ export const MausIncomingMessage = {
         case 9:
           message.solve = MsgSolve.decode(reader, reader.uint32());
           break;
+        case 10:
+          message.laneCallibration = MsgEncoderCallibration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1638,6 +1767,9 @@ export const MausIncomingMessage = {
         ? MsgSetPosition.fromJSON(object.setPosition)
         : undefined,
       solve: isSet(object.solve) ? MsgSolve.fromJSON(object.solve) : undefined,
+      laneCallibration: isSet(object.laneCallibration)
+        ? MsgEncoderCallibration.fromJSON(object.laneCallibration)
+        : undefined,
     };
   },
 
@@ -1665,6 +1797,10 @@ export const MausIncomingMessage = {
         : undefined);
     message.solve !== undefined &&
       (obj.solve = message.solve ? MsgSolve.toJSON(message.solve) : undefined);
+    message.laneCallibration !== undefined &&
+      (obj.laneCallibration = message.laneCallibration
+        ? MsgEncoderCallibration.toJSON(message.laneCallibration)
+        : undefined);
     return obj;
   },
 
@@ -1704,6 +1840,10 @@ export const MausIncomingMessage = {
     message.solve =
       object.solve !== undefined && object.solve !== null
         ? MsgSolve.fromPartial(object.solve)
+        : undefined;
+    message.laneCallibration =
+      object.laneCallibration !== undefined && object.laneCallibration !== null
+        ? MsgEncoderCallibration.fromPartial(object.laneCallibration)
         : undefined;
     return message;
   },

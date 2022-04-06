@@ -1,26 +1,22 @@
 <script lang="ts">
   import Toaster from "./components/Toaster.svelte";
-  import SensorTable from "./sensorTable.svelte";
+  import SensorTable from "./SensorTable.svelte";
   import MazeView from "./MazeViewCard.svelte";
   import Input from "./components/Input.svelte";
   import { Communicator } from "./Communicator";
   import Grid from "./components/Grid.svelte";
   import Button from "./components/Button.svelte";
   import { Joystick } from "./Joystick";
-  import { testFloodFill } from "./utils/floodFill";
   import { DriveCmdType, SolveCmdType } from "./proto/message";
   import PowerView from "./components/PowerView.svelte";
   import StatusView from "./components/StatusView.svelte";
+  import PidConfigCard from "./PidConfigCard.svelte";
 
   export const com = new Communicator({
     url: "ws://localhost:8080/ws",
   });
 
   const controller = new Joystick(com);
-
-  let kP = 0.4;
-  let kD = 0.00001;
-  let kI = 0.0;
 
   let direction = 0;
   let speed = 0;
@@ -76,15 +72,16 @@
   let isPidTuningActive = false;
 
   const onTunePid = () => {
-    com.send({
-      encoderCallibration: {
-        kD,
-        kI,
-        kP,
-        streamData: !isPidTuningActive,
-      },
-    });
-    isPidTuningActive = !isPidTuningActive;
+    alert("currently disabled");
+    // com.send({
+    //   encoderCallibration: {
+    //     kD,
+    //     kI,
+    //     kP,
+    //     streamData: !isPidTuningActive,
+    //   },
+    // });
+    // isPidTuningActive = !isPidTuningActive;
   };
 
   // list of all valid drive commands
@@ -131,21 +128,6 @@
         </Grid>
         <Button type="submit">Update</Button>
       </form>
-    </div>
-
-    <div class="card">
-      <h2>Tuning</h2>
-      <form on:submit={onUpdateMotorCalibration}>
-        <Grid>
-          <Input step="0.000001" label="kP" type="number" bind:value={kP} />
-          <Input step="0.000001" label="kD" type="number" bind:value={kD} />
-          <Input step="0.000001" label="kI" type="number" bind:value={kI} />
-        </Grid>
-        <Button type="submit">Update</Button>
-      </form>
-    </div>
-
-    <div class="card">
       <h2>Drive</h2>
       <form on:submit={onDrive}>
         <select bind:value={driveCmdType}>
@@ -170,13 +152,19 @@
         <Button type="submit">Drive</Button>
       </form>
     </div>
+
+    <div class="card">
+      <PidConfigCard {com} />
+    </div>
   </div>
+
   <div class="card">
     <h2>Actions</h2>
     <Button inline on:click={onStop}>STOP!</Button>
     <Button inline on:click={onStartExplore}>Explore</Button>
     <Button inline on:click={onGoToStart}>Go To Start</Button>
     <Button inline on:click={onFastRun}>Fast Run</Button>
+    <Button inline on:click={onTunePid}>Tune PID</Button>
   </div>
 
   <div class="subgrid">

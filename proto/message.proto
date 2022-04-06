@@ -10,6 +10,13 @@ message Position {
 	float heading = 3;
 }
 
+message MsgEncoderCallibration {
+	float kP = 1;
+	float kI = 2;
+	float kD = 3;
+	bool streamData = 4;
+}
+
 message PongPacket {}
 
 message SensorPacket {
@@ -54,6 +61,11 @@ message MazeStatePacket {
 	Position target = 4;
 }
 
+message MausConfigPacket {
+	MsgEncoderCallibration motorPid = 1;
+	MsgEncoderCallibration lanePid = 2;
+}
+
 message PathPacket {
 	repeated MsgDrive cmd = 1;
 }
@@ -66,6 +78,7 @@ message MausOutgoingMessage {
 		InfoPacket info = 4;
 		PidTuningInfo pidTuning = 5;
 		MazeStatePacket mazeState = 6;
+		MausConfigPacket mausConfig = 7;
 	}
 }
 
@@ -117,13 +130,6 @@ message MsgSetPosition {
 
 message MsgStop {}
 
-message MsgEncoderCallibration {
-	float kP = 1;
-	float kI = 2;
-	float kD = 3;
-	bool streamData = 4;
-}
-
 message MausIncomingMessage {
 	oneof payload {
 		MsgInit init = 2;
@@ -134,5 +140,6 @@ message MausIncomingMessage {
 		MsgDrive drive = 7;
 		MsgSetPosition setPosition = 8;
 		MsgSolve solve = 9;
+		MsgEncoderCallibration laneCallibration = 10;
 	}
 }

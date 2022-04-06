@@ -9,113 +9,105 @@
 
 static const char *TAG = "lane-ctrl";
 
-void clampAndIntegrate(float &correction,
-					   float &intError,
-					   uint32_t &timeInterval,
-					   int16_t minValue = INT16_MIN,
-					   int16_t maxValue = INT16_MAX) {
-	if (correction < minValue) {
-		correction = minValue;
-	} else if (correction > maxValue) {
-		correction = maxValue;
-	} else {
-		// safe to integrate
-		intError += correction * timeInterval;
-	}
-}
+#define OPTIMAL_WALL_DISTANCE 36
 
-void laneControlTask(Controller *controller, MsgDrive *cmd) {
-	// Controller *controller = (Controller *)args;
-	// Motor *leftMotor = controller->getMotor(left);
-	// Motor *rightMotor = controller->getMotor(right);
+// minimal correction amount e.g. distance between walls
+// below this threshold the robot will driver straight
+#define MIN_CORRECTION_AMOUNT 5
 
+// largest radius the robot will drive to correct error e.g. small corrections
+#define CORRECTION_MIN_BOUND 2000
+
+// smallest radius the robot will drive to correct error e.g. large corrections
+#define CORRECTION_MAX_BOUND (float)1300.0
+
+bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 	PIDErrors pErr;
-	static uint32_t timeInterval = 20;
+	static uint32_t timeInterval = 10;
+	float timeFactor = timeInterval / 1000;
 
 	// declare variables for sensor distances
 	NavigationPacket state;
+	MsgEncoderCallibration config;
 
-	// const float updateConst = 0.01;
-	float kP = 0.02;
-	float kD = 0;
-	float kI = 0;
+	int64_t curEncoderValue = controller->getAverageEncoderTicks();
 
-	float dif = 0;
-	float averageEncoderValue1 = 0;
-	float averageEncoderValue2 = 0;
-	int16_t maxValue = INT16_MAX;
-	int16_t minValue = INT16_MIN;
-	bool flag = true;
+	int64_t targetEncoderValue =
+		controller->getAverageEncoderTicks() + mmsToTicks(mazeCellSize) * cmd->value;
 
-	float curSpeedTicks;
+	uint8_t counter = 0;
+	// this value represents how often lane control will be called compared to
+	// distance checks: 5 means for every 5 distance checks the lane control routine will be called
+	// once
+	// this is usefull since lane control is computationally heavy but we need regular checks to
+	// prevent overshooting
+	uint8_t laneControlChechInterval = 5;
+
+	ESP_LOGI(TAG, "t=%lld, cur=%lld", targetEncoderValue, curEncoderValue);
 
 	// get first encoder count to compare traveled distance
-	averageEncoderValue1 = controller->averageEncoder();
-	while ((dif < (1790 * cmd->value)) && flag) {
-		/*
-		Get left and right sensor readings + current speed
-		d_left = get_left_sensor_distance()
-		d_right = get_right_sensor_distance()
-		cur_speed = get_current_speed()
-		*/
-		ESP_LOGI(TAG, "cmdSpeed: %f", cmd->speed);
+	while (targetEncoderValue - curEncoderValue > 20) {
+		// perform wall control at different rate to distance checks
+		if (counter % laneControlChechInterval == 0) {
+			config = controller->getLanePidConfig();
+			controller->updateSensors();
+			state = controller->getState();
 
-		controller->updateSensors();
-		state = controller->getState();
+			bool leftSensorValid = isSensorValid(state.sensors.left);
+			bool rightSensorValid = isSensorValid(state.sensors.right);
 
+			// only left is valid
+			if (!rightSensorValid && leftSensorValid) {
+				pErr.curError = state.sensors.left - OPTIMAL_WALL_DISTANCE;
+			} else if (!leftSensorValid && rightSensorValid) {
+				// only right is valid
+				pErr.curError = OPTIMAL_WALL_DISTANCE - state.sensors.right;
+			} else if (leftSensorValid && rightSensorValid) {
+				// both are valid
+				pErr.curError = state.sensors.left - state.sensors.right;
+			} else {
+				// pray that all is okay
+				pErr.curError = 0;
+			}
+
+			// PID
+			pErr.derError = (pErr.lastError - pErr.curError) * timeFactor;
+			pErr.correction = (config.kP * pErr.curError) + (config.kD * pErr.derError) +
+							  (config.kI * pErr.intError);
+			pErr.lastError = pErr.curError;
+
+			// if correction if small just drive straight
+			if (abs(pErr.correction) < MIN_CORRECTION_AMOUNT) {
+				controller->drive(cmd->speed, 0);
+			} else {
+				// make sure error is reasonable meaning:
+				// lane correction is not too small or too large
+				// too large is more problematic
+				pErr.correction = copysign(
+					(CORRECTION_MIN_BOUND - std::min(abs(pErr.correction), CORRECTION_MAX_BOUND)),
+					pErr.correction);
+
+				controller->drive(cmd->speed, pErr.correction);
+
+				ESP_LOGI(TAG, "correction: %f", pErr.correction);
+				pErr.intError += pErr.correction * timeFactor;
+			}
+
+			// STOP drive when wall in front
+			if (isSensorValid(state.sensors.front) && state.sensors.front < 30) {
+				controller->setSpeed(0);
+				controller->drive(0, 0);
+				return false;
+			}
+		}
 		// get second encoder count to compare traveled distance
-		averageEncoderValue2 = controller->averageEncoder();
-		// Check how fare bot has traveled
-		dif = averageEncoderValue2 - averageEncoderValue1;
-
-		curSpeedTicks = convertMMsToTPS(controller->getSpeed());
-		if (state.sensors.left < 0.1) {
-			pErr.curError = -20;
-		}
-		if (state.sensors.right < 0.1) {
-			pErr.curError = 20;
-		} else {
-			pErr.curError = state.sensors.left - state.sensors.right;
-		}
-		pErr.derError = (pErr.lastError - pErr.curError) / timeInterval;
-		pErr.correction += (kP * pErr.curError) + (kD * pErr.derError) + (kI * pErr.intError);
-
-		pErr.lastError = pErr.curError;
-
-		// TODO: since direction changes are inverse to the error e.g.
-		// small adjustments are large values and large ones are little we need to remap/rescale
-		// @xavier take a look at this
-
-		// Update speed of right motor
-		// clampAndIntegrate(pErr.correction, pErr.intError, timeInterval, -4000, 4000);
-		if (pErr.correction < minValue) {
-			pErr.correction = minValue;
-		} else if (pErr.correction > maxValue) {
-			pErr.correction = maxValue;
-		} else {
-			// safe to integrate
-			pErr.intError += pErr.correction * timeInterval;
-		}
-		ESP_LOGI(TAG,
-				 "dLeft=%f, dRight=%f, dFront= %f, c=%f",
-				 state.sensors.left,
-				 state.sensors.right,
-				 state.sensors.front,
-				 pErr.correction);
-
-		// controller->setDirection(copysign((4000 - abs(pErr.correction)), pErr.correction));
-		controller->drive(cmd->speed, copysign((4000 - abs(pErr.correction)), pErr.correction));
-		ESP_LOGI(
-			TAG, "lane Direction: %f", copysign((4000 - abs(pErr.correction)), pErr.correction));
-
-		if (state.sensors.front > 0.02 && state.sensors.front < 30) {
-			controller->setSpeed(0);
-			flag = false;
-			controller->drive(0, 0);
-		}
-
+		curEncoderValue = controller->getAverageEncoderTicks();
+		counter++;
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}
-	dif = 0;
+
+	ESP_LOGI(TAG, "reached target t=%lld, cur=%lld", targetEncoderValue, curEncoderValue);
+
 	controller->drive(0, 0);
+	return true;
 }

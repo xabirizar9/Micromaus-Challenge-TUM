@@ -43,6 +43,7 @@ void waitForDriveCompletion(EventGroupHandle_t handle) {
 	while (true) {
 		event = xEventGroupWaitBits(handle, DRIVE_EVT_COMPLETED_BIT, true, true, waitTicks);
 		if ((event & DRIVE_EVT_COMPLETED_BIT) == DRIVE_EVT_COMPLETED_BIT) {
+			xEventGroupClearBits(handle, DRIVE_EVT_COMPLETED_BIT & DRIVE_EVT_STARTED_BIT);
 			ESP_LOGD(TAG, "got cmd completed event");
 			return;
 		}

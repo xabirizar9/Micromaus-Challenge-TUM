@@ -4,7 +4,19 @@ static constexpr float PI = 3.141592653589793238462643383279502884;
 
 static constexpr float radPerDegree = PI / 180.f;
 
+// sensor offset from maus center‚
+static const float leftSensorOffsetY = -53.0;
+static const float leftSensorOffsetX = 32.0;
+
+static const float rightSensorOffsetY = -53.0;
+static const float rightSensorOffsetX = 32.0;
+
+static const float frontSensorOffsetY = 0.0;
+static const float frontSensorOffsetX = 67.0;
+
 static const float encoderTicksToMm = 0.0892497913;
+
+static const float mazeCellSize = 180.0;
 
 // distance between the wheels in millimeters
 static const float wheelDistance = 125.0;
@@ -26,4 +38,8 @@ inline float mmsToTicks(float millis) {
 
 inline float convertMMsToTPS(float millis) {
 	return convertMillimetersToRevolutions(millis) * ticksPerRevolution;
+}
+
+inline bool isSensorValid(float value) {
+	return value > 0.02;
 }

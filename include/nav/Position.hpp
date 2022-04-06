@@ -20,12 +20,17 @@ class CardinalDirection {
 
 	friend inline constexpr int operator-(const CardinalDirection, const CardinalDirection);
 
+	friend inline constexpr int operator-(const CardinalDirection, const CardinalDirection::the);
+
    private:
 	uint8_t impl;
 };
 
 inline constexpr int operator-(const CardinalDirection a, const CardinalDirection b) {
 	return (int)a.impl - (int)b.impl;
+}
+inline constexpr int operator-(const CardinalDirection a, const CardinalDirection::the b) {
+	return (int)a.impl - (int)b;
 }
 
 class Heading {

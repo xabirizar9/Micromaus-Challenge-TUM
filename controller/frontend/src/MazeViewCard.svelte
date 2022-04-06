@@ -110,8 +110,8 @@
           if (maus) {
             const x = fromMmToUnits(evt.data.nav.position.x) + 0.5;
             const y = fromMmToUnits(evt.data.nav.position.y) + 0.5;
-            maus.style.left = `${100 * (x / mazeSize.width)}%`;
-            maus.style.bottom = `${100 * ((y - 0.5) / mazeSize.height)}%`;
+            // maus.style.left = `${100 * (x / mazeSize.width)}%`;
+            // maus.style.bottom = `${100 * ((y - 0.5) / mazeSize.height)}%`;
 
             pathChart.appendPoint({
               x: x,
@@ -123,6 +123,14 @@
         if (evt.data.mazeState) {
           mazeState = evt.data.mazeState.state;
           wallState = evt.data.mazeState.walls;
+
+          maus.style.left = `${
+            100 * (evt.data.mazeState.position.x / mazeSize.width)
+          }%`;
+          maus.style.bottom = `${
+            100 * (evt.data.mazeState.position.y / mazeSize.height)
+          }%`;
+          console.log(evt.data.mazeState.position);
         }
       }
     );
