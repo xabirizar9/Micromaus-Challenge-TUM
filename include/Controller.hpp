@@ -3,6 +3,7 @@
 
 #include "IRSensor.hpp"
 #include "config.h"
+#include "filter/SLAM.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "periph/Encoder.hpp"
@@ -38,13 +39,15 @@ class Controller {
 	// create packet storring current controller state
 	NavigationPacket state;
 
+	SLAM slam;
+
    public:
 	Controller();
 	~Controller();
 
 	power::Battery battery;
 
-	NavigationPacket getState();
+	const NavigationPacket &getState();
 
 	/**
 	 * @brief Get global robot speed (both motors) in mm/s

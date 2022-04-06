@@ -12,10 +12,16 @@ PB_BIND(AckPacket, AckPacket, AUTO)
 PB_BIND(Position, Position, AUTO)
 
 
+PB_BIND(MsgEncoderCallibration, MsgEncoderCallibration, AUTO)
+
+
 PB_BIND(PongPacket, PongPacket, AUTO)
 
 
 PB_BIND(SensorPacket, SensorPacket, AUTO)
+
+
+PB_BIND(PosDistribution, PosDistribution, AUTO)
 
 
 PB_BIND(NavigationPacket, NavigationPacket, AUTO)
@@ -58,9 +64,6 @@ PB_BIND(MsgSetPosition, MsgSetPosition, AUTO)
 
 
 PB_BIND(MsgStop, MsgStop, AUTO)
-
-
-PB_BIND(MsgEncoderCallibration, MsgEncoderCallibration, AUTO)
 
 
 PB_BIND(MausIncomingMessage, MausIncomingMessage, AUTO)

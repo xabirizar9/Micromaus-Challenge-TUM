@@ -7,6 +7,7 @@
 class SensorState;
 
 class Location {
+   public:
 	/**
 	 * initializes the robot position to the center of the (0, 0) field,
 	 * which is (9cm, 9cm, EAST) and a std-derivation of (9cm, 9cm, 45deg)
