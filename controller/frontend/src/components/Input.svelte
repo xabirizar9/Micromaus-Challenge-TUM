@@ -38,6 +38,7 @@
 
 <style lang="scss">
   .input {
+    width: 100%;
     min-width: 0;
     &:hover {
       input {

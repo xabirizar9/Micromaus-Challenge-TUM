@@ -90,13 +90,13 @@ export class Joystick {
       newDirection = -200;
     }
     if (this.pressedKeyboardKeys["arrowup"] || this.pressedKeyboardKeys["w"]) {
-      newSpeed = 2000 * (turbo ? 2 : 1);
+      newSpeed = 200 * (turbo ? 2 : 1);
     } else if (
       this.pressedKeyboardKeys["arrowdown"] ||
       this.pressedKeyboardKeys["s"] ||
       this.pressedKeyboardKeys["S"]
     ) {
-      newSpeed = -2000 * (turbo ? 2 : 1);
+      newSpeed = -200 * (turbo ? 2 : 1);
     } else {
       newSpeed = 0;
     }
