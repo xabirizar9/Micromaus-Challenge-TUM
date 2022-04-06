@@ -61,19 +61,19 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 			// only left is valid
 			if ((!rightWallgiven && leftWallgiven) || (!rightSensorValid && leftSensorValid)) {
 				pErr.curError = state.sensors.left - OPTIMAL_WALL_DISTANCE;
-				ESP_LOGI(TAG, "only left is valid");
+				ESP_LOGD(TAG, "only left is valid");
 			} else if ((!leftWallgiven && rightWallgiven) ||
 					   (!leftSensorValid && rightSensorValid)) {
 				// only right is valid
 				pErr.curError = OPTIMAL_WALL_DISTANCE - state.sensors.right;
-				ESP_LOGI(TAG, "only right is valid");
+				ESP_LOGD(TAG, "only right is valid");
 			} else if (leftWallgiven && rightWallgiven && leftSensorValid && rightSensorValid) {
 				// both are valid
-				ESP_LOGI(TAG, "both are valid");
+				ESP_LOGD(TAG, "both are valid");
 				pErr.curError = state.sensors.left - state.sensors.right;
 			} else {
 				// pray that all is okay
-				ESP_LOGI(TAG, "else");
+
 				pErr.curError = 0;
 			}
 
