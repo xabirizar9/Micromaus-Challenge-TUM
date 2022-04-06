@@ -84,7 +84,8 @@ CardinalDirection MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	costs[CardinalDirection::WEST] = this->maze.getCost(x - 1, y);
 
 	for (uint8_t i = 0; i < 4; i++) {
-		heading = costs[i] < costs[heading] ? CardinalDirection(i - 1) : heading;
+		// TODO: @alex help us
+		heading = costs[i] < costs[heading] ? CardinalDirection((i - 1) % 4) : heading;
 	}
 
 	return heading;
