@@ -7,6 +7,8 @@
 #include "nav/Position.hpp"
 #include "nav/RobotDriver.hpp"
 
+using nav::CardinalDirection;
+
 class MazeSolver : public RobotDriver {
    private:
 	Maze maze;
