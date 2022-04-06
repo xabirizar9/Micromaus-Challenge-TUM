@@ -181,7 +181,7 @@ void MazeSolver::startGoHome() {
 			return;
 		}
 
-		this->updateWalls(x, y, heading);
+		// this->updateWalls(x, y, heading);
 
 		// rerun flood fill
 		this->maze.fillFrom(0, 0);
