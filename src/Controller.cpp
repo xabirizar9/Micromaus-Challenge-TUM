@@ -96,6 +96,8 @@ void Controller::updatePosition() {
 
 	leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
+
+	slam.predict(state.leftMotorSpeed / 10.f, state.rightMotorSpeed / 10.f);
 }
 
 void Controller::setDirection(int16_t direction) {
@@ -199,8 +201,6 @@ Motor *Controller::getMotor(MotorPosition position) {
 
 NavigationPacket Controller::getState() {
 	this->state.timestamp = xTaskGetTickCount();
-	this->state.leftMotorSpeed = this->leftSpeedTickTarget;
-	this->state.rightMotorSpeed = this->rightSpeedTickTarget;
 	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
 	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
 	this->updateSensors();

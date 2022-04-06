@@ -3,6 +3,7 @@
 
 #include "IRSensor.hpp"
 #include "config.h"
+#include "filter/SLAM.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "periph/Encoder.hpp"
@@ -37,6 +38,8 @@ class Controller {
 
 	// create packet storring current controller state
 	NavigationPacket state;
+
+	SLAM slam;
 
    public:
 	Controller();
