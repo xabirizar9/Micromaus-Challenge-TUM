@@ -114,7 +114,7 @@ void MazeSolver::startExploration() {
 	CardinalDirection heading = CardinalDirection::NORTH;
 	CardinalDirection newHeading = CardinalDirection::NORTH;
 	MazeStatePacket packet;
-	uint16_t speed = 120;
+	uint16_t speed = 150;
 	// TODO: split into task
 
 	while (true) {
@@ -141,7 +141,7 @@ void MazeSolver::startExploration() {
 		// write and encode the command
 		NetController::Manager::getInstance().writeMazeState(packet);
 
-		// this->maze.printMaze(x, y);
+		this->maze.printMaze(x, y);
 		// give us some time to print
 		vTaskDelay(pdMS_TO_TICKS(200));
 

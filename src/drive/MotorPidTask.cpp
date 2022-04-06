@@ -19,7 +19,7 @@ void motorPidTask(void *pvParameter) {
 	delete payload;
 
 	// PID interval in ms
-	uint16_t monitorInterval = 10;
+	uint16_t monitorInterval = 20;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
 	float secondFraction = (float)monitorInterval / 1000.0;
