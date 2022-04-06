@@ -20,6 +20,15 @@ class Location {
 		rpd = n;
 	}
 
+	const RobotPositionDistribution& getDistribution() const {
+		return rpd;
+	}
+
+	/**
+	 * sets deviations to zero, keeping means
+	 */
+	void pin();
+
 	/**
 	 * Predicts the location of the robot given the desired wheel velocities
 	 * in cm/s and the time delta in seconds.

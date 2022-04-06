@@ -22,6 +22,11 @@ Location::Location()
 		  {{9, 0, 0, 0, 9, 0, 0, 0, PI / 4}},
 		  Mat3f{}) {}
 
+void Location::pin() {
+	rpd.positionStd = Mat3f();
+	rpd.velocityStd = Mat3f();
+}
+
 /* The motion model: see Thrun et al., Probabilistic Robotics, p. 127
  */
 static Vec2f predictPosMeanDelta(const float v,
