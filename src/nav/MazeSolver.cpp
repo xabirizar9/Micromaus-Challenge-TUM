@@ -85,7 +85,7 @@ CardinalDirection MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 
 	for (uint8_t i = 0; i < 4; i++) {
 		// TODO: @alex help us
-		heading = costs[i] < costs[heading] ? CardinalDirection((i - 1) % 4) : heading;
+		heading = costs[i] < costs[heading] ? CardinalDirection(i) : heading;
 	}
 
 	return heading;
@@ -150,10 +150,11 @@ void MazeSolver::startExploration() {
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
-			this->addCmdAndWait(heading < newHeading ? DriveCmdType::DriveCmdType_TurnLeftOnSpot
-													 : DriveCmdType::DriveCmdType_TurnRightOnSpot,
-								CardinalDirection(heading - newHeading),
-								speed);
+			this->addCmdAndWait(
+				heading < newHeading ? DriveCmdType::DriveCmdType_TurnLeftOnSpot
+									 : DriveCmdType::DriveCmdType_TurnRightOnSpot,
+				std::abs(heading - newHeading) == 3 ? 1 : std::abs(heading - newHeading),
+				speed);
 			heading = newHeading;
 		}
 
