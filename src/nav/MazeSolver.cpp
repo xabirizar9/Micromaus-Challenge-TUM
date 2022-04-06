@@ -163,11 +163,21 @@ void MazeSolver::startExploration() {
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
-			this->addCmdAndWait(
-				heading < newHeading ? DriveCmdType::DriveCmdType_TurnLeftOnSpot
-									 : DriveCmdType::DriveCmdType_TurnRightOnSpot,
-				std::abs(heading - newHeading) == 3 ? 1 : std::abs(heading - newHeading),
-				speed);
+			DriveCmdType direction;
+			float turns = std::abs(heading - newHeading) == 3 ? 1 : std::abs(heading - newHeading);
+			if (heading < newHeading) {
+				direction = DriveCmdType::DriveCmdType_TurnLeftOnSpot;
+			} else {
+				direction = DriveCmdType::DriveCmdType_TurnRightOnSpot;
+			}
+
+			if (std::abs(heading - newHeading) == 3) {
+				direction = direction == DriveCmdType::DriveCmdType_TurnLeftOnSpot
+								? DriveCmdType::DriveCmdType_TurnRightOnSpot
+								: DriveCmdType::DriveCmdType_TurnLeftOnSpot;
+			}
+
+			this->addCmdAndWait(direction, turns, speed);
 			heading = newHeading;
 		}
 
