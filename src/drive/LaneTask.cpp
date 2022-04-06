@@ -19,7 +19,7 @@ static const char *TAG = "lane-ctrl";
 #define CORRECTION_MIN_BOUND 2000
 
 // smallest radius the robot will drive to correct error e.g. large corrections
-#define CORRECTION_MAX_BOUND (float)1300.0
+#define CORRECTION_MAX_BOUND (float)1600.0
 
 bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 	PIDErrors pErr;
@@ -41,7 +41,7 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 	// once
 	// this is usefull since lane control is computationally heavy but we need regular checks to
 	// prevent overshooting
-	uint8_t laneControlChechInterval = 5;
+	uint8_t laneControlChechInterval = 3;
 
 	ESP_LOGI(TAG, "t=%lld, cur=%lld", targetEncoderValue, curEncoderValue);
 
@@ -53,20 +53,27 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 			controller->updateSensors();
 			state = controller->getState();
 
-			bool leftSensorValid = isSensorValid(state.sensors.left);
-			bool rightSensorValid = isSensorValid(state.sensors.right);
+			bool leftWallgiven = isWallGiven(state.sensors.left);
+			bool rightWallgiven = isWallGiven(state.sensors.right);
+			bool leftSensorValid = isSensorValid(state.sensors.right);
+			bool rightSensorValid = isSensorValid(state.sensors.left);
 
 			// only left is valid
-			if (!rightSensorValid && leftSensorValid) {
+			if ((!rightWallgiven && leftWallgiven) || (!rightSensorValid && leftSensorValid)) {
 				pErr.curError = state.sensors.left - OPTIMAL_WALL_DISTANCE;
-			} else if (!leftSensorValid && rightSensorValid) {
+				ESP_LOGI(TAG, "only left is valid");
+			} else if ((!leftWallgiven && rightWallgiven) ||
+					   (!leftSensorValid && rightSensorValid)) {
 				// only right is valid
 				pErr.curError = OPTIMAL_WALL_DISTANCE - state.sensors.right;
-			} else if (leftSensorValid && rightSensorValid) {
+				ESP_LOGI(TAG, "only right is valid");
+			} else if (leftWallgiven && rightWallgiven && leftSensorValid && rightSensorValid) {
 				// both are valid
+				ESP_LOGI(TAG, "both are valid");
 				pErr.curError = state.sensors.left - state.sensors.right;
 			} else {
 				// pray that all is okay
+				ESP_LOGI(TAG, "else");
 				pErr.curError = 0;
 			}
 
@@ -94,7 +101,7 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 			}
 
 			// STOP drive when wall in front
-			if (isSensorValid(state.sensors.front) && state.sensors.front < 30) {
+			if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
 				controller->setSpeed(0);
 				controller->drive(0, 0);
 				return false;

@@ -23,3 +23,23 @@ std::common_type_t<T, S> dot(const Mat<T, A, 1>& l, const Mat<S, A, 1>& r) {
 	}
 	return std::move(out);
 }
+
+/**
+ * Vec2 cross product, returns z component of result
+ */
+template <typename T, typename S>
+std::common_type_t<T, S> cross(const Mat<T, 2, 1>& l, const Mat<S, 2, 1>& r) {
+	return l.data[0] * r.data[1] - l.data[1] * r.data[0];
+}
+
+/**
+ * Vector to diagonal conversion
+ */
+template <typename T, unsigned int A>
+Mat<T, A, A> diag(const Mat<T, A, 1>& r) {
+	Mat<T, A, A> out;
+	for (unsigned int i = 0; i < A; ++i) {
+		out.at(i, i) = r.data[i];
+	}
+	return std::move(out);
+}

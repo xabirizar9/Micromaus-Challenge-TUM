@@ -113,7 +113,7 @@ void MazeSolver::startExploration() {
 	CardinalDirection heading = CardinalDirection::NORTH;
 	CardinalDirection newHeading = CardinalDirection::NORTH;
 	MazeStatePacket packet;
-	uint16_t speed = 400;
+	uint16_t speed = 120;
 	// TODO: split into task
 
 	while (true) {

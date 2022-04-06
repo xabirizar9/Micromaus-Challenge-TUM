@@ -1,5 +1,9 @@
 #include <stdint.h>
 
+static constexpr float PI = 3.141592653589793238462643383279502884;
+
+static constexpr float radPerDegree = PI / 180.f;
+
 // sensor offset from maus center‚
 static const float leftSensorOffsetY = -53.0;
 static const float leftSensorOffsetX = 32.0;
@@ -36,6 +40,9 @@ inline float convertMMsToTPS(float millis) {
 	return convertMillimetersToRevolutions(millis) * ticksPerRevolution;
 }
 
-inline bool isSensorValid(float value) {
-	return value > 0.02;
+inline bool isWallGiven(float sensor) {
+	return (sensor > 0.2) && (sensor < 70);
+}
+inline bool isSensorValid(float contraSensor) {
+	return contraSensor < 55;
 }

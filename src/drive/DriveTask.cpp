@@ -79,8 +79,9 @@ void driveTask(void* arg) {
 				int64_t cur = controller->getEncoder(pos)->getTotalCounter();
 
 				int64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value);
-
-				// start driving
+				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int vEnd,
+				// TickType_t tStart, TickType_t tEnd))
+				//  start driving
 				controller->drive(curCmd->speed,
 								  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
 
@@ -104,6 +105,7 @@ void driveTask(void* arg) {
 					vTaskDelay(pdMS_TO_TICKS(1));
 				}
 				controller->drive(0, 0);
+				ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
 				break;
 			}
 			default: break;
@@ -113,7 +115,7 @@ void driveTask(void* arg) {
 		curCmd = NULL;
 
 		// notify driver about event completion
-		ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
+
 		ESP_LOGI(tag, "cmd completed");
 		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
 
