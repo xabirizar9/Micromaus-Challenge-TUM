@@ -1,5 +1,9 @@
 #include <stdint.h>
 
+static constexpr float PI = 3.141592653589793238462643383279502884;
+
+static constexpr float radPerDegree = PI / 180.f;
+
 static const float encoderTicksToMm = 0.0892497913;
 
 // distance between the wheels in millimeters
