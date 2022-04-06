@@ -92,7 +92,7 @@ void driveTask(void* arg) {
 						 curCmd->value,
 						 ticksPerOnSpotRotation);
 
-				int targetDiffRange = std::min(std::max(20 * curCmd->speed / 4000.0, 1.0), 20.0);
+				int targetDiffRange = std::min(std::max(600 * curCmd->speed / 4000.0, 1.0), 600.0);
 
 				// monitor encoder values
 				// NOTE: values will only be updated during motor PID
