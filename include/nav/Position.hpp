@@ -5,32 +5,32 @@
 namespace nav {
 class CardinalDirection {
    public:
-	enum the : uint8_t { EAST = 0, NORTH = 1, WEST = 2, SOUTH = 3 };
+	enum the : int8_t { EAST = 0, NORTH = 1, WEST = 2, SOUTH = 3 };
 
-	explicit constexpr CardinalDirection(int x) : impl(x % 4) {}
-	constexpr CardinalDirection(the x) : impl((uint8_t)x) {}
+	explicit constexpr CardinalDirection(int8_t x) : impl(x % 4) {}
+	constexpr CardinalDirection(the x) : impl((int8_t)x) {}
 
 	explicit constexpr operator char() const {
 		return "ENWS"[impl];
 	}
 
-	constexpr operator uint8_t() const {
+	constexpr operator int8_t() const {
 		return impl;
 	}
 
-	friend inline constexpr int operator-(const CardinalDirection, const CardinalDirection);
+	friend inline constexpr int8_t operator-(const CardinalDirection, const CardinalDirection);
 
-	friend inline constexpr int operator-(const CardinalDirection, const CardinalDirection::the);
+	friend inline constexpr int8_t operator-(const CardinalDirection, const CardinalDirection::the);
 
    private:
-	uint8_t impl;
+	int8_t impl;
 };
 
-inline constexpr int operator-(const CardinalDirection a, const CardinalDirection b) {
-	return (int)a.impl - (int)b.impl;
+inline constexpr int8_t operator-(const CardinalDirection a, const CardinalDirection b) {
+	return (int8_t)a.impl - (int8_t)b.impl;
 }
-inline constexpr int operator-(const CardinalDirection a, const CardinalDirection::the b) {
-	return (int)a.impl - (int)b;
+inline constexpr int8_t operator-(const CardinalDirection a, const CardinalDirection::the b) {
+	return (int8_t)a.impl - (int8_t)b;
 }
 
 class Heading {

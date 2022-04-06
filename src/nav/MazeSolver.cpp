@@ -152,7 +152,7 @@ void MazeSolver::startExploration() {
 		if (heading != newHeading) {
 			this->addCmdAndWait(heading < newHeading ? DriveCmdType::DriveCmdType_TurnLeftOnSpot
 													 : DriveCmdType::DriveCmdType_TurnRightOnSpot,
-								heading - newHeading,
+								CardinalDirection(heading - newHeading),
 								speed);
 			heading = newHeading;
 		}
