@@ -1,6 +1,7 @@
 
 #include "drive/DriveTask.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 #include "Controller.hpp"
@@ -89,12 +90,16 @@ void driveTask(void* arg) {
 						 cur,
 						 curCmd->value,
 						 ticksPerOnSpotRotation);
+
+				int targetDiffRange = std::min(std::max(20 * curCmd->speed / 4000.0, 1.0), 20.0);
+
 				// monitor encoder values
 				// NOTE: values will only be updated during motor PID
 				// decreasing vTaskDelay will not affect precission directly
 				// but will increase the chance that the last update interval was more recent
-				// to avoid overshooting we stop even when we are a couple of ticks away from target
-				while (target - cur > 20) {
+				// to avoid overshooting we stop even when we are a couple of ticks away from
+				// target
+				while (target - cur > targetDiffRange) {
 					ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
 					cur = controller->getEncoder(pos)->getTotalCounter();
 					vTaskDelay(pdMS_TO_TICKS(1));
