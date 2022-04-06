@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -8,9 +9,11 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 
-	"github.com/c-bata/go-prompt"
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
@@ -64,15 +67,39 @@ func (r *Robot) connect(ctx context.Context, address string) (err error) {
 	return
 }
 
-func robotSelector(robots map[string]net.IP) prompt.Completer {
-	return func(d prompt.Document) []prompt.Suggest {
-		s := []prompt.Suggest{}
+func robotSelector(robots map[string]net.IP) string {
 
-		for k, v := range robots {
-			s = append(s, prompt.Suggest{Text: v.String(), Description: k})
-		}
-		return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
+	i := 1
+	ips := make([]net.IP, len(robots))
+
+	fmt.Printf("Please select robot by typing the robot number\n")
+
+	for k, v := range robots {
+		fmt.Printf("%d) %s: %s\n", i, k, v.String())
+		ips[i-1] = v
+		i++
 	}
+	for {
+
+		fmt.Printf("->")
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+		// convert CRLF to LF
+
+		text = strings.Replace(text, "\n", "", -1)
+		intVar, err := strconv.Atoi(text)
+		if err != nil {
+			continue
+		}
+
+		if intVar > i || intVar < 1 {
+			fmt.Println("invalid option selected")
+			continue
+		}
+
+		return ips[i-1].String()
+	}
+
 }
 
 var (
@@ -153,11 +180,8 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 			}
 		} else {
 			fmt.Printf("Found multiple Maus robots:\n")
-			for k, v := range m.Robots {
-				fmt.Printf("%s: %s\n", k, v.String())
-			}
 
-			addr = prompt.Input("Select Maus > ", robotSelector(m.Robots))
+			addr = robotSelector(m.Robots)
 			if addr == "" {
 				return nil, errors.New("no robot selected")
 			}

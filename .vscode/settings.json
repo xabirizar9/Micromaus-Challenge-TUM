@@ -66,6 +66,7 @@
     "set": "cpp",
     "future": "cpp",
     "mutex": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "iostream": "cpp"
   }
 }
