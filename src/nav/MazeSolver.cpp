@@ -152,14 +152,11 @@ void MazeSolver::startExploration() {
 		vTaskDelay(pdMS_TO_TICKS(200));
 
 		this->maze.printMaze(x, y);
-		// give us some time to print
+		//  give us some time to print
 		vTaskDelay(pdMS_TO_TICKS(200));
 
 		// find cell will lover cost/distance to center;
 		newHeading = this->getNewHeading(x, y);
-
-		vTaskDelay(pdMS_TO_TICKS(200));
-		continue;
 
 		// rotate based on optimal index
 		if (heading != newHeading) {

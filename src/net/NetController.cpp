@@ -21,7 +21,7 @@
 #include "net/WifiCommunicator.hpp"
 
 static const char *tag = "NET";
-static const uint16_t sensorSendInterval = pdMS_TO_TICKS(300);
+static const uint16_t sensorSendInterval = pdMS_TO_TICKS(500);
 
 using namespace NetController;
 
