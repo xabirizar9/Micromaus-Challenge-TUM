@@ -17,7 +17,6 @@ struct Maze {
 	size_t size;
 	uint8_t* wallState;
 	uint8_t* state;
-	bool* visited;
 
 	void setWall(uint8_t x, uint8_t y, nav::CardinalDirection dir, bool setOpposing);
 	bool getWall(uint8_t x, uint8_t y, nav::CardinalDirection dir);
@@ -27,8 +26,8 @@ struct Maze {
 
 	void printMaze(uint8_t robotX, uint8_t robotY);
 
-	void resetVisited();
 	void resetCosts();
+	void resetWalls();
 
 	void fill(uint8_t x, uint8_t y, uint8_t distance);
 	void update();

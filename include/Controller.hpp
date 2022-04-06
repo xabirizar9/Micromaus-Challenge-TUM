@@ -94,7 +94,7 @@ class Controller {
 
 	void setPosition(float x, float y, float heading);
 
-	float averageEncoder();
+	int64_t getAverageEncoderTicks();
 
 	MsgEncoderCallibration getLanePidConfig();
 	void updateLanePid(MsgEncoderCallibration config);

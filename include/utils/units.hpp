@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-// sensor offset from maus center
+// sensor offset from maus center‚
 static const float leftSensorOffsetY = -53.0;
 static const float leftSensorOffsetX = 32.0;
 
@@ -11,6 +11,8 @@ static const float frontSensorOffsetY = 0.0;
 static const float frontSensorOffsetX = 67.0;
 
 static const float encoderTicksToMm = 0.0892497913;
+
+static const float mazeCellSize = 180.0;
 
 // distance between the wheels in millimeters
 static const float wheelDistance = 125.0;

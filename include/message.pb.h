@@ -110,6 +110,13 @@ typedef struct _SensorPacket {
     float right; 
 } SensorPacket;
 
+typedef struct _MausConfigPacket { 
+    bool has_motorPid;
+    MsgEncoderCallibration motorPid; 
+    bool has_lanePid;
+    MsgEncoderCallibration lanePid; 
+} MausConfigPacket;
+
 typedef struct _MausIncomingMessage { 
     pb_size_t which_payload;
     union {
@@ -157,6 +164,7 @@ typedef struct _MausOutgoingMessage {
         InfoPacket info;
         PidTuningInfo pidTuning;
         MazeStatePacket mazeState;
+        MausConfigPacket mausConfig;
     } payload; 
 } MausOutgoingMessage;
 
@@ -188,6 +196,7 @@ extern "C" {
 #define InfoPacket_init_default                  {_InfoCmdType_MIN}
 #define PidTuningInfo_init_default               {{{NULL}, NULL}}
 #define MazeStatePacket_init_default             {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_default, false, Position_init_default}
+#define MausConfigPacket_init_default            {false, MsgEncoderCallibration_init_default, false, MsgEncoderCallibration_init_default}
 #define PathPacket_init_default                  {{{NULL}, NULL}}
 #define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
@@ -207,6 +216,7 @@ extern "C" {
 #define InfoPacket_init_zero                     {_InfoCmdType_MIN}
 #define PidTuningInfo_init_zero                  {{{NULL}, NULL}}
 #define MazeStatePacket_init_zero                {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_zero, false, Position_init_zero}
+#define MausConfigPacket_init_zero               {false, MsgEncoderCallibration_init_zero, false, MsgEncoderCallibration_init_zero}
 #define PathPacket_init_zero                     {{{NULL}, NULL}}
 #define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
@@ -243,6 +253,8 @@ extern "C" {
 #define SensorPacket_left_tag                    1
 #define SensorPacket_front_tag                   2
 #define SensorPacket_right_tag                   3
+#define MausConfigPacket_motorPid_tag            1
+#define MausConfigPacket_lanePid_tag             2
 #define MausIncomingMessage_init_tag             2
 #define MausIncomingMessage_control_tag          3
 #define MausIncomingMessage_encoderCallibration_tag 4
@@ -271,6 +283,7 @@ extern "C" {
 #define MausOutgoingMessage_info_tag             4
 #define MausOutgoingMessage_pidTuning_tag        5
 #define MausOutgoingMessage_mazeState_tag        6
+#define MausOutgoingMessage_mausConfig_tag       7
 
 /* Struct field encoding specification for nanopb */
 #define AckPacket_FIELDLIST(X, a) \
@@ -332,6 +345,14 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  target,            4)
 #define MazeStatePacket_position_MSGTYPE Position
 #define MazeStatePacket_target_MSGTYPE Position
 
+#define MausConfigPacket_FIELDLIST(X, a) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  motorPid,          1) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  lanePid,           2)
+#define MausConfigPacket_CALLBACK NULL
+#define MausConfigPacket_DEFAULT NULL
+#define MausConfigPacket_motorPid_MSGTYPE MsgEncoderCallibration
+#define MausConfigPacket_lanePid_MSGTYPE MsgEncoderCallibration
+
 #define PathPacket_FIELDLIST(X, a) \
 X(a, CALLBACK, REPEATED, MESSAGE,  cmd,               1)
 #define PathPacket_CALLBACK pb_default_field_callback
@@ -344,7 +365,8 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,nav,payload.nav),   2) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,pong,payload.pong),   3) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,info,payload.info),   4) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,pidTuning,payload.pidTuning),   5) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mazeState,payload.mazeState),   6)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mazeState,payload.mazeState),   6) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mausConfig,payload.mausConfig),   7)
 #define MausOutgoingMessage_CALLBACK NULL
 #define MausOutgoingMessage_DEFAULT NULL
 #define MausOutgoingMessage_payload_ack_MSGTYPE AckPacket
@@ -353,6 +375,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mazeState,payload.mazeState),   6)
 #define MausOutgoingMessage_payload_info_MSGTYPE InfoPacket
 #define MausOutgoingMessage_payload_pidTuning_MSGTYPE PidTuningInfo
 #define MausOutgoingMessage_payload_mazeState_MSGTYPE MazeStatePacket
+#define MausOutgoingMessage_payload_mausConfig_MSGTYPE MausConfigPacket
 
 #define MsgInit_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, INT32,    version,           1)
@@ -432,6 +455,7 @@ extern const pb_msgdesc_t NavigationPacket_msg;
 extern const pb_msgdesc_t InfoPacket_msg;
 extern const pb_msgdesc_t PidTuningInfo_msg;
 extern const pb_msgdesc_t MazeStatePacket_msg;
+extern const pb_msgdesc_t MausConfigPacket_msg;
 extern const pb_msgdesc_t PathPacket_msg;
 extern const pb_msgdesc_t MausOutgoingMessage_msg;
 extern const pb_msgdesc_t MsgInit_msg;
@@ -453,6 +477,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define InfoPacket_fields &InfoPacket_msg
 #define PidTuningInfo_fields &PidTuningInfo_msg
 #define MazeStatePacket_fields &MazeStatePacket_msg
+#define MausConfigPacket_fields &MausConfigPacket_msg
 #define PathPacket_fields &PathPacket_msg
 #define MausOutgoingMessage_fields &MausOutgoingMessage_msg
 #define MsgInit_fields &MsgInit_msg
@@ -472,6 +497,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 /* MausOutgoingMessage_size depends on runtime parameters */
 #define AckPacket_size                           0
 #define InfoPacket_size                          2
+#define MausConfigPacket_size                    38
 #define MausIncomingMessage_size                 19
 #define MsgControl_size                          16
 #define MsgDrive_size                            12

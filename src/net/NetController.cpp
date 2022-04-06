@@ -32,7 +32,6 @@ using namespace NetController;
  */
 void infoStreamerTask(void *pvParameter) {
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
-	Maze *maze;
 	while (true) {
 		if (manager->controller == NULL || !manager->initCompleted) {
 			vTaskDelay(sensorSendInterval);
@@ -79,6 +78,8 @@ bool pidInfoEncoderCallback(pb_ostream_t *ostream, const pb_field_t *field, void
 }
 
 void receiverTask(void *pvParameter) {
+	static uint16_t taskInterval = pdMS_TO_TICKS(20);
+
 	uint16_t msgLen = 0;
 	NetController::Manager *manager = (NetController::Manager *)pvParameter;
 	uint8_t *buffer = manager->decodeBuffer;
@@ -91,19 +92,19 @@ void receiverTask(void *pvParameter) {
 	while (true) {
 		if (msgBuffer == NULL) {
 			// ESP_LOGD(tag, "not initialized");
-			vTaskDelay(pdMS_TO_TICKS(20));
+			vTaskDelay(taskInterval);
 			continue;
 		}
 		if (xMessageBufferIsEmpty(msgBuffer)) {
 			// ESP_LOGI(tag, "queue empty");
-			vTaskDelay(pdMS_TO_TICKS(20));
+			vTaskDelay(taskInterval);
 			continue;
 		}
-		msgLen = xMessageBufferReceive(msgBuffer, buffer, RECV_BUFFER_SIZE, pdMS_TO_TICKS(20));
+		msgLen = xMessageBufferReceive(msgBuffer, buffer, RECV_BUFFER_SIZE, taskInterval);
 
 		if (msgLen == 0) {
 			// ESP_LOGI(tag, "empty message");
-			vTaskDelay(pdMS_TO_TICKS(20));
+			vTaskDelay(taskInterval);
 			continue;
 		}
 
@@ -118,23 +119,27 @@ void receiverTask(void *pvParameter) {
 		ESP_LOGD(tag, "got msg ID=%d", msg.which_payload);
 
 		switch (msg.which_payload) {
-			case MausIncomingMessage_init_tag:
-				if (manager->initCompleted) {
-					break;
-				}
-				ESP_LOGI(tag, "connected to connector v.%d", msg.payload.init.version);
+			case MausIncomingMessage_init_tag: {
 				// TODO: improve memory management
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
-				vTaskDelay(pdMS_TO_TICKS(20));
-				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
-				vTaskDelay(pdMS_TO_TICKS(20));
-				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
-				manager->initCompleted = true;
-				vTaskDelay(pdMS_TO_TICKS(20));
+				vTaskDelay(taskInterval);
+				// send maus config to server
+				MausConfigPacket config = MausConfigPacket_init_zero;
+				config.has_lanePid = true;
+				config.has_motorPid = true;
+				config.motorPid.kD = manager->controller->getMotor(MotorPosition::left)->kD;
+				config.motorPid.kP = manager->controller->getMotor(MotorPosition::left)->kP;
+				config.motorPid.kI = manager->controller->getMotor(MotorPosition::left)->kI;
+				config.lanePid = manager->controller->getLanePidConfig();
+				manager->writePacket<MausConfigPacket, MausOutgoingMessage_mausConfig_tag>(config);
+				break;
+
+				ESP_LOGI(tag, "connected to connector v.%d", msg.payload.init.version);
 				// set okay status LED
 				LedController((gpio_num_t)3).set(1);
 
-				break;
+				manager->initCompleted = true;
+			}
 			case MausIncomingMessage_encoderCallibration_tag:
 				ESP_LOGD(tag,
 						 "updated motors to kP=%f kD=%f kI=%f",
@@ -159,7 +164,6 @@ void receiverTask(void *pvParameter) {
 					info.err.funcs.encode = pidInfoEncoderCallback;
 					manager->writePacket<PidTuningInfo, MausOutgoingMessage_pidTuning_tag>(info);
 				}
-
 				break;
 
 			case MausIncomingMessage_laneCallibration_tag:
@@ -170,7 +174,6 @@ void receiverTask(void *pvParameter) {
 						 msg.payload.laneCallibration.kI);
 				// update values for both motors
 				manager->controller->updateLanePid(msg.payload.laneCallibration);
-
 				break;
 
 			// ping pong interface
@@ -179,6 +182,7 @@ void receiverTask(void *pvParameter) {
 				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
 					PongPacket_init_zero);
 				break;
+
 			case MausIncomingMessage_control_tag:
 				manager->controller->drive(msg.payload.control.speed,
 										   msg.payload.control.direction);
@@ -214,6 +218,7 @@ void receiverTask(void *pvParameter) {
 					case SolveCmdType_GoHome: manager->driver->startGoHome(); break;
 				}
 		}
+		vTaskDelay(taskInterval);
 	}
 }
 bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {

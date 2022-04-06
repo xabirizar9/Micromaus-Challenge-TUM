@@ -14,26 +14,20 @@
 static const char* tag = "[drive]";
 
 void driveTask(void* arg) {
-	TaskHandle_t laneControllTaskHandle;
-
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t navInterval = 100;
 	NavigationPacket state;
 	Controller* controller = driver->controller;
-	float gridMM = 180;
-	float gridPulses = 1797.46;
 	float interval = 0;
 	float distance = 0;
-	int64_t encoderTemp = 0;
-	float averageEncoder1 = 0;
-	float averageEncoder2 = 0;
-	float dif = 0;
+
+	float ticksPerMazeCell = mmsToTicks(180.0);
+
+	// (radius * 2 * PI) / 4(quarter circle eg 90deg rotation) * (mToTicks contant)
+	float ticksPerOnSpotRotation = mmsToTicks(M_PI * wheelDistance / 4);
 
 	MsgDrive cmd;
 	MsgDrive* curCmd;
-
-	// xTaskCreate(laneControlTask, "laneControltask", 2048, controller, 1,
-	// &laneControllTaskHandle); vTaskSuspend(laneControllTaskHandle);
 
 	while (true) {
 		// update and get state
@@ -53,18 +47,18 @@ void driveTask(void* arg) {
 		}
 		// ESP_LOGI(tag, "cmd type:%d", cmd.type);
 
-		switch (cmd.type) {
+		switch (curCmd->type) {
 			case DriveCmdType::DriveCmdType_Move: break;
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
-				laneControlTask(controller, &cmd);
+				laneControlTask(controller, curCmd);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
 
 			case DriveCmdType::DriveCmdType_TurnLeft:
-				distance = ((3.14 / 2) * cmd.value);
+				distance = ((M_PI_2)*cmd.value);
 				interval = distance / cmd.speed;
 				controller->drive(cmd.speed, INT16_MIN);
 				vTaskDelay(pdMS_TO_TICKS(interval));
@@ -76,45 +70,45 @@ void driveTask(void* arg) {
 				// controller.drive(speed, 90);
 				//  ToDo: time!!!
 				break;
-			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: {
-				ESP_LOGI(tag, "DriveLeftOnSpot");
-				// vTaskResume(laneControllTaskHandle);
-				encoderTemp = controller->getEncoder(MotorPosition::right)->getTotalCounter();
-				while (
-					(controller->getEncoder(MotorPosition::right)->getTotalCounter() - encoderTemp <
-					 (1056 * cmd.value))) {
-					// vTaskDelay(pdMS_TO_TICKS(10));
-
-					controller->drive(65, INT16_MIN);
-				}
-				controller->drive(0, 0);
-				encoderTemp = 0;
-				// vTaskSuspend(laneControllTaskHandle);
-				break;
-			}
+			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
-				ESP_LOGI(tag, "DriveRightOnSpot");
-				// vTaskResume(laneControllTaskHandle);
-				encoderTemp = controller->getEncoder(MotorPosition::left)->getTotalCounter();
-				while (
-					(controller->getEncoder(MotorPosition::left)->getTotalCounter() - encoderTemp <
-					 (1056 * cmd.value))) {
-					// vTaskDelay(pdMS_TO_TICKS(10));
+				MotorPosition pos = cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
+										? MotorPosition::right
+										: MotorPosition::left;
+				int64_t cur = controller->getEncoder(pos)->getTotalCounter();
 
-					controller->drive(65, INT16_MAX);
+				int64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value);
+
+				// start driving
+				controller->drive(curCmd->speed,
+								  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
+
+				ESP_LOGI(tag,
+						 "t=%lld, cur=%lld v=%f tposr=%f",
+						 target,
+						 cur,
+						 curCmd->value,
+						 ticksPerOnSpotRotation);
+				// monitor encoder values
+				// NOTE: values will only be updated during motor PID
+				// decreasing vTaskDelay will not affect precission directly
+				// but will increase the chance that the last update interval was more recent
+				// to avoid overshooting we stop even when we are a couple of ticks away from target
+				while (target - cur > 20) {
+					ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
+					cur = controller->getEncoder(pos)->getTotalCounter();
+					vTaskDelay(pdMS_TO_TICKS(1));
 				}
-
 				controller->drive(0, 0);
-				encoderTemp = 0;
-				// vTaskSuspend(laneControllTaskHandle);
 				break;
 			}
 			default: break;
 		}
 
+		// reset current command
 		curCmd = NULL;
 
-		// TODO: send this event when command is completed
+		// notify driver about event completion
 		ESP_LOGI(tag, "cmd completed");
 		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
 

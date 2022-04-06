@@ -43,6 +43,10 @@
 #define WIFI_CHANNEL 11
 #define PORT 8888
 
+// URL of the remote registration server
+#define REMOTE_RESOLVER_URL "iamwlad.com"
+#define REMOTE_RESOLVER_PORT 8888
+
 #define STA_MODE
 
 static const char *TAG = "[WIFI]";
@@ -125,6 +129,9 @@ static void wifi_event_handler(void *arg,
 					 MAC2STR(event->bssid),
 					 event->ssid,
 					 event->reason);
+
+			ESP_LOGI(TAG, "rebooting...");
+			esp_restart();
 			return;
 		}
 #endif
@@ -310,17 +317,16 @@ int UdpCommunicator::write(uint8_t *buf, size_t msgLen) {
 void UdpCommunicator::sendOwnIP() {
 	/* convert URL to IP address */
 	ip_addr_t target_addr;
-	sockaddr target;
 	struct addrinfo hint;
 	struct addrinfo *res = NULL;
 	memset(&hint, 0, sizeof(hint));
 	memset(&target_addr, 0, sizeof(target_addr));
-	getaddrinfo("iamwlad.com", NULL, &hint, &res);
+	getaddrinfo(REMOTE_RESOLVER_URL, NULL, &hint, &res);
 	struct in_addr addr4 = ((struct sockaddr_in *)(res->ai_addr))->sin_addr;
 	inet_addr_to_ip4addr(ip_2_ip4(&target_addr), &addr4);
 
 	ESP_LOGI(TAG, "Resolved online server:" IPSTR, IP2STR(&target_addr.u_addr.ip4));
-	((struct sockaddr_in *)res->ai_addr)->sin_port = htons(8888);
+	((struct sockaddr_in *)res->ai_addr)->sin_port = htons(REMOTE_RESOLVER_PORT);
 	uint8_t retries = 2;
 
 	// construct buffer with current IP and mac of robot for identification

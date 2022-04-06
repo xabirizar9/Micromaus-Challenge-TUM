@@ -18,7 +18,7 @@ MazeSolver::MazeSolver(Controller* controller) {
 void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 	static NavigationPacket state;
 
-	float maxWallDistance = 7;
+	float maxWallDistance = 70;
 
 	bool newWalls[3];
 	bool walls[3] = {false, false, false};
@@ -37,14 +37,34 @@ void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 			continue;
 		}
 
+		walls[0] = newWalls[0];
+		walls[1] = newWalls[1];
+		walls[2] = newWalls[2];
+
 		vTaskDelay(pdMS_TO_TICKS(10));
 		continue;
 	}
 
 	// update walls
-	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::WEST), walls[0]);
-	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::NORTH), walls[1]);
-	this->maze.setWall(x, y, CardinalDirection(dir - CardinalDirection::EAST), walls[2]);
+	if (walls[0]) {
+		this->maze.setWall(x, y, CardinalDirection((dir - 1) + CardinalDirection::WEST), true);
+	}
+	if (walls[1]) {
+		this->maze.setWall(x, y, CardinalDirection((dir - 1) + CardinalDirection::NORTH), true);
+	}
+	if (walls[2]) {
+		this->maze.setWall(x, y, CardinalDirection((dir - 1) + CardinalDirection::EAST), true);
+	}
+
+	ESP_LOGI(TAG,
+			 "found walls (l=%d f=%d r=%d) (s=%d e=%d w=%d n=%d",
+			 walls[0],
+			 walls[1],
+			 walls[2],
+			 this->maze.getWall(x, y, CardinalDirection::SOUTH),
+			 this->maze.getWall(x, y, CardinalDirection::EAST),
+			 this->maze.getWall(x, y, CardinalDirection::WEST),
+			 this->maze.getWall(x, y, CardinalDirection::NORTH));
 }
 
 /**
@@ -64,7 +84,7 @@ CardinalDirection MazeSolver::getNewHeading(uint8_t x, uint8_t y) {
 	costs[CardinalDirection::WEST] = this->maze.getCost(x - 1, y);
 
 	for (uint8_t i = 0; i < 4; i++) {
-		heading = costs[i] < costs[heading] ? CardinalDirection(i) : heading;
+		heading = costs[i] < costs[heading] ? CardinalDirection(i - 1) : heading;
 	}
 
 	return heading;
@@ -86,10 +106,14 @@ void MazeSolver::startExploration() {
 	uint8_t x = 0;
 	uint8_t y = 0;
 
+	// reset maze
+	this->maze.resetCosts();
+	this->maze.resetWalls();
+
 	CardinalDirection heading = CardinalDirection::NORTH;
 	CardinalDirection newHeading = CardinalDirection::NORTH;
 	MazeStatePacket packet;
-	uint16_t speed = 200;
+	uint16_t speed = 400;
 	// TODO: split into task
 
 	while (true) {
@@ -108,6 +132,10 @@ void MazeSolver::startExploration() {
 		// send update over network
 
 		packet = this->getMaze()->getEncodedValue();
+		packet.position = Position_init_zero;
+		packet.position.x = (float)x;
+		packet.position.y = (float)y;
+		packet.position.heading = (float)heading;
 
 		// write and encode the command
 		NetController::Manager::getInstance().writeMazeState(packet);
@@ -121,10 +149,9 @@ void MazeSolver::startExploration() {
 
 		// rotate based on optimal index
 		if (heading != newHeading) {
-			this->addCmdAndWait(heading - newHeading < 0
-									? DriveCmdType::DriveCmdType_TurnLeftOnSpot
-									: DriveCmdType::DriveCmdType_TurnRightOnSpot,
-								std::abs(heading - newHeading),
+			this->addCmdAndWait(heading < newHeading ? DriveCmdType::DriveCmdType_TurnLeftOnSpot
+													 : DriveCmdType::DriveCmdType_TurnRightOnSpot,
+								heading - newHeading,
 								speed);
 			heading = newHeading;
 		}
