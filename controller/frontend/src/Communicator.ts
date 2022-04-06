@@ -68,7 +68,7 @@ export class Communicator extends EventTarget {
         }
 
         this.dispatchEvent(new MessageEvent("message", { data: message }));
-        // console.log({ ...message.nav });
+        console.log(message.nav);
       } else {
         // text frame
         // console.log(event.data);
