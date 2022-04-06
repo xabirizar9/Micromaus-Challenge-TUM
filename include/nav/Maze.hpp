@@ -30,6 +30,7 @@ struct Maze {
 	void resetWalls();
 
 	void fill(uint8_t x, uint8_t y, uint8_t distance);
+	void fillFrom(uint8_t x, uint8_t y);
 	void update();
 
 	MazeStatePacket getEncodedValue();

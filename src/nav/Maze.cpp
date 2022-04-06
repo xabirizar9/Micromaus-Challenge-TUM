@@ -114,6 +114,11 @@ void Maze::update() {
 #endif
 }
 
+void Maze::fillFrom(uint8_t x, uint8_t y) {
+	this->resetCosts();
+	fill(x, y, 0);
+}
+
 void Maze::setCost(uint8_t x, uint8_t y, uint8_t value) {
 	// assuming MAZE_SIZE < UINT8_MAX
 	if (x >= this->size || y >= this->size) {

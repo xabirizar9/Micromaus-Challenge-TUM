@@ -13,7 +13,7 @@
   import PidConfigCard from "./PidConfigCard.svelte";
 
   export const com = new Communicator({
-    url: "ws://localhost:8080/ws",
+    url: `ws://${window.location.host}/ws`,
   });
 
   const controller = new Joystick(com);
