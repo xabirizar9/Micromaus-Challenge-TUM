@@ -38,6 +38,8 @@ type Robot struct {
 
 	// channel on which to listen for messages
 	IncomingMsg chan *pb.MausOutgoingMessage
+
+	Config *pb.MausConfigPacket
 }
 
 type RobotConnectionOptions struct {
@@ -239,9 +241,22 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 		}
 		log.Debug("waiting for init ack")
 		ackCmd, _, err := r.ReadCmd()
-		log.Debug("received response", zap.Error(err))
+		log.Debug("received response", zap.String("cmd", ackCmd.String()))
 		if err != nil {
 			respChannel <- errors.New("invalid robot response to init packet")
+			return
+		}
+
+		if ack := ackCmd.GetAck(); ack != nil {
+			log.Debug("got ack packet stopping func")
+			respChannel <- nil
+			return
+		}
+
+		if conf := ackCmd.GetMausConfig(); conf != nil {
+			r.Config = conf
+			log.Debug("got config packet stopping func")
+			respChannel <- nil
 			return
 		}
 
@@ -251,11 +266,6 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 			return
 		}
 
-		if ack := ackCmd.GetAck(); ack != nil {
-			log.Debug("got ack packet stopping func")
-			respChannel <- nil
-			return
-		}
 	}()
 
 	select {
@@ -302,11 +312,10 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 				return
 			}
 
-			log.Info("waiting for pong", zap.Error(err))
+			log.Info("ping->")
 			// wait for pong
 			<-r.pongMsgChannel
-
-			log.Info("got pong", zap.Error(err))
+			log.Info("<-pong")
 
 			errChan <- nil
 		})
@@ -359,7 +368,6 @@ func (r *Robot) Connect() error {
 
 				// internally handle ack messages
 				if pong := cmd.GetPong(); pong != nil {
-					log.Debug("got pong")
 					r.pongMsgChannel <- true
 					continue
 				}

@@ -1,4 +1,8 @@
-import { MausIncomingMessage, MausOutgoingMessage } from "./proto/message";
+import {
+  MausConfigPacket,
+  MausIncomingMessage,
+  MausOutgoingMessage,
+} from "./proto/message";
 import { toast } from "@zerodevx/svelte-toast";
 import * as toaster from "./utils/notifications";
 
@@ -8,6 +12,8 @@ export type CommunicatorOptions = {
 
 export class Communicator extends EventTarget {
   private socket?: WebSocket;
+
+  public config?: MausConfigPacket;
 
   constructor(private options: CommunicatorOptions) {
     super();
@@ -56,6 +62,11 @@ export class Communicator extends EventTarget {
       if (event.data instanceof ArrayBuffer) {
         // binary frame
         const message = MausOutgoingMessage.decode(new Uint8Array(event.data));
+
+        if (message.mausConfig) {
+          this.config = message.mausConfig;
+        }
+
         this.dispatchEvent(new MessageEvent("message", { data: message }));
         // console.log({ ...message.nav });
       } else {
