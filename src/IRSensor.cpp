@@ -21,8 +21,12 @@ float IRSensor::measuredistance() {
 		distance = -2.86 * vol + 8;
 	}
 
-	else if (vol <= 1.05 && vol > 0.6) {
-		distance = -11.1 * vol + 16.66;
+	else if (vol <= 1.05 && vol > 0.8) {
+		distance = -8 * vol + 13.4;
+	}
+
+	else if (vol <= 0.8 && vol > 0.6) {
+		distance = -15 * vol + 19;
 	}
 
 	else if (vol <= 0.6 && vol > 0.4) {

@@ -36,6 +36,9 @@ inline float convertMMsToTPS(float millis) {
 	return convertMillimetersToRevolutions(millis) * ticksPerRevolution;
 }
 
-inline bool isSensorValid(float value) {
-	return value > 0.02;
+inline bool isWallGiven(float sensor) {
+	return (sensor > 0.2) && (sensor < 70);
+}
+inline bool isSensorValid(float contraSensor) {
+	return contraSensor < 55;
 }
