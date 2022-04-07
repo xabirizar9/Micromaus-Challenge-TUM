@@ -21,6 +21,8 @@ class MotionProfile {
 	float a0, a1, a2, a3;
 	int grid;
 
+	int16_t getSpeedAt(uint16_t index);
+
 	int getMaxSpeed() {
 		return maxSpeed;
 	}
