@@ -39,8 +39,34 @@ void computeTrajectories(void* arg, int numGridElements) {
 
 MotionProfile motionProfile;
 
+void runStraight(int distance, float duration, int updateFrequence) {
+	int tickStart = 0;
+	int tickEnd = mmsToTicks(distance);
+	int vstart = 0;
+	int vEnd = 0;
+	float tStart = 0.0;
+	float tEnd = 2.0;
+
+	float* coefficients = getMotionProfilePolynom(0, tickEnd, 0, 0, 0, tEnd);
+
+	int numIntervals = (tEnd - tStart) / controlInterval;
+	float* velocityProfile[numIntervals];
+
+	int counter = 0;
+	int time = 0;
+
+	while (counter <= numIntervals) {
+		time = counter * controlInterval;
+		// need to solve type conversion error
+		velocityProfile[counter] = (float)coefficients[1] * time + 2 * coefficients[2] * time +
+								   3 * coefficients[3] * pow(time, 2);
+		counter++;
+	}
+	// TBD: iterate over velocityProfile array and set motor speeds accordingly
+}
+
 float* getMotionProfilePolynom(
-	int64_t& tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
+	int tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
 	static float* resp = new float[4];
 	int b0, b1, b2, b3;
 	float ticksTime, tDiff, tickDiff;
