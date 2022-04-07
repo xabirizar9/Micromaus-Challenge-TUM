@@ -35,6 +35,9 @@ class MotionProfile {
 		ESP_LOGI(tag, "Movement completed");
 	};
 
+	float* getCurvePolynom(int degrees, int duration);
+	float* computeProfile(int tickStart, int tickEnd, int vStart, int vEnd, float duration);
+
 	// uint16_t* computeTurnProfile();
 	// uint16_t* computeDriveProfile();
 	// void computeProfiles(uint16_t speed, uint16_t interval = controlInterval);

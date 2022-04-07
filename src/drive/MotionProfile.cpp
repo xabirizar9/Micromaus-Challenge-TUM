@@ -39,7 +39,7 @@ void computeTrajectories(void* arg, int numGridElements) {
 
 MotionProfile motionProfile;
 
-void runStraight(int distance, float duration, int updateFrequence) {
+void runStraight(int distance, float duration) {
 	int tickStart = 0;
 	int tickEnd = mmsToTicks(distance);
 	int vstart = 0;
@@ -48,6 +48,7 @@ void runStraight(int distance, float duration, int updateFrequence) {
 	float tEnd = 2.0;
 
 	float* coefficients = getMotionProfilePolynom(0, tickEnd, 0, 0, 0, tEnd);
+	float tickSpeed;
 
 	int numIntervals = (tEnd - tStart) / controlInterval;
 	float* velocityProfile[numIntervals];
@@ -58,11 +59,52 @@ void runStraight(int distance, float duration, int updateFrequence) {
 	while (counter <= numIntervals) {
 		time = counter * controlInterval;
 		// need to solve type conversion error
-		velocityProfile[counter] = (float)coefficients[1] * time + 2 * coefficients[2] * time +
-								   3 * coefficients[3] * pow(time, 2);
+		tickSpeed = (float)coefficients[1] * time + 2 * coefficients[2] * time +
+					3 * coefficients[3] * pow(time, 2);
+		*velocityProfile[counter] =
+			encoderTicksToMm * tickSpeed;  // check if pointer assignment is corre t
 		counter++;
 	}
 	// TBD: iterate over velocityProfile array and set motor speeds accordingly
+}
+
+float* MotionProfile::computeProfile(
+	int tickStart, int tickEnd, int vStart, int vEnd, float duration) {
+	float* coefficients = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, 0, duration);
+
+	float tickSpeed = 0;
+	int counter = 0;
+	int time = 0;
+
+	int numIntervals = duration / controlInterval;
+	float* velocityProfile;
+
+	while (counter <= numIntervals) {
+		time = counter * controlInterval;
+		// need to solve type conversion error
+		tickSpeed = (float)coefficients[1] * time + 2 * coefficients[2] * time +
+					3 * coefficients[3] * pow(time, 2);
+		velocityProfile[counter] =
+			encoderTicksToMm * tickSpeed;  // check if pointer assignment is corre t
+		counter++;
+	}
+	return velocityProfile;
+}
+
+float* MotionProfile::getCurveProfile(int degrees, int duration) {
+	int tickEnd = mmsToTicks(141.37);  // a curve of pi/2 with r=90mm is 141.37mm
+	float* coefficients;
+	if (degrees == 180) {
+		tickEnd *= 2;
+	}
+
+	return MotionProfile::computeProfile(0, tickEnd, 100, 100, duration);
+}
+
+float* MotionProfile::getStraightProfile(int numGrids, int duration) {
+	int tickEnd = mmsToTicks(numGrids * 16);
+
+	return MotionProfile::computeProfile(0, tickEnd, 0, 100, 2.0);
 }
 
 float* getMotionProfilePolynom(
@@ -71,6 +113,9 @@ float* getMotionProfilePolynom(
 	int b0, b1, b2, b3;
 	float ticksTime, tDiff, tickDiff;
 	float tEnd2, tStart2, tEnd3, tStart3;
+
+	vStart = convertMMsToTPS(vStart);
+	vEnd = convertMMsToTPS(vEnd);
 
 	tDiff = tEnd - tStart;
 	tickDiff = tickEnd - tickStart;
