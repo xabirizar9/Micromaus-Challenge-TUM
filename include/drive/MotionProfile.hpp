@@ -8,6 +8,9 @@
 #include "utils/units.hpp"
 static const char* tag = "[drive]";
 
+// interval in which driver will update command speed
+static const uint8_t controlInterval = 5;
+
 class MotionProfile {
    private:
 	const int maxSpeed;
@@ -29,4 +32,8 @@ class MotionProfile {
 	~MotionProfile() {
 		ESP_LOGI(tag, "Movement completed");
 	};
+
+	// uint16_t* computeTurnProfile();
+	// uint16_t* computeDriveProfile();
+	// void computeProfiles(uint16_t speed, uint16_t interval = controlInterval);
 };
