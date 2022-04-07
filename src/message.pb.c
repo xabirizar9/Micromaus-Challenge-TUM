@@ -39,7 +39,7 @@ PB_BIND(MazeStatePacket, MazeStatePacket, AUTO)
 PB_BIND(MausConfigPacket, MausConfigPacket, AUTO)
 
 
-PB_BIND(PathPacket, PathPacket, AUTO)
+PB_BIND(MausCommandStatus, MausCommandStatus, AUTO)
 
 
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, AUTO)

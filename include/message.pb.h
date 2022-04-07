@@ -49,10 +49,6 @@ typedef struct _MsgStop {
     char dummy_field;
 } MsgStop;
 
-typedef struct _PathPacket { 
-    pb_callback_t cmd; 
-} PathPacket;
-
 typedef struct _PidTuningInfo { 
     pb_callback_t err; 
 } PidTuningInfo;
@@ -64,6 +60,13 @@ typedef struct _PongPacket {
 typedef struct _InfoPacket { 
     InfoCmdType cmd; 
 } InfoPacket;
+
+typedef struct _MausCommandStatus { 
+    DriveCmdType cmd; 
+    bool success; 
+    uint64_t target; 
+    uint64_t actual; 
+} MausCommandStatus;
 
 typedef struct _MsgControl { 
     float direction; 
@@ -174,6 +177,7 @@ typedef struct _MausOutgoingMessage {
         PidTuningInfo pidTuning;
         MazeStatePacket mazeState;
         MausConfigPacket mausConfig;
+        MausCommandStatus mausCommandStatus;
     } payload; 
 } MausOutgoingMessage;
 
@@ -208,7 +212,7 @@ extern "C" {
 #define PidTuningInfo_init_default               {{{NULL}, NULL}}
 #define MazeStatePacket_init_default             {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_default, false, Position_init_default}
 #define MausConfigPacket_init_default            {false, MsgEncoderCallibration_init_default, false, MsgEncoderCallibration_init_default}
-#define PathPacket_init_default                  {{{NULL}, NULL}}
+#define MausCommandStatus_init_default           {_DriveCmdType_MIN, 0, 0, 0}
 #define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
 #define MsgPing_init_default                     {0}
@@ -229,7 +233,7 @@ extern "C" {
 #define PidTuningInfo_init_zero                  {{{NULL}, NULL}}
 #define MazeStatePacket_init_zero                {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_zero, false, Position_init_zero}
 #define MausConfigPacket_init_zero               {false, MsgEncoderCallibration_init_zero, false, MsgEncoderCallibration_init_zero}
-#define PathPacket_init_zero                     {{{NULL}, NULL}}
+#define MausCommandStatus_init_zero              {_DriveCmdType_MIN, 0, 0, 0}
 #define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
 #define MsgPing_init_zero                        {0}
@@ -241,9 +245,12 @@ extern "C" {
 #define MausIncomingMessage_init_zero            {0, {MsgInit_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define PathPacket_cmd_tag                       1
 #define PidTuningInfo_err_tag                    1
 #define InfoPacket_cmd_tag                       1
+#define MausCommandStatus_cmd_tag                1
+#define MausCommandStatus_success_tag            2
+#define MausCommandStatus_target_tag             3
+#define MausCommandStatus_actual_tag             4
 #define MsgControl_direction_tag                 1
 #define MsgControl_speed_tag                     2
 #define MsgDrive_type_tag                        1
@@ -300,6 +307,7 @@ extern "C" {
 #define MausOutgoingMessage_pidTuning_tag        5
 #define MausOutgoingMessage_mazeState_tag        6
 #define MausOutgoingMessage_mausConfig_tag       7
+#define MausOutgoingMessage_mausCommandStatus_tag 8
 
 /* Struct field encoding specification for nanopb */
 #define AckPacket_FIELDLIST(X, a) \
@@ -387,11 +395,13 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  lanePid,           2)
 #define MausConfigPacket_motorPid_MSGTYPE MsgEncoderCallibration
 #define MausConfigPacket_lanePid_MSGTYPE MsgEncoderCallibration
 
-#define PathPacket_FIELDLIST(X, a) \
-X(a, CALLBACK, REPEATED, MESSAGE,  cmd,               1)
-#define PathPacket_CALLBACK pb_default_field_callback
-#define PathPacket_DEFAULT NULL
-#define PathPacket_cmd_MSGTYPE MsgDrive
+#define MausCommandStatus_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UENUM,    cmd,               1) \
+X(a, STATIC,   SINGULAR, BOOL,     success,           2) \
+X(a, STATIC,   SINGULAR, UINT64,   target,            3) \
+X(a, STATIC,   SINGULAR, UINT64,   actual,            4)
+#define MausCommandStatus_CALLBACK NULL
+#define MausCommandStatus_DEFAULT NULL
 
 #define MausOutgoingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ack,payload.ack),   1) \
@@ -400,7 +410,8 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,pong,payload.pong),   3) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,info,payload.info),   4) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,pidTuning,payload.pidTuning),   5) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mazeState,payload.mazeState),   6) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mausConfig,payload.mausConfig),   7)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mausConfig,payload.mausConfig),   7) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mausCommandStatus,payload.mausCommandStatus),   8)
 #define MausOutgoingMessage_CALLBACK NULL
 #define MausOutgoingMessage_DEFAULT NULL
 #define MausOutgoingMessage_payload_ack_MSGTYPE AckPacket
@@ -410,6 +421,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,mausConfig,payload.mausConfig),   7)
 #define MausOutgoingMessage_payload_pidTuning_MSGTYPE PidTuningInfo
 #define MausOutgoingMessage_payload_mazeState_MSGTYPE MazeStatePacket
 #define MausOutgoingMessage_payload_mausConfig_MSGTYPE MausConfigPacket
+#define MausOutgoingMessage_payload_mausCommandStatus_MSGTYPE MausCommandStatus
 
 #define MsgInit_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, INT32,    version,           1)
@@ -484,7 +496,7 @@ extern const pb_msgdesc_t InfoPacket_msg;
 extern const pb_msgdesc_t PidTuningInfo_msg;
 extern const pb_msgdesc_t MazeStatePacket_msg;
 extern const pb_msgdesc_t MausConfigPacket_msg;
-extern const pb_msgdesc_t PathPacket_msg;
+extern const pb_msgdesc_t MausCommandStatus_msg;
 extern const pb_msgdesc_t MausOutgoingMessage_msg;
 extern const pb_msgdesc_t MsgInit_msg;
 extern const pb_msgdesc_t MsgPing_msg;
@@ -507,7 +519,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define PidTuningInfo_fields &PidTuningInfo_msg
 #define MazeStatePacket_fields &MazeStatePacket_msg
 #define MausConfigPacket_fields &MausConfigPacket_msg
-#define PathPacket_fields &PathPacket_msg
+#define MausCommandStatus_fields &MausCommandStatus_msg
 #define MausOutgoingMessage_fields &MausOutgoingMessage_msg
 #define MsgInit_fields &MsgInit_msg
 #define MsgPing_fields &MsgPing_msg
@@ -521,10 +533,10 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 /* Maximum encoded size of messages (where known) */
 /* PidTuningInfo_size depends on runtime parameters */
 /* MazeStatePacket_size depends on runtime parameters */
-/* PathPacket_size depends on runtime parameters */
 /* MausOutgoingMessage_size depends on runtime parameters */
 #define AckPacket_size                           0
 #define InfoPacket_size                          2
+#define MausCommandStatus_size                   26
 #define MausConfigPacket_size                    38
 #define MausIncomingMessage_size                 19
 #define MsgControl_size                          16

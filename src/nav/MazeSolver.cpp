@@ -163,12 +163,34 @@ void MazeSolver::driveToNextCell(float speed) {
 }
 
 void MazeSolver::startFastRun() {
+	MazeStatePacket packet;
+	uint16_t speed = 250;
+	// reset maze
+	this->maze.resetCosts();
+
+	while (true) {
+		// broadcast current solver state
+		sendSolverState();
+
+		if (this->maze.getCost(x, y) == 0) {
+			// TODO: add what need to be done when center found
+			return;
+		}
+
+		// this->updateWalls(x, y, heading);
+
+		// rerun flood fill
+		this->maze.fillFrom(0, 0);
+
+		driveToNextCell(speed);
+	}
+	// TODO: implement
 	// TODO: implement
 }
 
 void MazeSolver::startGoHome() {
 	MazeStatePacket packet;
-	uint16_t speed = 280;
+	uint16_t speed = 250;
 	// reset maze
 	this->maze.resetCosts();
 

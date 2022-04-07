@@ -74,8 +74,11 @@ message MausConfigPacket {
 	MsgEncoderCallibration lanePid = 2;
 }
 
-message PathPacket {
-	repeated MsgDrive cmd = 1;
+message MausCommandStatus {
+	DriveCmdType cmd = 1;
+	bool success = 2;
+	uint64 target = 3;
+	uint64 actual = 4;
 }
 
 message MausOutgoingMessage {
@@ -87,6 +90,7 @@ message MausOutgoingMessage {
 		PidTuningInfo pidTuning = 5;
 		MazeStatePacket mazeState = 6;
 		MausConfigPacket mausConfig = 7;
+		MausCommandStatus mausCommandStatus = 8;
 	}
 }
 

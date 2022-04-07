@@ -140,8 +140,13 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	if err != nil && !opt.OnlyMDNS {
 
 		l.Warn("direct connection failed using fallback", zap.Error(err))
+		remoteAddr := os.Getenv("REMOTE_URL")
+		if remoteAddr == "" {
+			remoteAddr = "http://iamwlad.com:7777/maus"
+		}
+
 		// if initial connect fails try using remote address
-		resp, err := http.Get("http://iamwlad.com:7777/maus")
+		resp, err := http.Get(remoteAddr)
 		if err != nil {
 			l.Error("failed to connect to robot", zap.Error(err))
 			return nil, err

@@ -10,6 +10,7 @@
 #include "freertos/queue.h"
 #include "message.pb.h"
 #include "nav/MazeSolver.hpp"
+#include "net/NetController.hpp"
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
 static const char* tag = "[drive]";
@@ -19,10 +20,14 @@ float ticksPerRotation(float radius) {
 }
 
 void driveTask(void* arg) {
+	static MausCommandStatus cmdStatus = MausCommandStatus_init_zero;
+
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t navInterval = 100;
 	NavigationPacket state;
 	Controller* controller = driver->controller;
+	NetController::Manager net = NetController::Manager::getInstance();
+
 	float interval = 0;
 	float distance = 0;
 
@@ -50,6 +55,9 @@ void driveTask(void* arg) {
 			}
 		}
 		// ESP_LOGI(tag, "cmd type:%d", cmd.type);
+
+		// set status cmd;
+		cmdStatus.cmd = curCmd->type;
 
 		switch (curCmd->type) {
 			case DriveCmdType::DriveCmdType_Move: break;
@@ -108,6 +116,8 @@ void driveTask(void* arg) {
 						 curCmd->value,
 						 ticksPerOnSpotRotation);
 
+				cmdStatus.target = target;
+
 				int targetDiffRange = 20;
 				// std::min(std::max(600 * curCmd->speed / 4000.0, 1.0), 600.0);
 
@@ -121,8 +131,10 @@ void driveTask(void* arg) {
 					cur = controller->getEncoder(pos)->getTotalCounter();
 					vTaskDelay(pdMS_TO_TICKS(1));
 				}
+
+				cmdStatus.actual = cur;
+
 				controller->drive(0, 0);
-				ESP_LOGI(tag, "t=%lld, cur=%lld", target, cur);
 				break;
 			}
 			default: break;
@@ -135,8 +147,7 @@ void driveTask(void* arg) {
 
 		ESP_LOGI(tag, "cmd completed");
 		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
-
-		vTaskDelay(pdMS_TO_TICKS(navInterval));
+		net.writePacket<> vTaskDelay(pdMS_TO_TICKS(navInterval));
 	}
 }
 

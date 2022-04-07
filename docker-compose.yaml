@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  controller:
+    build: ./controller
+    environment:
+      - REMOTE_URL=http://remote:7777/maus
+    ports:
+      - "8080:8080"
+  remote:
+    build: ./remote
+    ports:
+      - "7777:7777"
+      - "8888:8888/udp"

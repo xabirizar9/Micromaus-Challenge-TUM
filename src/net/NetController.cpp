@@ -271,3 +271,8 @@ void NetController::Manager::writeMazeState(MazeStatePacket packet) {
 	ESP_LOGI(tag, "writing packet");
 	return this->writePacket<MazeStatePacket, MausOutgoingMessage_mazeState_tag>(packet);
 }
+
+void NetController::Manager::writeCmdState(MausCommandStatus packet) {
+	ESP_LOGI(tag, "writing packet");
+	return this->writePacket<MausCommandStatus, MausOutgoingMessage_mausCommandStatus_tag>(packet);
+}
