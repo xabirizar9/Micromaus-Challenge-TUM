@@ -6,6 +6,7 @@
 
 #include "Controller.hpp"
 #include "drive/LaneTask.hpp"
+#include "drive/MotionProfile.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
@@ -53,7 +54,9 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
-
+				MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
+				MotionProfile straightProfile(200, 2.0);
+				MotionProfile curveNinetyDegrees((uint8_t)90, 1.0);
 				laneControlTask(controller, curCmd);
 				break;
 			}
