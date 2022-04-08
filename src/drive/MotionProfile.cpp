@@ -34,7 +34,7 @@ void computeTrajectories(void* arg, int numGridElements) {
 	float* resp = getMotionProfilePolynom(tickStart, gridInTicks, vStart, vEnd, tStart, tEnd);
 
 	float tickValues = resp[0] + resp[1] * time + resp[2] * pow(time, 2) + resp[3] * pow(time, 3);
-	float tickValuesDer = resp[1] * time + 2 * resp[2] * time + 3 * resp[3] * pow(time, 2);
+	float tickValuesDer = resp[1] + 2 * resp[2] * time + 3 * resp[3] * pow(time, 2);
 }
 
 MotionProfile motionProfile;
