@@ -101,40 +101,25 @@ float* MotionProfile::getCurveProfile(int degrees, int duration) {
 	return MotionProfile::computeProfile(0, tickEnd, 100, 100, duration);
 }
 
-float* MotionProfile::getStraightProfile(int numGrids, int duration) {
+float* MotionProfile::getStraightProfile(int numGrids,
+										 int duration,
+										 int initialSpeed,
+										 int finalSpeed) {
 	int tickEnd = mmsToTicks(numGrids * 16);
 
-	return MotionProfile::computeProfile(0, tickEnd, 0, 100, 2.0);
+	return MotionProfile::computeProfile(0, tickEnd, initialSpeed, finalSpeed, duration);
 }
 
-float* getMotionProfilePolynom(
-	int tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
+float* getMotionProfilePolynom(int distance, int vStart, int vEnd, float tEnd) {
 	static float* resp = new float[4];
-	int b0, b1, b2, b3;
-	float ticksTime, tDiff, tickDiff;
-	float tEnd2, tStart2, tEnd3, tStart3;
 
 	vStart = convertMMsToTPS(vStart);
 	vEnd = convertMMsToTPS(vEnd);
 
-	tDiff = tEnd - tStart;
-	tickDiff = tickEnd - tickStart;
-	ticksTime = tickDiff / tDiff;
-
-	b0 = tickStart;
-	b1 = tickDiff;
-	b2 = vStart - ticksTime;
-	b3 = vEnd + vStart - 2 * ticksTime;
-
-	tStart2 = pow(tStart, 2);
-	tStart3 = pow(tStart, 3);
-	tEnd2 = pow(tEnd, 2);
-	tEnd3 = pow(tEnd, 3);
-
-	resp[3] = b3 / (tEnd2 + tStart2 + 4 * tEnd * tStart);
-	resp[2] = (resp[3] * (2 * tStart2 - tEnd2 + 2 * tEnd * tStart) - b2) / tDiff;
-	resp[1] = (b1 - resp[2] * (tEnd2 - tStart2) - resp[3] * (tEnd3 - tStart3)) / tDiff;
-	resp[0] = b0 - resp[1] * tStart + resp[2] * tStart2 + resp[3] * tStart3;
+	resp[0] = 0;
+	resp[1] = vStart;
+	resp[2] = 3 / pow(tEnd, 2) * distance - vStart * 2 / tEnd - vEnd * 1 / tEnd;
+	resp[3] = -2 * distance * 1 / pow(tEnd, 3) + (vEnd + vStart) / pow(tEnd, 2);
 
 	return resp;
 }
