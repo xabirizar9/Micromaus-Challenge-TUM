@@ -1,17 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
-	"io/ioutil"
 	"net"
-	"net/http"
-	"os"
-	"strconv"
-	"strings"
 	"time"
 
 	pb "gitlab.lrz.de/waxn/micromaus/proto"
@@ -32,9 +24,10 @@ type RobotComInterface interface {
 }
 
 type Robot struct {
-	com RobotComInterface
-
-	Status RobotConnStatus
+	com           RobotComInterface
+	ID            string
+	InterfaceAddr string
+	Status        RobotConnStatus
 
 	// channel on which to listen for messages
 	pongMsgChannel chan bool
@@ -46,10 +39,9 @@ type Robot struct {
 }
 
 type RobotConnectionOptions struct {
-	Baud     int
-	Dev      string
-	Addr     string
-	OnlyMDNS bool
+	Baud int
+	Dev  string
+	Addr string
 }
 
 func (r *Robot) connect(ctx context.Context, address string) (err error) {
@@ -67,41 +59,6 @@ func (r *Robot) connect(ctx context.Context, address string) (err error) {
 	return
 }
 
-func robotSelector(robots map[string]net.IP) string {
-
-	i := 1
-	ips := make([]net.IP, len(robots))
-
-	fmt.Printf("Please select robot by typing the robot number\n")
-
-	for k, v := range robots {
-		fmt.Printf("%d) %s: %s\n", i, k, v.String())
-		ips[i-1] = v
-		i++
-	}
-	for {
-
-		fmt.Printf("->")
-		reader := bufio.NewReader(os.Stdin)
-		text, _ := reader.ReadString('\n')
-		// convert CRLF to LF
-
-		text = strings.Replace(text, "\n", "", -1)
-		intVar, err := strconv.Atoi(text)
-		if err != nil {
-			continue
-		}
-
-		if intVar > i || intVar < 1 {
-			fmt.Println("invalid option selected")
-			continue
-		}
-
-		return ips[i-1].String()
-	}
-
-}
-
 var (
 	lastAddr string
 )
@@ -116,6 +73,8 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 
 	l.Debug("connecting to robot")
 	r = &Robot{
+		ID:            opt.Dev,
+		InterfaceAddr: opt.Addr,
 		//port:   s,
 		Status:      Disconnected,
 		IncomingMsg: make(chan *pb.MausOutgoingMessage),
@@ -137,71 +96,8 @@ func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
 	}
 
 	// connect using remote server
-	if err != nil && !opt.OnlyMDNS {
-
-		l.Warn("direct connection failed using fallback", zap.Error(err))
-		remoteAddr := os.Getenv("REMOTE_URL")
-		if remoteAddr == "" {
-			remoteAddr = "http://iamwlad.com:7777/maus"
-		}
-
-		// if initial connect fails try using remote address
-		resp, err := http.Get(remoteAddr)
-		if err != nil {
-			l.Error("failed to connect to robot", zap.Error(err))
-			return nil, err
-		}
-
-		type maus struct {
-			Robots map[string]net.IP `json:"robots"`
-		}
-
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			l.Error("failed to connect to robot", zap.Error(err))
-			return nil, err
-		}
-
-		var (
-			m    maus
-			addr string
-		)
-
-		err = json.Unmarshal(body, &m)
-		if err != nil {
-			l.Error("failed to decode remote response", zap.Error(err))
-			return nil, err
-		}
-
-		if len(m.Robots) == 0 {
-			err = errors.New("no robots found on remote server")
-			l.Error("failed to decode remote response", zap.Error(err))
-			return nil, err
-		}
-
-		if len(m.Robots) == 1 {
-			for _, v := range m.Robots {
-				addr = v.String()
-			}
-		} else {
-			fmt.Printf("Found multiple Maus robots:\n")
-
-			addr = robotSelector(m.Robots)
-			if addr == "" {
-				return nil, errors.New("no robot selected")
-			}
-		}
-
-		err = r.connect(context.TODO(), addr+":8888")
-		if err != nil {
-			l.Error("failed to connect to robot", zap.Error(err))
-			return nil, err
-		}
-
-		// store address for quicker reconnect & to avoid reselection
-		lastAddr = addr
-
-		return r, nil
+	if err != nil {
+		return nil, err
 	}
 
 	// start listening on the serial port
@@ -242,8 +138,6 @@ func (r *Robot) ReadCmd() (*pb.MausOutgoingMessage, []byte, error) {
 		return nil, buf[:n], err
 	}
 
-	// log.Debug("got command", zap.String("cmd", cmd.String()))
-
 	return cmd, buf[:n], nil
 }
 
@@ -257,7 +151,7 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 
 			Payload: &pb.MausIncomingMessage_Init{
 				Init: &pb.MsgInit{
-					Version: 2,
+					Version: 3,
 				},
 			},
 		}
@@ -270,7 +164,7 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 		}
 		log.Debug("waiting for init ack")
 		ackCmd, _, err := r.ReadCmd()
-		log.Debug("received response", zap.String("cmd", ackCmd.String()))
+		// log.Debug("received response", zap.String("cmd", ackCmd.String()))
 		if err != nil {
 			respChannel <- errors.New("invalid robot response to init packet")
 			return
@@ -328,6 +222,8 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 		Payload: &pb.MausIncomingMessage_Ping{},
 	}
 
+	time.Sleep(5 * time.Second)
+
 	for {
 		ctx, cancel := context.WithTimeout(context.TODO(), timeout)
 
@@ -353,7 +249,8 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 			log.Error("failed to send ping, disconnecting", zap.Error(err))
 			r.Status = Disconnected
 			log.Info("reconnecting")
-			r.Connect()
+			close(r.pongMsgChannel)
+			r.pongMsgChannel = nil
 			return
 		}
 		time.Sleep(interval)
@@ -395,6 +292,8 @@ func (r *Robot) Connect() error {
 					return
 				}
 
+				log.Info("got command", zap.String("cmd", cmd.String()), zap.Int("len", len(buf)))
+
 				// internally handle ack messages
 				if pong := cmd.GetPong(); pong != nil {
 					r.pongMsgChannel <- true
@@ -405,8 +304,9 @@ func (r *Robot) Connect() error {
 			}
 		}()
 
+		r.pongMsgChannel = make(chan bool)
 		// start ping pong routine
-		go r.startPingPong(10*time.Second, 5*time.Second, 3)
+		// go r.startPingPong(10*time.Second, 5*time.Second, 3)
 
 		return nil
 	}

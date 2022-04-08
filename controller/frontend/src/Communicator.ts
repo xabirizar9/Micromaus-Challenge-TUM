@@ -3,7 +3,11 @@ import {
   MausIncomingMessage,
   MausOutgoingMessage,
 } from "./proto/message";
-import { DashboardClientMessage } from "./proto/dashboard";
+import {
+  ClientMessage,
+  DashboardClientMessage,
+  ServerMessage,
+} from "./proto/dashboard";
 import { toast } from "@zerodevx/svelte-toast";
 import * as toaster from "./utils/notifications";
 
@@ -22,16 +26,20 @@ export class Communicator extends EventTarget {
   }
 
   sendClientMsg(message: Partial<DashboardClientMessage>) {
-    const msg = DashboardClientMessage.encode(
-      message as DashboardClientMessage
-    ).finish();
+    const msg = ClientMessage.encode({
+      dashboard: message as DashboardClientMessage,
+      maus: undefined,
+    }).finish();
+    toaster.success(`send client CMD: size=${msg.length}`);
+    console.log(msg, this.socket?.readyState);
     this.socket?.send(msg);
   }
 
   send(message: Partial<MausIncomingMessage>) {
-    const msg = MausIncomingMessage.encode(
-      message as MausIncomingMessage
-    ).finish();
+    const msg = ClientMessage.encode({
+      maus: message as MausIncomingMessage,
+      dashboard: undefined,
+    }).finish();
     toaster.success(`CMD send: size=${msg.length}`);
     this.socket?.send(msg);
   }
@@ -55,7 +63,8 @@ export class Communicator extends EventTarget {
       console.error(error);
     };
 
-    this.socket.onclose = () => {
+    this.socket.onclose = (err) => {
+      console.log(err);
       this.socket = undefined;
       toaster.error(`socket closed`, {
         duration: 500,
@@ -69,17 +78,23 @@ export class Communicator extends EventTarget {
     this.socket.onmessage = (event) => {
       if (event.data instanceof ArrayBuffer) {
         // binary frame
-        const message = MausOutgoingMessage.decode(new Uint8Array(event.data));
+        const { maus, dashboard } = ServerMessage.decode(
+          new Uint8Array(event.data)
+        );
 
-        if (message.mausConfig) {
-          this.config = message.mausConfig;
+        console.log("hello there", { maus, dashboard });
+
+        if (maus) {
+          if (maus.mausConfig) {
+            this.config = maus.mausConfig;
+          }
+          this.dispatchEvent(new MessageEvent("message", { data: maus }));
+        } else {
+          this.dispatchEvent(
+            new MessageEvent("dashboard", { data: dashboard })
+          );
         }
 
-        if (message.mazeState) {
-          console.log(message.mazeState);
-        }
-
-        this.dispatchEvent(new MessageEvent("message", { data: message }));
         // console.log(message.nav);
       } else {
         // text frame

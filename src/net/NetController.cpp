@@ -11,6 +11,7 @@
 #include "freertos/message_buffer.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
+#include "net/OTA.hpp"
 #include "pb_decode.h"
 #include "pb_encode.h"
 #include "periph/Led.hpp"
@@ -38,10 +39,8 @@ void infoStreamerTask(void *pvParameter) {
 			continue;
 		}
 
-		if (manager->initCompleted) {
-			manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(
-				manager->controller->getState());
-		}
+		manager->writePacket<NavigationPacket, MausOutgoingMessage_nav_tag>(
+			manager->controller->getState());
 
 		vTaskDelay(sensorSendInterval);
 	}
@@ -121,8 +120,9 @@ void receiverTask(void *pvParameter) {
 		switch (msg.which_payload) {
 			case MausIncomingMessage_init_tag: {
 				// TODO: improve memory management
+				manager->initCompleted = true;
+
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
-				vTaskDelay(taskInterval);
 				// send maus config to server
 				MausConfigPacket config = MausConfigPacket_init_zero;
 				config.has_lanePid = true;
@@ -137,7 +137,6 @@ void receiverTask(void *pvParameter) {
 				// set okay status LED
 				LedController((gpio_num_t)3).set(1);
 
-				manager->initCompleted = true;
 				break;
 			}
 			case MausIncomingMessage_encoderCallibration_tag:
@@ -178,7 +177,11 @@ void receiverTask(void *pvParameter) {
 
 			// ping pong interface
 			case MausIncomingMessage_ping_tag:
-				ESP_LOGD(tag, "ping<->pong");
+				ESP_LOGI(tag, "ping<->pong");
+				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
+					PongPacket_init_zero);
+				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
+					PongPacket_init_zero);
 				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
 					PongPacket_init_zero);
 				break;
@@ -235,7 +238,7 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 		return false;
 	}
 
-	// ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
+	ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
 
 	xMessageBufferSend(buffer, this->encodeBuffer, stream.bytes_written, 0);
 	return true;
@@ -243,7 +246,10 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 
 NetController::Manager::Manager() {
 	this->comInterface = WifiCommunicator::getInstance();
-	ESP_LOGI(tag, "Manager()");
+
+#ifdef USE_OTA
+	setupOta();
+#endif
 
 	xTaskCreate(receiverTask, "receiverTask", 9000, this, 5, NULL);
 
@@ -259,7 +265,7 @@ NetController::Manager::Manager() {
  */
 template <typename T, int msgTag>
 void NetController::Manager::writePacket(T packet) {
-	MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
+	static MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
 	msg.which_payload = msgTag;
 	*reinterpret_cast<T *>(&msg.payload) = packet;
 	// ESP_LOGI(tag, "x %f y %f", msg.payload.nav.position.x, msg.payload.nav.position.y);
@@ -273,6 +279,5 @@ void NetController::Manager::writeMazeState(MazeStatePacket packet) {
 }
 
 void NetController::Manager::writeCmdState(MausCommandStatus packet) {
-	ESP_LOGI(tag, "writing packet");
 	return this->writePacket<MausCommandStatus, MausOutgoingMessage_mausCommandStatus_tag>(packet);
 }

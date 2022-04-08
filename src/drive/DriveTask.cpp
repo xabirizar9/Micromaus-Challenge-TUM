@@ -30,9 +30,6 @@ void driveTask(void* arg) {
 
 	float interval = 0;
 	float distance = 0;
-
-	float ticksPerMazeCell = mmsToTicks(180.0);
-
 	float ticksPerOnSpotRotation = mmsToTicks(M_PI * wheelDistance / 4);
 
 	MsgDrive cmd;
@@ -140,82 +137,64 @@ void driveTask(void* arg) {
 			default: break;
 		}
 
+				// stream command results to server
+		// net.writeCmdState(cmdStatus);
+
 		// reset current command
 		curCmd = NULL;
 
 		// notify driver about event completion
-
 		ESP_LOGI(tag, "cmd completed");
 		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
-		net.writePacket<> vTaskDelay(pdMS_TO_TICKS(navInterval));
+		vTaskDelay(pdMS_TO_TICKS(navInterval));
 	}
 }
 
-void computeTrajectories(void* arg) {
-	RobotDriver* driver = (RobotDriver*)arg;
-	Controller* controller = driver->controller;
+// void computeTrajectories(void* arg) {
+// 	RobotDriver* driver = (RobotDriver*)arg;
+// 	Controller* controller = driver->controller;
 
-	int vMax = 500;
-	int64_t tickStart = controller->getEncoder(left)->getTotalCounter();
-	int tickEnd = mmsToTicks(500);
-	int vStart = controller->getSpeed();
-	int vEnd = 50;
-	TickType_t tStart = xTaskGetTickCount();
-	TickType_t tEnd = pdMS_TO_TICKS(1000 / (vMax * 0.9));
+// 	int vMax = 500;
+// 	int64_t tickStart = controller->getEncoder(left)->getTotalCounter();
+// 	int tickEnd = mmsToTicks(500);
+// 	int vStart = controller->getSpeed();
+// 	int vEnd = 50;
+// 	TickType_t tStart = xTaskGetTickCount();
+// 	TickType_t tEnd = pdMS_TO_TICKS(1000 / (vMax * 0.9));
 
-	uint64_t time = xTaskGetTickCount() - tStart;
+// 	uint64_t time = xTaskGetTickCount() - tStart;
 
-	float* resp = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, tStart, tEnd);
+// 	float* resp = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, tStart, tEnd);
 
-	float tickValues = resp[0] + resp[1] * time + resp[2] * pow(time, 2) + resp[3] * pow(time, 3);
-	float tickValuesDer = resp[1] * time + 2 * resp[2] * time + 3 * resp[3] * pow(time, 2);
-}
+// 	float tickValues = resp[0] + resp[1] * time + resp[2] * pow(time, 2) + resp[3] * pow(time, 3);
+// 	float tickValuesDer = resp[1] * time + 2 * resp[2] * time + 3 * resp[3] * pow(time, 2);
+// }
 
-float* getMotionProfilePolynom(
-	int64_t& tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
-	static float* resp = new float[4];
-	int b0, b1, b2, b3;
-	float ticksTime, tDiff, tickDiff;
-	float tEnd2, tStart2, tEnd3, tStart3;
+// float* getMotionProfilePolynom(
+// 	int64_t& tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
+// 	static float* resp = new float[4];
+// 	int b0, b1, b2, b3;
+// 	float ticksTime, tDiff, tickDiff;
+// 	float tEnd2, tStart2, tEnd3, tStart3;
 
-	tDiff = tEnd - tStart;
-	tickDiff = tickEnd - tickStart;
-	ticksTime = tickDiff / tDiff;
+// 	tDiff = tEnd - tStart;
+// 	tickDiff = tickEnd - tickStart;
+// 	ticksTime = tickDiff / tDiff;
 
-	b0 = tickStart;
-	b1 = tickDiff;
-	b2 = vStart - ticksTime;
-	b3 = vEnd + vStart - 2 * ticksTime;
+// 	b0 = tickStart;
+// 	b1 = tickDiff;
+// 	b2 = vStart - ticksTime;
+// 	b3 = vEnd + vStart - 2 * ticksTime;
 
-	tStart2 = pow(tStart, 2);
-	tStart3 = pow(tStart, 3);
-	tEnd2 = pow(tEnd, 2);
-	tEnd3 = pow(tEnd, 3);
+// 	tStart2 = pow(tStart, 2);
+// 	tStart3 = pow(tStart, 3);
+// 	tEnd2 = pow(tEnd, 2);
+// 	tEnd3 = pow(tEnd, 3);
 
-	resp[3] = b3 / (tEnd2 + tStart2 + 4 * tEnd * tStart);
-	resp[2] = (resp[3] * (2 * tStart2 - tEnd2 + 2 * tEnd * tStart) - b2) / tDiff;
-	resp[1] = (b1 - resp[2] * (tEnd2 - tStart2) - resp[3] * (tEnd3 - tStart3)) / tDiff;
-	resp[0] = b0 - resp[1] * tStart + resp[2] * tStart2 + resp[3] * tStart3;
+// 	resp[3] = b3 / (tEnd2 + tStart2 + 4 * tEnd * tStart);
+// 	resp[2] = (resp[3] * (2 * tStart2 - tEnd2 + 2 * tEnd * tStart) - b2) / tDiff;
+// 	resp[1] = (b1 - resp[2] * (tEnd2 - tStart2) - resp[3] * (tEnd3 - tStart3)) / tDiff;
+// 	resp[0] = b0 - resp[1] * tStart + resp[2] * tStart2 + resp[3] * tStart3;
 
-	return resp;
-}
-/*
-void turn() {
-	// vTaskDelay(pdMS_TO_TICKS(5000));
-	int8_t pre = -1;
-	if (degree < 0) {
-		pre = 1;
-	}
-	uint8_t rMaus = 60;
-	float dRad = abs(degree) * rMaus;
-	float duration = dRad / speed;
-
-	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
-	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
-
-	ESP_LOGI(TAG, "no time passed %f %f", leftSpeedTickTarget, rightSpeedTickTarget);
-
-	vTaskDelay(pdMS_TO_TICKS(duration));
-	this->setSpeed(0);
-}
-*/
+// 	return resp;
+// }

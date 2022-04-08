@@ -12,6 +12,7 @@ RUN go mod download
 
 COPY *.go ./
 COPY proto/*.go ./proto/
+COPY remote/*.go ./remote/
 # CGO has to be disabled for alpine
 RUN go build -o /app/micromaus
 

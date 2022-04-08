@@ -8,6 +8,9 @@ import (
 type Client struct {
 	ID string
 
+	// robot the client is listening to
+	RobotID string
+
 	// The websocket connection.
 	conn *websocket.Conn
 

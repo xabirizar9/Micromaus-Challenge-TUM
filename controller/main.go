@@ -1,12 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net/http"
 	"os/exec"
 	"runtime"
 	"time"
+
+	"gitlab.lrz.de/waxn/micromaus/remote"
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
@@ -43,33 +46,64 @@ func main() {
 	c := Config{}
 	c.getConf()
 	m := NewManager()
-	// try connecting robot
-	go func() {
-		for {
-			log.Info("connecting to robot...")
-			r, err := NewRobot(log, RobotConnectionOptions{
-				Baud:     115200,
-				Dev:      "/dev/cu.MAUS_BT_SERIAL",
-				Addr:     c.MausAddr,
-				OnlyMDNS: *forceMDNS,
-			})
-			if err != nil {
 
-				time.Sleep(1 * time.Second)
-				continue
+	// only search for mDNS if explicitly enabled, this does not make sense on the server
+	if *forceMDNS {
+		// try connecting robot
+		go func() {
+			for {
+				log.Info("connecting to robot...")
+				r, err := NewRobot(log, RobotConnectionOptions{
+					Baud: 115200,
+					Dev:  "waxn-robot.local",
+					Addr: c.MausAddr,
+				})
+				if err != nil {
+
+					time.Sleep(1 * time.Second)
+					continue
+				}
+
+				err = m.RegisterRobot(r)
+				if err != nil {
+					time.Sleep(1 * time.Second)
+					continue
+				}
+
+				log.Info("connected to robot")
+
+				return
 			}
+		}()
+	} else {
+		// listen for robot registration
+		remote.HandleRobotRegisteredFunc("/maus", ":8888", func(addr remote.RobotAddr) {
+			// try connecting multiple times
+			for {
+				log.Info("registered maus", zap.String("mac", addr.Mac), zap.String("ip", addr.PublicIP.String()))
+				r, err := NewRobot(log, RobotConnectionOptions{
+					Baud: 0,
+					Dev:  addr.Mac,
+					Addr: addr.PublicIP.String(),
+				})
+				if err != nil {
 
-			err = m.RegisterRobot(r)
-			if err != nil {
-				time.Sleep(1 * time.Second)
-				continue
+					time.Sleep(1 * time.Second)
+					continue
+				}
+
+				err = m.RegisterRobot(r)
+				if err != nil {
+					time.Sleep(1 * time.Second)
+					continue
+				}
+
+				log.Info("connected to robot")
+
+				return
 			}
-
-			log.Info("connected to robot")
-
-			return
-		}
-	}()
+		})
+	}
 
 	// serve static assets
 	fs := http.FileServer((http.Dir("./frontend/dist")))
@@ -84,17 +118,54 @@ func main() {
 		l.Info("websocket request")
 
 		conn, err := upgrader.Upgrade(w, r, nil)
-
+		conn.SetCloseHandler(func(code int, text string) error {
+			l.Info("websocket closed", zap.Int("code", code), zap.String("text", text))
+			return nil
+		})
 		if err != nil {
 			return
 		}
 
-		id := m.AddClient(conn)
+		m.RunWebSocketClient(conn)
 
-		l.Debug("client added", zap.String("id", id))
+	})
+
+	http.HandleFunc("/maus", func(w http.ResponseWriter, r *http.Request) {
+		type MausInfo struct {
+			ID  string `json:"id"`
+			Mac string `json:"mac"`
+			IP  string `json:"ip"`
+		}
+		type MausList struct {
+			Items []MausInfo `json:"maus"`
+		}
+
+		data := MausList{
+			Items: make([]MausInfo, len(m.Robots)),
+		}
+		i := 0
+		for k, v := range m.Robots {
+			data.Items[i] = MausInfo{
+				Mac: v.ID,
+				IP:  v.InterfaceAddr,
+				ID:  k,
+			}
+			i++
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		buf, err := json.Marshal(data)
+		if err != nil {
+			log.Error("failed to marshal robots", zap.Error(err))
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		w.Write(buf)
 	})
 
 	log.Info("server started")
-	// openbrowser("http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe("0.0.0.0:8080", nil)
 }

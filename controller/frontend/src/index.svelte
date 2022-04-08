@@ -12,6 +12,7 @@
   import PowerView from "./components/PowerView.svelte";
   import StatusView from "./components/StatusView.svelte";
   import PidConfigCard from "./PidConfigCard.svelte";
+  import { DashboardServerMessage } from "./proto/dashboard";
 
   export const com = new Communicator({
     url: `ws://${window.location.host}/ws`,
@@ -98,6 +99,18 @@
       },
     });
   };
+
+  com.addEventListener(
+    "dashboard",
+    (evt: MessageEvent<DashboardServerMessage>) => {
+      if (evt.data.selected) {
+        mausConnected = true;
+      }
+      if (evt.data.deviceLost) {
+        mausConnected = false;
+      }
+    }
+  );
 </script>
 
 <Toaster />

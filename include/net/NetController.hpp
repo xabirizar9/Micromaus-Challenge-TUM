@@ -54,6 +54,7 @@ class Manager {
 	void writePacket(T packet);
 
 	void writeMazeState(MazeStatePacket state);
+	void writeCmdState(MausCommandStatus state);
 };
 
 extern Manager* netManager;

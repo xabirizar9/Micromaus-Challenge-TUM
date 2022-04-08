@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+import "message.proto";
+option go_package = "./proto";
+
+message SelectDeviceClientMessage {
+	string deviceId = 1;
+}
+
+message DashboardClientMessage {
+	oneof payload {
+		SelectDeviceClientMessage selectDevice = 1;
+	}
+}
+
+message DeviceSelected {}
+message DeviceLostMessage {}
+message NewDeviceMessage {}
+
+message DashboardServerMessage {
+	oneof payload {
+		DeviceSelected selected = 1;
+		DeviceLostMessage deviceLost = 2;
+		NewDeviceMessage newDevice = 3;
+	}
+}
+
+message ClientMessage {
+	oneof payload {
+		DashboardClientMessage dashboard = 1;
+		MausIncomingMessage maus = 2;
+	}
+}
+message ServerMessage {
+	oneof payload {
+		MausOutgoingMessage maus = 1;
+		DashboardServerMessage dashboard = 2;
+	}
+}

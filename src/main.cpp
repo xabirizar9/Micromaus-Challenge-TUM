@@ -34,9 +34,9 @@ extern "C" void app_main() {
 	// start main robot controller interface with motors and encoders
 	mainController = new Controller();
 
-	explorer = new MazeSolver(mainController);
+	// explorer = new MazeSolver(mainController);
 
 	// pass controller to remote controller
 	NetController::Manager::getInstance().controller = mainController;
-	NetController::Manager::getInstance().driver = explorer;
+	// NetController::Manager::getInstance().driver = explorer;
 }

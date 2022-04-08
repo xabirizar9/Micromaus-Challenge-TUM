@@ -42,7 +42,7 @@ message NavigationPacket {
 	float voltage = 7;
 	float batPercentage = 8;
 	uint32 timestamp = 9;
-	PosDistribution posDistribution = 10;
+	// PosDistribution posDistribution = 10;
 }
 
 enum InfoCmdType {

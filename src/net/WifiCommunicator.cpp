@@ -210,11 +210,7 @@ static esp_netif_t *setupWifi(void) {
 	esp_wifi_connect();
 #endif
 
-	ESP_LOGI(TAG,
-			 "wifi_init_softap finished. SSID:%s password:%s channel:%d",
-			 WIFI_SSID,
-			 WIFI_PW,
-			 WIFI_CHANNEL);
+	ESP_LOGI(TAG, "wifi_init_softap finished. SSID:%s channel:%d", WIFI_SSID, WIFI_CHANNEL);
 
 	return netif;
 }
@@ -263,8 +259,6 @@ static void udpSenderTask(void *pvParameters) {
 			ESP_LOGE(TAG, "write failed %d!=%d", len, msgLen);
 			continue;
 		}
-		// Data received
-		else {}
 	}
 
 	vTaskDelete(NULL);
