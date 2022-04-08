@@ -3,6 +3,7 @@ import {
   MausIncomingMessage,
   MausOutgoingMessage,
 } from "./proto/message";
+import { DashboardClientMessage } from "./proto/dashboard";
 import { toast } from "@zerodevx/svelte-toast";
 import * as toaster from "./utils/notifications";
 
@@ -18,6 +19,13 @@ export class Communicator extends EventTarget {
   constructor(private options: CommunicatorOptions) {
     super();
     this.setupSocket(options);
+  }
+
+  sendClientMsg(message: Partial<DashboardClientMessage>) {
+    const msg = DashboardClientMessage.encode(
+      message as DashboardClientMessage
+    ).finish();
+    this.socket?.send(msg);
   }
 
   send(message: Partial<MausIncomingMessage>) {

@@ -2,6 +2,7 @@
   import Toaster from "./components/Toaster.svelte";
   import SensorTable from "./SensorTable.svelte";
   import MazeView from "./MazeViewCard.svelte";
+  import MausSelector from "./MausSelector.svelte";
   import Input from "./components/Input.svelte";
   import { Communicator } from "./Communicator";
   import Grid from "./components/Grid.svelte";
@@ -18,26 +19,13 @@
 
   const controller = new Joystick(com);
 
+  let mausConnected = false;
   let direction = 0;
   let speed = 0;
 
   let driveValue = 0;
   let driveSpeed = 0;
   let driveCmdType = DriveCmdType.Move;
-
-  const onUpdateMotorCalibration = (
-    evt: SubmitEvent | CustomEvent<MouseEvent>
-  ) => {
-    evt.preventDefault();
-    com.send({
-      encoderCallibration: {
-        kD,
-        kI,
-        kP,
-        streamData: false,
-      },
-    });
-  };
 
   const onUpdateControls = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
     console.log("onUpdateControls", { speed, direction });
@@ -68,8 +56,6 @@
       stop: {},
     });
   };
-
-  let isPidTuningActive = false;
 
   const onTunePid = () => {
     alert("currently disabled");
@@ -115,71 +101,79 @@
 </script>
 
 <Toaster />
+<nav />
 <main>
-  <MazeView {com} />
+  {#if mausConnected}
+    <MazeView {com} />
 
-  <div class="subgrid">
-    <div class="card">
-      <h2>Controls</h2>
-      <form on:submit={onUpdateControls}>
-        <Grid>
-          <Input label="Speed" type="number" bind:value={speed} />
-          <Input label="heading" type="number" bind:value={direction} />
-        </Grid>
-        <Button type="submit">Update</Button>
-      </form>
-      <h2>Drive</h2>
-      <form on:submit={onDrive}>
-        <select bind:value={driveCmdType}>
-          {#each driveOptions as [key, value], i}<option {value}>{key}</option
-            >{/each}
-        </select>
-        <Grid>
-          <Input
-            label="Speed"
-            step="0.001"
-            type="number"
-            bind:value={driveSpeed}
-          />
+    <div class="subgrid">
+      <div class="card">
+        <h2>Controls</h2>
+        <form on:submit={onUpdateControls}>
+          <Grid>
+            <Input label="Speed" type="number" bind:value={speed} />
+            <Input label="heading" type="number" bind:value={direction} />
+          </Grid>
+          <Button type="submit">Update</Button>
+        </form>
+        <h2>Drive</h2>
+        <form on:submit={onDrive}>
+          <select bind:value={driveCmdType}>
+            {#each driveOptions as [key, value], i}<option {value}>{key}</option
+              >{/each}
+          </select>
+          <Grid>
+            <Input
+              label="Speed"
+              step="0.001"
+              type="number"
+              bind:value={driveSpeed}
+            />
 
-          <Input
-            label="Value"
-            step="0.001"
-            type="number"
-            bind:value={driveValue}
-          />
-        </Grid>
-        <Button type="submit">Drive</Button>
-      </form>
+            <Input
+              label="Value"
+              step="0.001"
+              type="number"
+              bind:value={driveValue}
+            />
+          </Grid>
+          <Button type="submit">Drive</Button>
+        </form>
+      </div>
+
+      <div class="card">
+        <PidConfigCard {com} />
+      </div>
     </div>
 
     <div class="card">
-      <PidConfigCard {com} />
+      <h2>Actions</h2>
+      <Button inline on:click={onStop}>STOP!</Button>
+      <Button inline on:click={onStartExplore}>Explore</Button>
+      <Button inline on:click={onGoToStart}>Go To Start</Button>
+      <Button inline on:click={onFastRun}>Fast Run</Button>
+      <Button inline on:click={onTunePid}>Tune PID</Button>
     </div>
-  </div>
 
-  <div class="card">
-    <h2>Actions</h2>
-    <Button inline on:click={onStop}>STOP!</Button>
-    <Button inline on:click={onStartExplore}>Explore</Button>
-    <Button inline on:click={onGoToStart}>Go To Start</Button>
-    <Button inline on:click={onFastRun}>Fast Run</Button>
-    <Button inline on:click={onTunePid}>Tune PID</Button>
-  </div>
-
-  <div class="subgrid">
-    <div class="card">
-      <h2>Status</h2>
-      <StatusView {com} />
+    <div class="subgrid">
+      <div class="card">
+        <h2>Status</h2>
+        <StatusView {com} />
+      </div>
+      <div class="card">
+        <h2>Power</h2>
+        <PowerView {com} />
+      </div>
     </div>
-    <div class="card">
-      <h2>Power</h2>
-      <PowerView {com} />
-    </div>
-  </div>
 
-  <div class="card full"><SensorTable {com} /></div>
+    <div class="card full"><SensorTable {com} /></div>
+  {/if}
 </main>
+
+{#if !mausConnected}
+  <div class="no-maus">No mouse connected</div>
+  <MausSelector {com} />
+{/if}
 
 <style lang="scss">
   :root {
@@ -192,6 +186,7 @@
     --success-color: #77c97e;
     --success-color-text: #fff;
 
+    --nav-bg: #e8e8e8cc;
     --border-color: rgb(121, 121, 121);
     --main-bg-secondary: #e8e8e8;
     --main-bg-color: #dadada;
@@ -201,6 +196,7 @@
     --main-shadow-secondary-color: rgba(0, 0, 0, 0.05);
 
     @media (prefers-color-scheme: dark) {
+      --nav-bg: rgba(51, 51, 51, 0.653);
       --border-color: #333;
       --main-bg-secondary: rgb(40, 40, 40);
       --main-bg-color: #181818;
@@ -229,7 +225,6 @@
 
   :global(body) {
     background-color: var(--main-bg-color);
-    padding: 1rem;
     color: var(--main-text-color);
 
     .card {
@@ -251,7 +246,30 @@
       grid-template-columns: 1fr 1fr;
     }
   }
+
+  nav {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 40px;
+    z-index: 100;
+    background-color: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 0px 10px var(--main-shadow-color);
+    border-bottom: 1px solid var(--main-bg-secondary);
+  }
+
+  .no-maus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 1rem;
+  }
+
   main {
+    padding: 1rem;
     background-color: var(--main-bg-color);
     display: grid;
 

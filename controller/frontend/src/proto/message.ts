@@ -169,12 +169,26 @@ export interface Position {
   heading: number;
 }
 
+export interface MsgEncoderCallibration {
+  kP: number;
+  kI: number;
+  kD: number;
+  streamData: boolean;
+}
+
 export interface PongPacket {}
 
 export interface SensorPacket {
   left: number;
   front: number;
   right: number;
+}
+
+export interface PosDistribution {
+  positionMean: number[];
+  velocityMean: number[];
+  positionStd: number[];
+  velocityStd: number[];
 }
 
 export interface NavigationPacket {
@@ -187,6 +201,7 @@ export interface NavigationPacket {
   voltage: number;
   batPercentage: number;
   timestamp: number;
+  posDistribution: PosDistribution | undefined;
 }
 
 export interface InfoPacket {
@@ -209,8 +224,11 @@ export interface MausConfigPacket {
   lanePid: MsgEncoderCallibration | undefined;
 }
 
-export interface PathPacket {
-  cmd: MsgDrive[];
+export interface MausCommandStatus {
+  cmd: DriveCmdType;
+  success: boolean;
+  target: number;
+  actual: number;
 }
 
 export interface MausOutgoingMessage {
@@ -221,6 +239,7 @@ export interface MausOutgoingMessage {
   pidTuning: PidTuningInfo | undefined;
   mazeState: MazeStatePacket | undefined;
   mausConfig: MausConfigPacket | undefined;
+  mausCommandStatus: MausCommandStatus | undefined;
 }
 
 /** command indicates remote client connection */
@@ -252,13 +271,6 @@ export interface MsgSetPosition {
 }
 
 export interface MsgStop {}
-
-export interface MsgEncoderCallibration {
-  kP: number;
-  kI: number;
-  kD: number;
-  streamData: boolean;
-}
 
 export interface MausIncomingMessage {
   init: MsgInit | undefined;
@@ -378,6 +390,87 @@ export const Position = {
   },
 };
 
+function createBaseMsgEncoderCallibration(): MsgEncoderCallibration {
+  return { kP: 0, kI: 0, kD: 0, streamData: false };
+}
+
+export const MsgEncoderCallibration = {
+  encode(
+    message: MsgEncoderCallibration,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.kP !== 0) {
+      writer.uint32(13).float(message.kP);
+    }
+    if (message.kI !== 0) {
+      writer.uint32(21).float(message.kI);
+    }
+    if (message.kD !== 0) {
+      writer.uint32(29).float(message.kD);
+    }
+    if (message.streamData === true) {
+      writer.uint32(32).bool(message.streamData);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgEncoderCallibration {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgEncoderCallibration();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.kP = reader.float();
+          break;
+        case 2:
+          message.kI = reader.float();
+          break;
+        case 3:
+          message.kD = reader.float();
+          break;
+        case 4:
+          message.streamData = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgEncoderCallibration {
+    return {
+      kP: isSet(object.kP) ? Number(object.kP) : 0,
+      kI: isSet(object.kI) ? Number(object.kI) : 0,
+      kD: isSet(object.kD) ? Number(object.kD) : 0,
+      streamData: isSet(object.streamData) ? Boolean(object.streamData) : false,
+    };
+  },
+
+  toJSON(message: MsgEncoderCallibration): unknown {
+    const obj: any = {};
+    message.kP !== undefined && (obj.kP = message.kP);
+    message.kI !== undefined && (obj.kI = message.kI);
+    message.kD !== undefined && (obj.kD = message.kD);
+    message.streamData !== undefined && (obj.streamData = message.streamData);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgEncoderCallibration>, I>>(
+    object: I
+  ): MsgEncoderCallibration {
+    const message = createBaseMsgEncoderCallibration();
+    message.kP = object.kP ?? 0;
+    message.kI = object.kI ?? 0;
+    message.kD = object.kD ?? 0;
+    message.streamData = object.streamData ?? false;
+    return message;
+  },
+};
+
 function createBasePongPacket(): PongPacket {
   return {};
 }
@@ -486,6 +579,149 @@ export const SensorPacket = {
   },
 };
 
+function createBasePosDistribution(): PosDistribution {
+  return {
+    positionMean: [],
+    velocityMean: [],
+    positionStd: [],
+    velocityStd: [],
+  };
+}
+
+export const PosDistribution = {
+  encode(message: PosDistribution, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).fork();
+    for (const v of message.positionMean) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    writer.uint32(18).fork();
+    for (const v of message.velocityMean) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    writer.uint32(26).fork();
+    for (const v of message.positionStd) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    writer.uint32(34).fork();
+    for (const v of message.velocityStd) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PosDistribution {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePosDistribution();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.positionMean.push(reader.float());
+            }
+          } else {
+            message.positionMean.push(reader.float());
+          }
+          break;
+        case 2:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.velocityMean.push(reader.float());
+            }
+          } else {
+            message.velocityMean.push(reader.float());
+          }
+          break;
+        case 3:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.positionStd.push(reader.float());
+            }
+          } else {
+            message.positionStd.push(reader.float());
+          }
+          break;
+        case 4:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.velocityStd.push(reader.float());
+            }
+          } else {
+            message.velocityStd.push(reader.float());
+          }
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PosDistribution {
+    return {
+      positionMean: Array.isArray(object?.positionMean)
+        ? object.positionMean.map((e: any) => Number(e))
+        : [],
+      velocityMean: Array.isArray(object?.velocityMean)
+        ? object.velocityMean.map((e: any) => Number(e))
+        : [],
+      positionStd: Array.isArray(object?.positionStd)
+        ? object.positionStd.map((e: any) => Number(e))
+        : [],
+      velocityStd: Array.isArray(object?.velocityStd)
+        ? object.velocityStd.map((e: any) => Number(e))
+        : [],
+    };
+  },
+
+  toJSON(message: PosDistribution): unknown {
+    const obj: any = {};
+    if (message.positionMean) {
+      obj.positionMean = message.positionMean.map((e) => e);
+    } else {
+      obj.positionMean = [];
+    }
+    if (message.velocityMean) {
+      obj.velocityMean = message.velocityMean.map((e) => e);
+    } else {
+      obj.velocityMean = [];
+    }
+    if (message.positionStd) {
+      obj.positionStd = message.positionStd.map((e) => e);
+    } else {
+      obj.positionStd = [];
+    }
+    if (message.velocityStd) {
+      obj.velocityStd = message.velocityStd.map((e) => e);
+    } else {
+      obj.velocityStd = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PosDistribution>, I>>(
+    object: I
+  ): PosDistribution {
+    const message = createBasePosDistribution();
+    message.positionMean = object.positionMean?.map((e) => e) || [];
+    message.velocityMean = object.velocityMean?.map((e) => e) || [];
+    message.positionStd = object.positionStd?.map((e) => e) || [];
+    message.velocityStd = object.velocityStd?.map((e) => e) || [];
+    return message;
+  },
+};
+
 function createBaseNavigationPacket(): NavigationPacket {
   return {
     sensors: undefined,
@@ -497,6 +733,7 @@ function createBaseNavigationPacket(): NavigationPacket {
     voltage: 0,
     batPercentage: 0,
     timestamp: 0,
+    posDistribution: undefined,
   };
 }
 
@@ -528,6 +765,12 @@ export const NavigationPacket = {
     }
     if (message.timestamp !== 0) {
       writer.uint32(72).uint32(message.timestamp);
+    }
+    if (message.posDistribution !== undefined) {
+      PosDistribution.encode(
+        message.posDistribution,
+        writer.uint32(82).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -566,6 +809,12 @@ export const NavigationPacket = {
         case 9:
           message.timestamp = reader.uint32();
           break;
+        case 10:
+          message.posDistribution = PosDistribution.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -599,6 +848,9 @@ export const NavigationPacket = {
         ? Number(object.batPercentage)
         : 0,
       timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
+      posDistribution: isSet(object.posDistribution)
+        ? PosDistribution.fromJSON(object.posDistribution)
+        : undefined,
     };
   },
 
@@ -625,6 +877,10 @@ export const NavigationPacket = {
       (obj.batPercentage = message.batPercentage);
     message.timestamp !== undefined &&
       (obj.timestamp = Math.round(message.timestamp));
+    message.posDistribution !== undefined &&
+      (obj.posDistribution = message.posDistribution
+        ? PosDistribution.toJSON(message.posDistribution)
+        : undefined);
     return obj;
   },
 
@@ -647,6 +903,10 @@ export const NavigationPacket = {
     message.voltage = object.voltage ?? 0;
     message.batPercentage = object.batPercentage ?? 0;
     message.timestamp = object.timestamp ?? 0;
+    message.posDistribution =
+      object.posDistribution !== undefined && object.posDistribution !== null
+        ? PosDistribution.fromPartial(object.posDistribution)
+        : undefined;
     return message;
   },
 };
@@ -965,27 +1225,45 @@ export const MausConfigPacket = {
   },
 };
 
-function createBasePathPacket(): PathPacket {
-  return { cmd: [] };
+function createBaseMausCommandStatus(): MausCommandStatus {
+  return { cmd: 0, success: false, target: 0, actual: 0 };
 }
 
-export const PathPacket = {
-  encode(message: PathPacket, writer: Writer = Writer.create()): Writer {
-    for (const v of message.cmd) {
-      MsgDrive.encode(v!, writer.uint32(10).fork()).ldelim();
+export const MausCommandStatus = {
+  encode(message: MausCommandStatus, writer: Writer = Writer.create()): Writer {
+    if (message.cmd !== 0) {
+      writer.uint32(8).int32(message.cmd);
+    }
+    if (message.success === true) {
+      writer.uint32(16).bool(message.success);
+    }
+    if (message.target !== 0) {
+      writer.uint32(24).uint64(message.target);
+    }
+    if (message.actual !== 0) {
+      writer.uint32(32).uint64(message.actual);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PathPacket {
+  decode(input: Reader | Uint8Array, length?: number): MausCommandStatus {
     const reader = input instanceof Reader ? input : new Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePathPacket();
+    const message = createBaseMausCommandStatus();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.cmd.push(MsgDrive.decode(reader, reader.uint32()));
+          message.cmd = reader.int32() as any;
+          break;
+        case 2:
+          message.success = reader.bool();
+          break;
+        case 3:
+          message.target = longToNumber(reader.uint64() as Long);
+          break;
+        case 4:
+          message.actual = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -995,29 +1273,32 @@ export const PathPacket = {
     return message;
   },
 
-  fromJSON(object: any): PathPacket {
+  fromJSON(object: any): MausCommandStatus {
     return {
-      cmd: Array.isArray(object?.cmd)
-        ? object.cmd.map((e: any) => MsgDrive.fromJSON(e))
-        : [],
+      cmd: isSet(object.cmd) ? driveCmdTypeFromJSON(object.cmd) : 0,
+      success: isSet(object.success) ? Boolean(object.success) : false,
+      target: isSet(object.target) ? Number(object.target) : 0,
+      actual: isSet(object.actual) ? Number(object.actual) : 0,
     };
   },
 
-  toJSON(message: PathPacket): unknown {
+  toJSON(message: MausCommandStatus): unknown {
     const obj: any = {};
-    if (message.cmd) {
-      obj.cmd = message.cmd.map((e) => (e ? MsgDrive.toJSON(e) : undefined));
-    } else {
-      obj.cmd = [];
-    }
+    message.cmd !== undefined && (obj.cmd = driveCmdTypeToJSON(message.cmd));
+    message.success !== undefined && (obj.success = message.success);
+    message.target !== undefined && (obj.target = Math.round(message.target));
+    message.actual !== undefined && (obj.actual = Math.round(message.actual));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<PathPacket>, I>>(
+  fromPartial<I extends Exact<DeepPartial<MausCommandStatus>, I>>(
     object: I
-  ): PathPacket {
-    const message = createBasePathPacket();
-    message.cmd = object.cmd?.map((e) => MsgDrive.fromPartial(e)) || [];
+  ): MausCommandStatus {
+    const message = createBaseMausCommandStatus();
+    message.cmd = object.cmd ?? 0;
+    message.success = object.success ?? false;
+    message.target = object.target ?? 0;
+    message.actual = object.actual ?? 0;
     return message;
   },
 };
@@ -1031,6 +1312,7 @@ function createBaseMausOutgoingMessage(): MausOutgoingMessage {
     pidTuning: undefined,
     mazeState: undefined,
     mausConfig: undefined,
+    mausCommandStatus: undefined,
   };
 }
 
@@ -1069,6 +1351,12 @@ export const MausOutgoingMessage = {
         writer.uint32(58).fork()
       ).ldelim();
     }
+    if (message.mausCommandStatus !== undefined) {
+      MausCommandStatus.encode(
+        message.mausCommandStatus,
+        writer.uint32(66).fork()
+      ).ldelim();
+    }
     return writer;
   },
 
@@ -1100,6 +1388,12 @@ export const MausOutgoingMessage = {
         case 7:
           message.mausConfig = MausConfigPacket.decode(reader, reader.uint32());
           break;
+        case 8:
+          message.mausCommandStatus = MausCommandStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1124,6 +1418,9 @@ export const MausOutgoingMessage = {
         : undefined,
       mausConfig: isSet(object.mausConfig)
         ? MausConfigPacket.fromJSON(object.mausConfig)
+        : undefined,
+      mausCommandStatus: isSet(object.mausCommandStatus)
+        ? MausCommandStatus.fromJSON(object.mausCommandStatus)
         : undefined,
     };
   },
@@ -1151,6 +1448,10 @@ export const MausOutgoingMessage = {
     message.mausConfig !== undefined &&
       (obj.mausConfig = message.mausConfig
         ? MausConfigPacket.toJSON(message.mausConfig)
+        : undefined);
+    message.mausCommandStatus !== undefined &&
+      (obj.mausCommandStatus = message.mausCommandStatus
+        ? MausCommandStatus.toJSON(message.mausCommandStatus)
         : undefined);
     return obj;
   },
@@ -1186,6 +1487,11 @@ export const MausOutgoingMessage = {
     message.mausConfig =
       object.mausConfig !== undefined && object.mausConfig !== null
         ? MausConfigPacket.fromPartial(object.mausConfig)
+        : undefined;
+    message.mausCommandStatus =
+      object.mausCommandStatus !== undefined &&
+      object.mausCommandStatus !== null
+        ? MausCommandStatus.fromPartial(object.mausCommandStatus)
         : undefined;
     return message;
   },
@@ -1564,87 +1870,6 @@ export const MsgStop = {
   },
 };
 
-function createBaseMsgEncoderCallibration(): MsgEncoderCallibration {
-  return { kP: 0, kI: 0, kD: 0, streamData: false };
-}
-
-export const MsgEncoderCallibration = {
-  encode(
-    message: MsgEncoderCallibration,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.kP !== 0) {
-      writer.uint32(13).float(message.kP);
-    }
-    if (message.kI !== 0) {
-      writer.uint32(21).float(message.kI);
-    }
-    if (message.kD !== 0) {
-      writer.uint32(29).float(message.kD);
-    }
-    if (message.streamData === true) {
-      writer.uint32(32).bool(message.streamData);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): MsgEncoderCallibration {
-    const reader = input instanceof Reader ? input : new Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgEncoderCallibration();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.kP = reader.float();
-          break;
-        case 2:
-          message.kI = reader.float();
-          break;
-        case 3:
-          message.kD = reader.float();
-          break;
-        case 4:
-          message.streamData = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MsgEncoderCallibration {
-    return {
-      kP: isSet(object.kP) ? Number(object.kP) : 0,
-      kI: isSet(object.kI) ? Number(object.kI) : 0,
-      kD: isSet(object.kD) ? Number(object.kD) : 0,
-      streamData: isSet(object.streamData) ? Boolean(object.streamData) : false,
-    };
-  },
-
-  toJSON(message: MsgEncoderCallibration): unknown {
-    const obj: any = {};
-    message.kP !== undefined && (obj.kP = message.kP);
-    message.kI !== undefined && (obj.kI = message.kI);
-    message.kD !== undefined && (obj.kD = message.kD);
-    message.streamData !== undefined && (obj.streamData = message.streamData);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgEncoderCallibration>, I>>(
-    object: I
-  ): MsgEncoderCallibration {
-    const message = createBaseMsgEncoderCallibration();
-    message.kP = object.kP ?? 0;
-    message.kI = object.kI ?? 0;
-    message.kD = object.kD ?? 0;
-    message.streamData = object.streamData ?? false;
-    return message;
-  },
-};
-
 function createBaseMausIncomingMessage(): MausIncomingMessage {
   return {
     init: undefined,
@@ -1909,6 +2134,13 @@ export type Exact<P, I extends P> = P extends Builtin
         Exclude<keyof I, KeysOfUnion<P>>,
         never
       >;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
 
 // If you get a compile-error about 'Constructor<Long> and ... have no overlap',
 // add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
