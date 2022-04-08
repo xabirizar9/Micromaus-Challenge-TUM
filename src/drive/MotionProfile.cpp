@@ -39,38 +39,47 @@ void computeTrajectories(void* arg, int numGridElements) {
 
 MotionProfile motionProfile;
 
-void runStraight(int distance, float duration) {
-	int tickStart = 0;
-	int tickEnd = mmsToTicks(distance);
-	int vstart = 0;
-	int vEnd = 0;
-	float tStart = 0.0;
-	float tEnd = 2.0;
+float* getMotionProfilePolynom(int distance, int vStart, int vEnd, float tEnd) {
+	static float* resp = new float[4];
 
-	float* coefficients = getMotionProfilePolynom(0, tickEnd, 0, 0, 0, tEnd);
-	float tickSpeed;
+	vStart = convertMMsToTPS(vStart);
+	vEnd = convertMMsToTPS(vEnd);
 
-	int numIntervals = (tEnd - tStart) / controlInterval;
-	float* velocityProfile[numIntervals];
+	resp[0] = 0;
+	resp[1] = vStart;
+	resp[2] = 3 / pow(tEnd, 2) * distance - vStart * 2 / tEnd - vEnd * 1 / tEnd;
+	resp[3] = -2 * distance * 1 / pow(tEnd, 3) + (vEnd + vStart) / pow(tEnd, 2);
 
+	return resp;
+}
+
+float* runStraight(int distance, float duration) {
 	int counter = 0;
 	int time = 0;
+	int numIntervals = duration / controlInterval;
+	int tickEnd = mmsToTicks(distance);
+
+	static float* velocityProfile = new float[numIntervals];
+
+	float* coefficients = getMotionProfilePolynom(tickEnd, 0, 0, duration);
 
 	while (counter <= numIntervals) {
 		time = counter * controlInterval;
-		// need to solve type conversion error
-		tickSpeed = (float)coefficients[1] * time + 2 * coefficients[2] * time +
-					3 * coefficients[3] * pow(time, 2);
-		*velocityProfile[counter] =
-			encoderTicksToMm * tickSpeed;  // check if pointer assignment is corre t
+		// Convert ticks/s to mm/s
+		velocityProfile[counter] =
+			encoderTicksToMm * ((float)coefficients[1] * time + 2 * coefficients[2] * time +
+								3 * coefficients[3] * pow(time, 2));
 		counter++;
 	}
+
+	return velocityProfile;
 	// TBD: iterate over velocityProfile array and set motor speeds accordingly
 }
 
 float* MotionProfile::computeProfile(
 	int tickStart, int tickEnd, int vStart, int vEnd, float duration) {
-	float* coefficients = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, 0, duration);
+	float* coefficients = getMotionProfilePolynom(tickEnd, vStart, vEnd, duration);
+	this.a0 = coefficients[0];
 
 	float tickSpeed = 0;
 	int counter = 0;
@@ -98,7 +107,7 @@ float* MotionProfile::getCurveProfile(int degrees, int duration) {
 		tickEnd *= 2;
 	}
 
-	return MotionProfile::computeProfile(0, tickEnd, 100, 100, duration);
+	return MotionProfile::computeProfile(tickEnd, 100, 100, duration);
 }
 
 float* MotionProfile::getStraightProfile(int numGrids,
@@ -107,19 +116,5 @@ float* MotionProfile::getStraightProfile(int numGrids,
 										 int finalSpeed) {
 	int tickEnd = mmsToTicks(numGrids * 16);
 
-	return MotionProfile::computeProfile(0, tickEnd, initialSpeed, finalSpeed, duration);
-}
-
-float* getMotionProfilePolynom(int distance, int vStart, int vEnd, float tEnd) {
-	static float* resp = new float[4];
-
-	vStart = convertMMsToTPS(vStart);
-	vEnd = convertMMsToTPS(vEnd);
-
-	resp[0] = 0;
-	resp[1] = vStart;
-	resp[2] = 3 / pow(tEnd, 2) * distance - vStart * 2 / tEnd - vEnd * 1 / tEnd;
-	resp[3] = -2 * distance * 1 / pow(tEnd, 3) + (vEnd + vStart) / pow(tEnd, 2);
-
-	return resp;
+	return MotionProfile::computeProfile(tickEnd, initialSpeed, finalSpeed, duration);
 }

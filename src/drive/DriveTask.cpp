@@ -53,6 +53,7 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
+
 				laneControlTask(controller, curCmd);
 				break;
 			}
