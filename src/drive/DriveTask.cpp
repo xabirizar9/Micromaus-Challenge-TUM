@@ -6,6 +6,7 @@
 
 #include "Controller.hpp"
 #include "drive/LaneTask.hpp"
+#include "drive/MotionProfile.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
@@ -39,6 +40,10 @@ void driveTask(void* arg) {
 	MsgDrive cmd;
 	MsgDrive* curCmd = NULL;
 
+	MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
+	MotionProfile straightProfile(200, 2.0);
+	MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
+
 	while (true) {
 		// update and get state
 		// controller->updateSensors();
@@ -65,6 +70,7 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
+
 				laneControlTask(controller, curCmd);
 				break;
 			}
@@ -133,10 +139,25 @@ void driveTask(void* arg) {
 				// but will increase the chance that the last update interval was more recent
 				// to avoid overshooting we stop even when we are a couple of ticks away from
 				// target
-				while (target - cur > targetDiffRange) {
+
+				float percentage = 0.0;
+				int16_t actualSpeed = curCmd->speed;
+				uint32_t progress = target - cur;
+				uint32_t totalDiff = target - cur;
+
+				while (progress > targetDiffRange) {
 					cur = controller->getEncoder(pos)->getTotalCounter();
-					vTaskDelay(pdMS_TO_TICKS(1));
+					progress = target - cur;
+					percentage = progress / totalDiff;
+					// gradually reduce speed
+					controller->drive(curCmd->speed * (1 - percentage),
+									  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
+					// decrease speed while nearing curve end
+					vTaskDelay(pdMS_TO_TICKS(5));
 				}
+
+				// applay breaks based on distance
+
 				cmdStatus.actual = cur;
 				controller->drive(0, 0);
 
@@ -158,52 +179,23 @@ void driveTask(void* arg) {
 		vTaskDelay(pdMS_TO_TICKS(navInterval));
 	}
 }
+/*
+void turn() {
+	// vTaskDelay(pdMS_TO_TICKS(5000));
+	int8_t pre = -1;
+	if (degree < 0) {
+		pre = 1;
+	}
+	uint8_t rMaus = 60;
+	float dRad = abs(degree) * rMaus;
+	float duration = dRad / speed;
 
-// void computeTrajectories(void* arg) {
-// 	RobotDriver* driver = (RobotDriver*)arg;
-// 	Controller* controller = driver->controller;
+	this->leftSpeedTickTarget = convertMMsToTPS(-pre * speed);
+	this->rightSpeedTickTarget = convertMMsToTPS(pre * speed);
 
-// 	int vMax = 500;
-// 	int64_t tickStart = controller->getEncoder(left)->getTotalCounter();
-// 	int tickEnd = mmsToTicks(500);
-// 	int vStart = controller->getSpeed();
-// 	int vEnd = 50;
-// 	TickType_t tStart = xTaskGetTickCount();
-// 	TickType_t tEnd = pdMS_TO_TICKS(1000 / (vMax * 0.9));
+	ESP_LOGI(TAG, "no time passed %f %f", leftSpeedTickTarget, rightSpeedTickTarget);
 
-// 	uint64_t time = xTaskGetTickCount() - tStart;
-
-// 	float* resp = getMotionProfilePolynom(tickStart, tickEnd, vStart, vEnd, tStart, tEnd);
-
-// 	float tickValues = resp[0] + resp[1] * time + resp[2] * pow(time, 2) + resp[3] * pow(time, 3);
-// 	float tickValuesDer = resp[1] * time + 2 * resp[2] * time + 3 * resp[3] * pow(time, 2);
-// }
-
-// float* getMotionProfilePolynom(
-// 	int64_t& tickStart, int tickEnd, int vStart, int vEnd, TickType_t tStart, TickType_t tEnd) {
-// 	static float* resp = new float[4];
-// 	int b0, b1, b2, b3;
-// 	float ticksTime, tDiff, tickDiff;
-// 	float tEnd2, tStart2, tEnd3, tStart3;
-
-// 	tDiff = tEnd - tStart;
-// 	tickDiff = tickEnd - tickStart;
-// 	ticksTime = tickDiff / tDiff;
-
-// 	b0 = tickStart;
-// 	b1 = tickDiff;
-// 	b2 = vStart - ticksTime;
-// 	b3 = vEnd + vStart - 2 * ticksTime;
-
-// 	tStart2 = pow(tStart, 2);
-// 	tStart3 = pow(tStart, 3);
-// 	tEnd2 = pow(tEnd, 2);
-// 	tEnd3 = pow(tEnd, 3);
-
-// 	resp[3] = b3 / (tEnd2 + tStart2 + 4 * tEnd * tStart);
-// 	resp[2] = (resp[3] * (2 * tStart2 - tEnd2 + 2 * tEnd * tStart) - b2) / tDiff;
-// 	resp[1] = (b1 - resp[2] * (tEnd2 - tStart2) - resp[3] * (tEnd3 - tStart3)) / tDiff;
-// 	resp[0] = b0 - resp[1] * tStart + resp[2] * tStart2 + resp[3] * tStart3;
-
-// 	return resp;
-// }
+	vTaskDelay(pdMS_TO_TICKS(duration));
+	this->setSpeed(0);
+}
+*/

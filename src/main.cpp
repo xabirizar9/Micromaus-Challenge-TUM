@@ -33,6 +33,8 @@ extern "C" void app_main() {
 	// start main robot controller interface with motors and encoders
 	mainController = new Controller();
 
+	// TODO: precompute motion profiles
+
 	explorer = new MazeSolver(mainController);
 
 	// pass controller to remote controller
