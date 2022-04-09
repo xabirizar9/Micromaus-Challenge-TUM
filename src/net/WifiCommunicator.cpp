@@ -302,7 +302,7 @@ int UdpCommunicator::write(uint8_t *buf, size_t msgLen) {
 	inet_ntoa_r(((struct sockaddr_in *)&this->sourceAddr)->sin_addr,
 				this->addrTmp,
 				sizeof(this->addrTmp) - 1);
-	ESP_LOGI(TAG, "Sending %d bytes to %s:", msgLen, this->addrTmp);
+	// ESP_LOGI(TAG, "Sending %d bytes to %s:", msgLen, this->addrTmp);
 	// ESP_LOGI(TAG, "Resolved online server:" IPSTR, IP2STR(&this->sourceAddr));
 
 	return sendto(

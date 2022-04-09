@@ -41,10 +41,7 @@ func NewManager() *Manager {
 }
 
 func (m *Manager) RunWebSocketClient(c *websocket.Conn) string {
-	client := &Client{
-		ID:   uuid.NewString(),
-		conn: c,
-	}
+	client := NewClient(c, uuid.NewString())
 
 	m.Clients[client.ID] = client
 
@@ -73,46 +70,6 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 		return err
 	}
 	return nil
-}
-
-func (m *Manager) sendDashboardMsgToClient(ID string, cmd *pb.DashboardServerMessage) error {
-	msg := &pb.ServerMessage{
-		Payload: &pb.ServerMessage_Dashboard{
-			Dashboard: cmd,
-		},
-	}
-	return m.sendCmdToClient(ID, msg)
-}
-
-func (m *Manager) sendMausMsgToClient(ID string, cmd *pb.MausOutgoingMessage) error {
-	msg := &pb.ServerMessage{
-		Payload: &pb.ServerMessage_Maus{
-			Maus: cmd,
-		},
-	}
-	return m.sendCmdToClient(ID, msg)
-}
-
-func (m *Manager) sendCmdToClient(ID string, cmd *pb.ServerMessage) error {
-	l := m.getLogger()
-	// re encode message
-	buf, err := proto.Marshal(cmd)
-	if err != nil {
-		l.Error("failed to encode proto message", zap.Error(err))
-		return err
-	}
-
-	if c, ok := m.Clients[ID]; ok {
-		c.conn.WriteMessage(websocket.BinaryMessage, buf)
-		if err != nil {
-			l.Error("failed to write to client", zap.Error(err), zap.String("client", c.ID))
-			return err
-		}
-		return nil
-	} else {
-		l.Error("client not found", zap.String("client", ID))
-		return errors.New("client not found")
-	}
 }
 
 func (m *Manager) broadCastRoutine(robotID string) {
@@ -223,23 +180,27 @@ func (m *Manager) onClientDashboardMsg(c *Client, msg *pb.DashboardClientMessage
 		}
 		c.RobotID = payload.DeviceId
 		if r, ok := m.Robots[c.RobotID]; ok {
-			msg := &pb.DashboardServerMessage{
-				Payload: &pb.DashboardServerMessage_Selected{
-					Selected: &pb.DeviceSelected{},
-				},
-			}
 			log.Info("selected robot", zap.String("client", c.ID), zap.String("robot", c.RobotID))
-			m.sendDashboardMsgToClient(c.ID, msg)
+
+			err := c.sendMausSelectedOk()
+			if err != nil {
+				return err
+			}
 
 			// send initial robot config to server
-			m.sendMausMsgToClient(c.ID, &pb.MausOutgoingMessage{
+			err = c.sendMausMsgToClient(&pb.MausOutgoingMessage{
 				Payload: &pb.MausOutgoingMessage_MausConfig{
 					MausConfig: r.Config,
 				},
 			})
+			if err != nil {
+				return err
+			}
 			return nil
+		} else {
+			log.Info("robot not found", zap.String("client", c.ID), zap.String("robot", c.RobotID))
+			c.sendMausDisconnect()
 		}
-		log.Info("robot not found", zap.String("client", c.ID), zap.String("robot", c.RobotID))
 	}
 
 	return nil

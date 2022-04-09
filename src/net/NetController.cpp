@@ -234,7 +234,7 @@ bool NetController::Manager::writeCmd(MausOutgoingMessage *msg) {
 		return false;
 	}
 
-	ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
+	// ESP_LOGI(tag, "sending message of size %d", stream.bytes_written);
 
 	xMessageBufferSend(buffer, this->encodeBuffer, stream.bytes_written, 0);
 	return true;
