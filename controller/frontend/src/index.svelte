@@ -80,6 +80,7 @@
     com.send({
       solve: {
         type: SolveCmdType.FastRun,
+        speed: 400,
       },
     });
   };
@@ -88,6 +89,7 @@
     com.send({
       solve: {
         type: SolveCmdType.Explore,
+        speed: 400,
       },
     });
   };
@@ -96,6 +98,7 @@
     com.send({
       solve: {
         type: SolveCmdType.GoHome,
+        speed: 400,
       },
     });
   };

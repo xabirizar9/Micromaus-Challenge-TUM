@@ -64,6 +64,21 @@ func (m *Manager) RegisterRobot(r *Robot) error {
 	m.Robots[r.ID] = r
 	m.startComRoutine(r.ID)
 
+	r.OnLostConnection = func() {
+		// write disconnect event in broadcast channel
+
+		msg := &pb.DashboardServerMessage{
+			Payload: &pb.DashboardServerMessage_DeviceLost{},
+		}
+
+		for _, c := range m.Clients {
+			if c.RobotID != r.ID {
+				continue
+			}
+			c.sendDashboardMsgToClient(msg)
+		}
+	}
+
 	err := r.Connect()
 	if err != nil {
 
@@ -136,6 +151,8 @@ func (m *Manager) recvFromMausRoutine(robotID string) {
 			l.Info("received config from robot")
 			// store mouse config
 			r.Config = cmd.GetMausConfig()
+			cmdChan <- cmd
+		case *pb.MausOutgoingMessage_MausCommandStatus:
 			cmdChan <- cmd
 		case *pb.MausOutgoingMessage_Nav:
 			cmdChan <- cmd

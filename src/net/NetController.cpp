@@ -212,9 +212,15 @@ void receiverTask(void *pvParameter) {
 			case MausIncomingMessage_solve_tag:
 				ESP_LOGD(tag, "got solve cmd type=%d", msg.payload.solve.type);
 				switch (msg.payload.solve.type) {
-					case SolveCmdType_Explore: manager->driver->startExploration(); break;
-					case SolveCmdType_FastRun: manager->driver->startFastRun(); break;
-					case SolveCmdType_GoHome: manager->driver->startGoHome(); break;
+					case SolveCmdType_Explore:
+						manager->driver->startExploration(msg.payload.solve.speed);
+						break;
+					case SolveCmdType_FastRun:
+						manager->driver->startFastRun(msg.payload.solve.speed);
+						break;
+					case SolveCmdType_GoHome:
+						manager->driver->startGoHome(msg.payload.solve.speed);
+						break;
 				}
 		}
 		vTaskDelay(taskInterval);

@@ -22,9 +22,9 @@ class RobotDriver {
 	void addCmd(DriveCmdType type, float value, float speed);
 	void addCmdAndWait(DriveCmdType type, float value, float speed);
 
-	virtual void startExploration(){};
-	virtual void startGoHome(){};
-	virtual void startFastRun(){};
+	virtual void startExploration(float speed){};
+	virtual void startGoHome(float speed){};
+	virtual void startFastRun(float speed){};
 	virtual Maze* getMaze() {
 		return NULL;
 	};

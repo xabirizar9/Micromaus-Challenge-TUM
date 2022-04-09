@@ -77,8 +77,8 @@ message MausConfigPacket {
 message MausCommandStatus {
 	DriveCmdType cmd = 1;
 	bool success = 2;
-	uint64 target = 3;
-	uint64 actual = 4;
+	uint32 target = 3;
+	uint32 actual = 4;
 }
 
 message MausOutgoingMessage {
@@ -132,6 +132,7 @@ enum SolveCmdType {
 
 message MsgSolve {
 	SolveCmdType type = 1;
+	float speed = 2;
 }
 
 message MsgSetPosition {

@@ -22,9 +22,9 @@ class MazeSolver : public RobotDriver {
    public:
 	MazeSolver(Controller* controller);
 
-	void startExploration() override;
-	void startGoHome() override;
-	void startFastRun() override;
+	void startExploration(float speed) override;
+	void startGoHome(float speed) override;
+	void startFastRun(float speed) override;
 	Maze* getMaze() override;
 	void start();
 	void pause();

@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
 import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "";
 
@@ -262,6 +262,7 @@ export interface MsgDrive {
 
 export interface MsgSolve {
   type: SolveCmdType;
+  speed: number;
 }
 
 export interface MsgSetPosition {
@@ -289,12 +290,12 @@ function createBaseAckPacket(): AckPacket {
 }
 
 export const AckPacket = {
-  encode(_: AckPacket, writer: Writer = Writer.create()): Writer {
+  encode(_: AckPacket, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AckPacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): AckPacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAckPacket();
     while (reader.pos < end) {
@@ -328,7 +329,10 @@ function createBasePosition(): Position {
 }
 
 export const Position = {
-  encode(message: Position, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Position,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
     }
@@ -341,8 +345,8 @@ export const Position = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Position {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Position {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePosition();
     while (reader.pos < end) {
@@ -397,8 +401,8 @@ function createBaseMsgEncoderCallibration(): MsgEncoderCallibration {
 export const MsgEncoderCallibration = {
   encode(
     message: MsgEncoderCallibration,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.kP !== 0) {
       writer.uint32(13).float(message.kP);
     }
@@ -414,8 +418,11 @@ export const MsgEncoderCallibration = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgEncoderCallibration {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgEncoderCallibration {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgEncoderCallibration();
     while (reader.pos < end) {
@@ -476,12 +483,12 @@ function createBasePongPacket(): PongPacket {
 }
 
 export const PongPacket = {
-  encode(_: PongPacket, writer: Writer = Writer.create()): Writer {
+  encode(_: PongPacket, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PongPacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): PongPacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePongPacket();
     while (reader.pos < end) {
@@ -515,7 +522,10 @@ function createBaseSensorPacket(): SensorPacket {
 }
 
 export const SensorPacket = {
-  encode(message: SensorPacket, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SensorPacket,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.left !== 0) {
       writer.uint32(13).float(message.left);
     }
@@ -528,8 +538,8 @@ export const SensorPacket = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): SensorPacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): SensorPacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSensorPacket();
     while (reader.pos < end) {
@@ -589,7 +599,10 @@ function createBasePosDistribution(): PosDistribution {
 }
 
 export const PosDistribution = {
-  encode(message: PosDistribution, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: PosDistribution,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.positionMean) {
       writer.float(v);
@@ -613,8 +626,8 @@ export const PosDistribution = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PosDistribution {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): PosDistribution {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePosDistribution();
     while (reader.pos < end) {
@@ -737,7 +750,10 @@ function createBaseNavigationPacket(): NavigationPacket {
 }
 
 export const NavigationPacket = {
-  encode(message: NavigationPacket, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: NavigationPacket,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.sensors !== undefined) {
       SensorPacket.encode(message.sensors, writer.uint32(10).fork()).ldelim();
     }
@@ -768,8 +784,8 @@ export const NavigationPacket = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NavigationPacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): NavigationPacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNavigationPacket();
     while (reader.pos < end) {
@@ -892,15 +908,18 @@ function createBaseInfoPacket(): InfoPacket {
 }
 
 export const InfoPacket = {
-  encode(message: InfoPacket, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: InfoPacket,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.cmd !== 0) {
       writer.uint32(8).int32(message.cmd);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): InfoPacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): InfoPacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInfoPacket();
     while (reader.pos < end) {
@@ -943,7 +962,10 @@ function createBasePidTuningInfo(): PidTuningInfo {
 }
 
 export const PidTuningInfo = {
-  encode(message: PidTuningInfo, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: PidTuningInfo,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.err) {
       writer.float(v);
@@ -952,8 +974,8 @@ export const PidTuningInfo = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PidTuningInfo {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): PidTuningInfo {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePidTuningInfo();
     while (reader.pos < end) {
@@ -1014,7 +1036,10 @@ function createBaseMazeStatePacket(): MazeStatePacket {
 }
 
 export const MazeStatePacket = {
-  encode(message: MazeStatePacket, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MazeStatePacket,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.state.length !== 0) {
       writer.uint32(10).bytes(message.state);
     }
@@ -1030,8 +1055,8 @@ export const MazeStatePacket = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MazeStatePacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MazeStatePacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMazeStatePacket();
     while (reader.pos < end) {
@@ -1118,7 +1143,10 @@ function createBaseMausConfigPacket(): MausConfigPacket {
 }
 
 export const MausConfigPacket = {
-  encode(message: MausConfigPacket, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MausConfigPacket,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.motorPid !== undefined) {
       MsgEncoderCallibration.encode(
         message.motorPid,
@@ -1134,8 +1162,8 @@ export const MausConfigPacket = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MausConfigPacket {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MausConfigPacket {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMausConfigPacket();
     while (reader.pos < end) {
@@ -1206,7 +1234,10 @@ function createBaseMausCommandStatus(): MausCommandStatus {
 }
 
 export const MausCommandStatus = {
-  encode(message: MausCommandStatus, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MausCommandStatus,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.cmd !== 0) {
       writer.uint32(8).int32(message.cmd);
     }
@@ -1214,16 +1245,16 @@ export const MausCommandStatus = {
       writer.uint32(16).bool(message.success);
     }
     if (message.target !== 0) {
-      writer.uint32(24).uint64(message.target);
+      writer.uint32(24).uint32(message.target);
     }
     if (message.actual !== 0) {
-      writer.uint32(32).uint64(message.actual);
+      writer.uint32(32).uint32(message.actual);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MausCommandStatus {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MausCommandStatus {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMausCommandStatus();
     while (reader.pos < end) {
@@ -1236,10 +1267,10 @@ export const MausCommandStatus = {
           message.success = reader.bool();
           break;
         case 3:
-          message.target = longToNumber(reader.uint64() as Long);
+          message.target = reader.uint32();
           break;
         case 4:
-          message.actual = longToNumber(reader.uint64() as Long);
+          message.actual = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1295,8 +1326,8 @@ function createBaseMausOutgoingMessage(): MausOutgoingMessage {
 export const MausOutgoingMessage = {
   encode(
     message: MausOutgoingMessage,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.ack !== undefined) {
       AckPacket.encode(message.ack, writer.uint32(10).fork()).ldelim();
     }
@@ -1336,8 +1367,8 @@ export const MausOutgoingMessage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MausOutgoingMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MausOutgoingMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMausOutgoingMessage();
     while (reader.pos < end) {
@@ -1478,15 +1509,18 @@ function createBaseMsgInit(): MsgInit {
 }
 
 export const MsgInit = {
-  encode(message: MsgInit, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgInit,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.version !== 0) {
       writer.uint32(8).int32(message.version);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgInit {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInit {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInit();
     while (reader.pos < end) {
@@ -1528,12 +1562,12 @@ function createBaseMsgPing(): MsgPing {
 }
 
 export const MsgPing = {
-  encode(_: MsgPing, writer: Writer = Writer.create()): Writer {
+  encode(_: MsgPing, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgPing {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPing {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPing();
     while (reader.pos < end) {
@@ -1567,7 +1601,10 @@ function createBaseMsgControl(): MsgControl {
 }
 
 export const MsgControl = {
-  encode(message: MsgControl, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgControl,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.direction !== 0) {
       writer.uint32(13).float(message.direction);
     }
@@ -1577,8 +1614,8 @@ export const MsgControl = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgControl {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgControl {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgControl();
     while (reader.pos < end) {
@@ -1627,7 +1664,10 @@ function createBaseMsgDrive(): MsgDrive {
 }
 
 export const MsgDrive = {
-  encode(message: MsgDrive, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgDrive,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
     }
@@ -1640,8 +1680,8 @@ export const MsgDrive = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgDrive {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDrive {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDrive();
     while (reader.pos < end) {
@@ -1690,19 +1730,25 @@ export const MsgDrive = {
 };
 
 function createBaseMsgSolve(): MsgSolve {
-  return { type: 0 };
+  return { type: 0, speed: 0 };
 }
 
 export const MsgSolve = {
-  encode(message: MsgSolve, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgSolve,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
+    }
+    if (message.speed !== 0) {
+      writer.uint32(21).float(message.speed);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSolve {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSolve {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSolve();
     while (reader.pos < end) {
@@ -1710,6 +1756,9 @@ export const MsgSolve = {
       switch (tag >>> 3) {
         case 1:
           message.type = reader.int32() as any;
+          break;
+        case 2:
+          message.speed = reader.float();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1722,18 +1771,21 @@ export const MsgSolve = {
   fromJSON(object: any): MsgSolve {
     return {
       type: isSet(object.type) ? solveCmdTypeFromJSON(object.type) : 0,
+      speed: isSet(object.speed) ? Number(object.speed) : 0,
     };
   },
 
   toJSON(message: MsgSolve): unknown {
     const obj: any = {};
     message.type !== undefined && (obj.type = solveCmdTypeToJSON(message.type));
+    message.speed !== undefined && (obj.speed = message.speed);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgSolve>, I>>(object: I): MsgSolve {
     const message = createBaseMsgSolve();
     message.type = object.type ?? 0;
+    message.speed = object.speed ?? 0;
     return message;
   },
 };
@@ -1743,7 +1795,10 @@ function createBaseMsgSetPosition(): MsgSetPosition {
 }
 
 export const MsgSetPosition = {
-  encode(message: MsgSetPosition, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgSetPosition,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
     }
@@ -1756,8 +1811,8 @@ export const MsgSetPosition = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetPosition {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPosition {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetPosition();
     while (reader.pos < end) {
@@ -1812,12 +1867,12 @@ function createBaseMsgStop(): MsgStop {
 }
 
 export const MsgStop = {
-  encode(_: MsgStop, writer: Writer = Writer.create()): Writer {
+  encode(_: MsgStop, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgStop {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStop {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStop();
     while (reader.pos < end) {
@@ -1863,8 +1918,8 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
 export const MausIncomingMessage = {
   encode(
     message: MausIncomingMessage,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.init !== undefined) {
       MsgInit.encode(message.init, writer.uint32(18).fork()).ldelim();
     }
@@ -1904,8 +1959,8 @@ export const MausIncomingMessage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MausIncomingMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MausIncomingMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMausIncomingMessage();
     while (reader.pos < end) {
@@ -2078,9 +2133,9 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (const byte of arr) {
+  arr.forEach((byte) => {
     bin.push(String.fromCharCode(byte));
-  }
+  });
   return btoa(bin.join(""));
 }
 
@@ -2111,18 +2166,11 @@ export type Exact<P, I extends P> = P extends Builtin
         never
       >;
 
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
 // If you get a compile-error about 'Constructor<Long> and ... have no overlap',
 // add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
 }
 
 function isSet(value: any): boolean {

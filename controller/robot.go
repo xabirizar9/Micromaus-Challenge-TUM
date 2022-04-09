@@ -30,6 +30,9 @@ type Robot struct {
 	Status        RobotConnStatus
 	Ctx           context.Context
 
+	OnLostConnection func()
+	OnConnected      func()
+
 	// channel on which to listen for messages
 	pongMsgChannel chan bool
 
@@ -240,8 +243,13 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 
 		if err != nil {
 			log.Error("failed to send ping, disconnecting", zap.Error(err))
+
 			r.Status = Disconnected
-			log.Info("reconnecting")
+
+			if r.OnLostConnection != nil {
+				r.OnLostConnection()
+			}
+
 			err = r.Connect()
 			if err != nil {
 				log.Error("failed to reconnect", zap.Error(err))
@@ -280,6 +288,10 @@ func (r *Robot) Connect() error {
 		}
 		r.Status = Connected
 		r.pongMsgChannel = make(chan bool)
+
+		if r.OnConnected != nil {
+			r.OnConnected()
+		}
 
 		// start message handling routine
 		go func() {

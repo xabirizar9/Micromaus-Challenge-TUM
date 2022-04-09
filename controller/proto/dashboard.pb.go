@@ -137,6 +137,8 @@ type DeviceSelected struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Maus *Maus `protobuf:"bytes,1,opt,name=maus,proto3" json:"maus,omitempty"`
 }
 
 func (x *DeviceSelected) Reset() {
@@ -169,6 +171,13 @@ func (x *DeviceSelected) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeviceSelected.ProtoReflect.Descriptor instead.
 func (*DeviceSelected) Descriptor() ([]byte, []int) {
 	return file_dashboard_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DeviceSelected) GetMaus() *Maus {
+	if x != nil {
+		return x.Maus
+	}
+	return nil
 }
 
 type DeviceLostMessage struct {
@@ -209,16 +218,81 @@ func (*DeviceLostMessage) Descriptor() ([]byte, []int) {
 	return file_dashboard_proto_rawDescGZIP(), []int{3}
 }
 
+type Maus struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id  string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Mac string `protobuf:"bytes,2,opt,name=mac,proto3" json:"mac,omitempty"`
+	Ip  string `protobuf:"bytes,3,opt,name=ip,proto3" json:"ip,omitempty"`
+}
+
+func (x *Maus) Reset() {
+	*x = Maus{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_dashboard_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Maus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Maus) ProtoMessage() {}
+
+func (x *Maus) ProtoReflect() protoreflect.Message {
+	mi := &file_dashboard_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Maus.ProtoReflect.Descriptor instead.
+func (*Maus) Descriptor() ([]byte, []int) {
+	return file_dashboard_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Maus) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Maus) GetMac() string {
+	if x != nil {
+		return x.Mac
+	}
+	return ""
+}
+
+func (x *Maus) GetIp() string {
+	if x != nil {
+		return x.Ip
+	}
+	return ""
+}
+
 type NewDeviceMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Maus []*Maus `protobuf:"bytes,1,rep,name=maus,proto3" json:"maus,omitempty"`
 }
 
 func (x *NewDeviceMessage) Reset() {
 	*x = NewDeviceMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_dashboard_proto_msgTypes[4]
+		mi := &file_dashboard_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -231,7 +305,7 @@ func (x *NewDeviceMessage) String() string {
 func (*NewDeviceMessage) ProtoMessage() {}
 
 func (x *NewDeviceMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_dashboard_proto_msgTypes[4]
+	mi := &file_dashboard_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -244,7 +318,14 @@ func (x *NewDeviceMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NewDeviceMessage.ProtoReflect.Descriptor instead.
 func (*NewDeviceMessage) Descriptor() ([]byte, []int) {
-	return file_dashboard_proto_rawDescGZIP(), []int{4}
+	return file_dashboard_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *NewDeviceMessage) GetMaus() []*Maus {
+	if x != nil {
+		return x.Maus
+	}
+	return nil
 }
 
 type DashboardServerMessage struct {
@@ -262,7 +343,7 @@ type DashboardServerMessage struct {
 func (x *DashboardServerMessage) Reset() {
 	*x = DashboardServerMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_dashboard_proto_msgTypes[5]
+		mi := &file_dashboard_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -275,7 +356,7 @@ func (x *DashboardServerMessage) String() string {
 func (*DashboardServerMessage) ProtoMessage() {}
 
 func (x *DashboardServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_dashboard_proto_msgTypes[5]
+	mi := &file_dashboard_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -288,7 +369,7 @@ func (x *DashboardServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DashboardServerMessage.ProtoReflect.Descriptor instead.
 func (*DashboardServerMessage) Descriptor() ([]byte, []int) {
-	return file_dashboard_proto_rawDescGZIP(), []int{5}
+	return file_dashboard_proto_rawDescGZIP(), []int{6}
 }
 
 func (m *DashboardServerMessage) GetPayload() isDashboardServerMessage_Payload {
@@ -355,7 +436,7 @@ type ClientMessage struct {
 func (x *ClientMessage) Reset() {
 	*x = ClientMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_dashboard_proto_msgTypes[6]
+		mi := &file_dashboard_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -368,7 +449,7 @@ func (x *ClientMessage) String() string {
 func (*ClientMessage) ProtoMessage() {}
 
 func (x *ClientMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_dashboard_proto_msgTypes[6]
+	mi := &file_dashboard_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -381,7 +462,7 @@ func (x *ClientMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientMessage.ProtoReflect.Descriptor instead.
 func (*ClientMessage) Descriptor() ([]byte, []int) {
-	return file_dashboard_proto_rawDescGZIP(), []int{6}
+	return file_dashboard_proto_rawDescGZIP(), []int{7}
 }
 
 func (m *ClientMessage) GetPayload() isClientMessage_Payload {
@@ -435,7 +516,7 @@ type ServerMessage struct {
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_dashboard_proto_msgTypes[7]
+		mi := &file_dashboard_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -448,7 +529,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_dashboard_proto_msgTypes[7]
+	mi := &file_dashboard_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -461,7 +542,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_dashboard_proto_rawDescGZIP(), []int{7}
+	return file_dashboard_proto_rawDescGZIP(), []int{8}
 }
 
 func (m *ServerMessage) GetPayload() isServerMessage_Payload {
@@ -516,10 +597,17 @@ var file_dashboard_proto_rawDesc = []byte{
 	0x63, 0x74, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4d, 0x65,
 	0x73, 0x73, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0c, 0x73, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x44,
 	0x65, 0x76, 0x69, 0x63, 0x65, 0x42, 0x09, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64,
-	0x22, 0x10, 0x0a, 0x0e, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74,
-	0x65, 0x64, 0x22, 0x13, 0x0a, 0x11, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x4c, 0x6f, 0x73, 0x74,
-	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x12, 0x0a, 0x10, 0x4e, 0x65, 0x77, 0x44, 0x65,
-	0x76, 0x69, 0x63, 0x65, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0xbb, 0x01, 0x0a, 0x16,
+	0x22, 0x2b, 0x0a, 0x0e, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74,
+	0x65, 0x64, 0x12, 0x19, 0x0a, 0x04, 0x6d, 0x61, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x05, 0x2e, 0x4d, 0x61, 0x75, 0x73, 0x52, 0x04, 0x6d, 0x61, 0x75, 0x73, 0x22, 0x13, 0x0a,
+	0x11, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x4c, 0x6f, 0x73, 0x74, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x22, 0x38, 0x0a, 0x04, 0x4d, 0x61, 0x75, 0x73, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x61,
+	0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6d, 0x61, 0x63, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x70, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x70, 0x22, 0x2d, 0x0a, 0x10,
+	0x4e, 0x65, 0x77, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x12, 0x19, 0x0a, 0x04, 0x6d, 0x61, 0x75, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x05,
+	0x2e, 0x4d, 0x61, 0x75, 0x73, 0x52, 0x04, 0x6d, 0x61, 0x75, 0x73, 0x22, 0xbb, 0x01, 0x0a, 0x16,
 	0x44, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4d,
 	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x2d, 0x0a, 0x08, 0x73, 0x65, 0x6c, 0x65, 0x63, 0x74,
 	0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x44, 0x65, 0x76, 0x69, 0x63,
@@ -563,33 +651,36 @@ func file_dashboard_proto_rawDescGZIP() []byte {
 	return file_dashboard_proto_rawDescData
 }
 
-var file_dashboard_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_dashboard_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_dashboard_proto_goTypes = []interface{}{
 	(*SelectDeviceClientMessage)(nil), // 0: SelectDeviceClientMessage
 	(*DashboardClientMessage)(nil),    // 1: DashboardClientMessage
 	(*DeviceSelected)(nil),            // 2: DeviceSelected
 	(*DeviceLostMessage)(nil),         // 3: DeviceLostMessage
-	(*NewDeviceMessage)(nil),          // 4: NewDeviceMessage
-	(*DashboardServerMessage)(nil),    // 5: DashboardServerMessage
-	(*ClientMessage)(nil),             // 6: ClientMessage
-	(*ServerMessage)(nil),             // 7: ServerMessage
-	(*MausIncomingMessage)(nil),       // 8: MausIncomingMessage
-	(*MausOutgoingMessage)(nil),       // 9: MausOutgoingMessage
+	(*Maus)(nil),                      // 4: Maus
+	(*NewDeviceMessage)(nil),          // 5: NewDeviceMessage
+	(*DashboardServerMessage)(nil),    // 6: DashboardServerMessage
+	(*ClientMessage)(nil),             // 7: ClientMessage
+	(*ServerMessage)(nil),             // 8: ServerMessage
+	(*MausIncomingMessage)(nil),       // 9: MausIncomingMessage
+	(*MausOutgoingMessage)(nil),       // 10: MausOutgoingMessage
 }
 var file_dashboard_proto_depIdxs = []int32{
-	0, // 0: DashboardClientMessage.selectDevice:type_name -> SelectDeviceClientMessage
-	2, // 1: DashboardServerMessage.selected:type_name -> DeviceSelected
-	3, // 2: DashboardServerMessage.deviceLost:type_name -> DeviceLostMessage
-	4, // 3: DashboardServerMessage.newDevice:type_name -> NewDeviceMessage
-	1, // 4: ClientMessage.dashboard:type_name -> DashboardClientMessage
-	8, // 5: ClientMessage.maus:type_name -> MausIncomingMessage
-	9, // 6: ServerMessage.maus:type_name -> MausOutgoingMessage
-	5, // 7: ServerMessage.dashboard:type_name -> DashboardServerMessage
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	0,  // 0: DashboardClientMessage.selectDevice:type_name -> SelectDeviceClientMessage
+	4,  // 1: DeviceSelected.maus:type_name -> Maus
+	4,  // 2: NewDeviceMessage.maus:type_name -> Maus
+	2,  // 3: DashboardServerMessage.selected:type_name -> DeviceSelected
+	3,  // 4: DashboardServerMessage.deviceLost:type_name -> DeviceLostMessage
+	5,  // 5: DashboardServerMessage.newDevice:type_name -> NewDeviceMessage
+	1,  // 6: ClientMessage.dashboard:type_name -> DashboardClientMessage
+	9,  // 7: ClientMessage.maus:type_name -> MausIncomingMessage
+	10, // 8: ServerMessage.maus:type_name -> MausOutgoingMessage
+	6,  // 9: ServerMessage.dashboard:type_name -> DashboardServerMessage
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_dashboard_proto_init() }
@@ -648,7 +739,7 @@ func file_dashboard_proto_init() {
 			}
 		}
 		file_dashboard_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NewDeviceMessage); i {
+			switch v := v.(*Maus); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -660,7 +751,7 @@ func file_dashboard_proto_init() {
 			}
 		}
 		file_dashboard_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DashboardServerMessage); i {
+			switch v := v.(*NewDeviceMessage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -672,7 +763,7 @@ func file_dashboard_proto_init() {
 			}
 		}
 		file_dashboard_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClientMessage); i {
+			switch v := v.(*DashboardServerMessage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -684,6 +775,18 @@ func file_dashboard_proto_init() {
 			}
 		}
 		file_dashboard_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ClientMessage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_dashboard_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ServerMessage); i {
 			case 0:
 				return &v.state
@@ -699,16 +802,16 @@ func file_dashboard_proto_init() {
 	file_dashboard_proto_msgTypes[1].OneofWrappers = []interface{}{
 		(*DashboardClientMessage_SelectDevice)(nil),
 	}
-	file_dashboard_proto_msgTypes[5].OneofWrappers = []interface{}{
+	file_dashboard_proto_msgTypes[6].OneofWrappers = []interface{}{
 		(*DashboardServerMessage_Selected)(nil),
 		(*DashboardServerMessage_DeviceLost)(nil),
 		(*DashboardServerMessage_NewDevice)(nil),
 	}
-	file_dashboard_proto_msgTypes[6].OneofWrappers = []interface{}{
+	file_dashboard_proto_msgTypes[7].OneofWrappers = []interface{}{
 		(*ClientMessage_Dashboard)(nil),
 		(*ClientMessage_Maus)(nil),
 	}
-	file_dashboard_proto_msgTypes[7].OneofWrappers = []interface{}{
+	file_dashboard_proto_msgTypes[8].OneofWrappers = []interface{}{
 		(*ServerMessage_Maus)(nil),
 		(*ServerMessage_Dashboard)(nil),
 	}
@@ -718,7 +821,7 @@ func file_dashboard_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_dashboard_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

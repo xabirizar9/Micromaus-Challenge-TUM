@@ -64,8 +64,8 @@ typedef struct _InfoPacket {
 typedef struct _MausCommandStatus { 
     DriveCmdType cmd; 
     bool success; 
-    uint64_t target; 
-    uint64_t actual; 
+    uint32_t target; 
+    uint32_t actual; 
 } MausCommandStatus;
 
 typedef struct _MsgControl { 
@@ -99,6 +99,7 @@ typedef struct _MsgSetPosition {
 
 typedef struct _MsgSolve { 
     SolveCmdType type; 
+    float speed; 
 } MsgSolve;
 
 typedef struct _PosDistribution { 
@@ -216,7 +217,7 @@ extern "C" {
 #define MsgPing_init_default                     {0}
 #define MsgControl_init_default                  {0, 0}
 #define MsgDrive_init_default                    {_DriveCmdType_MIN, 0, 0}
-#define MsgSolve_init_default                    {_SolveCmdType_MIN}
+#define MsgSolve_init_default                    {_SolveCmdType_MIN, 0}
 #define MsgSetPosition_init_default              {0, 0, 0}
 #define MsgStop_init_default                     {0}
 #define MausIncomingMessage_init_default         {0, {MsgInit_init_default}}
@@ -237,7 +238,7 @@ extern "C" {
 #define MsgPing_init_zero                        {0}
 #define MsgControl_init_zero                     {0, 0}
 #define MsgDrive_init_zero                       {_DriveCmdType_MIN, 0, 0}
-#define MsgSolve_init_zero                       {_SolveCmdType_MIN}
+#define MsgSolve_init_zero                       {_SolveCmdType_MIN, 0}
 #define MsgSetPosition_init_zero                 {0, 0, 0}
 #define MsgStop_init_zero                        {0}
 #define MausIncomingMessage_init_zero            {0, {MsgInit_init_zero}}
@@ -263,6 +264,7 @@ extern "C" {
 #define MsgSetPosition_y_tag                     2
 #define MsgSetPosition_heading_tag               3
 #define MsgSolve_type_tag                        1
+#define MsgSolve_speed_tag                       2
 #define PosDistribution_positionMean_tag         1
 #define PosDistribution_velocityMean_tag         2
 #define PosDistribution_positionStd_tag          3
@@ -393,8 +395,8 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  lanePid,           2)
 #define MausCommandStatus_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UENUM,    cmd,               1) \
 X(a, STATIC,   SINGULAR, BOOL,     success,           2) \
-X(a, STATIC,   SINGULAR, UINT64,   target,            3) \
-X(a, STATIC,   SINGULAR, UINT64,   actual,            4)
+X(a, STATIC,   SINGULAR, UINT32,   target,            3) \
+X(a, STATIC,   SINGULAR, UINT32,   actual,            4)
 #define MausCommandStatus_CALLBACK NULL
 #define MausCommandStatus_DEFAULT NULL
 
@@ -442,7 +444,8 @@ X(a, STATIC,   SINGULAR, FLOAT,    speed,             3)
 #define MsgDrive_DEFAULT NULL
 
 #define MsgSolve_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, UENUM,    type,              1)
+X(a, STATIC,   SINGULAR, UENUM,    type,              1) \
+X(a, STATIC,   SINGULAR, FLOAT,    speed,             2)
 #define MsgSolve_CALLBACK NULL
 #define MsgSolve_DEFAULT NULL
 
@@ -531,7 +534,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 /* MausOutgoingMessage_size depends on runtime parameters */
 #define AckPacket_size                           0
 #define InfoPacket_size                          2
-#define MausCommandStatus_size                   26
+#define MausCommandStatus_size                   16
 #define MausConfigPacket_size                    38
 #define MausIncomingMessage_size                 19
 #define MsgControl_size                          16
@@ -540,7 +543,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MsgInit_size                             11
 #define MsgPing_size                             0
 #define MsgSetPosition_size                      15
-#define MsgSolve_size                            2
+#define MsgSolve_size                            7
 #define MsgStop_size                             0
 #define NavigationPacket_size                    82
 #define PongPacket_size                          0

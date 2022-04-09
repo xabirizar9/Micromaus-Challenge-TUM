@@ -60,7 +60,6 @@ void motorPidTask(void *pvParameter) {
 		if (target == 0.0) {
 			// stop motor if target changed
 			m->setPWM(0);
-			m->brakeMotor(1);
 			intError = 0;
 			derError = 0;
 			curEncoderReading = enc->get();

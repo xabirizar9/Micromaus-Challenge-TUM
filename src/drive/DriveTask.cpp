@@ -20,7 +20,9 @@ float ticksPerRotation(float radius) {
 }
 
 void driveTask(void* arg) {
-	static MausCommandStatus cmdStatus = MausCommandStatus_init_zero;
+	ESP_LOGI(tag, "1");
+	MausCommandStatus cmdStatus = MausCommandStatus_init_zero;
+	ESP_LOGI(tag, "2");
 
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t navInterval = 100;
@@ -32,8 +34,10 @@ void driveTask(void* arg) {
 	float distance = 0;
 	float ticksPerOnSpotRotation = mmsToTicks(M_PI * wheelDistance / 4);
 
+	ESP_LOGI(tag, "3");
+
 	MsgDrive cmd;
-	MsgDrive* curCmd;
+	MsgDrive* curCmd = NULL;
 
 	while (true) {
 		// update and get state
@@ -78,16 +82,21 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_TurnRight: {
 				int64_t curLeft = controller->getEncoder(MotorPosition::left)->getTotalCounter();
 				int64_t curRight = controller->getEncoder(MotorPosition::right)->getTotalCounter();
+
 				float targetRight = ticksPerRotation(InnercurveRadius);
 				float targetLeft = ticksPerRotation(OutercurveRadius);
-				controller->drive(cmd.speed, 90);
 				float targetDiffRange = 20;
+
+				controller->drive(cmd.speed, 90);
+				cmdStatus.target = targetLeft;
+
 				while (targetLeft - curLeft > targetDiffRange) {
 					curLeft = controller->getEncoder(MotorPosition::left)->getTotalCounter();
 					vTaskDelay(pdMS_TO_TICKS(1));
 				}
-				controller->drive(0, 0);
+				cmdStatus.actual = curLeft;
 
+				controller->drive(0, 0);
 			}
 			// controller.drive(speed, 90);
 			//  ToDo: time!!!
@@ -98,8 +107,8 @@ void driveTask(void* arg) {
 										? MotorPosition::right
 										: MotorPosition::left;
 				int64_t cur = controller->getEncoder(pos)->getTotalCounter();
-
 				int64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value);
+
 				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int vEnd,
 				// TickType_t tStart, TickType_t tEnd))
 				//  start driving
@@ -128,24 +137,24 @@ void driveTask(void* arg) {
 					cur = controller->getEncoder(pos)->getTotalCounter();
 					vTaskDelay(pdMS_TO_TICKS(1));
 				}
-
 				cmdStatus.actual = cur;
-
 				controller->drive(0, 0);
+
 				break;
 			}
 			default: break;
 		}
 
-				// stream command results to server
-		// net.writeCmdState(cmdStatus);
+		if (curCmd != NULL) {
+			// stream command results to server
+			net.writeCmdState(cmdStatus);
 
-		// reset current command
-		curCmd = NULL;
-
-		// notify driver about event completion
-		ESP_LOGI(tag, "cmd completed");
-		xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
+			// reset current command
+			curCmd = NULL;
+			ESP_LOGI(tag, "cmd completed");
+			// notify driver about event completion
+			xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_COMPLETED_BIT);
+		}
 		vTaskDelay(pdMS_TO_TICKS(navInterval));
 	}
 }

@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
 import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import { MausIncomingMessage, MausOutgoingMessage } from "./message";
 
 export const protobufPackage = "";
@@ -52,8 +52,8 @@ function createBaseSelectDeviceClientMessage(): SelectDeviceClientMessage {
 export const SelectDeviceClientMessage = {
   encode(
     message: SelectDeviceClientMessage,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.deviceId !== "") {
       writer.uint32(10).string(message.deviceId);
     }
@@ -61,10 +61,10 @@ export const SelectDeviceClientMessage = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): SelectDeviceClientMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSelectDeviceClientMessage();
     while (reader.pos < end) {
@@ -109,8 +109,8 @@ function createBaseDashboardClientMessage(): DashboardClientMessage {
 export const DashboardClientMessage = {
   encode(
     message: DashboardClientMessage,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.selectDevice !== undefined) {
       SelectDeviceClientMessage.encode(
         message.selectDevice,
@@ -120,8 +120,11 @@ export const DashboardClientMessage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DashboardClientMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): DashboardClientMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDashboardClientMessage();
     while (reader.pos < end) {
@@ -175,15 +178,18 @@ function createBaseDeviceSelected(): DeviceSelected {
 }
 
 export const DeviceSelected = {
-  encode(message: DeviceSelected, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeviceSelected,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.maus !== undefined) {
       Maus.encode(message.maus, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DeviceSelected {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeviceSelected {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeviceSelected();
     while (reader.pos < end) {
@@ -230,12 +236,15 @@ function createBaseDeviceLostMessage(): DeviceLostMessage {
 }
 
 export const DeviceLostMessage = {
-  encode(_: DeviceLostMessage, writer: Writer = Writer.create()): Writer {
+  encode(
+    _: DeviceLostMessage,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DeviceLostMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeviceLostMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeviceLostMessage();
     while (reader.pos < end) {
@@ -271,7 +280,7 @@ function createBaseMaus(): Maus {
 }
 
 export const Maus = {
-  encode(message: Maus, writer: Writer = Writer.create()): Writer {
+  encode(message: Maus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -284,8 +293,8 @@ export const Maus = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Maus {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Maus {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMaus();
     while (reader.pos < end) {
@@ -338,15 +347,18 @@ function createBaseNewDeviceMessage(): NewDeviceMessage {
 }
 
 export const NewDeviceMessage = {
-  encode(message: NewDeviceMessage, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: NewDeviceMessage,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.maus) {
       Maus.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NewDeviceMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): NewDeviceMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNewDeviceMessage();
     while (reader.pos < end) {
@@ -397,8 +409,8 @@ function createBaseDashboardServerMessage(): DashboardServerMessage {
 export const DashboardServerMessage = {
   encode(
     message: DashboardServerMessage,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.selected !== undefined) {
       DeviceSelected.encode(
         message.selected,
@@ -420,8 +432,11 @@ export const DashboardServerMessage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DashboardServerMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): DashboardServerMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDashboardServerMessage();
     while (reader.pos < end) {
@@ -503,7 +518,10 @@ function createBaseClientMessage(): ClientMessage {
 }
 
 export const ClientMessage = {
-  encode(message: ClientMessage, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ClientMessage,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.dashboard !== undefined) {
       DashboardClientMessage.encode(
         message.dashboard,
@@ -519,8 +537,8 @@ export const ClientMessage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ClientMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): ClientMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClientMessage();
     while (reader.pos < end) {
@@ -588,7 +606,10 @@ function createBaseServerMessage(): ServerMessage {
 }
 
 export const ServerMessage = {
-  encode(message: ServerMessage, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ServerMessage,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.maus !== undefined) {
       MausOutgoingMessage.encode(
         message.maus,
@@ -604,8 +625,8 @@ export const ServerMessage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ServerMessage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): ServerMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServerMessage();
     while (reader.pos < end) {
@@ -697,9 +718,9 @@ export type Exact<P, I extends P> = P extends Builtin
 
 // If you get a compile-error about 'Constructor<Long> and ... have no overlap',
 // add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
 }
 
 function isSet(value: any): boolean {

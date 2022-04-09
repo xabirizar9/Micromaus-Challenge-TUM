@@ -162,9 +162,8 @@ void MazeSolver::driveToNextCell(float speed) {
 	}
 }
 
-void MazeSolver::startFastRun() {
-	MazeStatePacket packet;
-	uint16_t speed = 250;
+void MazeSolver::startFastRun(float speed) {
+	uint16_t actualSpeed = (uint16_t)speed;
 	// reset maze
 	this->maze.resetCosts();
 
@@ -182,15 +181,12 @@ void MazeSolver::startFastRun() {
 		// rerun flood fill
 		this->maze.fillFrom(0, 0);
 
-		driveToNextCell(speed);
+		driveToNextCell(actualSpeed);
 	}
-	// TODO: implement
-	// TODO: implement
 }
 
-void MazeSolver::startGoHome() {
-	MazeStatePacket packet;
-	uint16_t speed = 250;
+void MazeSolver::startGoHome(float speed) {
+	uint16_t actualSpeed = (uint16_t)speed;
 	// reset maze
 	this->maze.resetCosts();
 
@@ -208,19 +204,17 @@ void MazeSolver::startGoHome() {
 		// rerun flood fill
 		this->maze.fillFrom(0, 0);
 
-		driveToNextCell(speed);
+		driveToNextCell(actualSpeed);
 	}
-	// TODO: implement
 }
 
-void MazeSolver::startExploration() {
+void MazeSolver::startExploration(float speed) {
 	// reset maze
 	this->maze.resetCosts();
 	this->maze.resetWalls();
 
 	CardinalDirection newHeading = CardinalDirection::NORTH;
-	uint16_t speed = 200;
-	// TODO: split into task
+	uint16_t actualSpeed = (uint16_t)speed;
 
 	while (true) {
 		// broadcast current solver state
@@ -236,7 +230,7 @@ void MazeSolver::startExploration() {
 		// rerun flood fill
 		this->maze.update();
 
-		driveToNextCell(speed);
+		driveToNextCell(actualSpeed);
 		// give us some time to print
 
 		// this->maze.printMaze(x, y);

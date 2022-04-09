@@ -18,7 +18,7 @@ RobotDriver::RobotDriver() {
 	// - drive 20mm
 	// - rotate
 	// - ...
-	xTaskCreate(driveTask, "driveTask", 4096, this, 1, &this->driveTaskHandle);
+	xTaskCreate(driveTask, "driveTask", 8192, this, 1, &this->driveTaskHandle);
 }
 
 RobotDriver::~RobotDriver() {
