@@ -180,10 +180,6 @@ void receiverTask(void *pvParameter) {
 				ESP_LOGI(tag, "ping<->pong");
 				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
 					PongPacket_init_zero);
-				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
-					PongPacket_init_zero);
-				manager->writePacket<PongPacket, MausOutgoingMessage_pong_tag>(
-					PongPacket_init_zero);
 				break;
 
 			case MausIncomingMessage_control_tag:

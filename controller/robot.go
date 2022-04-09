@@ -28,6 +28,7 @@ type Robot struct {
 	ID            string
 	InterfaceAddr string
 	Status        RobotConnStatus
+	Ctx           context.Context
 
 	// channel on which to listen for messages
 	pongMsgChannel chan bool
@@ -55,7 +56,6 @@ func (r *Robot) connect(ctx context.Context, address string) (err error) {
 		return
 	}
 	r.com = conn
-
 	return
 }
 
@@ -64,22 +64,16 @@ var (
 )
 
 func NewRobot(l *zap.Logger, opt RobotConnectionOptions) (r *Robot, err error) {
-	/*c := &serial.Config{Name: opt.Dev, Baud: opt.Baud}
-	s, err := serial.OpenPort(c)
-	if err != nil {
-		l.Error("failed to open port", zap.Error(err))
-		return
-	}*/
-
-	l.Debug("connecting to robot")
+	l.Debug("NewRobot()")
 	r = &Robot{
 		ID:            opt.Dev,
 		InterfaceAddr: opt.Addr,
 		//port:   s,
 		Status:      Disconnected,
-		IncomingMsg: make(chan *pb.MausOutgoingMessage),
+		IncomingMsg: make(chan *pb.MausOutgoingMessage, 10),
 		// channel for incoming pong messages
-		pongMsgChannel: make(chan bool),
+		pongMsgChannel: make(chan bool, 10),
+		Ctx:            context.Background(),
 	}
 
 	err = r.connect(context.TODO(), opt.Addr)
@@ -164,7 +158,7 @@ func (r *Robot) sendInitWithRetries(ctx context.Context) error {
 		}
 		log.Debug("waiting for init ack")
 		ackCmd, _, err := r.ReadCmd()
-		// log.Debug("received response", zap.String("cmd", ackCmd.String()))
+		log.Debug("received response", zap.String("cmd", ackCmd.String()))
 		if err != nil {
 			respChannel <- errors.New("invalid robot response to init packet")
 			return
@@ -236,7 +230,6 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 				errChan <- err
 				return
 			}
-
 			log.Info("ping->")
 			// wait for pong
 			<-r.pongMsgChannel
@@ -249,8 +242,13 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 			log.Error("failed to send ping, disconnecting", zap.Error(err))
 			r.Status = Disconnected
 			log.Info("reconnecting")
-			close(r.pongMsgChannel)
-			r.pongMsgChannel = nil
+			err = r.Connect()
+			if err != nil {
+				log.Error("failed to reconnect", zap.Error(err))
+				return
+			}
+			// close(r.pongMsgChannel)
+			// r.pongMsgChannel = nil
 			return
 		}
 		time.Sleep(interval)
@@ -258,9 +256,12 @@ func (r *Robot) startPingPong(interval time.Duration, timeout time.Duration, max
 }
 
 func (r *Robot) Connect() error {
+	log := log.With(zap.String("ID", r.ID))
+	log.Debug("Robot.Connect()")
 	if r.Status == Connected {
 		return errors.New("already connected")
 	}
+
 	for {
 		ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
 		defer cancel()
@@ -277,22 +278,24 @@ func (r *Robot) Connect() error {
 			return err
 
 		}
-		log.Debug("init completed")
 		r.Status = Connected
+		r.pongMsgChannel = make(chan bool)
 
 		// start message handling routine
 		go func() {
 			for {
 				if r.Status == Disconnected {
+					log.Debug("disconnected, stopping message handling routine")
 					return
 				}
+				// log.Debug("waiting for message")
 				cmd, buf, err := r.ReadCmd()
 				if err != nil {
 					log.Error("failed to read command", zap.Error(err), zap.Binary("buf", buf), zap.Int("len", len(buf)))
 					return
 				}
 
-				log.Info("got command", zap.String("cmd", cmd.String()), zap.Int("len", len(buf)))
+				// log.Info("got command", zap.String("cmd", cmd.String()), zap.Int("len", len(buf)))
 
 				// internally handle ack messages
 				if pong := cmd.GetPong(); pong != nil {
@@ -304,9 +307,8 @@ func (r *Robot) Connect() error {
 			}
 		}()
 
-		r.pongMsgChannel = make(chan bool)
 		// start ping pong routine
-		// go r.startPingPong(10*time.Second, 5*time.Second, 3)
+		go r.startPingPong(3*time.Second, 5*time.Second, 2)
 
 		return nil
 	}

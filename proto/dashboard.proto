@@ -13,9 +13,20 @@ message DashboardClientMessage {
 	}
 }
 
-message DeviceSelected {}
+message DeviceSelected {
+	Maus maus = 1;
+}
 message DeviceLostMessage {}
-message NewDeviceMessage {}
+
+message Maus {
+	string id = 1;
+	string mac = 2;
+	string ip = 3;
+}
+
+message NewDeviceMessage {
+	repeated Maus maus = 1;
+}
 
 message DashboardServerMessage {
 	oneof payload {

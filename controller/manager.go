@@ -33,7 +33,7 @@ func NewManager() *Manager {
 	return &Manager{
 		Robots:            make(map[string]*Robot),
 		Clients:           make(map[string]*Client),
-		broadcastChannels: make(map[string]chan *pb.MausOutgoingMessage),
+		broadcastChannels: make(map[string]chan *pb.MausOutgoingMessage, 1),
 		robotComStopChan:  make(map[string]chan int),
 		ctx:               context.WithValue(context.TODO(), "log", log.With(zap.String("service", "manager"))),
 		routineRunning:    false,
@@ -61,6 +61,8 @@ func (m *Manager) RunWebSocketClient(c *websocket.Conn) string {
 
 func (m *Manager) RegisterRobot(r *Robot) error {
 
+	// create broadcast channel
+	m.broadcastChannels[r.ID] = make(chan *pb.MausOutgoingMessage, 1)
 	// store robot on interface address
 	m.Robots[r.ID] = r
 	m.startComRoutine(r.ID)
@@ -114,7 +116,7 @@ func (m *Manager) sendCmdToClient(ID string, cmd *pb.ServerMessage) error {
 }
 
 func (m *Manager) broadCastRoutine(robotID string) {
-	l := m.getLogger().With(zap.String("robot", robotID))
+	l := m.getLogger().With(zap.String("ID", robotID))
 	quitChan := m.robotComStopChan[robotID]
 	cmdChan := m.broadcastChannels[robotID]
 
@@ -123,8 +125,14 @@ func (m *Manager) broadCastRoutine(robotID string) {
 		case <-quitChan:
 			return
 		case cmd := <-cmdChan:
+			envelope := &pb.ServerMessage{
+				Payload: &pb.ServerMessage_Maus{
+					Maus: cmd,
+				},
+			}
+
 			// re encode message
-			buf, err := proto.Marshal(cmd)
+			buf, err := proto.Marshal(envelope)
 			if err != nil {
 				l.Error("failed to encode proto message", zap.Error(err))
 				continue
@@ -150,11 +158,12 @@ func (m *Manager) broadCastRoutine(robotID string) {
 }
 
 func (m *Manager) recvFromMausRoutine(robotID string) {
-	l := m.getLogger().With(zap.String("robot", "MAUS"))
+	l := m.getLogger().With(zap.String("ID", robotID))
 	r := m.Robots[robotID]
 	cmdChan := m.broadcastChannels[robotID]
 
 	if r == nil || cmdChan == nil {
+		l.Info("robot not found")
 		return
 	}
 
@@ -163,12 +172,7 @@ func (m *Manager) recvFromMausRoutine(robotID string) {
 			l.Info("robot disconnected stopping transmission")
 			return
 		}
-		if m.Robots[robotID] != nil || m.Robots[robotID].Status == Disconnected {
-			return
-		}
-
 		cmd := <-r.IncomingMsg
-		l.Info("got message", zap.String("type", cmd.String()))
 
 		switch cmd.Payload.(type) {
 		case *pb.MausOutgoingMessage_MausConfig:
@@ -177,7 +181,6 @@ func (m *Manager) recvFromMausRoutine(robotID string) {
 			r.Config = cmd.GetMausConfig()
 			cmdChan <- cmd
 		case *pb.MausOutgoingMessage_Nav:
-			l.Info("got nav packet")
 			cmdChan <- cmd
 		case *pb.MausOutgoingMessage_MazeState:
 			cmdChan <- cmd

@@ -54,18 +54,19 @@ func main() {
 			for {
 				log.Info("connecting to robot...")
 				r, err := NewRobot(log, RobotConnectionOptions{
-					Baud: 115200,
+					Baud: 0,
 					Dev:  "waxn-robot.local",
 					Addr: c.MausAddr,
 				})
 				if err != nil {
-
+					log.Info("low level connection failed", zap.Error(err), zap.String("addr", c.MausAddr))
 					time.Sleep(1 * time.Second)
 					continue
 				}
 
 				err = m.RegisterRobot(r)
 				if err != nil {
+					log.Info("register failed", zap.Error(err), zap.String("addr", c.MausAddr))
 					time.Sleep(1 * time.Second)
 					continue
 				}

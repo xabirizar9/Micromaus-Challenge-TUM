@@ -12,7 +12,7 @@
   import PowerView from "./components/PowerView.svelte";
   import StatusView from "./components/StatusView.svelte";
   import PidConfigCard from "./PidConfigCard.svelte";
-  import { DashboardServerMessage } from "./proto/dashboard";
+  import { DashboardServerMessage, Maus } from "./proto/dashboard";
 
   export const com = new Communicator({
     url: `ws://${window.location.host}/ws`,
@@ -20,7 +20,7 @@
 
   const controller = new Joystick(com);
 
-  let mausConnected = false;
+  let mausConnected: Maus | false = false;
   let direction = 0;
   let speed = 0;
 
@@ -100,21 +100,25 @@
     });
   };
 
-  com.addEventListener(
-    "dashboard",
-    (evt: MessageEvent<DashboardServerMessage>) => {
-      if (evt.data.selected) {
-        mausConnected = true;
-      }
-      if (evt.data.deviceLost) {
-        mausConnected = false;
-      }
+  com.addEventListener("connected", (evt: MessageEvent<Maus>) => {
+    console.log("connected !!!");
+    if (evt.data) {
+      mausConnected = evt.data;
     }
-  );
+  });
 </script>
 
 <Toaster />
-<nav />
+<nav>
+  <a href="" class="brand-logo">WAXN</a>
+  <div>
+    {#if mausConnected}
+      <a on:click={() => (mausConnected = false)}
+        >{mausConnected.id}:{mausConnected.ip}</a
+      >
+    {/if}
+  </div>
+</nav>
 <main>
   {#if mausConnected}
     <MazeView {com} />
@@ -240,6 +244,11 @@
     background-color: var(--main-bg-color);
     color: var(--main-text-color);
 
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
     .card {
       background-color: var(--main-bg-secondary);
       border-radius: 1.25rem;
@@ -266,10 +275,14 @@
     width: 100%;
     height: 40px;
     z-index: 100;
+    display: flex;
+    padding: 0 0.5rem;
+    align-items: center;
+    justify-content: space-between;
     background-color: var(--nav-bg);
     backdrop-filter: blur(10px);
     box-shadow: 0px 0px 10px var(--main-shadow-color);
-    border-bottom: 1px solid var(--main-bg-secondary);
+    border-bottom: 1px solid var(--main-bg-tertiary);
   }
 
   .no-maus {

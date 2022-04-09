@@ -6,6 +6,7 @@ import {
 import {
   ClientMessage,
   DashboardClientMessage,
+  Maus,
   ServerMessage,
 } from "./proto/dashboard";
 import { toast } from "@zerodevx/svelte-toast";
@@ -18,6 +19,8 @@ export type CommunicatorOptions = {
 export class Communicator extends EventTarget {
   private socket?: WebSocket;
 
+  public selectedMouse?: Maus;
+
   public config?: MausConfigPacket;
 
   constructor(private options: CommunicatorOptions) {
@@ -25,13 +28,22 @@ export class Communicator extends EventTarget {
     this.setupSocket(options);
   }
 
+  connectToMaus(maus: Maus) {
+    this.selectedMouse = maus;
+    this.sendClientMsg({
+      selectDevice: {
+        deviceId: maus.id,
+      },
+    });
+  }
+
   sendClientMsg(message: Partial<DashboardClientMessage>) {
     const msg = ClientMessage.encode({
       dashboard: message as DashboardClientMessage,
       maus: undefined,
     }).finish();
+
     toaster.success(`send client CMD: size=${msg.length}`);
-    console.log(msg, this.socket?.readyState);
     this.socket?.send(msg);
   }
 
@@ -54,6 +66,11 @@ export class Communicator extends EventTarget {
     this.socket.onopen = () => {
       toaster.success(`connected to ${options.url}`);
       this.socket.binaryType = "arraybuffer";
+
+      // if a robot was selected send reconnect event
+      if (this.selectedMouse) {
+        this.connectToMaus(this.selectedMouse);
+      }
     };
 
     this.socket.onerror = (error) => {
@@ -76,30 +93,36 @@ export class Communicator extends EventTarget {
     };
 
     this.socket.onmessage = (event) => {
-      if (event.data instanceof ArrayBuffer) {
-        // binary frame
-        const { maus, dashboard } = ServerMessage.decode(
-          new Uint8Array(event.data)
-        );
+      if (!(event.data instanceof ArrayBuffer)) {
+        return;
+      }
+      // binary frame
+      const { maus, dashboard } = ServerMessage.decode(
+        new Uint8Array(event.data)
+      );
 
-        console.log("hello there", { maus, dashboard });
+      console.log(maus, dashboard);
 
-        if (maus) {
-          if (maus.mausConfig) {
-            this.config = maus.mausConfig;
-          }
-          this.dispatchEvent(new MessageEvent("message", { data: maus }));
-        } else {
-          this.dispatchEvent(
-            new MessageEvent("dashboard", { data: dashboard })
-          );
+      if (maus) {
+        if (maus.mausConfig) {
+          this.config = maus.mausConfig;
         }
-
-        // console.log(message.nav);
+        this.dispatchEvent(new MessageEvent("message", { data: maus }));
+        return;
+      }
+      if (dashboard) {
+        if (dashboard.selected) {
+          console.log("selected", dashboard.selected);
+          this.dispatchEvent(
+            new MessageEvent("connected", { data: this.selectedMouse })
+          );
+          return;
+        }
       } else {
-        // text frame
-        // console.log(event.data);
+        this.dispatchEvent(new MessageEvent("dashboard", { data: dashboard }));
       }
     };
+
+    // console.log(message.nav);
   }
 }

@@ -13,11 +13,21 @@ export interface DashboardClientMessage {
   selectDevice: SelectDeviceClientMessage | undefined;
 }
 
-export interface DeviceSelected {}
+export interface DeviceSelected {
+  maus: Maus | undefined;
+}
 
 export interface DeviceLostMessage {}
 
-export interface NewDeviceMessage {}
+export interface Maus {
+  id: string;
+  mac: string;
+  ip: string;
+}
+
+export interface NewDeviceMessage {
+  maus: Maus[];
+}
 
 export interface DashboardServerMessage {
   selected: DeviceSelected | undefined;
@@ -161,11 +171,14 @@ export const DashboardClientMessage = {
 };
 
 function createBaseDeviceSelected(): DeviceSelected {
-  return {};
+  return { maus: undefined };
 }
 
 export const DeviceSelected = {
-  encode(_: DeviceSelected, writer: Writer = Writer.create()): Writer {
+  encode(message: DeviceSelected, writer: Writer = Writer.create()): Writer {
+    if (message.maus !== undefined) {
+      Maus.encode(message.maus, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -176,6 +189,9 @@ export const DeviceSelected = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.maus = Maus.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -184,19 +200,27 @@ export const DeviceSelected = {
     return message;
   },
 
-  fromJSON(_: any): DeviceSelected {
-    return {};
+  fromJSON(object: any): DeviceSelected {
+    return {
+      maus: isSet(object.maus) ? Maus.fromJSON(object.maus) : undefined,
+    };
   },
 
-  toJSON(_: DeviceSelected): unknown {
+  toJSON(message: DeviceSelected): unknown {
     const obj: any = {};
+    message.maus !== undefined &&
+      (obj.maus = message.maus ? Maus.toJSON(message.maus) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<DeviceSelected>, I>>(
-    _: I
+    object: I
   ): DeviceSelected {
     const message = createBaseDeviceSelected();
+    message.maus =
+      object.maus !== undefined && object.maus !== null
+        ? Maus.fromPartial(object.maus)
+        : undefined;
     return message;
   },
 };
@@ -242,12 +266,82 @@ export const DeviceLostMessage = {
   },
 };
 
+function createBaseMaus(): Maus {
+  return { id: "", mac: "", ip: "" };
+}
+
+export const Maus = {
+  encode(message: Maus, writer: Writer = Writer.create()): Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.mac !== "") {
+      writer.uint32(18).string(message.mac);
+    }
+    if (message.ip !== "") {
+      writer.uint32(26).string(message.ip);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Maus {
+    const reader = input instanceof Reader ? input : new Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMaus();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.mac = reader.string();
+          break;
+        case 3:
+          message.ip = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Maus {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      mac: isSet(object.mac) ? String(object.mac) : "",
+      ip: isSet(object.ip) ? String(object.ip) : "",
+    };
+  },
+
+  toJSON(message: Maus): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.mac !== undefined && (obj.mac = message.mac);
+    message.ip !== undefined && (obj.ip = message.ip);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<Maus>, I>>(object: I): Maus {
+    const message = createBaseMaus();
+    message.id = object.id ?? "";
+    message.mac = object.mac ?? "";
+    message.ip = object.ip ?? "";
+    return message;
+  },
+};
+
 function createBaseNewDeviceMessage(): NewDeviceMessage {
-  return {};
+  return { maus: [] };
 }
 
 export const NewDeviceMessage = {
-  encode(_: NewDeviceMessage, writer: Writer = Writer.create()): Writer {
+  encode(message: NewDeviceMessage, writer: Writer = Writer.create()): Writer {
+    for (const v of message.maus) {
+      Maus.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -258,6 +352,9 @@ export const NewDeviceMessage = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.maus.push(Maus.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -266,19 +363,29 @@ export const NewDeviceMessage = {
     return message;
   },
 
-  fromJSON(_: any): NewDeviceMessage {
-    return {};
+  fromJSON(object: any): NewDeviceMessage {
+    return {
+      maus: Array.isArray(object?.maus)
+        ? object.maus.map((e: any) => Maus.fromJSON(e))
+        : [],
+    };
   },
 
-  toJSON(_: NewDeviceMessage): unknown {
+  toJSON(message: NewDeviceMessage): unknown {
     const obj: any = {};
+    if (message.maus) {
+      obj.maus = message.maus.map((e) => (e ? Maus.toJSON(e) : undefined));
+    } else {
+      obj.maus = [];
+    }
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<NewDeviceMessage>, I>>(
-    _: I
+    object: I
   ): NewDeviceMessage {
     const message = createBaseNewDeviceMessage();
+    message.maus = object.maus?.map((e) => Maus.fromPartial(e)) || [];
     return message;
   },
 };

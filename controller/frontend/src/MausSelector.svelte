@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Communicator } from "./Communicator";
+  import { Maus } from "./proto/dashboard";
 
   export let com: Communicator;
 
-  let availableMauses: Array<{ id: string; mac: string; ip: string }> = [];
+  let availableMauses: Array<Maus> = [];
 
   const fetchAvailableMouses = async () => {
     const response = await fetch("/maus");
@@ -12,12 +13,8 @@
     return mouses;
   };
 
-  const onRobotSelected = (id: string) => {
-    com.sendClientMsg({
-      selectDevice: {
-        deviceId: id,
-      },
-    });
+  const onRobotSelected = (maus: Maus) => {
+    com.connectToMaus(maus);
   };
 
   fetchAvailableMouses();
@@ -26,7 +23,7 @@
 <div>
   <ul>
     {#each availableMauses as maus}
-      <li on:click={() => onRobotSelected(maus.id)}>{maus.ip}:{maus.mac}</li>
+      <li on:click={() => onRobotSelected(maus)}>{maus.ip}:{maus.mac}</li>
     {/each}
   </ul>
 </div>
@@ -39,13 +36,24 @@
   }
 
   ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
     max-width: 300px;
     border: 1px solid var(--border-color);
-    border-radius: 1.5rem;
+    border-radius: 1rem;
+    overflow: hidden;
   }
 
   li {
+    cursor: pointer;
     padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--border-color);
+    }
+    &:hover {
+      background-color: var(--primary-color);
+      color: var(--primary-text-color);
+    }
   }
 </style>
