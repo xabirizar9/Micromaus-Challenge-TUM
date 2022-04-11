@@ -6,7 +6,6 @@
 #include "Controller.hpp"
 #include "freertos/FreeRTOS.h"
 #include "utils/units.hpp"
-static const char* tag = "[drive]";
 
 // interval in which driver will update command speed
 static const uint8_t controlInterval = 5;
@@ -43,7 +42,8 @@ class MotionProfile {
 	MotionProfile(uint8_t numGrids, float duration, int vStart, int vEnd) : maxSpeed(1700) {
 		vStart = vStart;
 		vEnd = vEnd;
-		distance = mmsToTicks(distance * 160);
+		// FIXME: using ditance in its own definition :D
+		distance = 0;  // mmsToTicks(distance * 160);
 		MotionProfile::getGridProfile(distance, duration, vStart, vEnd, true);
 	};
 	// Constructor for curves
@@ -60,10 +60,7 @@ class MotionProfile {
 	void computeVelocityProfile(int tickEnd, float duration, int vStart, int vEnd, bool optimize);
 	void getPolynomCoefficients(int distance, float tEnd, int vStart, int vEnd);
 
-	~MotionProfile() {
-		ESP_LOGI(tag, "Movement completed");
-	};
-
+	~MotionProfile();
 	// uint16_t* computeTurnProfile();
 	// uint16_t* computeDriveProfile();
 	// void computeProfiles(uint16_t speed, uint16_t interval = controlInterval);

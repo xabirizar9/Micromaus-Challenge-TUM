@@ -80,7 +80,7 @@
     com.send({
       solve: {
         type: SolveCmdType.FastRun,
-        speed: 400,
+        speed: 1000,
       },
     });
   };

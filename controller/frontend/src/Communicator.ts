@@ -101,8 +101,6 @@ export class Communicator extends EventTarget {
         new Uint8Array(event.data)
       );
 
-      console.log(maus, dashboard);
-
       if (maus) {
         if (maus.mausConfig) {
           this.config = maus.mausConfig;
@@ -112,7 +110,7 @@ export class Communicator extends EventTarget {
       }
       if (dashboard) {
         if (dashboard.selected) {
-          console.log("selected", dashboard.selected);
+          //  console.log("selected", dashboard.selected);
           this.dispatchEvent(
             new MessageEvent("connected", { data: this.selectedMouse })
           );

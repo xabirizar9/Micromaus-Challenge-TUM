@@ -124,11 +124,13 @@
           mazeState = evt.data.mazeState.state;
           wallState = evt.data.mazeState.walls;
 
+          console.log(evt.data.mazeState);
+
           maus.style.left = `${
-            100 * (evt.data.mazeState.position.x / mazeSize.width)
+            100 * ((evt.data.mazeState.position.x + 0.5) / mazeSize.width)
           }%`;
           maus.style.bottom = `${
-            100 * (evt.data.mazeState.position.y / mazeSize.height)
+            100 * ((evt.data.mazeState.position.y - 0.5) / mazeSize.height)
           }%`;
           console.log(evt.data.mazeState.position);
         }

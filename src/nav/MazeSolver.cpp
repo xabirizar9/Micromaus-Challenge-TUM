@@ -134,7 +134,7 @@ void MazeSolver::driveToNextCell(float speed) {
 							: DriveCmdType::DriveCmdType_TurnLeftOnSpot;
 		}
 
-		this->addCmdAndWait(direction, turns, speed);
+		this->addCmdAndWait(direction, turns, speed * 2);
 		heading = newHeading;
 	}
 
@@ -144,19 +144,19 @@ void MazeSolver::driveToNextCell(float speed) {
 	// TODO: maybe use robot position here
 	switch (newHeading) {
 		case CardinalDirection::NORTH:
-			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y + 1);
+			// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y + 1);
 			y += 1;
 			break;
 		case CardinalDirection::EAST:
-			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x + 1, y);
+			// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x + 1, y);
 			x += 1;
 			break;
 		case CardinalDirection::SOUTH:
-			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y - 1);
+			// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y - 1);
 			y -= 1;
 			break;
 		case CardinalDirection::WEST:
-			ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x - 1, y);
+			// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x - 1, y);
 			x -= 1;
 			break;
 	}

@@ -12,7 +12,12 @@
 #include "nav/MazeSolver.hpp"
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
-static const char* tag = "[drive]";
+
+static const char* tag = "[motion]";
+
+MotionProfile::~MotionProfile() {
+	ESP_LOGI(tag, "Movement completed");
+}
 
 void MotionProfile::getPolynomCoefficients(int distance, float tEnd, int vStart, int vEnd) {
 	vStart = convertMMsToTPS(vStart);
@@ -102,7 +107,7 @@ void MotionProfile::computeVelocityProfile(
 	int time = 0;
 
 	int numIntervals = duration / controlInterval;
-	float* velocityProfile = new float[numIntervals];
+	MotionProfile::velocityProfile = new float[numIntervals];
 
 	while (counter <= numIntervals) {
 		time = counter * controlInterval;

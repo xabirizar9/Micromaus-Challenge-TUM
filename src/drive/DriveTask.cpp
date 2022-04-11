@@ -1,8 +1,9 @@
 
 #include "drive/DriveTask.hpp"
 
+#include <math.h>
+
 #include <algorithm>
-#include <cmath>
 
 #include "Controller.hpp"
 #include "drive/LaneTask.hpp"
@@ -40,9 +41,9 @@ void driveTask(void* arg) {
 	MsgDrive cmd;
 	MsgDrive* curCmd = NULL;
 
-	MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
-	MotionProfile straightProfile(200, 2.0);
-	MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
+	// MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
+	// MotionProfile straightProfile(200, 2.0);
+	// MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
 
 	while (true) {
 		// update and get state
@@ -72,6 +73,8 @@ void driveTask(void* arg) {
 				ESP_LOGI(tag, "DriveCell");
 
 				laneControlTask(controller, curCmd);
+
+				controller->drive(0, 0);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
@@ -112,25 +115,19 @@ void driveTask(void* arg) {
 				MotorPosition pos = cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
 										? MotorPosition::right
 										: MotorPosition::left;
+
 				int64_t cur = controller->getEncoder(pos)->getTotalCounter();
-				int64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value);
-
-				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int vEnd,
-				// TickType_t tStart, TickType_t tEnd))
-				//  start driving
-				controller->drive(curCmd->speed,
-								  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
-
-				ESP_LOGI(tag,
-						 "t=%lld, cur=%lld v=%f tposr=%f",
-						 target,
-						 cur,
-						 curCmd->value,
-						 ticksPerOnSpotRotation);
+				int64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value) + 40;
+				// ESP_LOGI(tag,
+				// 		 "t=%lld, cur=%lld v=%f tposr=%f",
+				// 		 target,
+				// 		 cur,
+				// 		 curCmd->value,
+				// 		 ticksPerOnSpotRotation);
 
 				cmdStatus.target = target;
 
-				int targetDiffRange = 20;
+				int targetDiffRange = 25;
 				// std::min(std::max(600 * curCmd->speed / 4000.0, 1.0), 600.0);
 
 				// monitor encoder values
@@ -145,22 +142,40 @@ void driveTask(void* arg) {
 				uint32_t progress = target - cur;
 				uint32_t totalDiff = target - cur;
 
+				int8_t counter = 0;
+
+				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int vEnd,
+				// TickType_t tStart, TickType_t tEnd))
+				//  start driving
+				controller->drive(curCmd->speed,
+								  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
+
 				while (progress > targetDiffRange) {
 					cur = controller->getEncoder(pos)->getTotalCounter();
-					progress = target - cur;
-					percentage = progress / totalDiff;
-					// gradually reduce speed
-					controller->drive(curCmd->speed * (1 - percentage),
-									  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
+					// make sure progress can never exceed target
+					progress = target - std::min(cur, target);
+
+					// // start slowing down
+					// percentage = std::abs((float)std::min(progress, totalDiff) /
+					// (float)totalDiff); actualSpeed = (float)curCmd->speed * (float)(percentage);
+					// // gradually reduce speed
+					// controller->drive(std::max(actualSpeed, (int16_t)200),
+					// 				  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
 					// decrease speed while nearing curve end
-					vTaskDelay(pdMS_TO_TICKS(5));
+					vTaskDelay(pdMS_TO_TICKS(2));
 				}
 
-				// applay breaks based on distance
+				// add some breaking
+				// controller->drive(std::max((int16_t)((float)curCmd->speed * 0.6), (int16_t)120),
+				//				  pos == MotorPosition::right ? INT16_MAX : INT16_MIN);
+				// vTaskDelay(pdMS_TO_TICKS(10));
 
 				cmdStatus.actual = cur;
+				controller->drive(120, pos == MotorPosition::right ? INT16_MAX : INT16_MIN);
+				vTaskDelay(pdMS_TO_TICKS(20));
+				controller->drive(80, pos == MotorPosition::right ? INT16_MAX : INT16_MIN);
+				vTaskDelay(pdMS_TO_TICKS(15));
 				controller->drive(0, 0);
-
 				break;
 			}
 			default: break;

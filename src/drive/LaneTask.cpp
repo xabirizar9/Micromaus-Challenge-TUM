@@ -96,7 +96,7 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 
 				controller->drive(cmd->speed, pErr.correction);
 
-				ESP_LOGI(TAG, "correction: %f", pErr.correction);
+				// ESP_LOGI(TAG, "correction: %f", pErr.correction);
 				pErr.intError += pErr.correction * timeFactor;
 			}
 
@@ -113,7 +113,7 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 		vTaskDelay(pdMS_TO_TICKS(timeInterval));
 	}
 
-	ESP_LOGI(TAG, "reached target t=%lld, cur=%lld", targetEncoderValue, curEncoderValue);
+	// ESP_LOGI(TAG, "reached target t=%lld, cur=%lld", targetEncoderValue, curEncoderValue);
 
 	controller->drive(0, 0);
 	return true;
