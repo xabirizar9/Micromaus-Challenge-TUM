@@ -22,6 +22,7 @@ class RobotDriver {
 	void addCmd(DriveCmdType type, float value, float speed);
 	void addCmdAndWait(DriveCmdType type, float value, float speed);
 
+	virtual void setPosition(float x, float y){};
 	virtual void startExploration(float speed){};
 	virtual void startGoHome(float speed){};
 	virtual void startFastRun(float speed){};

@@ -65,4 +65,7 @@ void Motor::updatePidConfig(MsgEncoderCallibration config) {
 	this->kD = config.kD;
 	this->kI = config.kI;
 	this->kP = config.kP;
+
+	// will be reset by PID task when changes are applied
+	this->wasPidChanged = true;
 };

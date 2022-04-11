@@ -72,7 +72,10 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
 
+				cmdStatus.target = 0;
 				laneControlTask(controller, curCmd);
+
+				cmdStatus.actual = 0;
 
 				controller->drive(0, 0);
 				break;
@@ -116,8 +119,12 @@ void driveTask(void* arg) {
 										? MotorPosition::right
 										: MotorPosition::left;
 
-				int64_t cur = controller->getEncoder(pos)->getTotalCounter();
-				int64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value) + 40;
+				uint64_t cur = controller->getEncoder(pos)->getTotalCounter();
+				uint64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value);
+
+				// decrease target based on speed to prevent overshoot
+				target -= std::min((int)((double)std::abs(curCmd->speed) * 0.667), 200);
+
 				// ESP_LOGI(tag,
 				// 		 "t=%lld, cur=%lld v=%f tposr=%f",
 				// 		 target,
@@ -127,7 +134,7 @@ void driveTask(void* arg) {
 
 				cmdStatus.target = target;
 
-				int targetDiffRange = 25;
+				int targetDiffRange = 30;
 				// std::min(std::max(600 * curCmd->speed / 4000.0, 1.0), 600.0);
 
 				// monitor encoder values
@@ -139,10 +146,10 @@ void driveTask(void* arg) {
 
 				float percentage = 0.0;
 				int16_t actualSpeed = curCmd->speed;
-				uint32_t progress = target - cur;
-				uint32_t totalDiff = target - cur;
+				uint64_t progress = target - cur;
+				// uint64_t totalDiff = target - cur;
 
-				int8_t counter = 0;
+				// uint counter = 0;
 
 				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int vEnd,
 				// TickType_t tStart, TickType_t tEnd))
@@ -162,20 +169,15 @@ void driveTask(void* arg) {
 					// controller->drive(std::max(actualSpeed, (int16_t)200),
 					// 				  pos == MotorPosition::right ? INT16_MIN : INT16_MAX);
 					// decrease speed while nearing curve end
-					vTaskDelay(pdMS_TO_TICKS(2));
+					vTaskDelay(pdMS_TO_TICKS(1));
 				}
 
 				// add some breaking
-				// controller->drive(std::max((int16_t)((float)curCmd->speed * 0.6), (int16_t)120),
-				//				  pos == MotorPosition::right ? INT16_MAX : INT16_MIN);
-				// vTaskDelay(pdMS_TO_TICKS(10));
-
-				cmdStatus.actual = cur;
-				controller->drive(120, pos == MotorPosition::right ? INT16_MAX : INT16_MIN);
-				vTaskDelay(pdMS_TO_TICKS(20));
-				controller->drive(80, pos == MotorPosition::right ? INT16_MAX : INT16_MIN);
-				vTaskDelay(pdMS_TO_TICKS(15));
 				controller->drive(0, 0);
+
+				vTaskDelay(pdMS_TO_TICKS(20));
+				cmdStatus.actual = cur;
+
 				break;
 			}
 			default: break;

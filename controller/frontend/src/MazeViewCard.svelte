@@ -14,6 +14,7 @@
 
   export let com: Communicator;
 
+  const mazeCellSize = 180;
   let mazeState = new Uint8Array(mazeSize.width * mazeSize.width).map(
     (_, i) => 255
   );
@@ -29,15 +30,15 @@
   let pathChart: ReturnType<typeof ConnectedScatterplot>;
 
   let ctx: CanvasRenderingContext2D;
-  const data: Vector2D[] = [];
   let currentRotationInRad = 0.0;
+  let currentPosition: Vector2D = { x: 0, y: 0 };
 
-  const fromMmToUnits = (mm: number) => mm / 180 / mazeSize.width;
-  const fromUnitToMms = (unit: number) => unit * 180 * mazeSize.width;
+  const fromMmToUnits = (mm: number) => mm / mazeCellSize / mazeSize.width;
+  const fromUnitToMms = (unit: number) => unit * mazeCellSize;
 
   const getRenderPosUnit = (pos: Position) => {
-    const x = (fromMmToUnits(pos.x) + 0.5) / 6;
-    const y = (fromMmToUnits(pos.y) - 0.5) / 6;
+    const x = (pos.x / mazeCellSize + 0.5) / mazeSize.width;
+    const y = (pos.y / mazeCellSize + 0.5) / mazeSize.height;
     return { x, y };
   };
 
@@ -53,7 +54,7 @@
     // add static offset from wall
     let { x, y } = getRenderPosUnit(nav.position);
     x *= width;
-    y = height - (y + 1 / 6) * height;
+    y = height - y * height;
 
     ctx.beginPath();
 
@@ -97,10 +98,14 @@
       canvas.height = height;
     }
     ctx = canvas.getContext("2d");
-    const gap = 5;
 
     ctx.beginPath();
     ctx.moveTo(0, 0);
+
+    com.addEventListener("pathReset", () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pathChart.reset();
+    });
 
     com.addEventListener(
       "message",
@@ -108,11 +113,10 @@
         if (evt.data.nav) {
           onNavPacket(evt.data.nav);
           if (maus) {
-            const x = fromMmToUnits(evt.data.nav.position.x) + 0.5;
-            const y = fromMmToUnits(evt.data.nav.position.y) + 0.5;
-            // maus.style.left = `${100 * (x / mazeSize.width)}%`;
-            // maus.style.bottom = `${100 * ((y - 0.5) / mazeSize.height)}%`;
-
+            const x = fromMmToUnits(evt.data.nav.position.x) * 6 + 0.5;
+            const y = fromMmToUnits(evt.data.nav.position.y) * 6 + 0.5;
+            maus.style.left = `${100 * (x / mazeSize.width)}%`;
+            maus.style.bottom = `${100 * ((y - 0.5) / mazeSize.height)}%`;
             pathChart.appendPoint({
               x: x,
               y: y,
@@ -123,16 +127,7 @@
         if (evt.data.mazeState) {
           mazeState = evt.data.mazeState.state;
           wallState = evt.data.mazeState.walls;
-
-          console.log(evt.data.mazeState);
-
-          maus.style.left = `${
-            100 * ((evt.data.mazeState.position.x + 0.5) / mazeSize.width)
-          }%`;
-          maus.style.bottom = `${
-            100 * ((evt.data.mazeState.position.y - 0.5) / mazeSize.height)
-          }%`;
-          console.log(evt.data.mazeState.position);
+          currentPosition = evt.data.mazeState.position;
         }
       }
     );
@@ -165,12 +160,12 @@
       setPosition: {
         heading: 0,
         x: fromUnitToMms(x),
-        y: fromUnitToMms(5 - y),
+        y: fromUnitToMms(y),
       },
     });
   };
 
-  const getWallIndex = (i: number) => {
+  const getIndex = (i: number) => {
     return (
       mazeSize.width * (5 - Math.floor(i / mazeSize.width)) +
       (i % mazeSize.width)
@@ -180,21 +175,26 @@
 
 <div class="card map">
   <div class="maze-grid">
-    {#each mazeState as v, i}
+    {#each mazeState as _, i}
       <div
-        class:goal={v == 0}
+        class:goal={mazeState[getIndex(i)] == 0}
+        class:hasMaus={getIndex(i) % mazeSize.width == currentPosition.x &&
+          Math.floor(getIndex(i) / mazeSize.width) == currentPosition.y}
         on:click={() =>
-          setPosition(i % mazeSize.width, Math.floor(i / mazeSize.width))}
+          setPosition(
+            getIndex(i) % mazeSize.width,
+            Math.floor(getIndex(i) / mazeSize.width)
+          )}
         class="maze-item"
       >
-        {v}
-        {#if (1 << 0) & wallState[getWallIndex(i)]}
+        {mazeState[getIndex(i)]}
+        {#if (1 << 0) & wallState[getIndex(i)]}
           <div class="east" />{/if}
-        {#if (1 << 1) & wallState[getWallIndex(i)]}
+        {#if (1 << 1) & wallState[getIndex(i)]}
           <div class="north" />{/if}
-        {#if (1 << 2) & wallState[getWallIndex(i)]}
+        {#if (1 << 2) & wallState[getIndex(i)]}
           <div class="west" />{/if}
-        {#if (1 << 3) & wallState[getWallIndex(i)]}
+        {#if (1 << 3) & wallState[getIndex(i)]}
           <div class="south" />{/if}
       </div>
     {/each}
@@ -282,6 +282,10 @@
         background-color: #f39c12;
         color: #fff;
       }
+    }
+
+    &.hasMaus {
+      border: 1px solid var(--primary-color);
     }
 
     > div {

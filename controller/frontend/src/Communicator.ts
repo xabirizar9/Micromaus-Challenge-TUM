@@ -52,7 +52,10 @@ export class Communicator extends EventTarget {
       maus: message as MausIncomingMessage,
       dashboard: undefined,
     }).finish();
-    toaster.success(`CMD send: size=${msg.length}`);
+    // toaster.success(`CMD send: size=${msg.length}`);
+    if (message.setPosition) {
+      this.dispatchEvent(new MessageEvent("pathReset", { data: message }));
+    }
     this.socket?.send(msg);
   }
 

@@ -6,23 +6,22 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "config.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/message_buffer.h"
 #include "freertos/queue.h"
 #include "message.pb.h"
 #include "net/OTA.hpp"
+#include "net/WifiCommunicator.hpp"
 #include "pb_decode.h"
 #include "pb_encode.h"
 #include "periph/Led.hpp"
 #include "sys/time.h"
-// TODO: add toggle
-// #include "net/BluetoothCore.hpp"
-#include "config.h"
-#include "net/WifiCommunicator.hpp"
+#include "utils/units.hpp"
 
 static const char *tag = "NET";
-static const uint16_t sensorSendInterval = pdMS_TO_TICKS(500);
+static const uint16_t sensorSendInterval = pdMS_TO_TICKS(200);
 
 using namespace NetController;
 
@@ -204,6 +203,10 @@ void receiverTask(void *pvParameter) {
 						 msg.payload.setPosition.x,
 						 msg.payload.setPosition.y,
 						 msg.payload.setPosition.heading);
+				// set position in maze coordiantes
+				manager->driver->setPosition(msg.payload.setPosition.x / mazeCellSize,
+											 msg.payload.setPosition.y / mazeCellSize);
+				// set position in mm
 				manager->controller->setPosition(msg.payload.setPosition.x,
 												 msg.payload.setPosition.y,
 												 msg.payload.setPosition.heading);

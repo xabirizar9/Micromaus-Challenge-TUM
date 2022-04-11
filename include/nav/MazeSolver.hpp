@@ -12,8 +12,9 @@ using nav::CardinalDirection;
 class MazeSolver : public RobotDriver {
    private:
 	Maze maze;
-	uint8_t x = 0;
-	uint8_t y = 0;
+	// position in maze coordinates
+	float x = 0;
+	float y = 0;
 	CardinalDirection heading = CardinalDirection::NORTH;
 
 	void driveToNextCell(float speed);
@@ -25,6 +26,7 @@ class MazeSolver : public RobotDriver {
 	void startExploration(float speed) override;
 	void startGoHome(float speed) override;
 	void startFastRun(float speed) override;
+	void setPosition(float x, float y) override;
 	Maze* getMaze() override;
 	void start();
 	void pause();

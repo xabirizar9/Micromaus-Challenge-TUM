@@ -72,7 +72,7 @@ type ConnectedScatterPlotOptions = {
 export function ConnectedScatterplot<T extends Vector2D>(
   initialData = [],
   {
-    dotRadius = 3, // (fixed) radius of dots, in pixels
+    dotRadius = 1, // (fixed) radius of dots, in pixels
     curve = d3.curveCatmullRom, // curve generator for the line
     width = 640, // outer width, in pixels
     height = 400, // outer height, in pixels
@@ -214,8 +214,8 @@ export function ConnectedScatterplot<T extends Vector2D>(
   const appendPoint = (point: T) => {
     if (
       lastPoint &&
-      Math.abs(lastPoint.x - point.x) <= 0.4 &&
-      Math.abs(lastPoint.y - point.y) <= 0.4
+      Math.abs(lastPoint.x - point.x) <= 0.01 &&
+      Math.abs(lastPoint.y - point.y) <= 0.01
     ) {
       lastPoint = point;
       return;
@@ -225,7 +225,13 @@ export function ConnectedScatterplot<T extends Vector2D>(
     renderPath(data);
   };
 
+  const reset = () => {
+    data = [];
+    renderPath(data);
+    svg.selectAll("g").remove();
+  };
+
   animate();
 
-  return Object.assign(svg.node(), { animate, redrawPath, appendPoint });
+  return Object.assign(svg.node(), { animate, redrawPath, appendPoint, reset });
 }

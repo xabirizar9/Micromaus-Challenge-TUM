@@ -24,6 +24,7 @@
   let direction = 0;
   let speed = 0;
 
+  let actionSpeed = 400;
   let driveValue = 0;
   let driveSpeed = 0;
   let driveCmdType = DriveCmdType.Move;
@@ -80,7 +81,7 @@
     com.send({
       solve: {
         type: SolveCmdType.FastRun,
-        speed: 1000,
+        speed: actionSpeed,
       },
     });
   };
@@ -89,7 +90,7 @@
     com.send({
       solve: {
         type: SolveCmdType.Explore,
-        speed: 400,
+        speed: actionSpeed,
       },
     });
   };
@@ -98,13 +99,12 @@
     com.send({
       solve: {
         type: SolveCmdType.GoHome,
-        speed: 400,
+        speed: actionSpeed,
       },
     });
   };
 
   com.addEventListener("connected", (evt: MessageEvent<Maus>) => {
-    console.log("connected !!!");
     if (evt.data) {
       mausConnected = evt.data;
     }
@@ -168,11 +168,14 @@
 
     <div class="card">
       <h2>Actions</h2>
-      <Button inline on:click={onStop}>STOP!</Button>
-      <Button inline on:click={onStartExplore}>Explore</Button>
-      <Button inline on:click={onGoToStart}>Go To Start</Button>
-      <Button inline on:click={onFastRun}>Fast Run</Button>
-      <Button inline on:click={onTunePid}>Tune PID</Button>
+      <div>
+        <Input type="number" bind:value={actionSpeed} />
+        <Button inline on:click={onStop}>STOP!</Button>
+        <Button inline on:click={onStartExplore}>Explore</Button>
+        <Button inline on:click={onGoToStart}>Go To Start</Button>
+        <Button inline on:click={onFastRun}>Fast Run</Button>
+        <Button inline on:click={onTunePid}>Tune PID</Button>
+      </div>
     </div>
 
     <div class="subgrid">

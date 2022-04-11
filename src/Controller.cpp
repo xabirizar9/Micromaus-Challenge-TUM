@@ -31,6 +31,7 @@ Controller::Controller()
 	this->state.has_position = true;
 	this->state.has_sensors = true;
 	this->state.position = Position_init_zero;
+	this->state.position.heading = M_PI_2;
 	this->state.sensors = SensorPacket_init_zero;
 
 	// init pid payload
@@ -96,7 +97,7 @@ void Controller::updatePosition() {
 
 	// current heading as theta
 	// our wheelDistance is the hypotenuse while right-left form the triangle side
-	this->state.position.heading = M_PI_2 + (right - left) / wheelDistance;
+	this->state.position.heading += (right - left) / wheelDistance;
 
 	// to confirm we could compute the angle
 	// ESP_LOGE(TAG, "robot angle %f", sin(this->state.position.heading));

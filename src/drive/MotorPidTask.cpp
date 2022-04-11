@@ -1,10 +1,11 @@
 #include "drive/MotorPidTask.hpp"
 
+#include "drive/PID.hpp"
 #include "esp_log.h"
 
 static const char *TAG = "PID";
 
-// #define DEBUG_PID
+#define DEBUG_PID
 
 void motorPidTask(void *pvParameter) {
 	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
@@ -22,96 +23,47 @@ void motorPidTask(void *pvParameter) {
 	uint16_t monitorInterval = 10;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
-	float secondFraction = (float)monitorInterval / 1000.0;
+	double secondFraction = (float)monitorInterval / 1000.0;
 	float oneOverMaxSpeed = 1 / (5315.2 * secondFraction);
 
 	ESP_LOGD(TAG, "started pid task %d", pos);
 
 	// current speed target in ticks
-	float target = 0;
-	int16_t curEncoderReading = 0;
+	double target = 0;
 
-	float lastSpeed = (float)controller->getSpeedInTicks(pos) * secondFraction;
+	double input = 0.0;
+	double output = 0.0;
 
-	float error = 0.0;
-	float lastError = 0.0;
-	float intError = 0.0;
-	float derError = 0.0;
+	MsgEncoderCallibration config;
+	PID pid = PID(&input, &output, -1.0, 1.0, monitorInterval * 5, config);
+	pid.setCallibration(m->kP, m->kI, m->kD);
+	pid.setTarget(&target);
 
-	float kP;
-	float kD;
-	float kI;
-
-#ifdef DEBUG_PID
-	uint32_t lastTicks = xTaskGetTickCount();
-#endif
-
-	float correction = 0;
+	uint8_t counter = 0;
 
 	while (true) {
-		// update values
-		kP = m->kP;
-		kD = m->kD;
-		kI = m->kI;
-
-		// get target speed for a given PID interval
-		target = controller->getSpeedInTicks(pos) * secondFraction;
-		// if speed target changed set it directly and let PID fine tune
-		if (target == 0.0) {
-			// stop motor if target changed
-			m->setPWM(0);
-			intError = 0;
-			derError = 0;
-			curEncoderReading = enc->get();
-			// reset encoder to avoid overflows
-			enc->reset();
-			// add short interval
-			vTaskDelay(pdMS_TO_TICKS(monitorInterval));
-			continue;
+		if (counter % 5 == 0) {
+			target = (double)controller->getSpeedInTicks(pos) * secondFraction;
+			if (target != 0.0) {
+				m->brakeMotor(0);
+				// get target speed for a given PID interval
+				input = enc->get();
+				if (m->wasPidChanged) {
+					// update pid with latest motor settings
+					pid.setCallibration(m->kP, m->kI, m->kD);
+					m->wasPidChanged = false;
+				}
+				pid.evaluate();
+				m->setPWM(output);
+			} else {
+				pid.reset();
+				m->setPWM(0.0);
+				m->brakeMotor(-1);
+			}
 		}
-		// if speed has changed reset errors and correction
-		if (target != lastSpeed) {
-			correction = 0.0;
-			intError = 0;
-			derError = 0;
-		}
-
-		curEncoderReading = enc->get();
+		counter++;
 		// reset encoder to avoid overflows
 		enc->reset();
-
-		// compute speed in ticks
-		error = target - (float)curEncoderReading;
-		derError = lastError - error;
-
-		// compute correction
-		correction = (kP * error) + (kD * derError) + (kI * intError);
-		// correction = 1;
-
-#ifdef DEBUG_PID
-		// if (pos == MotorPosition::left) {
-		ESP_LOGI(TAG,
-				 "%d t=%.3f errCur=%.3f. cor=%.3f pwm=%.3f enc=%d time=%d",
-				 pos,
-				 target,
-				 error,
-				 correction,
-				 correction * oneOverMaxSpeed,
-				 curEncoderReading,
-				 pdTICKS_TO_MS(xTaskGetTickCount() - lastTicks));
-		//}
-		lastTicks = xTaskGetTickCount();
-#endif
-
-		// copy step values for next step
-		lastError = error;
-		lastSpeed = target;
-
-		m->setPWM(correction * oneOverMaxSpeed);
-
-		if (controller->getIsPidTuningEnabled()) {
-			controller->appendPidTuningSample(error);
-		}
 
 		// add short interval
 		vTaskDelay(pdMS_TO_TICKS(monitorInterval));

@@ -67,6 +67,7 @@
     "future": "cpp",
     "mutex": "cpp",
     "thread": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "hash_map": "cpp"
   }
 }

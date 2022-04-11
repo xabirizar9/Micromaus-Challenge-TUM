@@ -28,6 +28,11 @@ void MazeSolver::sendSolverState() {
 	NetController::Manager::getInstance().writeMazeState(packet);
 }
 
+void MazeSolver::setPosition(float x, float y) {
+	this->x = std::clamp(x, (float)0.0, (float)this->maze.size);
+	this->x = std::clamp(y, (float)0.0, (float)this->maze.size);
+}
+
 void MazeSolver::updateWalls(uint8_t x, uint8_t y, CardinalDirection dir) {
 	static NavigationPacket state;
 
@@ -134,7 +139,7 @@ void MazeSolver::driveToNextCell(float speed) {
 							: DriveCmdType::DriveCmdType_TurnLeftOnSpot;
 		}
 
-		this->addCmdAndWait(direction, turns, speed * 2);
+		this->addCmdAndWait(direction, turns, speed);
 		heading = newHeading;
 	}
 
@@ -179,7 +184,7 @@ void MazeSolver::startFastRun(float speed) {
 		// this->updateWalls(x, y, heading);
 
 		// rerun flood fill
-		this->maze.fillFrom(0, 0);
+		this->maze.update();
 
 		driveToNextCell(actualSpeed);
 	}
@@ -209,6 +214,10 @@ void MazeSolver::startGoHome(float speed) {
 }
 
 void MazeSolver::startExploration(float speed) {
+	this->heading = CardinalDirection::NORTH;
+	this->x = 0;
+	this->y = 0;
+
 	// reset maze
 	this->maze.resetCosts();
 	this->maze.resetWalls();
