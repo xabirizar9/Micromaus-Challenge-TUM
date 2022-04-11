@@ -8,62 +8,78 @@ static const char *TAG = "PID";
 #define DEBUG_PID
 
 void motorPidTask(void *pvParameter) {
-	PidTaskInitPayload *payload = (PidTaskInitPayload *)pvParameter;
-
 	// copy all relevant values
-	Controller *controller = payload->controller;
-	MotorPosition pos = payload->position;
-	Motor *m = controller->getMotor(pos);
-	Encoder *enc = controller->getEncoder(pos);
+	Controller *controller = (Controller *)pvParameter;
+	Motor *lMotor = controller->getMotor(MotorPosition::left);
+	Motor *rMotor = controller->getMotor(MotorPosition::right);
 
-	// delete payload after we have read everything
-	delete payload;
+	Encoder *lEnc = controller->getEncoder(MotorPosition::left);
+	Encoder *rEnc = controller->getEncoder(MotorPosition::right);
 
 	// PID interval in ms
 	uint16_t monitorInterval = 10;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
 	double secondFraction = (float)monitorInterval / 1000.0;
-	float oneOverMaxSpeed = 1 / (5315.2 * secondFraction);
-
-	ESP_LOGD(TAG, "started pid task %d", pos);
 
 	// current speed target in ticks
-	double target = 0;
+	double lTarget = 0.0;
+	double lInput = 0.0;
+	double lOutput = 0.0;
 
-	double input = 0.0;
-	double output = 0.0;
+	double rTarget = 0.0;
+	double rInput = 0.0;
+	double rOutput = 0.0;
 
 	MsgEncoderCallibration config;
-	PID pid = PID(&input, &output, -1.0, 1.0, monitorInterval * 5, config);
-	pid.setCallibration(m->kP, m->kI, m->kD);
-	pid.setTarget(&target);
+
+	PID lPid = PID(&lInput, &lInput, -1.0, 1.0, monitorInterval * 5, config);
+	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
+	lPid.setTarget(&lTarget);
+
+	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval * 5, config);
+	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
+	rPid.setTarget(&rTarget);
 
 	uint8_t counter = 0;
 
+	// initially reset encoder
+	lEnc->reset();
+	rEnc->reset();
+
 	while (true) {
 		if (counter % 5 == 0) {
-			target = (double)controller->getSpeedInTicks(pos) * secondFraction;
-			if (target != 0.0) {
-				m->brakeMotor(0);
-				// get target speed for a given PID interval
-				input = enc->get();
-				if (m->wasPidChanged) {
-					// update pid with latest motor settings
-					pid.setCallibration(m->kP, m->kI, m->kD);
-					m->wasPidChanged = false;
-				}
-				pid.evaluate();
-				m->setPWM(output);
-			} else {
-				pid.reset();
-				m->setPWM(0.0);
-				m->brakeMotor(-1);
+			lTarget = (double)controller->getSpeedInTicks(MotorPosition::left) * secondFraction;
+			rTarget = (double)controller->getSpeedInTicks(MotorPosition::right) * secondFraction;
+
+			lInput = lEnc->get();
+			rInput = rEnc->get();
+
+			ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
+
+			lPid.evaluate();
+			rPid.evaluate();
+			// reset encoder to avoid overflows
+			lEnc->reset();
+			rEnc->reset();
+			ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
+
+			lMotor->setPWM(lOutput);
+			rMotor->setPWM(rOutput);
+
+			// update PID config if needed
+			if (lMotor->wasPidChanged) {
+				// update pid with latest motor settings
+				lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
+				lMotor->wasPidChanged = false;
+			}
+			if (rMotor->wasPidChanged) {
+				// update pid with latest motor settings
+				rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
+				rMotor->wasPidChanged = false;
 			}
 		}
 		counter++;
-		// reset encoder to avoid overflows
-		enc->reset();
 
 		// add short interval
 		vTaskDelay(pdMS_TO_TICKS(monitorInterval));

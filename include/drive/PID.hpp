@@ -3,6 +3,7 @@
 
 #include <algorithm>
 
+#include "Controller.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "message.pb.h"

@@ -57,7 +57,9 @@ void Motor::setPWM(float val) {
 void Motor::brakeMotor(float val) {
 	gpio_set_level((gpio_num_t)forwardPin, 1);
 	gpio_set_level((gpio_num_t)backwardPin, 1);
-	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, val));
+	uint32_t duty = lroundf(fabs(std::clamp(val, (float)-1.0, (float)1.0)) * 1);
+	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, duty));
+	ESP_ERROR_CHECK(ledc_update_duty(LEDC_LOW_SPEED_MODE, *channel));
 	// vTaskDelay(pdMS_TO_TICKS(20));
 }
 

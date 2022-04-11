@@ -35,19 +35,15 @@ Controller::Controller()
 	this->state.sensors = SensorPacket_init_zero;
 
 	// init pid payload
-	PidTaskInitPayload *leftPayload = new PidTaskInitPayload();
-	leftPayload->controller = this;
-	leftPayload->position = MotorPosition::left;
-	PidTaskInitPayload *rightPayload = new PidTaskInitPayload();
-	rightPayload->controller = this;
-	rightPayload->position = MotorPosition::right;
+	// PidTaskInitPayload *leftPayload = new PidTaskInitPayload();
+	// leftPayload->controller = this;
+	// leftPayload->position = MotorPosition::left;
+	// PidTaskInitPayload *rightPayload = new PidTaskInitPayload();
+	// rightPayload->controller = this;
+	// rightPayload->position = MotorPosition::right;
 
 	// setup pids to control the motors
-	xTaskCreate(
-		motorPidTask, "pidLeftMotorTask", 2048, leftPayload, 1, &this->leftMotorPidTaskHandle);
-
-	xTaskCreate(
-		motorPidTask, "pidRightMotorTask", 2048, rightPayload, 1, &this->rightMotorPidTaskHandle);
+	xTaskCreate(motorPidTask, "motorPidTask", 2048, this, 1, &this->motorPidTaskHandle);
 }
 
 /******************************************************************

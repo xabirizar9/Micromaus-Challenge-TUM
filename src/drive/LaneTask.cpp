@@ -4,6 +4,7 @@
 
 #include "Controller.hpp"
 #include "drive/MotorPidTask.hpp"
+#include "drive/PID.hpp"
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
 

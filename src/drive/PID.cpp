@@ -1,6 +1,11 @@
 #include "drive/PID.hpp"
 
+#include <math.h>
+
+#include <algorithm>
+
 #include "esp_log.h"
+#include "utils/units.hpp"
 
 PID::PID(double *input,
 		 double *output,
@@ -66,24 +71,24 @@ void PID::evaluate() {
 	sumError += kI * error;
 
 	// compute output
-	output = kP * error + sumError - kD * derError;
+	output = kP * error + sumError + kD * derError;
 
 	// clamp output
 	output = std::clamp(output, outMin, outMax);
-	// ESP_LOGI("PID",
-	// 		 "t=%lf i=%lf kP=%lf kI=%lf kD=%lf e=%lf de=%lf se=%lf o=%lf ",
-	// 		 *target,
-	// 		 input,
-	// 		 kP,
-	// 		 kI,
-	// 		 kD,
-	// 		 error,
-	// 		 derError,
-	// 		 sumError,
-	// 		 output);
+	ESP_LOGI("PID",
+			 "t=%lf i=%lf kP=%lf kI=%lf kD=%lf e=%lf de=%lf se=%lf o=%lf ",
+			 *target,
+			 input,
+			 kP,
+			 kI,
+			 kD,
+			 error,
+			 derError,
+			 sumError,
+			 output);
 
 	*this->output = output;
 
 	lastTime = curTime;
 	lastInput = input;
-}
+};

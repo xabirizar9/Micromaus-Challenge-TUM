@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "Controller.hpp"
+#include "drive/LanePID.hpp"
 #include "drive/LaneTask.hpp"
 #include "drive/MotionProfile.hpp"
 #include "freertos/FreeRTOS.h"
@@ -30,6 +31,7 @@ void driveTask(void* arg) {
 	uint16_t navInterval = 100;
 	NavigationPacket state;
 	Controller* controller = driver->controller;
+
 	NetController::Manager net = NetController::Manager::getInstance();
 
 	float interval = 0;
@@ -71,8 +73,46 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				ESP_LOGI(tag, "DriveCell");
+				interval = 30;
 
-				cmdStatus.target = 0;
+				double laneCorrection = 0.0;
+				LaneControlPID lanePid = LaneControlPID(&laneCorrection, interval, controller);
+
+				cmdStatus.actual = controller->getAverageEncoderTicks();
+
+				cmdStatus.target =
+					controller->getAverageEncoderTicks() + mmsToTicks(mazeCellSize) * curCmd->value;
+
+				uint32_t diff = cmdStatus.target - cmdStatus.actual;
+
+				uint8_t counter = 0;
+				// this value represents how often lane control will be called compared to
+				// distance checks: 5 means for every 5 distance checks the lane control routine
+				// will be called once this is usefull since lane control is computationally heavy
+				// but we need regular checks to prevent overshooting
+				uint8_t laneControlChechInterval = 3;
+
+				while (diff > 20) {
+					// perform wall control at different rate to distance checks
+					if (counter % laneControlChechInterval == 0) {
+						lanePid.evaluate();
+						controller->drive(curCmd->speed, laneCorrection);
+					}
+
+					// STOP drive when wall in front
+					if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
+						controller->setSpeed(0);
+						controller->drive(0, 0);
+						break;
+					}
+
+					cmdStatus.actual = controller->getAverageEncoderTicks();
+					diff = cmdStatus.target - cmdStatus.actual;
+					counter++;
+
+					vTaskDelay(pdMS_TO_TICKS(1));
+				}
+
 				laneControlTask(controller, curCmd);
 
 				cmdStatus.actual = 0;

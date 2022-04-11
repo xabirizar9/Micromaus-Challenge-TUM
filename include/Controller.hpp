@@ -14,16 +14,17 @@
 
 class Controller {
    private:
-	TaskHandle_t leftMotorPidTaskHandle;
-	TaskHandle_t rightMotorPidTaskHandle;
+	TaskHandle_t motorPidTaskHandle;
 
 	Motor leftMotor;
 	Motor rightMotor;
 	Encoder leftEncoder;
 	Encoder rightEncoder;
+
 	IRSensor leftSensor;
 	IRSensor rightSensor;
 	IRSensor frontSensor;
+
 	int16_t speed;
 
 	MsgEncoderCallibration lanePidConfig = {80, 0.0, 0.0, false};
