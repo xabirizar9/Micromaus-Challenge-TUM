@@ -72,46 +72,50 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_Move: break;
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
-				ESP_LOGI(tag, "DriveCell");
-				interval = 30;
+				// ESP_LOGI(tag, "DriveCell");
+				// interval = 1;
 
-				double laneCorrection = 0.0;
-				LaneControlPID lanePid = LaneControlPID(&laneCorrection, interval, controller);
+				// double laneCorrection = 0.0;
+				// LaneControlPID lanePid = LaneControlPID(&laneCorrection, interval * 5,
+				// controller);
 
-				cmdStatus.actual = controller->getAverageEncoderTicks();
+				// cmdStatus.actual = controller->getAverageEncoderTicks();
 
-				cmdStatus.target =
-					controller->getAverageEncoderTicks() + mmsToTicks(mazeCellSize) * curCmd->value;
+				// cmdStatus.target =
+				// 	controller->getAverageEncoderTicks() + mmsToTicks(mazeCellSize) * curCmd->value;
 
-				uint32_t diff = cmdStatus.target - cmdStatus.actual;
+				// uint32_t diff = cmdStatus.target - cmdStatus.actual;
+				// uint8_t counter = 0;
+				// // this value represents how often lane control will be called compared to
+				// // distance checks: 5 means for every 5 distance checks the lane control routine
+				// // will be called once this is usefull since lane control is computationally
+				// heavy
+				// // but we need regular checks to prevent overshooting
+				// uint8_t laneControlChechInterval = 5;
 
-				uint8_t counter = 0;
-				// this value represents how often lane control will be called compared to
-				// distance checks: 5 means for every 5 distance checks the lane control routine
-				// will be called once this is usefull since lane control is computationally heavy
-				// but we need regular checks to prevent overshooting
-				uint8_t laneControlChechInterval = 3;
+				// while (diff > 20) {
+				// 	controller->updatePosition();
+				// 	controller->updateSensors();
 
-				while (diff > 20) {
-					// perform wall control at different rate to distance checks
-					if (counter % laneControlChechInterval == 0) {
-						lanePid.evaluate();
-						controller->drive(curCmd->speed, laneCorrection);
-					}
+				// 	// perform wall control at different rate to distance checks
+				// 	if (counter % laneControlChechInterval == 0) {
+				// 		lanePid.evaluate();
+				// 		controller->drive(curCmd->speed, laneCorrection);
+				// 	}
 
-					// STOP drive when wall in front
-					if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
-						controller->setSpeed(0);
-						controller->drive(0, 0);
-						break;
-					}
+				// 	// STOP drive when wall in front
+				// 	if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
+				// 		controller->setSpeed(0);
+				// 		controller->drive(0, 0);
+				// 		break;
+				// 	}
 
-					cmdStatus.actual = controller->getAverageEncoderTicks();
-					diff = cmdStatus.target - cmdStatus.actual;
-					counter++;
+				// 	cmdStatus.actual = controller->getAverageEncoderTicks();
+				// 	diff = cmdStatus.target - cmdStatus.actual;
+				// 	counter++;
 
-					vTaskDelay(pdMS_TO_TICKS(1));
-				}
+				// 	vTaskDelay(pdMS_TO_TICKS(interval));
+				// }
 
 				laneControlTask(controller, curCmd);
 
@@ -163,7 +167,7 @@ void driveTask(void* arg) {
 				uint64_t target = cur + (int64_t)(ticksPerOnSpotRotation * curCmd->value);
 
 				// decrease target based on speed to prevent overshoot
-				target -= std::min((int)((double)std::abs(curCmd->speed) * 0.667), 200);
+				// target -= std::min((int)((double)std::abs(curCmd->speed) * 0.667), 200);
 
 				// ESP_LOGI(tag,
 				// 		 "t=%lld, cur=%lld v=%f tposr=%f",
@@ -174,7 +178,7 @@ void driveTask(void* arg) {
 
 				cmdStatus.target = target;
 
-				int targetDiffRange = 30;
+				int targetDiffRange = 10;
 				// std::min(std::max(600 * curCmd->speed / 4000.0, 1.0), 600.0);
 
 				// monitor encoder values

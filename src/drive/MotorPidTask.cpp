@@ -18,9 +18,12 @@ void motorPidTask(void *pvParameter) {
 
 	// PID interval in ms
 	uint16_t monitorInterval = 10;
+	uint8_t pidInterval = 3.0;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
-	double secondFraction = (float)monitorInterval / 1000.0;
+	double secondFraction = (float)monitorInterval / 100.0;
+
+	float oneOverMaxSpeed = 1 / (5315.2 * secondFraction);
 
 	// current speed target in ticks
 	double lTarget = 0.0;
@@ -33,11 +36,11 @@ void motorPidTask(void *pvParameter) {
 
 	MsgEncoderCallibration config;
 
-	PID lPid = PID(&lInput, &lOutput, -1.0, 1.0, monitorInterval * 10, config);
+	PID lPid = PID(&lInput, &lOutput, -1000.0, 1000.0, monitorInterval * 3, config);
 	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
-	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval * 10, config);
+	PID rPid = PID(&rInput, &rOutput, -1000.0, 1000.0, monitorInterval * 3, config);
 	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);
 
@@ -48,24 +51,21 @@ void motorPidTask(void *pvParameter) {
 	rEnc->reset();
 
 	while (true) {
-		if (counter % 10 == 0) {
+		lInput = lEnc->get();
+		rInput = rEnc->get();
+		if (counter % 3 == 0) {
 			lTarget = (double)controller->getSpeedInTicks(MotorPosition::left) * secondFraction;
 			rTarget = (double)controller->getSpeedInTicks(MotorPosition::right) * secondFraction;
-
-			lInput = lEnc->get();
-			rInput = rEnc->get();
 
 			// ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
 
 			lPid.evaluate();
-			// rPid.evaluate();
+			rPid.evaluate();
 			// reset encoder to avoid overflows
-			lEnc->reset();
-			rEnc->reset();
 			// ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
 
-			lMotor->setPWM((float)lOutput);
-			// rMotor->setPWM((float)rOutput);
+			lMotor->setPWM((float)lOutput * oneOverMaxSpeed * 1.07654321);
+			rMotor->setPWM((float)rOutput * oneOverMaxSpeed);
 
 			// update PID config if needed
 			if (lMotor->wasPidChanged) {
@@ -79,6 +79,8 @@ void motorPidTask(void *pvParameter) {
 				rMotor->wasPidChanged = false;
 			}
 		}
+		lEnc->reset();
+		rEnc->reset();
 		counter++;
 
 		// add short interval
