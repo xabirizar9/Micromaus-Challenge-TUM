@@ -1,0 +1,113 @@
+%
+% requires xelatex. build with
+%	latexmk -xelatex protokoll.tex
+%
+\documentclass[titlepage=firstiscover, twoside=semi, overfullrule]{scrartcl}
+\usepackage{scrlayer-scrpage}
+\usepackage{pdfpages}
+
+% xelatex
+\usepackage[babelshorthands]{polyglossia}
+\usepackage{csquotes}
+\setdefaultlanguage{english}
+
+% math typesetting aids
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{aligned-overset}
+\usepackage{xfrac}
+
+% for figures
+\usepackage{graphicx}
+\usepackage[format=plain]{caption}
+
+% literature management
+\usepackage[
+	style=numeric,
+	url=false,
+	isbn=false,
+	date=year,
+	sorting=none
+	]{biblatex}
+\addbibresource{literature.bib}
+
+\usepackage[english, pdfborderstyle={/S/U/W 1}, pdfborder={0 0 1},
+citebordercolor={0 .8 0}]{hyperref}
+
+% improve reference name style
+\let\subsectionautorefname\sectionautorefname
+\let\subsubsectionautorefname\sectionautorefname
+\renewcommand{\figureautorefname}{Fig.}
+\renewcommand{\equationautorefname}{Eq.}
+\renewcommand{\appendixautorefname}{appendix}
+
+% improved tables - use 'tabu' instead of 'tabular{x/y/}', see manuals of the
+% packages
+\usepackage{tabu}
+\usepackage{booktabs}
+
+% advanced macro creation
+\usepackage{xparse}
+
+% nice fonts
+\usepackage{microtype}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{STIX Two Text}[LetterSpace]
+\setsansfont{TeX Gyre Heros}[LetterSpace]
+\setmathfont{STIX Two Math}[LetterSpace]
+
+% beautiful units typesetting
+\usepackage{siunitx}
+
+% plotting
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+%\usetikzlibrary{external} % put figures in external pdfs, improves performance
+%\tikzsetexternalprefix{tikz/}
+%\tikzset{external/force remake} % uncomment to force remake of all figures
+%\tikzexternalize 
+\usetikzlibrary{calc}
+
+\pgfplotsset{every tick label/.append style={font=\small}}
+\pgfplotsset{every axis label/.append style={font=\small}}
+\pgfplotsset{every axis legend/.append style={font=\small, cells={anchor=west}}}
+
+% colors
+\definecolor{dark blaugrau}{rgb}{0.23,0.24,0.45}
+\definecolor{blaugrau}{rgb}{0.42,0.43,0.59}
+\definecolor{light blaugrau}{rgb}{0.62,0.62,0.73}
+
+\renewcommand{\vec}[1]{\symbfit{#1}} % vector
+\newcommand{\dd}{\mathrm{d}} % differential d
+\newcommand{\mat}[1]{\mathbf{#1}} % matrix
+\newcommand{\TT}{\mathrm{T}} % transpose T
+\newcommand{\vnabla}{\symbf{\nabla}} % nabla vector
+\newcommand{\rk}[1]{\left(#1\right)} % shorthand
+\newcommand{\levicivita}{\upepsilon}
+\newcommand{\kronecker}{\updelta}
+\newcommand{\Order}[1]{\mathcal{O}\left(#1\right)}
+\newcommand{\Integers}{\mathbb{Z}}
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\without}{\backslash}
+
+% text style for referencing signals on board/schematic
+\newcommand{\signal}[1]{\texttt{#1}}
+\newcommand{\partref}[1]{\texttt{#1}}
+
+% hurenkinderregelung
+\widowpenalty=10000
+\clubpenalty=10000
+
+\newcommand{\abs}[1]{\left\vert#1\right\vert} % absolute value
+
+\renewcommand{\eqref}[1]{\hyperref[#1]{(\ref*{#1})}}
+\NewDocumentCommand{\texteqref}{sO{Eq.}m}{\hyperref[#3]{\IfBooleanTF{#1}{Equation}{#2}~(\ref*{#3})}}
+
+\begin{document}
+\input{title.tex}
+\input{hardware.tex}
+\appendix
+\input{schematic.tex}
+\end{document}
