@@ -43,7 +43,7 @@ Controller::Controller()
 	// rightPayload->position = MotorPosition::right;
 
 	// setup pids to control the motors
-	xTaskCreate(motorPidTask, "motorPidTask", 2048, this, 1, &this->motorPidTaskHandle);
+	xTaskCreate(motorPidTask, "motorPidTask", 4096, this, 1, &this->motorPidTaskHandle);
 }
 
 /******************************************************************

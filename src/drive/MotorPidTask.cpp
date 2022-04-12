@@ -33,11 +33,11 @@ void motorPidTask(void *pvParameter) {
 
 	MsgEncoderCallibration config;
 
-	PID lPid = PID(&lInput, &lInput, -1.0, 1.0, monitorInterval * 5, config);
+	PID lPid = PID(&lInput, &lOutput, -1.0, 1.0, monitorInterval * 10, config);
 	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
-	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval * 5, config);
+	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval * 10, config);
 	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);
 
@@ -48,24 +48,24 @@ void motorPidTask(void *pvParameter) {
 	rEnc->reset();
 
 	while (true) {
-		if (counter % 5 == 0) {
+		if (counter % 10 == 0) {
 			lTarget = (double)controller->getSpeedInTicks(MotorPosition::left) * secondFraction;
 			rTarget = (double)controller->getSpeedInTicks(MotorPosition::right) * secondFraction;
 
 			lInput = lEnc->get();
 			rInput = rEnc->get();
 
-			ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
+			// ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
 
 			lPid.evaluate();
-			rPid.evaluate();
+			// rPid.evaluate();
 			// reset encoder to avoid overflows
 			lEnc->reset();
 			rEnc->reset();
-			ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
+			// ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
 
-			lMotor->setPWM(lOutput);
-			rMotor->setPWM(rOutput);
+			lMotor->setPWM((float)lOutput);
+			// rMotor->setPWM((float)rOutput);
 
 			// update PID config if needed
 			if (lMotor->wasPidChanged) {

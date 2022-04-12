@@ -20,6 +20,7 @@ class PID {
 
 	double error;
 	double lastInput;
+	double lastDerError;
 	double sumError;
 
 	double outMax;

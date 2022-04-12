@@ -7,6 +7,21 @@
 #include "esp_log.h"
 #include "utils/units.hpp"
 
+void clampAndIntegrate(float &correction,
+					   float &intError,
+					   uint32_t &timeInterval,
+					   int16_t minValue = INT16_MIN,
+					   int16_t maxValue = INT16_MAX) {
+	if (correction < minValue) {
+		correction = minValue;
+	} else if (correction > maxValue) {
+		correction = maxValue;
+	} else {
+		// safe to integrate
+		intError += correction * timeInterval;
+	}
+}
+
 PID::PID(double *input,
 		 double *output,
 		 double outMin,
@@ -65,16 +80,29 @@ void PID::evaluate() {
 
 	// copy values;
 	input = *this->input;
-
 	error = *this->target - input;
+
 	derError = input - lastInput;
-	sumError += kI * error;
+
+	// add smoothing
+	if (kD != 0.0) {
+		derError = 0.8 * lastDerError + 0.2 * derError;
+		lastDerError = derError;
+	}
 
 	// compute output
 	output = kP * error + sumError + kD * derError;
 
+	if (output < outMin) {
+		output = outMin;
+	} else if (output > outMax) {
+		output = outMax;
+	} else {
+		// safe to integrate
+		sumError += kI * error;
+	}
+
 	// clamp output
-	output = std::clamp(output, outMin, outMax);
 	ESP_LOGI("PID",
 			 "t=%lf i=%lf kP=%lf kI=%lf kD=%lf e=%lf de=%lf se=%lf o=%lf ",
 			 *target,

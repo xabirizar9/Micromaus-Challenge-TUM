@@ -85,16 +85,17 @@ func main() {
 				r, err := NewRobot(log, RobotConnectionOptions{
 					Baud: 0,
 					Dev:  addr.Mac,
-					Addr: addr.PublicIP.String(),
+					Addr: addr.PublicIP.String() + ":8888",
 				})
 				if err != nil {
-
+					log.Error("failed to register", zap.Error(err))
 					time.Sleep(1 * time.Second)
 					continue
 				}
 
 				err = m.RegisterRobot(r)
 				if err != nil {
+					log.Error("failed to register", zap.Error(err))
 					time.Sleep(1 * time.Second)
 					continue
 				}
