@@ -17,8 +17,8 @@ void motorPidTask(void *pvParameter) {
 	Encoder *rEnc = controller->getEncoder(MotorPosition::right);
 
 	// PID interval in ms
-	uint16_t monitorInterval = 50;
-	uint8_t pidInterval = 3.0;
+	uint16_t monitorInterval = 10;
+	uint8_t pidInterval = 2.0;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
 	double secondFraction = (float)monitorInterval / 100.0;
@@ -36,11 +36,11 @@ void motorPidTask(void *pvParameter) {
 
 	MsgEncoderCallibration config;
 
-	PID lPid = PID(&lInput, &lOutput, -1000.0, 1000.0, monitorInterval, config);
+	PID lPid = PID(&lInput, &lOutput, -1000.0, 1000.0, monitorInterval * pidInterval, config);
 	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
-	PID rPid = PID(&rInput, &rOutput, -1000.0, 1000.0, monitorInterval, config);
+	PID rPid = PID(&rInput, &rOutput, -1000.0, 1000.0, monitorInterval * pidInterval, config);
 	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);
 
@@ -51,11 +51,13 @@ void motorPidTask(void *pvParameter) {
 	rEnc->reset();
 
 	while (true) {
-		lInput = lEnc->get();
-		rInput = rEnc->get();
-		if (counter % 3 == 0) {
-			lTarget = (double)controller->getSpeedInTicks(MotorPosition::left) * secondFraction;
-			rTarget = (double)controller->getSpeedInTicks(MotorPosition::right) * secondFraction;
+		if (counter % 2 == 0) {
+			lInput = lEnc->get();
+			rInput = rEnc->get();
+			lTarget = (double)controller->getSpeedInTicks(MotorPosition::left) * secondFraction /
+					  pidInterval;
+			rTarget = (double)controller->getSpeedInTicks(MotorPosition::right) * secondFraction /
+					  pidInterval;
 
 			// ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
 
@@ -78,9 +80,9 @@ void motorPidTask(void *pvParameter) {
 				rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 				rMotor->wasPidChanged = false;
 			}
+			lEnc->reset();
+			rEnc->reset();
 		}
-		lEnc->reset();
-		rEnc->reset();
 		counter++;
 
 		// add short interval
