@@ -46,11 +46,11 @@ float MotionProfile::getSpeedAt(uint16_t index) {
 
 // We get coefficients as pointers, so they should be modified at adress
 void MotionProfile::optimizeCoefficients() {
-	int16_t tempVmax = 0;
-	uint8_t counter = 0;
-	int speedLowerBound = 0.98 * MotionProfile::maxSpeed;
+	double tempVmax = 0;
+	uint counter = 0;
+	double speedLowerBound = 0.98 * this->maxSpeed;
 	while (!(tempVmax >= speedLowerBound and tempVmax <= MotionProfile::maxSpeed)) {
-		if (tempVmax <= speedLowerBound)
+		if (tempVmax >= speedLowerBound)
 			duration -= 0.01;
 		else if (tempVmax <= MotionProfile::maxSpeed)
 			duration += 0.01;
@@ -62,6 +62,9 @@ void MotionProfile::optimizeCoefficients() {
 				   (MotionProfile::a1 - 0.33333 * pow(MotionProfile::a2, 2) / MotionProfile::a3);
 		if (counter == 100)
 			break;
+		counter++;
+		ESP_LOGI(tag, "d=%lf c=%d", duration, counter);
+		vTaskDelay(pdMS_TO_TICKS(1));
 	}
 }
 

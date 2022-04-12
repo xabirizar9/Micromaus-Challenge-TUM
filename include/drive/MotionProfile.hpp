@@ -22,7 +22,7 @@ class MotionProfile {
 	int distance;
 	int vStart;
 	int vEnd;
-	int duration;
+	float duration;
 	float* velocityProfile;
 
 	float getSpeedAt(uint16_t index);

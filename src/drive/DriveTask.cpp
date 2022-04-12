@@ -73,8 +73,10 @@ void driveTask(void* arg) {
 				uint32_t timeInterval = 30;
 				uint32_t numIntervals = straightProfile.duration / ((float)timeInterval / 1000);
 				uint8_t counter = 0;
+				ESP_LOGI(tag, "ti=%d ni=%d v=%d", timeInterval, numIntervals, (int)curCmd->value);
 				while (counter <= numIntervals) {
 					controller->drive(straightProfile.velocityProfile[counter], 0);
+					ESP_LOGI(tag, "s=%f c=%d", straightProfile.velocityProfile[counter], counter);
 					counter++;
 					vTaskDelay(pdMS_TO_TICKS(timeInterval));
 				}
@@ -163,10 +165,10 @@ void driveTask(void* arg) {
 				cmdStatus.actual = curLeft;
 
 				controller->drive(0, 0);
+				break;
 			}
 			// controller.drive(speed, 90);
 			//  ToDo: time!!!
-			break;
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
 				MotorPosition pos = cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot

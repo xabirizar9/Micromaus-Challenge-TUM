@@ -23,7 +23,7 @@ void motorPidTask(void *pvParameter) {
 	// needed to compute target speed for a given PID loop interval
 	double secondFraction = (float)monitorInterval / 100.0;
 
-	float oneOverMaxSpeed = 1 / (5315.2 * secondFraction);
+	float oneOverMaxSpeed = 1 / (5315.2 * (secondFraction * pidInterval));
 
 	// current speed target in ticks
 	double lTarget = 0.0;
