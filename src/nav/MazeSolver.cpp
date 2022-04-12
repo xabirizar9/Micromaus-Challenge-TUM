@@ -13,6 +13,7 @@ static const char* TAG = "[solver]";
 
 MazeSolver::MazeSolver(Controller* controller) {
 	this->controller = controller;
+	this->addCmdAndWait(DriveCmdType_Move, 200, 100);
 }
 
 void MazeSolver::sendSolverState() {

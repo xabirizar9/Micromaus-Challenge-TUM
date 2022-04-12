@@ -69,14 +69,15 @@ void driveTask(void* arg) {
 
 		switch (curCmd->type) {
 			case DriveCmdType::DriveCmdType_Move: {
-				MotionProfile straightProfile((int)curCmd->value, 2.0);
+				// MotionProfile straightProfile((int)curCmd->value, 2.0);
+				MotionProfile straightProfile(200, 2.0);
 				uint32_t timeInterval = 30;
 				uint32_t numIntervals = straightProfile.duration / ((float)timeInterval / 1000);
 				uint8_t counter = 0;
-				ESP_LOGI(tag, "ti=%d ni=%d v=%d", timeInterval, numIntervals, (int)curCmd->value);
+
 				while (counter <= numIntervals) {
 					controller->drive(straightProfile.velocityProfile[counter], 0);
-					ESP_LOGI(tag, "s=%f c=%d", straightProfile.velocityProfile[counter], counter);
+					// ESP_LOGI(tag, "s=%f c=%d", straightProfile.velocityProfile[counter], counter);
 					counter++;
 					vTaskDelay(pdMS_TO_TICKS(timeInterval));
 				}

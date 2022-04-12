@@ -19,7 +19,7 @@ class MotionProfile {
 	// float trajectories[numTrajectories];  // empty array with space for storing in each
 	// trajectory the given profile parameters
 	float a0, a1, a2, a3;
-	int distance;
+	float tickEnd;
 	int vStart;
 	int vEnd;
 	float duration;
@@ -32,32 +32,36 @@ class MotionProfile {
 	}
 
 	// Constructor for straight lines (not grid distances)
-	MotionProfile(int distance, float duration) : maxSpeed(400) {
+	MotionProfile(int distance, float elapsedTime) : maxSpeed(400) {
 		vStart = 0;
 		vEnd = 0;
-		distance = mmsToTicks(distance);
-		MotionProfile::getStraightProfile(distance, duration, vStart, vEnd, true);
+		tickEnd = mmsToTicks(distance);
+		duration = elapsedTime;
+		getStraightProfile(true);
 	};
 	// Constructor for a grid in straight line
-	MotionProfile(uint8_t numGrids, float duration, int vStart, int vEnd) : maxSpeed(1700) {
-		vStart = vStart;
-		vEnd = vEnd;
-		distance = mmsToTicks(numGrids * 180);
-		MotionProfile::getGridProfile(distance, duration, vStart, vEnd, true);
+	MotionProfile(uint8_t numGrids, float elapsedTime, int startSpeed, int endSpeed)
+		: maxSpeed(1700) {
+		vStart = startSpeed;
+		vEnd = endSpeed;
+		tickEnd = mmsToTicks(numGrids * 180);
+		duration = elapsedTime;
+		getGridProfile(true);
 	};
 	// Constructor for curves
-	MotionProfile(uint8_t degrees, float duration) : maxSpeed(700) {
+	MotionProfile(uint8_t degrees, float elapsedTime) : maxSpeed(700) {
 		vStart = 100;
 		vEnd = 100;
-		MotionProfile::getCurveProfile(90, 1.0, false);
+		duration = elapsedTime;
+		getCurveProfile(90, false);
 	};
 
 	void optimizeCoefficients();
-	void getCurveProfile(uint8_t degrees, int duration, bool optimize);
-	void getGridProfile(uint8_t numGrids, float duration, int vStart, int vEnd, bool optimize);
-	void getStraightProfile(int distance, float duration, int vStart, int vEnd, bool optimize);
-	void computeVelocityProfile(int tickEnd, float duration, int vStart, int vEnd, bool optimize);
-	void getPolynomCoefficients(int distance, float tEnd, int vStart, int vEnd);
+	void getCurveProfile(uint8_t degrees, bool optimize);
+	void getGridProfile(bool optimize);
+	void getStraightProfile(bool optimize);
+	void computeVelocityProfile(bool optimize);
+	void getPolynomCoefficients();
 
 	~MotionProfile();
 	// uint16_t* computeTurnProfile();
