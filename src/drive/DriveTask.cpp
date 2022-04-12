@@ -44,8 +44,7 @@ void driveTask(void* arg) {
 	MsgDrive* curCmd = NULL;
 
 	// MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
-	// MotionProfile straightProfile(200, 2.0);
-	// MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
+	//  MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
 
 	while (true) {
 		// update and get state
@@ -69,7 +68,18 @@ void driveTask(void* arg) {
 		cmdStatus.cmd = curCmd->type;
 
 		switch (curCmd->type) {
-			case DriveCmdType::DriveCmdType_Move: break;
+			case DriveCmdType::DriveCmdType_Move: {
+				MotionProfile straightProfile((int)curCmd->value, 2.0);
+				uint32_t timeInterval = 30;
+				uint32_t numIntervals = straightProfile.duration / ((float)timeInterval / 1000);
+				uint8_t counter = 0;
+				while (counter <= numIntervals) {
+					controller->drive(straightProfile.velocityProfile[counter], 0);
+					counter++;
+					vTaskDelay(pdMS_TO_TICKS(timeInterval));
+				}
+				break;
+			}
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				// ESP_LOGI(tag, "DriveCell");

@@ -41,7 +41,7 @@ float* runStraight(int distance, float duration) {
 }
 
 float MotionProfile::getSpeedAt(uint16_t index) {
-	return MotionProfile::velocityProfile[index];
+	return velocityProfile[index];
 }
 
 // We get coefficients as pointers, so they should be modified at adress
@@ -107,14 +107,14 @@ void MotionProfile::computeVelocityProfile(
 	int time = 0;
 
 	int numIntervals = duration / controlInterval;
-	MotionProfile::velocityProfile = new float[numIntervals];
+	velocityProfile = new float[numIntervals];
 
 	while (counter <= numIntervals) {
 		time = counter * controlInterval;
 		// need to solve type conversion error
 		tickSpeed = ((float)MotionProfile::a1 * time + 2 * MotionProfile::a2 * time +
 					 3 * MotionProfile::a3 * pow(time, 2));
-		MotionProfile::velocityProfile[counter] =
+		velocityProfile[counter] =
 			encoderTicksToMm * tickSpeed;  // check if pointer assignment is corre t
 		counter++;
 	}
