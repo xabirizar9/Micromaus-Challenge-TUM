@@ -10,6 +10,11 @@
 #endif
 
 /* Enum definitions */
+typedef enum _MotorPosition { 
+    MotorPosition_left = 0, 
+    MotorPosition_right = 1 
+} MotorPosition;
+
 typedef enum _InfoCmdType { 
     InfoCmdType_Noop = 0, 
     /* commands only intended for the go<->client communication */
@@ -48,10 +53,6 @@ typedef struct _MsgPing {
 typedef struct _MsgStop { 
     char dummy_field;
 } MsgStop;
-
-typedef struct _PidTuningInfo { 
-    pb_callback_t err; 
-} PidTuningInfo;
 
 typedef struct _PongPacket { 
     char dummy_field;
@@ -102,6 +103,10 @@ typedef struct _MsgSolve {
     float speed; 
 } MsgSolve;
 
+typedef struct _PidTuningInfo { 
+    float err[256]; 
+} PidTuningInfo;
+
 typedef struct _PosDistribution { 
     float positionMean[3]; 
     float velocityMean[3]; 
@@ -122,26 +127,13 @@ typedef struct _SensorPacket {
 } SensorPacket;
 
 typedef struct _MausConfigPacket { 
-    bool has_motorPid;
-    MsgEncoderCallibration motorPid; 
+    bool has_leftMotorPid;
+    MsgEncoderCallibration leftMotorPid; 
+    bool has_rightMotorPid;
+    MsgEncoderCallibration rightMotorPid; 
     bool has_lanePid;
     MsgEncoderCallibration lanePid; 
 } MausConfigPacket;
-
-typedef struct _MausIncomingMessage { 
-    pb_size_t which_payload;
-    union {
-        MsgInit init;
-        MsgControl control;
-        MsgEncoderCallibration encoderCallibration;
-        MsgPing ping;
-        MsgStop stop;
-        MsgDrive drive;
-        MsgSetPosition setPosition;
-        MsgSolve solve;
-        MsgEncoderCallibration laneCallibration;
-    } payload; 
-} MausIncomingMessage;
 
 typedef struct _MazeStatePacket { 
     pb_callback_t state; 
@@ -151,6 +143,12 @@ typedef struct _MazeStatePacket {
     bool has_target;
     Position target; 
 } MazeStatePacket;
+
+typedef struct _MsgMotorCallibration { 
+    MotorPosition motor; 
+    bool has_config;
+    MsgEncoderCallibration config; 
+} MsgMotorCallibration;
 
 typedef struct _NavigationPacket { 
     bool has_sensors;
@@ -165,6 +163,21 @@ typedef struct _NavigationPacket {
     float batPercentage; 
     uint32_t timestamp; /* PosDistribution posDistribution = 10; */
 } NavigationPacket;
+
+typedef struct _MausIncomingMessage { 
+    pb_size_t which_payload;
+    union {
+        MsgInit init;
+        MsgControl control;
+        MsgMotorCallibration motorCallibration;
+        MsgPing ping;
+        MsgStop stop;
+        MsgDrive drive;
+        MsgSetPosition setPosition;
+        MsgSolve solve;
+        MsgEncoderCallibration laneCallibration;
+    } payload; 
+} MausIncomingMessage;
 
 typedef struct _MausOutgoingMessage { 
     pb_size_t which_payload;
@@ -182,6 +195,10 @@ typedef struct _MausOutgoingMessage {
 
 
 /* Helper constants for enums */
+#define _MotorPosition_MIN MotorPosition_left
+#define _MotorPosition_MAX MotorPosition_right
+#define _MotorPosition_ARRAYSIZE ((MotorPosition)(MotorPosition_right+1))
+
 #define _InfoCmdType_MIN InfoCmdType_Noop
 #define _InfoCmdType_MAX InfoCmdType_MausDisconnected
 #define _InfoCmdType_ARRAYSIZE ((InfoCmdType)(InfoCmdType_MausDisconnected+1))
@@ -202,15 +219,16 @@ extern "C" {
 /* Initializer values for message structs */
 #define AckPacket_init_default                   {0}
 #define Position_init_default                    {0, 0, 0}
+#define MsgMotorCallibration_init_default        {_MotorPosition_MIN, false, MsgEncoderCallibration_init_default}
 #define MsgEncoderCallibration_init_default      {0, 0, 0, 0}
 #define PongPacket_init_default                  {0}
 #define SensorPacket_init_default                {0, 0, 0}
 #define PosDistribution_init_default             {{0, 0, 0}, {0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}}
 #define NavigationPacket_init_default            {false, SensorPacket_init_default, false, Position_init_default, 0, 0, 0, 0, 0, 0, 0}
 #define InfoPacket_init_default                  {_InfoCmdType_MIN}
-#define PidTuningInfo_init_default               {{{NULL}, NULL}}
+#define PidTuningInfo_init_default               {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}
 #define MazeStatePacket_init_default             {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_default, false, Position_init_default}
-#define MausConfigPacket_init_default            {false, MsgEncoderCallibration_init_default, false, MsgEncoderCallibration_init_default}
+#define MausConfigPacket_init_default            {false, MsgEncoderCallibration_init_default, false, MsgEncoderCallibration_init_default, false, MsgEncoderCallibration_init_default}
 #define MausCommandStatus_init_default           {_DriveCmdType_MIN, 0, 0, 0}
 #define MausOutgoingMessage_init_default         {0, {AckPacket_init_default}}
 #define MsgInit_init_default                     {0}
@@ -223,15 +241,16 @@ extern "C" {
 #define MausIncomingMessage_init_default         {0, {MsgInit_init_default}}
 #define AckPacket_init_zero                      {0}
 #define Position_init_zero                       {0, 0, 0}
+#define MsgMotorCallibration_init_zero           {_MotorPosition_MIN, false, MsgEncoderCallibration_init_zero}
 #define MsgEncoderCallibration_init_zero         {0, 0, 0, 0}
 #define PongPacket_init_zero                     {0}
 #define SensorPacket_init_zero                   {0, 0, 0}
 #define PosDistribution_init_zero                {{0, 0, 0}, {0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}}
 #define NavigationPacket_init_zero               {false, SensorPacket_init_zero, false, Position_init_zero, 0, 0, 0, 0, 0, 0, 0}
 #define InfoPacket_init_zero                     {_InfoCmdType_MIN}
-#define PidTuningInfo_init_zero                  {{{NULL}, NULL}}
+#define PidTuningInfo_init_zero                  {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}
 #define MazeStatePacket_init_zero                {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_zero, false, Position_init_zero}
-#define MausConfigPacket_init_zero               {false, MsgEncoderCallibration_init_zero, false, MsgEncoderCallibration_init_zero}
+#define MausConfigPacket_init_zero               {false, MsgEncoderCallibration_init_zero, false, MsgEncoderCallibration_init_zero, false, MsgEncoderCallibration_init_zero}
 #define MausCommandStatus_init_zero              {_DriveCmdType_MIN, 0, 0, 0}
 #define MausOutgoingMessage_init_zero            {0, {AckPacket_init_zero}}
 #define MsgInit_init_zero                        {0}
@@ -244,7 +263,6 @@ extern "C" {
 #define MausIncomingMessage_init_zero            {0, {MsgInit_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define PidTuningInfo_err_tag                    1
 #define InfoPacket_cmd_tag                       1
 #define MausCommandStatus_cmd_tag                1
 #define MausCommandStatus_success_tag            2
@@ -265,6 +283,7 @@ extern "C" {
 #define MsgSetPosition_heading_tag               3
 #define MsgSolve_type_tag                        1
 #define MsgSolve_speed_tag                       2
+#define PidTuningInfo_err_tag                    1
 #define PosDistribution_positionMean_tag         1
 #define PosDistribution_velocityMean_tag         2
 #define PosDistribution_positionStd_tag          3
@@ -275,21 +294,15 @@ extern "C" {
 #define SensorPacket_left_tag                    1
 #define SensorPacket_front_tag                   2
 #define SensorPacket_right_tag                   3
-#define MausConfigPacket_motorPid_tag            1
-#define MausConfigPacket_lanePid_tag             2
-#define MausIncomingMessage_init_tag             2
-#define MausIncomingMessage_control_tag          3
-#define MausIncomingMessage_encoderCallibration_tag 4
-#define MausIncomingMessage_ping_tag             5
-#define MausIncomingMessage_stop_tag             6
-#define MausIncomingMessage_drive_tag            7
-#define MausIncomingMessage_setPosition_tag      8
-#define MausIncomingMessage_solve_tag            9
-#define MausIncomingMessage_laneCallibration_tag 10
+#define MausConfigPacket_leftMotorPid_tag        1
+#define MausConfigPacket_rightMotorPid_tag       2
+#define MausConfigPacket_lanePid_tag             3
 #define MazeStatePacket_state_tag                1
 #define MazeStatePacket_walls_tag                2
 #define MazeStatePacket_position_tag             3
 #define MazeStatePacket_target_tag               4
+#define MsgMotorCallibration_motor_tag           1
+#define MsgMotorCallibration_config_tag          2
 #define NavigationPacket_sensors_tag             1
 #define NavigationPacket_position_tag            2
 #define NavigationPacket_leftMotorSpeed_tag      3
@@ -299,6 +312,15 @@ extern "C" {
 #define NavigationPacket_voltage_tag             7
 #define NavigationPacket_batPercentage_tag       8
 #define NavigationPacket_timestamp_tag           9
+#define MausIncomingMessage_init_tag             2
+#define MausIncomingMessage_control_tag          3
+#define MausIncomingMessage_motorCallibration_tag 4
+#define MausIncomingMessage_ping_tag             5
+#define MausIncomingMessage_stop_tag             6
+#define MausIncomingMessage_drive_tag            7
+#define MausIncomingMessage_setPosition_tag      8
+#define MausIncomingMessage_solve_tag            9
+#define MausIncomingMessage_laneCallibration_tag 10
 #define MausOutgoingMessage_ack_tag              1
 #define MausOutgoingMessage_nav_tag              2
 #define MausOutgoingMessage_pong_tag             3
@@ -320,6 +342,13 @@ X(a, STATIC,   SINGULAR, FLOAT,    y,                 2) \
 X(a, STATIC,   SINGULAR, FLOAT,    heading,           3)
 #define Position_CALLBACK NULL
 #define Position_DEFAULT NULL
+
+#define MsgMotorCallibration_FIELDLIST(X, a) \
+X(a, STATIC,   SINGULAR, UENUM,    motor,             1) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  config,            2)
+#define MsgMotorCallibration_CALLBACK NULL
+#define MsgMotorCallibration_DEFAULT NULL
+#define MsgMotorCallibration_config_MSGTYPE MsgEncoderCallibration
 
 #define MsgEncoderCallibration_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, FLOAT,    kP,                1) \
@@ -370,8 +399,8 @@ X(a, STATIC,   SINGULAR, UENUM,    cmd,               1)
 #define InfoPacket_DEFAULT NULL
 
 #define PidTuningInfo_FIELDLIST(X, a) \
-X(a, CALLBACK, REPEATED, FLOAT,    err,               1)
-#define PidTuningInfo_CALLBACK pb_default_field_callback
+X(a, STATIC,   FIXARRAY, FLOAT,    err,               1)
+#define PidTuningInfo_CALLBACK NULL
 #define PidTuningInfo_DEFAULT NULL
 
 #define MazeStatePacket_FIELDLIST(X, a) \
@@ -385,11 +414,13 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  target,            4)
 #define MazeStatePacket_target_MSGTYPE Position
 
 #define MausConfigPacket_FIELDLIST(X, a) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  motorPid,          1) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  lanePid,           2)
+X(a, STATIC,   OPTIONAL, MESSAGE,  leftMotorPid,      1) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  rightMotorPid,     2) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  lanePid,           3)
 #define MausConfigPacket_CALLBACK NULL
 #define MausConfigPacket_DEFAULT NULL
-#define MausConfigPacket_motorPid_MSGTYPE MsgEncoderCallibration
+#define MausConfigPacket_leftMotorPid_MSGTYPE MsgEncoderCallibration
+#define MausConfigPacket_rightMotorPid_MSGTYPE MsgEncoderCallibration
 #define MausConfigPacket_lanePid_MSGTYPE MsgEncoderCallibration
 
 #define MausCommandStatus_FIELDLIST(X, a) \
@@ -464,7 +495,7 @@ X(a, STATIC,   SINGULAR, FLOAT,    heading,           3)
 #define MausIncomingMessage_FIELDLIST(X, a) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,init,payload.init),   2) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,control,payload.control),   3) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,encoderCallibration,payload.encoderCallibration),   4) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,motorCallibration,payload.motorCallibration),   4) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ping,payload.ping),   5) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,stop,payload.stop),   6) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,drive,payload.drive),   7) \
@@ -475,7 +506,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,laneCallibration,payload.laneCallibr
 #define MausIncomingMessage_DEFAULT NULL
 #define MausIncomingMessage_payload_init_MSGTYPE MsgInit
 #define MausIncomingMessage_payload_control_MSGTYPE MsgControl
-#define MausIncomingMessage_payload_encoderCallibration_MSGTYPE MsgEncoderCallibration
+#define MausIncomingMessage_payload_motorCallibration_MSGTYPE MsgMotorCallibration
 #define MausIncomingMessage_payload_ping_MSGTYPE MsgPing
 #define MausIncomingMessage_payload_stop_MSGTYPE MsgStop
 #define MausIncomingMessage_payload_drive_MSGTYPE MsgDrive
@@ -485,6 +516,7 @@ X(a, STATIC,   ONEOF,    MESSAGE,  (payload,laneCallibration,payload.laneCallibr
 
 extern const pb_msgdesc_t AckPacket_msg;
 extern const pb_msgdesc_t Position_msg;
+extern const pb_msgdesc_t MsgMotorCallibration_msg;
 extern const pb_msgdesc_t MsgEncoderCallibration_msg;
 extern const pb_msgdesc_t PongPacket_msg;
 extern const pb_msgdesc_t SensorPacket_msg;
@@ -508,6 +540,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define AckPacket_fields &AckPacket_msg
 #define Position_fields &Position_msg
+#define MsgMotorCallibration_fields &MsgMotorCallibration_msg
 #define MsgEncoderCallibration_fields &MsgEncoderCallibration_msg
 #define PongPacket_fields &PongPacket_msg
 #define SensorPacket_fields &SensorPacket_msg
@@ -529,23 +562,24 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MausIncomingMessage_fields &MausIncomingMessage_msg
 
 /* Maximum encoded size of messages (where known) */
-/* PidTuningInfo_size depends on runtime parameters */
 /* MazeStatePacket_size depends on runtime parameters */
 /* MausOutgoingMessage_size depends on runtime parameters */
 #define AckPacket_size                           0
 #define InfoPacket_size                          2
 #define MausCommandStatus_size                   16
-#define MausConfigPacket_size                    38
-#define MausIncomingMessage_size                 19
+#define MausConfigPacket_size                    57
+#define MausIncomingMessage_size                 23
 #define MsgControl_size                          16
 #define MsgDrive_size                            12
 #define MsgEncoderCallibration_size              17
 #define MsgInit_size                             11
+#define MsgMotorCallibration_size                21
 #define MsgPing_size                             0
 #define MsgSetPosition_size                      15
 #define MsgSolve_size                            7
 #define MsgStop_size                             0
 #define NavigationPacket_size                    82
+#define PidTuningInfo_size                       1280
 #define PongPacket_size                          0
 #define PosDistribution_size                     120
 #define Position_size                            15

@@ -37,10 +37,10 @@ Controller::Controller()
 	// init pid payload
 	// PidTaskInitPayload *leftPayload = new PidTaskInitPayload();
 	// leftPayload->controller = this;
-	// leftPayload->position = MotorPosition::left;
+	// leftPayload->position = MotorPosition::MotorPosition_left;
 	// PidTaskInitPayload *rightPayload = new PidTaskInitPayload();
 	// rightPayload->controller = this;
-	// rightPayload->position = MotorPosition::right;
+	// rightPayload->position = MotorPosition::MotorPosition_right;
 
 	// setup pids to control the motors
 	xTaskCreate(motorPidTask, "motorPidTask", 4096, this, 1, &this->motorPidTaskHandle);
@@ -80,14 +80,18 @@ static void copyPosDistToState(NavigationPacket &state, const RobotPositionDistr
 }
 
 void Controller::updatePosition() {
-	static int64_t leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
-	static int64_t rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	static int64_t leftTicks =
+		this->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter();
+	static int64_t rightTicks =
+		this->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter();
 
 	// distance the wheels have traveled
 	float left =
-		(this->getEncoder(MotorPosition::left)->getTotalCounter() - leftTicks) * encoderTicksToMm;
+		(this->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter() - leftTicks) *
+		encoderTicksToMm;
 	float right =
-		(this->getEncoder(MotorPosition::right)->getTotalCounter() - rightTicks) * encoderTicksToMm;
+		(this->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter() - rightTicks) *
+		encoderTicksToMm;
 
 	float center = (left + right) / 2.0;
 
@@ -101,8 +105,8 @@ void Controller::updatePosition() {
 	this->state.position.x += center * cos(this->state.position.heading);
 	this->state.position.y += center * sin(this->state.position.heading);
 
-	leftTicks = this->getEncoder(MotorPosition::left)->getTotalCounter();
-	rightTicks = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	leftTicks = this->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter();
+	rightTicks = this->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter();
 
 	// slam.predict(state.leftMotorSpeed / 10.f, state.rightMotorSpeed / 10.f);
 	// copyPosDistToState(state, slam.getPositionDistribution());
@@ -154,8 +158,8 @@ void Controller::drive(int16_t speed, int16_t R) {
 
 float Controller::getSpeedInTicks(MotorPosition position) {
 	switch (position) {
-		case MotorPosition::left: return this->leftSpeedTickTarget;
-		case MotorPosition::right: return this->rightSpeedTickTarget;
+		case MotorPosition::MotorPosition_left: return this->leftSpeedTickTarget;
+		case MotorPosition::MotorPosition_right: return this->rightSpeedTickTarget;
 		default: return 0;
 	}
 }
@@ -189,8 +193,8 @@ void Controller::turnOnSpot(float degree, int16_t speed) {
 
 Encoder *Controller::getEncoder(MotorPosition position) {
 	switch (position) {
-		case MotorPosition::left: return &this->leftEncoder;
-		case MotorPosition::right: return &this->rightEncoder;
+		case MotorPosition::MotorPosition_left: return &this->leftEncoder;
+		case MotorPosition::MotorPosition_right: return &this->rightEncoder;
 		default:
 			// should be unreachable
 			return NULL;
@@ -199,8 +203,8 @@ Encoder *Controller::getEncoder(MotorPosition position) {
 
 Motor *Controller::getMotor(MotorPosition position) {
 	switch (position) {
-		case MotorPosition::left: return &this->leftMotor;
-		case MotorPosition::right: return &this->rightMotor;
+		case MotorPosition::MotorPosition_left: return &this->leftMotor;
+		case MotorPosition::MotorPosition_right: return &this->rightMotor;
 		default:
 			// should be unreachable
 			return NULL;
@@ -209,8 +213,10 @@ Motor *Controller::getMotor(MotorPosition position) {
 
 const NavigationPacket &Controller::getState() {
 	this->state.timestamp = xTaskGetTickCount();
-	this->state.leftEncoderTotal = this->getEncoder(MotorPosition::left)->getTotalCounter();
-	this->state.rightEncoderTotal = this->getEncoder(MotorPosition::right)->getTotalCounter();
+	this->state.leftEncoderTotal =
+		this->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter();
+	this->state.rightEncoderTotal =
+		this->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter();
 	this->updateSensors();
 	this->state.batPercentage = this->battery.getPercentage();
 	this->state.voltage = this->battery.getVoltage();
@@ -240,7 +246,7 @@ void Controller::startPidTuning() {
 		delete pidTuningSamples;
 	}
 	this->currentPidTuningSampleIndex = 0;
-	this->pidTuningSamples = new float[PID_TUNNING_BUFFER_SIZE];
+	this->pidTuningSamples = new PidTuningInfo;
 	this->isPidTuningEnabled = true;
 }
 
@@ -254,7 +260,7 @@ void Controller::appendPidTuningSample(float sample) {
 		return;
 	}
 
-	this->pidTuningSamples[this->currentPidTuningSampleIndex] = sample;
+	this->pidTuningSamples->err[this->currentPidTuningSampleIndex] = sample;
 	this->currentPidTuningSampleIndex++;
 }
 
@@ -262,12 +268,12 @@ bool Controller::getIsPidTuningEnabled() {
 	return this->isPidTuningEnabled;
 }
 
-float *Controller::getPidTuningBuffer() {
+PidTuningInfo *Controller::getPidTuningBuffer() {
 	return this->pidTuningSamples;
 }
 
 int64_t Controller::getAverageEncoderTicks() {
-	int64_t right = this->getEncoder(MotorPosition::right)->getTotalCounter();
-	int64_t left = this->getEncoder(MotorPosition::left)->getTotalCounter();
+	int64_t right = this->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter();
+	int64_t left = this->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter();
 	return 0.5 * (right + left);
 }

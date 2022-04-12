@@ -34,8 +34,8 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB) : unit(new PulseCounterResource()) 
 	pcnt_counter_clear(*unit);
 
 	// setup filter for runt pulses
-	pcnt_set_filter_value(*unit, 250);
-	pcnt_filter_enable(*unit);
+	// pcnt_set_filter_value(*unit, 250);
+	// pcnt_filter_enable(*unit);
 
 	if (!isrServiceRefcount) {
 		ESP_ERROR_CHECK(pcnt_isr_service_install(0));

@@ -10,21 +10,21 @@ static const char *TAG = "PID";
 void motorPidTask(void *pvParameter) {
 	// copy all relevant values
 	Controller *controller = (Controller *)pvParameter;
-	Motor *lMotor = controller->getMotor(MotorPosition::left);
-	Motor *rMotor = controller->getMotor(MotorPosition::right);
+	Motor *lMotor = controller->getMotor(MotorPosition::MotorPosition_left);
+	Motor *rMotor = controller->getMotor(MotorPosition::MotorPosition_right);
 
-	Encoder *lEnc = controller->getEncoder(MotorPosition::left);
-	Encoder *rEnc = controller->getEncoder(MotorPosition::right);
+	Encoder *lEnc = controller->getEncoder(MotorPosition::MotorPosition_left);
+	Encoder *rEnc = controller->getEncoder(MotorPosition::MotorPosition_right);
 
 	// PID interval in ms
 	uint16_t monitorInterval = 10;
-	uint8_t pidInterval = 2.0;
+	uint8_t pidInterval = 3;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
-	double secondFraction = (float)monitorInterval / 100.0;
-
-	float oneOverMaxSpeed = 1 / (5315.2 * (secondFraction * pidInterval));
-
+	double secondFraction = (double)monitorInterval / 1000.0;
+	double pidTimeInterval = (secondFraction * pidInterval);
+	double oneOverMaxSpeed = (1.0 / 1000.0);
+	double targetScaleFactor = pidTimeInterval;
 	// current speed target in ticks
 	double lTarget = 0.0;
 	double lInput = 0.0;
@@ -36,28 +36,26 @@ void motorPidTask(void *pvParameter) {
 
 	MsgEncoderCallibration config;
 
-	PID lPid = PID(&lInput, &lOutput, -1000.0, 1000.0, monitorInterval * pidInterval, config);
+	PID lPid = PID(&lInput, &lOutput, -1.0, 1.0, monitorInterval * pidInterval, config);
 	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
-	PID rPid = PID(&rInput, &rOutput, -1000.0, 1000.0, monitorInterval * pidInterval, config);
+	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval * pidInterval, config);
 	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);
 
 	uint8_t counter = 0;
 
 	// initially reset encoder
-	lEnc->reset();
-	rEnc->reset();
 
 	while (true) {
-		if (counter % 2 == 0) {
+		if (counter % pidInterval == 0) {
 			lInput = lEnc->get();
 			rInput = rEnc->get();
-			lTarget = (double)controller->getSpeedInTicks(MotorPosition::left) * secondFraction /
-					  pidInterval;
-			rTarget = (double)controller->getSpeedInTicks(MotorPosition::right) * secondFraction /
-					  pidInterval;
+			lTarget = (double)controller->getSpeedInTicks(MotorPosition::MotorPosition_left) *
+					  targetScaleFactor;
+			rTarget = (double)controller->getSpeedInTicks(MotorPosition::MotorPosition_right) *
+					  targetScaleFactor;
 
 			// ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
 
@@ -66,8 +64,8 @@ void motorPidTask(void *pvParameter) {
 			// reset encoder to avoid overflows
 
 			// ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
-			lMotor->setPWM((float)lOutput * oneOverMaxSpeed);
-			rMotor->setPWM((float)rOutput * oneOverMaxSpeed);
+			lMotor->setPWM((float)lOutput);
+			rMotor->setPWM((float)rOutput);
 
 			// update PID config if needed
 			if (lMotor->wasPidChanged) {

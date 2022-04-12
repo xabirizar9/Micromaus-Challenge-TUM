@@ -6,3 +6,6 @@ PosDistribution.positionStd max_count:9
 PosDistribution.positionStd fixed_count:true
 PosDistribution.velocityStd max_count:9
 PosDistribution.velocityStd fixed_count:true
+
+PidTuningInfo.err max_count:256
+PidTuningInfo.err fixed_count:true

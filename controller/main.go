@@ -56,7 +56,7 @@ func main() {
 				r, err := NewRobot(log, RobotConnectionOptions{
 					Baud: 0,
 					Dev:  "waxn-robot.local",
-					Addr: "131.159.195.109:8888", //c.MausAddr,
+					Addr: c.MausAddr,
 				})
 				if err != nil {
 					log.Info("low level connection failed", zap.Error(err), zap.String("addr", c.MausAddr))

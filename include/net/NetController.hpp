@@ -51,7 +51,7 @@ class Manager {
 	RobotDriver* driver;
 
 	template <typename T, int tag>
-	void writePacket(T packet);
+	void writePacket(const T& packet);
 
 	void writeMazeState(MazeStatePacket state);
 	void writeCmdState(MausCommandStatus state);

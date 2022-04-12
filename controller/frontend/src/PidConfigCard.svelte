@@ -5,17 +5,22 @@
   import Input from "./components/Input.svelte";
   import PidForm from "./components/PidForm.svelte";
   import { onMount } from "svelte";
-  import { MausOutgoingMessage, MsgEncoderCallibration } from "./proto/message";
+  import {
+    MausOutgoingMessage,
+    MotorPosition,
+    MsgEncoderCallibration,
+  } from "./proto/message";
 
   export let com: Communicator;
 
-  let motorPid: MsgEncoderCallibration;
+  let leftMotorPid: MsgEncoderCallibration;
+  let rightMotorPid: MsgEncoderCallibration;
   let lanePid: MsgEncoderCallibration;
 
   onMount(async () => {
-    console.log("onMount", { motorPid, lanePid });
     if (com.config) {
-      motorPid = com.config.motorPid;
+      leftMotorPid = com.config.leftMotorPid;
+      rightMotorPid = com.config.rightMotorPid;
       lanePid = com.config.lanePid;
     }
     com.addEventListener(
@@ -23,8 +28,9 @@
       (evt: MessageEvent<MausOutgoingMessage>) => {
         if (evt.data.mausConfig) {
           lanePid = evt.data.mausConfig.lanePid;
-          motorPid = evt.data.mausConfig.motorPid;
-          console.log("gotConfig", { motorPid, lanePid });
+          leftMotorPid = evt.data.mausConfig.leftMotorPid;
+          rightMotorPid = evt.data.mausConfig.rightMotorPid;
+          console.log("gotConfig", { rightMotorPid, leftMotorPid, lanePid });
         }
       }
     );
@@ -36,18 +42,29 @@
     });
   };
 
-  const onUpdateMotorCalibration = (config: MsgEncoderCallibration) => {
+  const onUpdateMotorCalibration = (
+    motor: MotorPosition,
+    config: MsgEncoderCallibration
+  ) => {
     com.send({
-      encoderCallibration: config,
+      motorCallibration: {
+        motor,
+        config,
+      },
     });
   };
 </script>
 
-{#if motorPid}
+{#if leftMotorPid}
   <PidForm
-    title="Motor PID"
-    bind:config={motorPid}
-    onSubmit={onUpdateMotorCalibration}
+    title="Left Motor PID"
+    bind:config={leftMotorPid}
+    onSubmit={(config) => onUpdateMotorCalibration(MotorPosition.left, config)}
+  />
+  <PidForm
+    title="Right Motor PID"
+    bind:config={rightMotorPid}
+    onSubmit={(config) => onUpdateMotorCalibration(MotorPosition.right, config)}
   />{/if}
 
 {#if lanePid}
@@ -57,7 +74,7 @@
     onSubmit={onUpdateLaneCalibration}
   />
 {/if}
-{#if !motorPid && !lanePid}
+{#if !leftMotorPid && !lanePid}
   <p>No lane PID configuration available. Please update the MAUS!</p>
 {/if}
 

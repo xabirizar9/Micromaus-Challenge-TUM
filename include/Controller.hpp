@@ -31,7 +31,7 @@ class Controller {
 
 	bool isPidTuningEnabled = false;
 	uint32_t currentPidTuningSampleIndex = 0;
-	float *pidTuningSamples = NULL;
+	PidTuningInfo *pidTuningSamples = NULL;
 
 	// individual speed targets per motor
 	float leftSpeedTickTarget = 0;
@@ -107,6 +107,6 @@ class Controller {
 	void startPidTuning();
 	void stopPidTuning();
 	bool getIsPidTuningEnabled();
-	float *getPidTuningBuffer();
+	PidTuningInfo *getPidTuningBuffer();
 	void appendPidTuningSample(float sample);
 };

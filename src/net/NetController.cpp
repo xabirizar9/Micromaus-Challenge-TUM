@@ -45,36 +45,6 @@ void infoStreamerTask(void *pvParameter) {
 	}
 }
 
-/**
- * @brief utility for protopb encoding of float arrays
- *
- * @param ostream
- * @param field
- * @param arg
- */
-bool pidInfoEncoderCallback(pb_ostream_t *ostream, const pb_field_t *field, void *const *arg) {
-	Controller *ctrl = (Controller *)(*arg);
-	float *buf = ctrl->getPidTuningBuffer();
-	// TODO: hardcoded  for now
-	size_t len = PID_TUNNING_BUFFER_SIZE;
-
-	// encode all numbers
-	if (!pb_encode_tag_for_field(ostream, field)) {
-		const char *error = PB_GET_ERROR(ostream);
-		return false;
-	}
-
-	for (int i = 0; i < len; i++) {
-		if (!pb_encode_fixed32(ostream, &buf[i])) {
-			const char *error = PB_GET_ERROR(ostream);
-			return false;
-		}
-		ESP_LOGI(tag, "%d %d", i, ostream->bytes_written);
-	}
-
-	return true;
-}
-
 void receiverTask(void *pvParameter) {
 	static uint16_t taskInterval = pdMS_TO_TICKS(20);
 
@@ -124,11 +94,24 @@ void receiverTask(void *pvParameter) {
 				manager->writePacket<AckPacket, MausOutgoingMessage_ack_tag>(AckPacket_init_zero);
 				// send maus config to server
 				MausConfigPacket config = MausConfigPacket_init_zero;
+
+				config.has_leftMotorPid = true;
+				config.leftMotorPid.kD =
+					manager->controller->getMotor(MotorPosition::MotorPosition_left)->kD;
+				config.leftMotorPid.kP =
+					manager->controller->getMotor(MotorPosition::MotorPosition_left)->kP;
+				config.leftMotorPid.kI =
+					manager->controller->getMotor(MotorPosition::MotorPosition_left)->kI;
+
+				config.has_rightMotorPid = true;
+				config.rightMotorPid.kD =
+					manager->controller->getMotor(MotorPosition::MotorPosition_right)->kD;
+				config.rightMotorPid.kP =
+					manager->controller->getMotor(MotorPosition::MotorPosition_right)->kP;
+				config.rightMotorPid.kI =
+					manager->controller->getMotor(MotorPosition::MotorPosition_right)->kI;
+
 				config.has_lanePid = true;
-				config.has_motorPid = true;
-				config.motorPid.kD = manager->controller->getMotor(MotorPosition::left)->kD;
-				config.motorPid.kP = manager->controller->getMotor(MotorPosition::left)->kP;
-				config.motorPid.kI = manager->controller->getMotor(MotorPosition::left)->kI;
 				config.lanePid = manager->controller->getLanePidConfig();
 				manager->writePacket<MausConfigPacket, MausOutgoingMessage_mausConfig_tag>(config);
 
@@ -138,30 +121,26 @@ void receiverTask(void *pvParameter) {
 
 				break;
 			}
-			case MausIncomingMessage_encoderCallibration_tag:
+			case MausIncomingMessage_motorCallibration_tag:
 				ESP_LOGD(tag,
 						 "updated motors to kP=%f kD=%f kI=%f",
-						 msg.payload.encoderCallibration.kP,
-						 msg.payload.encoderCallibration.kD,
-						 msg.payload.encoderCallibration.kI);
+						 msg.payload.motorCallibration.config.kP,
+						 msg.payload.motorCallibration.config.kD,
+						 msg.payload.motorCallibration.config.kI);
 				// update values for both motors
-				manager->controller->getMotor(MotorPosition::left)
-					->updatePidConfig(msg.payload.encoderCallibration);
-				manager->controller->getMotor(MotorPosition::right)
-					->updatePidConfig(msg.payload.encoderCallibration);
+				manager->controller->getMotor(msg.payload.motorCallibration.motor)
+					->updatePidConfig(msg.payload.motorCallibration.config);
 
-				// start PID callibration routine
-				if (msg.payload.encoderCallibration.streamData) {
-					manager->controller->startPidTuning();
-					wasPidCalibrationStarted = true;
-				} else if (wasPidCalibrationStarted) {
-					ESP_LOGD(tag, "pid monitor stopped");
-					wasPidCalibrationStarted = false;
-					PidTuningInfo info = PidTuningInfo_init_zero;
-					info.err.arg = manager->controller->getPidTuningBuffer();
-					info.err.funcs.encode = pidInfoEncoderCallback;
-					manager->writePacket<PidTuningInfo, MausOutgoingMessage_pidTuning_tag>(info);
-				}
+				// // start PID callibration routine
+				// if (msg.payload.encoderCallibration.streamData) {
+				// 	manager->controller->startPidTuning();
+				// 	wasPidCalibrationStarted = true;
+				// } else if (wasPidCalibrationStarted) {
+				// 	ESP_LOGD(tag, "pid monitor stopped");
+				// 	wasPidCalibrationStarted = false;
+				// 	PidTuningInfo info = *manager->controller->getPidTuningBuffer();
+				// 	manager->writePacket<PidTuningInfo, MausOutgoingMessage_pidTuning_tag>(info);
+				// }
 				break;
 
 			case MausIncomingMessage_laneCallibration_tag:
@@ -269,7 +248,7 @@ NetController::Manager::Manager() {
  * @return false queue not initialized
  */
 template <typename T, int msgTag>
-void NetController::Manager::writePacket(T packet) {
+void NetController::Manager::writePacket(const T &packet) {
 	static MausOutgoingMessage msg = MausOutgoingMessage_init_zero;
 	msg.which_payload = msgTag;
 	*reinterpret_cast<T *>(&msg.payload) = packet;

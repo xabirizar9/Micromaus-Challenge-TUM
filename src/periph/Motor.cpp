@@ -46,8 +46,8 @@ void Motor::setPWM(float val) {
 	constexpr float maxDuty = 1024;	 // depending on
 	bool reverse = (val < 0);
 	uint32_t duty = lroundf(fabs(std::clamp(val, (float)-1.0, (float)1.0)) * maxDuty);
-	// ESP_LOGI("m", "%d", duty);
-	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, duty));
+
+	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, duty < 150 ? 0 : duty));
 
 	gpio_set_level((gpio_num_t)forwardPin, (!reverse));
 	gpio_set_level((gpio_num_t)backwardPin, reverse);

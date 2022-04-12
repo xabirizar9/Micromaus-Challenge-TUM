@@ -4,6 +4,38 @@ import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "";
 
+export enum MotorPosition {
+  left = 0,
+  right = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function motorPositionFromJSON(object: any): MotorPosition {
+  switch (object) {
+    case 0:
+    case "left":
+      return MotorPosition.left;
+    case 1:
+    case "right":
+      return MotorPosition.right;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return MotorPosition.UNRECOGNIZED;
+  }
+}
+
+export function motorPositionToJSON(object: MotorPosition): string {
+  switch (object) {
+    case MotorPosition.left:
+      return "left";
+    case MotorPosition.right:
+      return "right";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export enum InfoCmdType {
   Noop = 0,
   /** Connected - commands only intended for the go<->client communication */
@@ -169,6 +201,11 @@ export interface Position {
   heading: number;
 }
 
+export interface MsgMotorCallibration {
+  motor: MotorPosition;
+  config: MsgEncoderCallibration | undefined;
+}
+
 export interface MsgEncoderCallibration {
   kP: number;
   kI: number;
@@ -220,7 +257,8 @@ export interface MazeStatePacket {
 }
 
 export interface MausConfigPacket {
-  motorPid: MsgEncoderCallibration | undefined;
+  leftMotorPid: MsgEncoderCallibration | undefined;
+  rightMotorPid: MsgEncoderCallibration | undefined;
   lanePid: MsgEncoderCallibration | undefined;
 }
 
@@ -276,7 +314,7 @@ export interface MsgStop {}
 export interface MausIncomingMessage {
   init: MsgInit | undefined;
   control: MsgControl | undefined;
-  encoderCallibration: MsgEncoderCallibration | undefined;
+  motorCallibration: MsgMotorCallibration | undefined;
   ping: MsgPing | undefined;
   stop: MsgStop | undefined;
   drive: MsgDrive | undefined;
@@ -390,6 +428,87 @@ export const Position = {
     message.x = object.x ?? 0;
     message.y = object.y ?? 0;
     message.heading = object.heading ?? 0;
+    return message;
+  },
+};
+
+function createBaseMsgMotorCallibration(): MsgMotorCallibration {
+  return { motor: 0, config: undefined };
+}
+
+export const MsgMotorCallibration = {
+  encode(
+    message: MsgMotorCallibration,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.motor !== 0) {
+      writer.uint32(8).int32(message.motor);
+    }
+    if (message.config !== undefined) {
+      MsgEncoderCallibration.encode(
+        message.config,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgMotorCallibration {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgMotorCallibration();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.motor = reader.int32() as any;
+          break;
+        case 2:
+          message.config = MsgEncoderCallibration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgMotorCallibration {
+    return {
+      motor: isSet(object.motor) ? motorPositionFromJSON(object.motor) : 0,
+      config: isSet(object.config)
+        ? MsgEncoderCallibration.fromJSON(object.config)
+        : undefined,
+    };
+  },
+
+  toJSON(message: MsgMotorCallibration): unknown {
+    const obj: any = {};
+    message.motor !== undefined &&
+      (obj.motor = motorPositionToJSON(message.motor));
+    message.config !== undefined &&
+      (obj.config = message.config
+        ? MsgEncoderCallibration.toJSON(message.config)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgMotorCallibration>, I>>(
+    object: I
+  ): MsgMotorCallibration {
+    const message = createBaseMsgMotorCallibration();
+    message.motor = object.motor ?? 0;
+    message.config =
+      object.config !== undefined && object.config !== null
+        ? MsgEncoderCallibration.fromPartial(object.config)
+        : undefined;
     return message;
   },
 };
@@ -1139,7 +1258,11 @@ export const MazeStatePacket = {
 };
 
 function createBaseMausConfigPacket(): MausConfigPacket {
-  return { motorPid: undefined, lanePid: undefined };
+  return {
+    leftMotorPid: undefined,
+    rightMotorPid: undefined,
+    lanePid: undefined,
+  };
 }
 
 export const MausConfigPacket = {
@@ -1147,16 +1270,22 @@ export const MausConfigPacket = {
     message: MausConfigPacket,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.motorPid !== undefined) {
+    if (message.leftMotorPid !== undefined) {
       MsgEncoderCallibration.encode(
-        message.motorPid,
+        message.leftMotorPid,
         writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.rightMotorPid !== undefined) {
+      MsgEncoderCallibration.encode(
+        message.rightMotorPid,
+        writer.uint32(18).fork()
       ).ldelim();
     }
     if (message.lanePid !== undefined) {
       MsgEncoderCallibration.encode(
         message.lanePid,
-        writer.uint32(18).fork()
+        writer.uint32(26).fork()
       ).ldelim();
     }
     return writer;
@@ -1170,12 +1299,18 @@ export const MausConfigPacket = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.motorPid = MsgEncoderCallibration.decode(
+          message.leftMotorPid = MsgEncoderCallibration.decode(
             reader,
             reader.uint32()
           );
           break;
         case 2:
+          message.rightMotorPid = MsgEncoderCallibration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 3:
           message.lanePid = MsgEncoderCallibration.decode(
             reader,
             reader.uint32()
@@ -1191,8 +1326,11 @@ export const MausConfigPacket = {
 
   fromJSON(object: any): MausConfigPacket {
     return {
-      motorPid: isSet(object.motorPid)
-        ? MsgEncoderCallibration.fromJSON(object.motorPid)
+      leftMotorPid: isSet(object.leftMotorPid)
+        ? MsgEncoderCallibration.fromJSON(object.leftMotorPid)
+        : undefined,
+      rightMotorPid: isSet(object.rightMotorPid)
+        ? MsgEncoderCallibration.fromJSON(object.rightMotorPid)
         : undefined,
       lanePid: isSet(object.lanePid)
         ? MsgEncoderCallibration.fromJSON(object.lanePid)
@@ -1202,9 +1340,13 @@ export const MausConfigPacket = {
 
   toJSON(message: MausConfigPacket): unknown {
     const obj: any = {};
-    message.motorPid !== undefined &&
-      (obj.motorPid = message.motorPid
-        ? MsgEncoderCallibration.toJSON(message.motorPid)
+    message.leftMotorPid !== undefined &&
+      (obj.leftMotorPid = message.leftMotorPid
+        ? MsgEncoderCallibration.toJSON(message.leftMotorPid)
+        : undefined);
+    message.rightMotorPid !== undefined &&
+      (obj.rightMotorPid = message.rightMotorPid
+        ? MsgEncoderCallibration.toJSON(message.rightMotorPid)
         : undefined);
     message.lanePid !== undefined &&
       (obj.lanePid = message.lanePid
@@ -1217,9 +1359,13 @@ export const MausConfigPacket = {
     object: I
   ): MausConfigPacket {
     const message = createBaseMausConfigPacket();
-    message.motorPid =
-      object.motorPid !== undefined && object.motorPid !== null
-        ? MsgEncoderCallibration.fromPartial(object.motorPid)
+    message.leftMotorPid =
+      object.leftMotorPid !== undefined && object.leftMotorPid !== null
+        ? MsgEncoderCallibration.fromPartial(object.leftMotorPid)
+        : undefined;
+    message.rightMotorPid =
+      object.rightMotorPid !== undefined && object.rightMotorPid !== null
+        ? MsgEncoderCallibration.fromPartial(object.rightMotorPid)
         : undefined;
     message.lanePid =
       object.lanePid !== undefined && object.lanePid !== null
@@ -1905,7 +2051,7 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
   return {
     init: undefined,
     control: undefined,
-    encoderCallibration: undefined,
+    motorCallibration: undefined,
     ping: undefined,
     stop: undefined,
     drive: undefined,
@@ -1926,9 +2072,9 @@ export const MausIncomingMessage = {
     if (message.control !== undefined) {
       MsgControl.encode(message.control, writer.uint32(26).fork()).ldelim();
     }
-    if (message.encoderCallibration !== undefined) {
-      MsgEncoderCallibration.encode(
-        message.encoderCallibration,
+    if (message.motorCallibration !== undefined) {
+      MsgMotorCallibration.encode(
+        message.motorCallibration,
         writer.uint32(34).fork()
       ).ldelim();
     }
@@ -1973,7 +2119,7 @@ export const MausIncomingMessage = {
           message.control = MsgControl.decode(reader, reader.uint32());
           break;
         case 4:
-          message.encoderCallibration = MsgEncoderCallibration.decode(
+          message.motorCallibration = MsgMotorCallibration.decode(
             reader,
             reader.uint32()
           );
@@ -2013,8 +2159,8 @@ export const MausIncomingMessage = {
       control: isSet(object.control)
         ? MsgControl.fromJSON(object.control)
         : undefined,
-      encoderCallibration: isSet(object.encoderCallibration)
-        ? MsgEncoderCallibration.fromJSON(object.encoderCallibration)
+      motorCallibration: isSet(object.motorCallibration)
+        ? MsgMotorCallibration.fromJSON(object.motorCallibration)
         : undefined,
       ping: isSet(object.ping) ? MsgPing.fromJSON(object.ping) : undefined,
       stop: isSet(object.stop) ? MsgStop.fromJSON(object.stop) : undefined,
@@ -2037,9 +2183,9 @@ export const MausIncomingMessage = {
       (obj.control = message.control
         ? MsgControl.toJSON(message.control)
         : undefined);
-    message.encoderCallibration !== undefined &&
-      (obj.encoderCallibration = message.encoderCallibration
-        ? MsgEncoderCallibration.toJSON(message.encoderCallibration)
+    message.motorCallibration !== undefined &&
+      (obj.motorCallibration = message.motorCallibration
+        ? MsgMotorCallibration.toJSON(message.motorCallibration)
         : undefined);
     message.ping !== undefined &&
       (obj.ping = message.ping ? MsgPing.toJSON(message.ping) : undefined);
@@ -2072,10 +2218,10 @@ export const MausIncomingMessage = {
       object.control !== undefined && object.control !== null
         ? MsgControl.fromPartial(object.control)
         : undefined;
-    message.encoderCallibration =
-      object.encoderCallibration !== undefined &&
-      object.encoderCallibration !== null
-        ? MsgEncoderCallibration.fromPartial(object.encoderCallibration)
+    message.motorCallibration =
+      object.motorCallibration !== undefined &&
+      object.motorCallibration !== null
+        ? MsgMotorCallibration.fromPartial(object.motorCallibration)
         : undefined;
     message.ping =
       object.ping !== undefined && object.ping !== null
