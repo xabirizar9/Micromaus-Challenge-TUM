@@ -17,7 +17,7 @@ void motorPidTask(void *pvParameter) {
 	Encoder *rEnc = controller->getEncoder(MotorPosition::right);
 
 	// PID interval in ms
-	uint16_t monitorInterval = 10;
+	uint16_t monitorInterval = 50;
 	uint8_t pidInterval = 3.0;
 	// fraction of interval to full second
 	// needed to compute target speed for a given PID loop interval
@@ -36,11 +36,11 @@ void motorPidTask(void *pvParameter) {
 
 	MsgEncoderCallibration config;
 
-	PID lPid = PID(&lInput, &lOutput, -1000.0, 1000.0, monitorInterval * 3, config);
+	PID lPid = PID(&lInput, &lOutput, -1000.0, 1000.0, monitorInterval, config);
 	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
-	PID rPid = PID(&rInput, &rOutput, -1000.0, 1000.0, monitorInterval * 3, config);
+	PID rPid = PID(&rInput, &rOutput, -1000.0, 1000.0, monitorInterval, config);
 	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);
 
@@ -62,9 +62,9 @@ void motorPidTask(void *pvParameter) {
 			lPid.evaluate();
 			rPid.evaluate();
 			// reset encoder to avoid overflows
-			// ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
 
-			lMotor->setPWM((float)lOutput * oneOverMaxSpeed * 1.07654321);
+			// ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
+			lMotor->setPWM((float)lOutput * oneOverMaxSpeed);
 			rMotor->setPWM((float)rOutput * oneOverMaxSpeed);
 
 			// update PID config if needed

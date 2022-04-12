@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "support/LEDCChannelResource.hpp"
@@ -45,7 +46,7 @@ void Motor::setPWM(float val) {
 	constexpr float maxDuty = 1024;	 // depending on
 	bool reverse = (val < 0);
 	uint32_t duty = lroundf(fabs(std::clamp(val, (float)-1.0, (float)1.0)) * maxDuty);
-
+	ESP_LOGI("m", "%d", duty);
 	ESP_ERROR_CHECK(ledc_set_duty(LEDC_LOW_SPEED_MODE, *channel, duty));
 
 	gpio_set_level((gpio_num_t)forwardPin, (!reverse));

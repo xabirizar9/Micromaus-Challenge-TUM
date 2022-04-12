@@ -13,8 +13,8 @@ class Motor {
    public:
 	bool wasPidChanged = false;
 	// PID tuning for motors
-	float kP = 2.012;
-	float kD = 0.65;
+	float kP = 1.412;
+	float kD = 0.031;
 	float kI = 0.01;
 
 	Motor(IO::Motor);

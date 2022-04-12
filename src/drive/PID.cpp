@@ -103,17 +103,17 @@ void PID::evaluate() {
 	}
 
 	// clamp output
-	// ESP_LOGI("PID",
-	// 		 "t=%lf i=%lf kP=%lf kI=%lf kD=%lf e=%lf de=%lf se=%lf o=%lf ",
-	// 		 *target,
-	// 		 input,
-	// 		 kP,
-	// 		 kI,
-	// 		 kD,
-	// 		 error,
-	// 		 derError,
-	// 		 sumError,
-	// 		 output);
+	ESP_LOGI("PID",
+			 "t=%lf i=%lf kP=%lf kI=%lf kD=%lf e=%lf de=%lf se=%lf o=%lf ",
+			 *target,
+			 input,
+			 kP,
+			 kI,
+			 kD,
+			 error,
+			 derError,
+			 sumError,
+			 output);
 
 	*this->output = output;
 
