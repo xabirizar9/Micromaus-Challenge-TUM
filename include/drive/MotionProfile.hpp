@@ -23,7 +23,7 @@ class MotionProfile {
 	int vStart;
 	int vEnd;
 	int duration;
-	static float* velocityProfile;
+	float* velocityProfile;
 
 	float getSpeedAt(uint16_t index);
 
@@ -32,7 +32,7 @@ class MotionProfile {
 	}
 
 	// Constructor for straight lines (not grid distances)
-	MotionProfile(int distance, float duration) : maxSpeed(1700) {
+	MotionProfile(int distance, float duration) : maxSpeed(400) {
 		vStart = 0;
 		vEnd = 0;
 		distance = mmsToTicks(distance);
@@ -42,8 +42,7 @@ class MotionProfile {
 	MotionProfile(uint8_t numGrids, float duration, int vStart, int vEnd) : maxSpeed(1700) {
 		vStart = vStart;
 		vEnd = vEnd;
-		// FIXME: using ditance in its own definition :D
-		distance = 0;  // mmsToTicks(distance * 160);
+		distance = mmsToTicks(numGrids * 180);
 		MotionProfile::getGridProfile(distance, duration, vStart, vEnd, true);
 	};
 	// Constructor for curves
