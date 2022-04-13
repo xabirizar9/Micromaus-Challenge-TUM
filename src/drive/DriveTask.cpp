@@ -77,8 +77,7 @@ void driveTask(void* arg) {
 
 				while (counter <= numIntervals) {
 					controller->drive(straightProfile.velocityProfile[counter], 0);
-					// ESP_LOGI(tag, "s=%f c=%d", straightProfile.velocityProfile[counter],
-					// counter);
+					ESP_LOGI(tag, "s=%f c=%d", straightProfile.velocityProfile[counter], counter);
 					counter++;
 					vTaskDelay(pdMS_TO_TICKS(timeInterval));
 				}

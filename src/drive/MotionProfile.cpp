@@ -76,20 +76,18 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 		optimizeCoefficients();
 	}
 	float tickSpeed = 0;
-	float speed = 0;
 	int counter = 0;
 	float time = 0;
-
-	int numIntervals = duration / controlInterval;
+	float interval = 0.03;
+	int numIntervals = (int)(duration / interval);
 	velocityProfile = new float[numIntervals];
-	ESP_LOGI(tag, "intervals=%d", numIntervals);
+
+	ESP_LOGI(tag, "intervals=%d d=%f span=%f", numIntervals, duration, interval);
 	while (counter <= numIntervals) {
-		time = counter * controlInterval;
-		// need to solve type conversion error
+		time = (float)counter * interval;
 		tickSpeed = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
-		speed = encoderTicksToMm * tickSpeed;
-		ESP_LOGI(tag, "tickSpeed=%f speed=%f time=%f", tickSpeed, speed, time);
-		// velocityProfile[counter] = speed;  // check if pointer assignment is correct
+		velocityProfile[counter] = encoderTicksToMm * tickSpeed;
 		counter++;
+		vTaskDelay(pdMS_TO_TICKS(1));
 	}
 }
