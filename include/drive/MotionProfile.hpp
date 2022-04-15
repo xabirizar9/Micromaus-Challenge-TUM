@@ -8,7 +8,7 @@
 #include "utils/units.hpp"
 
 // interval in which driver will update command speed
-static const uint8_t controlInterval = 5;
+static const uint8_t controlInterval = 50;
 
 class MotionProfile {
    private:
@@ -23,7 +23,7 @@ class MotionProfile {
 	int vStart;
 	int vEnd;
 	float duration;
-	float* velocityProfile;
+	uint16_t* velocityProfile;
 
 	float getSpeedAt(uint16_t index);
 
