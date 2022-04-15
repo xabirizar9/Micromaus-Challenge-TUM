@@ -78,18 +78,17 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 	float tickSpeed = 0;
 	int counter = 0;
 	float time = 0;
-	float interval = 0.03;
 	int numIntervals = (int)(duration / ((float)controlInterval / 1000));
 	velocityProfile = new uint16_t[numIntervals];
 
 	ESP_LOGI(tag,
-			 "dist=%d intervals=%d d=%f span=%f",
+			 "dist=%d intervals=%d d=%f span=%d",
 			 (int)(encoderTicksToMm * tickEnd),
 			 numIntervals,
 			 duration,
-			 interval);
+			 controlInterval);
 	while (counter <= numIntervals) {
-		time = (float)counter * interval;
+		time = (float)counter * ((float)controlInterval / 1000);
 		tickSpeed = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
 		velocityProfile[counter] = (int)(encoderTicksToMm * tickSpeed);
 		counter++;

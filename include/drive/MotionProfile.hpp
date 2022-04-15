@@ -12,7 +12,7 @@ static const uint8_t controlInterval = 50;
 
 class MotionProfile {
    private:
-	const int maxSpeed;
+	const uint16_t maxSpeed;
 	void optimizePolynom();
 
    public:

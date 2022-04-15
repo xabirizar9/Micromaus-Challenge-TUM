@@ -71,7 +71,7 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_Move: {
 				MotionProfile straightProfile((int)curCmd->value, 2.0);
 				// MotionProfile straightProfile(200, 2.0);
-				uint32_t numIntervals = straightProfile.duration / ((float)controlInterval / 1000);
+				uint8_t numIntervals = straightProfile.duration / ((float)controlInterval / 1000);
 				uint8_t counter = 0;
 
 				while (counter <= numIntervals) {
@@ -84,6 +84,7 @@ void driveTask(void* arg) {
 					counter++;
 					vTaskDelay(pdMS_TO_TICKS(controlInterval));
 				}
+				controller->drive(0, 0);
 				break;
 			}
 
