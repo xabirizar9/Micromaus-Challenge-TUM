@@ -57,10 +57,14 @@ void MotionProfile::optimizeCoefficients() {
 	// ESP_LOGI(tag, "a0=%f a1=%f a2=%f a3=%f", a0, a1, a2, a3);
 }
 
-void MotionProfile::getCurveProfile(uint8_t degrees, bool optimize = false) {
+void MotionProfile::getCurveProfile(uint8_t degrees, bool onSpot = false, bool optimize = true) {
 	tickEnd = mmsToTicks(141.37);  // a curve of pi/2 with r=90mm is 141.37mm long
 	if (degrees == 180) {
-		tickEnd *= 2;
+		tickEnd *= 2;  // curve of pi is double as pi/2
+	}
+	if (onSpot) {
+		// Curve of pi/2 with r=wheelDistance/2mm is 95.82mm
+		tickEnd = mmsToTicks(95.82);
 	}
 	computeVelocityProfile(optimize);
 }
@@ -86,21 +90,7 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 	if (velocityProfile != NULL) {
 		delete velocityProfile;
 	}
-
 	velocityProfile = new uint16_t[numIntervals];
-
-	// ESP_LOGI(tag,
-	// 		 "start=%d end=%d int=%f",
-	// 		 velocityProfile[0],
-	// 		 velocityProfile[numIntervals - 1],
-	// 		 duration / ((float)controlInterval / 1000));
-
-	// ESP_LOGI(tag,
-	// 		 "dist=%d intervals=%d d=%f span=%d",
-	// 		 (int)(encoderTicksToMm * tickEnd),
-	// 		 numIntervals,
-	// 		 duration,
-	// 		 controlInterval);
 
 	uint32_t stepInterval = pdMS_TO_TICKS(3);
 
@@ -111,8 +101,6 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 			time = (float)counter * ((float)controlInterval / 1000);
 		}
 		tickSpeed = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
-
-		// ESP_LOGI(tag, "time=%f", time);
 
 		velocityProfile[counter] = (int)(encoderTicksToMm * tickSpeed);
 

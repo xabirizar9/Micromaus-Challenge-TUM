@@ -28,7 +28,7 @@ void motionProfileTask(void* arg) {
 
 	MotionProfile* profile;
 	DriveCmdWithMotionProfile cmd;
-
+	uint16_t lastSpeed = 0;
 	while (true) {
 		if (!xQueueReceive(driver->executionQueue, &cmd.driveCmd, 0)) {
 			vTaskDelay(interval);
@@ -37,16 +37,31 @@ void motionProfileTask(void* arg) {
 
 		switch (cmd.driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
-				cmd.profile = new StraightProfile((int)cmd.driveCmd.value, 2.0, cmd.driveCmd.speed);
+				cmd.profile = new StraightProfile((int)cmd.driveCmd.value, 1.5, cmd.driveCmd.speed);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: {
 				break;
 			}
+			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
+			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
+				cmd.profile = new CurveProfile(90 * cmd.driveCmd.value, 1.0, 0, 0, true);
+			}
+			case DriveCmdType::DriveCmdType_TurnRight:
+			case DriveCmdType::DriveCmdType_TurnLeft: {
+				cmd.profile =
+					new CurveProfile(90 * cmd.driveCmd.value, 1.0, lastSpeed, cmd.driveCmd.speed);
+				break;
+			}
+			case DriveCmdType::DriveCmdType_MoveCells: {
+				cmd.profile =
+					new GridProfile(cmd.driveCmd.value, 1.5, lastSpeed, cmd.driveCmd.speed);
+			}
 			default:
 				break;
 				// TODO: handle this
 		}
+		lastSpeed = cmd.driveCmd.speed;
 		ESP_LOGI(tag, "motion profile computed");
 		// pass command to drive task
 		xQueueSend(driver->motionProfileQueue, &cmd, 0);
@@ -73,9 +88,6 @@ void driveTask(void* arg) {
 	DriveCmdWithMotionProfile lastCmd;
 	DriveCmdWithMotionProfile* curCmd = NULL;
 
-	// MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
-	//  MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
-
 	while (true) {
 		// update and get state
 		// controller->updateSensors();
@@ -100,24 +112,27 @@ void driveTask(void* arg) {
 		switch (curCmd->driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
 				ESP_LOGI(tag, "intervals=%d", curCmd->profile->numIntervals);
-				// MotionProfile straightProfile(200, 2.0);
 				uint8_t counter = 0;
 
 				while (counter < curCmd->profile->numIntervals) {
 					controller->drive(curCmd->profile->velocityProfile[counter], 0);
-					ESP_LOGI(tag,
-							 "intervals=%d s=%d c=%d",
-							 curCmd->profile->numIntervals,
-							 curCmd->profile->velocityProfile[counter],
-							 counter);
+					ESP_LOGI(
+						tag, "c=%d speed=%d", counter, curCmd->profile->velocityProfile[counter]);
 					counter++;
 					vTaskDelay(pdMS_TO_TICKS(controlInterval));
 				}
-
 				break;
 			}
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
+				// NOTE: enable if needed
+				// this value represents how often lane control will be called compared to
+				// distance checks: 5 means for every 5 distance checks the lane control routine
+				// will be called once this is usefull since lane control is computationally
+				// heavy
+				// but we need regular checks to prevent overshooting
+				// uint8_t motionProfileInterval = 5;
+
 				ESP_LOGI(tag, "DriveCell");
 				interval = 5;
 
@@ -130,48 +145,31 @@ void driveTask(void* arg) {
 
 				uint8_t counter = 0;
 
-				// NOTE: enable if needed
-				// this value represents how often lane control will be called compared to
-				// distance checks: 5 means for every 5 distance checks the lane control routine
-				// will be called once this is usefull since lane control is computationally
-				// heavy
-				// but we need regular checks to prevent overshooting
-				// uint8_t motionProfileInterval = 5;
-
 				while (counter < curCmd->profile->numIntervals) {
 					controller->updatePosition();
 					controller->updateSensors();
-
 					// update lane task
 					lanePid.evaluate();
 					controller->drive(curCmd->profile->velocityProfile[counter],
 									  (int16_t)round(laneCorrection));
-
 					// STOP drive when wall in front
 					if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
 						controller->setSpeed(0);
 						controller->drive(0, 0);
 						break;
 					}
-
 					counter++;
-
 					vTaskDelay(pdMS_TO_TICKS(controlInterval));
 				}
 
 				// laneControlTask(controller, curCmd);
 				cmdStatus.actual = controller->getAverageEncoderTicks();
-
-				controller->drive(0, 0);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
 
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
-				// MotionProfile curveProfile(
-				// 	curCmd->driveCmd.value, 2.0, 0, 0, curCmd->driveCmd.speed);
-				// MotionProfile straightProfile(200, 2.0);
 				uint8_t counter = 0;
 
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeft
@@ -185,8 +183,8 @@ void driveTask(void* arg) {
 				}
 				break;
 			}
-			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
-			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
+			case DriveCmdType::DriveCmdType_TurnRightOnSpot:
+			case DriveCmdType::DriveCmdType_TurnLeftOnSpot: {
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
 									  ? INT16_MIN
 									  : INT16_MAX;

@@ -31,13 +31,13 @@ class MotionProfile {
 	}
 
 	void optimizeCoefficients();
-	void getCurveProfile(uint8_t degrees, bool optimize);
+	void getCurveProfile(uint8_t degrees, bool onSpot, bool optimize);
 	void getGridProfile(bool optimize);
 	void getStraightProfile(bool optimize);
 	void computeVelocityProfile(bool optimize);
 	void getPolynomCoefficients();
 
-	MotionProfile(uint16_t speed) : maxSpeed(speed){};
+	MotionProfile(uint16_t speed = 400) : maxSpeed(speed){};
 	~MotionProfile();
 };
 
@@ -58,12 +58,17 @@ class CurveProfile : public MotionProfile {
 	CurveProfile(uint8_t degrees,
 				 float elapsedTime,
 				 uint16_t startSpeed = 300,
-				 uint16_t endSpeed = 300)
+				 uint16_t endSpeed = 300,
+				 bool onSpot = false)
 		: MotionProfile(400) {
 		vStart = startSpeed;
 		vEnd = endSpeed;
 		duration = elapsedTime;
-		getCurveProfile(degrees, true);
+		if (onSpot) {
+			getCurveProfile(90, true);
+		} else {
+			getCurveProfile(degrees, false);
+		}
 	};
 };
 
