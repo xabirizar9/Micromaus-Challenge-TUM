@@ -50,11 +50,16 @@ class MotionProfile {
 		getGridProfile(true);
 	};
 	// Constructor for curves
-	MotionProfile(uint8_t degrees, float elapsedTime) : maxSpeed(700) {
-		vStart = 100;
-		vEnd = 100;
+	MotionProfile(uint8_t degrees,
+				  float elapsedTime,
+				  uint16_t startSpeed = 0,
+				  uint16_t endSpeed = 0,
+				  uint16_t maxSpeed = 400)
+		: maxSpeed(maxSpeed) {
+		vStart = startSpeed;
+		vEnd = endSpeed;
 		duration = elapsedTime;
-		getCurveProfile(90, false);
+		getCurveProfile(degrees, true);
 	};
 
 	void optimizeCoefficients();

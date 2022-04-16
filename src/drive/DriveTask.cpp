@@ -142,38 +142,51 @@ void driveTask(void* arg) {
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: break;
 
-			case DriveCmdType::DriveCmdType_TurnLeft:
-				distance = ((M_PI_2)*cmd.value);
-				interval = distance / cmd.speed;
-				controller->drive(cmd.speed, INT16_MIN);
-				vTaskDelay(pdMS_TO_TICKS(interval));
-				controller->drive(INT16_MIN, 0);
-				// ToDo: time!!!
-				break;
+			case DriveCmdType::DriveCmdType_TurnRight:
+			case DriveCmdType::DriveCmdType_TurnLeft: {
+				MotionProfile curveProfile(curCmd->value, 2.0, 0, 0, curCmd->speed);
+				// MotionProfile straightProfile(200, 2.0);
+				uint8_t counter = 0;
 
-			case DriveCmdType::DriveCmdType_TurnRight: {
-				int64_t curLeft =
-					controller->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter();
-				int64_t curRight =
-					controller->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter();
+				int16_t heading = curCmd->type == DriveCmdType::DriveCmdType_TurnLeft
+									  ? -curCmd->value
+									  : curCmd->value;
 
-				float targetRight = ticksPerRotation(InnercurveRadius);
-				float targetLeft = ticksPerRotation(OutercurveRadius);
-				float targetDiffRange = 20;
-
-				controller->drive(cmd.speed, 90);
-				cmdStatus.target = targetLeft;
-
-				while (targetLeft - curLeft > targetDiffRange) {
-					curLeft = controller->getEncoder(MotorPosition::MotorPosition_left)
-								  ->getTotalCounter();
-					vTaskDelay(pdMS_TO_TICKS(1));
+				while (counter < curveProfile.numIntervals) {
+					controller->drive(curveProfile.velocityProfile[counter], heading);
+					ESP_LOGI(tag,
+							 "intervals=%d s=%d c=%d",
+							 curveProfile.numIntervals,
+							 curveProfile.velocityProfile[counter],
+							 counter);
+					counter++;
+					vTaskDelay(pdMS_TO_TICKS(controlInterval));
 				}
-				cmdStatus.actual = curLeft;
-
-				controller->drive(0, 0);
 				break;
 			}
+			// case DriveCmdType::DriveCmdType_TurnRight: {
+			// 	int64_t curLeft =
+			// 		controller->getEncoder(MotorPosition::MotorPosition_left)->getTotalCounter();
+			// 	int64_t curRight =
+			// 		controller->getEncoder(MotorPosition::MotorPosition_right)->getTotalCounter();
+
+			// 	float targetRight = ticksPerRotation(InnercurveRadius);
+			// 	float targetLeft = ticksPerRotation(OutercurveRadius);
+			// 	float targetDiffRange = 20;
+
+			// 	controller->drive(cmd.speed, 90);
+			// 	cmdStatus.target = targetLeft;
+
+			// 	while (targetLeft - curLeft > targetDiffRange) {
+			// 		curLeft = controller->getEncoder(MotorPosition::MotorPosition_left)
+			// 					  ->getTotalCounter();
+			// 		vTaskDelay(pdMS_TO_TICKS(1));
+			// 	}
+			// 	cmdStatus.actual = curLeft;
+
+			// 	controller->drive(0, 0);
+			// 	break;
+			// }
 			// controller.drive(speed, 90);
 			//  ToDo: time!!!
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:

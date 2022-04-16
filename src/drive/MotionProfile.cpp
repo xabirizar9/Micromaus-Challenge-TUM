@@ -62,7 +62,7 @@ void MotionProfile::getCurveProfile(uint8_t degrees, bool optimize = false) {
 	if (degrees == 180) {
 		tickEnd *= 2;
 	}
-	computeVelocityProfile(false);
+	computeVelocityProfile(optimize);
 }
 
 void MotionProfile::getStraightProfile(bool optimize = true) {
