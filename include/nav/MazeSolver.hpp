@@ -9,6 +9,12 @@
 
 using nav::CardinalDirection;
 
+struct MazeDriveCmdNode {
+	MazeDriveCmdNode* prev;
+	MazeDriveCmdNode* next;
+	MsgDrive cur;
+};
+
 class MazeSolver : public RobotDriver {
    private:
 	Maze maze;

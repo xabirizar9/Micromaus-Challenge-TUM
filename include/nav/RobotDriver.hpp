@@ -11,8 +11,14 @@
 #define DRIVE_EVT_STARTED_BIT (1 << 1)
 #define DRIVE_EVT_COMPLETED_BIT (1 << 2)
 
+struct DriveCmdWithMotionProfile {
+	MsgDrive driveCmd;
+	MotionProfile* profile;
+};
+
 class RobotDriver {
 	TaskHandle_t driveTaskHandle;
+	TaskHandle_t motionTaskHandle;
 	// queue of drive commands to be executed;
 
    public:
@@ -32,6 +38,7 @@ class RobotDriver {
 
 	EventGroupHandle_t eventHandle;
 	xQueueHandle executionQueue;
+	xQueueHandle motionProfileQueue;
 	Controller* controller;
 	// NetController::Manager* net;
 };

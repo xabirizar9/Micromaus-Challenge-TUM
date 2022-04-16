@@ -8,7 +8,8 @@
 static const char* TAG = "[driver]";
 
 RobotDriver::RobotDriver() {
-	this->executionQueue = xQueueCreate(1, sizeof(MsgDrive));
+	this->executionQueue = xQueueCreate(3, sizeof(MsgDrive));
+	this->motionProfileQueue = xQueueCreate(1, sizeof(DriveCmdWithMotionProfile));
 
 	this->eventHandle = xEventGroupCreate();
 
@@ -19,11 +20,13 @@ RobotDriver::RobotDriver() {
 	// - rotate
 	// - ...
 	xTaskCreate(driveTask, "driveTask", 8192, this, 1, &this->driveTaskHandle);
+	xTaskCreate(motionProfileTask, "motionProfileTask", 8192, this, 1, &this->motionTaskHandle);
 }
 
 RobotDriver::~RobotDriver() {
 	ESP_LOGD(TAG, "deleting...");
 	vTaskDelete(this->driveTaskHandle);
+	vTaskDelete(this->motionTaskHandle);
 	vQueueDelete(this->executionQueue);
 }
 

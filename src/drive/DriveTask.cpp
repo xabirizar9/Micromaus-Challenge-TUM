@@ -22,11 +22,35 @@ float ticksPerRotation(float radius) {
 	return mmsToTicks(0.5 * PI * radius);
 }
 
-void driveTask(void* arg) {
-	ESP_LOGI(tag, "1");
-	MausCommandStatus cmdStatus = MausCommandStatus_init_zero;
-	ESP_LOGI(tag, "2");
+void motionProfileTask(void* arg) {
+	RobotDriver* driver = (RobotDriver*)arg;
+	uint16_t interval = pdMS_TO_TICKS(30);
 
+	MotionProfile* profile;
+	MsgDrive cmd;
+	DriveCmdWithMotionProfile output;
+
+	while (true) {
+		if (!xQueueReceive(driver->motionProfileQueue, &cmd, 0)) {
+			vTaskDelay(interval);
+			continue;
+		}
+
+		switch (cmd.type)
+		case DriveCmdType::DriveCmdType_Move: {
+			profile = new MotionProfile((int)cmd.value, 2.0, cmd.speed);
+			break;
+		}
+		case DriveCmdType::DriveCmdType_TurnAround: {
+				}
+	}
+
+	// pass command to drive task
+	xQueueSend(driver->executionQueue, &cmd, 0);
+}
+
+void driveTask(void* arg) {
+	MausCommandStatus cmdStatus = MausCommandStatus_init_zero;
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t navInterval = 100;
 	NavigationPacket state;
@@ -38,11 +62,9 @@ void driveTask(void* arg) {
 	float distance = 0;
 	float ticksPerOnSpotRotation = mmsToTicks(M_PI * wheelDistance / 4);
 
-	ESP_LOGI(tag, "3");
-
-	MsgDrive cmd;
-	MsgDrive* lastCmd = NULL;
-	MsgDrive* curCmd = NULL;
+	DriveCmdWithMotionProfile cmd;
+	DriveCmdWithMotionProfile* lastCmd = NULL;
+	DriveCmdWithMotionProfile* curCmd = NULL;
 
 	// MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
 	//  MotionProfile curveNinetyDegrees = MotionProfile((uint8_t)90, 1.0);
@@ -54,7 +76,7 @@ void driveTask(void* arg) {
 		state = controller->getState();
 
 		if (curCmd == NULL) {
-			if (xQueueReceive(driver->executionQueue, &cmd, 0)) {
+			if (xQueueReceive(driver->motionProfileQueue, &cmd, 0)) {
 				ESP_LOGI(tag, "recv");
 				curCmd = &cmd;
 				xEventGroupSetBits(driver->eventHandle, DRIVE_EVT_STARTED_BIT);
@@ -66,16 +88,15 @@ void driveTask(void* arg) {
 		// ESP_LOGI(tag, "cmd type:%d", cmd.type);
 
 		// set status cmd;
-		cmdStatus.cmd = curCmd->type;
+		cmdStatus.cmd = curCmd->driveCmd->type;
 
-		switch (curCmd->type) {
+		switch (curCmd->driveCmd->type) {
 			case DriveCmdType::DriveCmdType_Move: {
-				MotionProfile straightProfile((int)curCmd->value, 2.0, curCmd->speed);
 				// MotionProfile straightProfile(200, 2.0);
 				uint8_t counter = 0;
 
-				while (counter < straightProfile.numIntervals) {
-					controller->drive(straightProfile.velocityProfile[counter], 0);
+				while (counter < curCmd->profile->numIntervals) {
+					controller->drive(curCmd->profile->velocityProfile[counter], 0);
 					// ESP_LOGI(tag,
 					// 		 "intervals=%d s=%d c=%d",
 					// 		 straightProfile.numIntervals,
@@ -143,7 +164,11 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
+				uint32_t start = xTaskGetTickCount();
 				MotionProfile curveProfile(curCmd->value, 2.0, 0, 0, curCmd->speed);
+				uint32_t end = xTaskGetTickCount();
+
+				ESP_LOGI(tag, "end: time=%d", xTaskGetTickCount());
 				// MotionProfile straightProfile(200, 2.0);
 				uint8_t counter = 0;
 
@@ -167,8 +192,8 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
 				// MotionProfile curveProfile(1, 0.5 * curCmd->value, 0, 0, curCmd->speed);
 				// int16_t heading =
-				// 	cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot ? INT16_MIN : INT16_MAX;
-				// uint8_t counter = 0;
+				// 	cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot ? INT16_MIN :
+				// INT16_MAX; uint8_t counter = 0;
 
 				// while (counter < curveProfile.numIntervals) {
 				// 	controller->drive(curveProfile.velocityProfile[counter], heading);
@@ -216,8 +241,8 @@ void driveTask(void* arg) {
 
 				// uint counter = 0;
 
-				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int vEnd,
-				// TickType_t tStart, TickType_t tEnd))
+				// getMotionProfilePolynom(int64_t& tickStart, int tickEnd, int vStart, int
+				// vEnd, TickType_t tStart, TickType_t tEnd))
 				//  start driving
 				controller->drive(
 					curCmd->speed,
@@ -230,7 +255,8 @@ void driveTask(void* arg) {
 
 					// // start slowing down
 					// percentage = std::abs((float)std::min(progress, totalDiff) /
-					// (float)totalDiff); actualSpeed = (float)curCmd->speed * (float)(percentage);
+					// (float)totalDiff); actualSpeed = (float)curCmd->speed *
+					// (float)(percentage);
 					// // gradually reduce speed
 					// controller->drive(std::max(actualSpeed, (int16_t)200),
 					// 				  pos == MotorPosition::MotorPosition_right ? INT16_MIN :
@@ -255,6 +281,7 @@ void driveTask(void* arg) {
 
 			// clear last last command
 			// and store current cmd as last
+			delete lastCmd->profile;
 			delete lastCmd;
 			lastCmd = curCmd;
 
