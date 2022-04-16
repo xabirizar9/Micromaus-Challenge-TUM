@@ -3,12 +3,24 @@
 #include <driver/pcnt.h>
 #include <esp_compiler.h>
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "support/PulseCounterResource.hpp"
 
 static const constexpr int limit = 16 * 33 * 4;
 static uint8_t isrServiceRefcount = 0;
 
+void encoderUpdater(void *pvParameter) {
+	Encoder *enc = (Encoder *)pvParameter;
+	uint32_t delay = pdMS_TO_TICKS(10);
+	while (true) {
+		enc->reset();
+		vTaskDelay(delay);
+	}
+}
+
 Encoder::Encoder(uint8_t pinA, uint8_t pinB) : unit(new PulseCounterResource()) {
+	totalCounter = 0;
 	pcnt_config_t conf{
 		.pulse_gpio_num = pinA,
 		.ctrl_gpio_num = pinB,
@@ -43,12 +55,14 @@ Encoder::Encoder(uint8_t pinA, uint8_t pinB) : unit(new PulseCounterResource()) 
 	isrServiceRefcount++;
 
 	pcnt_isr_handler_add(
-		*unit, [](void* e) { static_cast<Encoder*>(e)->onOverflow(); }, this);
+		*unit, [](void *e) { static_cast<Encoder *>(e)->onOverflow(); }, this);
 
 	pcnt_event_enable(*unit, PCNT_EVT_H_LIM);
 	pcnt_event_enable(*unit, PCNT_EVT_L_LIM);
 
 	pcnt_counter_resume(*unit);
+
+	xTaskCreate(encoderUpdater, "encoderUpdate", 1024, this, 1, NULL);
 }
 
 Encoder::Encoder(IO::Encoder io) : Encoder(io.a, io.b) {}
@@ -70,11 +84,7 @@ int16_t Encoder::get() const {
 }
 
 void Encoder::reset(bool resetTotalCounter) {
-	if (resetTotalCounter) {
-		totalCounter = 0;
-	} else {
-		totalCounter += this->get();
-	}
+	totalCounter += this->get();
 	pcnt_counter_clear(*unit);
 }
 

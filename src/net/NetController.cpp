@@ -237,7 +237,7 @@ NetController::Manager::Manager() {
 
 	xTaskCreate(receiverTask, "receiverTask", 9000, this, 5, NULL);
 
-	xTaskCreate(&infoStreamerTask, "infoStreamerTask", 9000, this, 5, NULL);
+	xTaskCreate(infoStreamerTask, "infoStreamerTask", 9000, this, 5, NULL);
 };
 
 /**
