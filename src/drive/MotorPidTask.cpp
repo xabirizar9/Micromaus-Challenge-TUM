@@ -154,8 +154,8 @@ void motorPidTask(void *pvParameter) {
 	// tuneMotorPID(rMotor, rEnc, &rPid, monitorInterval);
 
 	while (true) {
-		lInput = lEnc->getTotalCounter() - rLastCounter;
-		rInput = rEnc->getTotalCounter() - lLastCounter;
+		lInput = lEnc->getTotalCounter() - lLastCounter;
+		rInput = rEnc->getTotalCounter() - rLastCounter;
 		lTarget = (double)controller->getSpeedInTicks(MotorPosition::MotorPosition_left) *
 				  targetScaleFactor;
 		rTarget = (double)controller->getSpeedInTicks(MotorPosition::MotorPosition_right) *
@@ -182,6 +182,9 @@ void motorPidTask(void *pvParameter) {
 			rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 			rMotor->wasPidChanged = false;
 		}
+
+		lLastCounter = lEnc->getTotalCounter();
+		rLastCounter = rEnc->getTotalCounter();
 
 		// add short interval
 		vTaskDelay(tickInterval);

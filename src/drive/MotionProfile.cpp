@@ -17,6 +17,9 @@ static const char* tag = "[motion]";
 
 MotionProfile::~MotionProfile() {
 	ESP_LOGI(tag, "Movement completed");
+	if (velocityProfile != NULL) {
+		delete velocityProfile;
+	}
 }
 
 void MotionProfile::getPolynomCoefficients() {
@@ -78,8 +81,19 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 	float tickSpeed = 0;
 	int counter = 0;
 	float time = 0;
-	int numIntervals = (int)(duration / ((float)controlInterval / 1000));
+	numIntervals = (uint16_t)ceil(duration / ((float)controlInterval / 1000.0)) + 1;
+
+	if (velocityProfile != NULL) {
+		delete velocityProfile;
+	}
+
 	velocityProfile = new uint16_t[numIntervals];
+
+	ESP_LOGI(tag,
+			 "start=%d end=%d int=%f",
+			 velocityProfile[0],
+			 velocityProfile[numIntervals - 1],
+			 duration / ((float)controlInterval / 1000));
 
 	ESP_LOGI(tag,
 			 "dist=%d intervals=%d d=%f span=%d",
@@ -87,10 +101,19 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 			 numIntervals,
 			 duration,
 			 controlInterval);
-	while (counter <= numIntervals) {
-		time = (float)counter * ((float)controlInterval / 1000);
+
+	while (counter < numIntervals) {
+		if (counter == numIntervals - 1) {
+			time = duration;
+		} else {
+			time = (float)counter * ((float)controlInterval / 1000);
+		}
 		tickSpeed = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
+
+		ESP_LOGI(tag, "time=%f", time);
+
 		velocityProfile[counter] = (int)(encoderTicksToMm * tickSpeed);
+
 		counter++;
 		vTaskDelay(pdMS_TO_TICKS(1));
 	}

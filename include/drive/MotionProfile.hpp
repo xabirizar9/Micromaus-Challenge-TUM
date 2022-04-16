@@ -23,7 +23,8 @@ class MotionProfile {
 	int vStart;
 	int vEnd;
 	float duration;
-	uint16_t* velocityProfile;
+	uint16_t numIntervals;
+	uint16_t* velocityProfile = NULL;
 
 	float getSpeedAt(uint16_t index);
 
@@ -32,7 +33,7 @@ class MotionProfile {
 	}
 
 	// Constructor for straight lines (not grid distances)
-	MotionProfile(int distance, float elapsedTime) : maxSpeed(400) {
+	MotionProfile(int distance, float elapsedTime, uint16_t maxSpeed = 400) : maxSpeed(maxSpeed) {
 		vStart = 0;
 		vEnd = 0;
 		tickEnd = mmsToTicks(distance);
@@ -64,7 +65,4 @@ class MotionProfile {
 	void getPolynomCoefficients();
 
 	~MotionProfile();
-	// uint16_t* computeTurnProfile();
-	// uint16_t* computeDriveProfile();
-	// void computeProfiles(uint16_t speed, uint16_t interval = controlInterval);
 };
