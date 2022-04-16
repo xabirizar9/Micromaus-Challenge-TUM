@@ -53,7 +53,7 @@ void MotionProfile::optimizeCoefficients() {
 		counter++;
 		vTaskDelay(pdMS_TO_TICKS(1));
 	}
-	ESP_LOGI(tag, "d=%lf c=%d tempVmax=%f", duration, counter, tempVmax);
+	// ESP_LOGI(tag, "d=%lf c=%d tempVmax=%f", duration, counter, tempVmax);
 	// ESP_LOGI(tag, "a0=%f a1=%f a2=%f a3=%f", a0, a1, a2, a3);
 }
 
@@ -89,18 +89,20 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 
 	velocityProfile = new uint16_t[numIntervals];
 
-	ESP_LOGI(tag,
-			 "start=%d end=%d int=%f",
-			 velocityProfile[0],
-			 velocityProfile[numIntervals - 1],
-			 duration / ((float)controlInterval / 1000));
+	// ESP_LOGI(tag,
+	// 		 "start=%d end=%d int=%f",
+	// 		 velocityProfile[0],
+	// 		 velocityProfile[numIntervals - 1],
+	// 		 duration / ((float)controlInterval / 1000));
 
-	ESP_LOGI(tag,
-			 "dist=%d intervals=%d d=%f span=%d",
-			 (int)(encoderTicksToMm * tickEnd),
-			 numIntervals,
-			 duration,
-			 controlInterval);
+	// ESP_LOGI(tag,
+	// 		 "dist=%d intervals=%d d=%f span=%d",
+	// 		 (int)(encoderTicksToMm * tickEnd),
+	// 		 numIntervals,
+	// 		 duration,
+	// 		 controlInterval);
+
+	uint32_t stepInterval = pdMS_TO_TICKS(3);
 
 	while (counter < numIntervals) {
 		if (counter == numIntervals - 1) {
@@ -110,11 +112,11 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 		}
 		tickSpeed = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
 
-		ESP_LOGI(tag, "time=%f", time);
+		// ESP_LOGI(tag, "time=%f", time);
 
 		velocityProfile[counter] = (int)(encoderTicksToMm * tickSpeed);
 
 		counter++;
-		vTaskDelay(pdMS_TO_TICKS(1));
+		vTaskDelay(stepInterval);
 	}
 }
