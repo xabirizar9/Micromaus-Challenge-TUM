@@ -45,7 +45,7 @@ class MotionProfile {
 		: maxSpeed(1700) {
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		tickEnd = mmsToTicks(numGrids * 180);
+		tickEnd = mmsToTicks(numGrids * mazeCellSize);
 		duration = elapsedTime;
 		getGridProfile(true);
 	};

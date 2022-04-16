@@ -14,6 +14,7 @@ LaneControlPID::LaneControlPID(double *output, uint32_t sampleTimeInMs, Controll
 
 	// the target is 0.0 since it means both wall are equally far away
 	this->target = 0.0;
+	this->setTarget(&this->target);
 	this->laneOutput = output;
 }
 
