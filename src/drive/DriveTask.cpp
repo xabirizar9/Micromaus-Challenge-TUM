@@ -27,29 +27,31 @@ void motionProfileTask(void* arg) {
 	uint16_t interval = pdMS_TO_TICKS(30);
 
 	MotionProfile* profile;
-	MsgDrive cmd;
-	DriveCmdWithMotionProfile output;
+	DriveCmdWithMotionProfile cmd;
 
 	while (true) {
-		if (!xQueueReceive(driver->motionProfileQueue, &cmd, 0)) {
+		if (!xQueueReceive(driver->executionQueue, &cmd.driveCmd, 0)) {
 			vTaskDelay(interval);
 			continue;
 		}
 
-		switch (cmd.type) {
+		switch (cmd.driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
-				profile = new MotionProfile((int)cmd.value, 2.0, cmd.speed);
+				cmd.profile = new MotionProfile((int)cmd.driveCmd.value, 2.0, cmd.driveCmd.speed);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: {
 				break;
 			}
+			default:
+				break;
+				// TODO: handle this
 		}
+		ESP_LOGI(tag, "motion profile computed");
+		// pass command to drive task
+		xQueueSend(driver->motionProfileQueue, &cmd, 0);
 		vTaskDelay(interval);
 	}
-
-	// pass command to drive task
-	xQueueSend(driver->executionQueue, &cmd, 0);
 }
 
 void driveTask(void* arg) {
@@ -65,8 +67,10 @@ void driveTask(void* arg) {
 	float distance = 0;
 	float ticksPerOnSpotRotation = mmsToTicks(M_PI * wheelDistance / 4);
 
+	bool isFirstCmd = true;
+
 	DriveCmdWithMotionProfile cmd;
-	DriveCmdWithMotionProfile* lastCmd = NULL;
+	DriveCmdWithMotionProfile lastCmd;
 	DriveCmdWithMotionProfile* curCmd = NULL;
 
 	// MotionProfile straightGridProfile((uint8_t)curCmd->value, 3.0, 0, 100);
@@ -88,23 +92,24 @@ void driveTask(void* arg) {
 				continue;
 			}
 		}
-		// ESP_LOGI(tag, "cmd type:%d", cmd.type);
+		ESP_LOGI(tag, "cmd type:%d", curCmd->driveCmd.type);
 
 		// set status cmd;
 		cmdStatus.cmd = curCmd->driveCmd.type;
 
 		switch (curCmd->driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
+				ESP_LOGI(tag, "intervals=%d", curCmd->profile->numIntervals);
 				// MotionProfile straightProfile(200, 2.0);
 				uint8_t counter = 0;
 
 				while (counter < curCmd->profile->numIntervals) {
 					controller->drive(curCmd->profile->velocityProfile[counter], 0);
-					// ESP_LOGI(tag,
-					// 		 "intervals=%d s=%d c=%d",
-					// 		 straightProfile.numIntervals,
-					// 		 straightProfile.velocityProfile[counter],
-					// 		 counter);
+					ESP_LOGI(tag,
+							 "intervals=%d s=%d c=%d",
+							 curCmd->profile->numIntervals,
+							 curCmd->profile->velocityProfile[counter],
+							 counter);
 					counter++;
 					vTaskDelay(pdMS_TO_TICKS(controlInterval));
 				}
@@ -168,12 +173,8 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
-				uint32_t start = xTaskGetTickCount();
 				MotionProfile curveProfile(
 					curCmd->driveCmd.value, 2.0, 0, 0, curCmd->driveCmd.speed);
-				uint32_t end = xTaskGetTickCount();
-
-				ESP_LOGI(tag, "end: time=%d", xTaskGetTickCount());
 				// MotionProfile straightProfile(200, 2.0);
 				uint8_t counter = 0;
 
@@ -197,8 +198,9 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
 				MotionProfile curveProfile(
 					90, 0.5 * curCmd->driveCmd.value, 0, 0, curCmd->driveCmd.speed);
-				int16_t heading =
-					cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot ? INT16_MIN : INT16_MAX;
+				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
+									  ? INT16_MIN
+									  : INT16_MAX;
 				uint8_t counter = 0;
 
 				while (counter < curveProfile.numIntervals) {
@@ -282,17 +284,21 @@ void driveTask(void* arg) {
 		}
 
 		if (curCmd != NULL) {
-			// stream command results to server
+						// stream command results to server
 			net.writeCmdState(cmdStatus);
+
+			if (!isFirstCmd) {
+				delete lastCmd.profile;
+			}
 
 			// clear last last command
 			// and store current cmd as last
-			delete lastCmd->profile;
-			delete lastCmd;
-			lastCmd = curCmd;
+			lastCmd = cmd;
 
 			// reset current command
 			curCmd = NULL;
+
+			isFirstCmd = false;
 
 			ESP_LOGI(tag, "cmd completed");
 			// notify driver about event completion
