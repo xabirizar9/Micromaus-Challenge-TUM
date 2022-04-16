@@ -16,8 +16,6 @@ class MotionProfile {
 	void optimizePolynom();
 
    public:
-	// float trajectories[numTrajectories];  // empty array with space for storing in each
-	// trajectory the given profile parameters
 	float a0, a1, a2, a3;
 	float tickEnd;
 	int vStart;
@@ -32,36 +30,6 @@ class MotionProfile {
 		return maxSpeed;
 	}
 
-	// Constructor for straight lines (not grid distances)
-	MotionProfile(int distance, float elapsedTime, uint16_t maxSpeed = 400) : maxSpeed(maxSpeed) {
-		vStart = 0;
-		vEnd = 0;
-		tickEnd = mmsToTicks(distance);
-		duration = elapsedTime;
-		getStraightProfile(true);
-	};
-	// Constructor for a grid in straight line
-	MotionProfile(uint8_t numGrids, float elapsedTime, int startSpeed, int endSpeed)
-		: maxSpeed(1700) {
-		vStart = startSpeed;
-		vEnd = endSpeed;
-		tickEnd = mmsToTicks(numGrids * mazeCellSize);
-		duration = elapsedTime;
-		getGridProfile(true);
-	};
-	// Constructor for curves
-	MotionProfile(uint8_t degrees,
-				  float elapsedTime,
-				  uint16_t startSpeed = 0,
-				  uint16_t endSpeed = 0,
-				  uint16_t maxSpeed = 400)
-		: maxSpeed(maxSpeed) {
-		vStart = startSpeed;
-		vEnd = endSpeed;
-		duration = elapsedTime;
-		getCurveProfile(degrees, true);
-	};
-
 	void optimizeCoefficients();
 	void getCurveProfile(uint8_t degrees, bool optimize);
 	void getGridProfile(bool optimize);
@@ -69,5 +37,44 @@ class MotionProfile {
 	void computeVelocityProfile(bool optimize);
 	void getPolynomCoefficients();
 
+	MotionProfile(uint16_t speed) : maxSpeed(speed){};
 	~MotionProfile();
+};
+
+class StraightProfile : public MotionProfile {
+   public:
+	StraightProfile(int distance, float elapsedTime, uint16_t maxSpeed = 400)
+		: MotionProfile(maxSpeed) {
+		vStart = 0;
+		vEnd = 0;
+		tickEnd = mmsToTicks(distance);
+		duration = elapsedTime;
+		getStraightProfile(true);
+	};
+};
+
+class CurveProfile : public MotionProfile {
+   public:
+	CurveProfile(uint8_t degrees,
+				 float elapsedTime,
+				 uint16_t startSpeed = 300,
+				 uint16_t endSpeed = 300)
+		: MotionProfile(400) {
+		vStart = startSpeed;
+		vEnd = endSpeed;
+		duration = elapsedTime;
+		getCurveProfile(degrees, true);
+	};
+};
+
+class GridProfile : public MotionProfile {
+   public:
+	GridProfile(uint8_t numGrids, float elapsedTime, int startSpeed, int endSpeed)
+		: MotionProfile(1700) {
+		vStart = startSpeed;
+		vEnd = endSpeed;
+		tickEnd = mmsToTicks(numGrids * mazeCellSize);
+		duration = elapsedTime;
+		getGridProfile(true);
+	};
 };

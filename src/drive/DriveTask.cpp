@@ -116,9 +116,9 @@ void driveTask(void* arg) {
 				ESP_LOGI(tag, "DriveCell");
 				interval = 5;
 
-				MotionProfile straightProfile((int)(curCmd->driveCmd.value * mazeCellSize),
-											  2.0 * curCmd->driveCmd.value,
-											  curCmd->driveCmd.speed);
+				StraightProfile straightProfile((int)(curCmd->driveCmd.value * mazeCellSize),
+												2.0 * curCmd->driveCmd.value,
+												curCmd->driveCmd.speed);
 
 				double laneCorrection = 0.0;
 				uint16_t curSpeed = 0;
