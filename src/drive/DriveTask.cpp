@@ -41,7 +41,6 @@ void motionProfileTask(void* arg) {
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: {
-				break;
 			}
 			default:
 				break;
@@ -118,7 +117,6 @@ void driveTask(void* arg) {
 			}
 
 			case DriveCmdType::DriveCmdType_MoveCells: {
-				ESP_LOGI(tag, "DriveCell");
 				interval = 5;
 
 				double laneCorrection = 0.0;

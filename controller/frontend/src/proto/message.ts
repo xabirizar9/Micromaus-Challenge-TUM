@@ -237,8 +237,8 @@ export interface NavigationPacket {
   rightEncoderTotal: number;
   voltage: number;
   batPercentage: number;
-  /** PosDistribution posDistribution = 10; */
   timestamp: number;
+  posDistribution: PosDistribution | undefined;
 }
 
 export interface InfoPacket {
@@ -865,6 +865,7 @@ function createBaseNavigationPacket(): NavigationPacket {
     voltage: 0,
     batPercentage: 0,
     timestamp: 0,
+    posDistribution: undefined,
   };
 }
 
@@ -899,6 +900,12 @@ export const NavigationPacket = {
     }
     if (message.timestamp !== 0) {
       writer.uint32(72).uint32(message.timestamp);
+    }
+    if (message.posDistribution !== undefined) {
+      PosDistribution.encode(
+        message.posDistribution,
+        writer.uint32(82).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -937,6 +944,12 @@ export const NavigationPacket = {
         case 9:
           message.timestamp = reader.uint32();
           break;
+        case 10:
+          message.posDistribution = PosDistribution.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -970,6 +983,9 @@ export const NavigationPacket = {
         ? Number(object.batPercentage)
         : 0,
       timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
+      posDistribution: isSet(object.posDistribution)
+        ? PosDistribution.fromJSON(object.posDistribution)
+        : undefined,
     };
   },
 
@@ -996,6 +1012,10 @@ export const NavigationPacket = {
       (obj.batPercentage = message.batPercentage);
     message.timestamp !== undefined &&
       (obj.timestamp = Math.round(message.timestamp));
+    message.posDistribution !== undefined &&
+      (obj.posDistribution = message.posDistribution
+        ? PosDistribution.toJSON(message.posDistribution)
+        : undefined);
     return obj;
   },
 
@@ -1018,6 +1038,10 @@ export const NavigationPacket = {
     message.voltage = object.voltage ?? 0;
     message.batPercentage = object.batPercentage ?? 0;
     message.timestamp = object.timestamp ?? 0;
+    message.posDistribution =
+      object.posDistribution !== undefined && object.posDistribution !== null
+        ? PosDistribution.fromPartial(object.posDistribution)
+        : undefined;
     return message;
   },
 };

@@ -70,13 +70,13 @@ void Controller::updateSensors() {
 }
 
 static void copyPosDistToState(NavigationPacket &state, const RobotPositionDistribution &rpd) {
-	// PosDistribution &pd(state.posDistribution);
-	// memcpy(pd.positionMean, rpd.positionMean.data.data(), 2 * sizeof(float));
-	// pd.positionMean[2] = rpd.thetaMean;
-	// memcpy(pd.velocityMean, rpd.velocityMean.data.data(), 2 * sizeof(float));
-	// pd.velocityMean[2] = rpd.omegaMean;
-	// memcpy(pd.positionStd, rpd.positionStd.data.data(), 9 * sizeof(float));
-	// memcpy(pd.velocityStd, rpd.velocityStd.data.data(), 9 * sizeof(float));
+	PosDistribution &pd(state.posDistribution);
+	memcpy(pd.positionMean, rpd.positionMean.data.data(), 2 * sizeof(float));
+	pd.positionMean[2] = rpd.thetaMean;
+	memcpy(pd.velocityMean, rpd.velocityMean.data.data(), 2 * sizeof(float));
+	pd.velocityMean[2] = rpd.omegaMean;
+	memcpy(pd.positionStd, rpd.positionStd.data.data(), 9 * sizeof(float));
+	memcpy(pd.velocityStd, rpd.velocityStd.data.data(), 9 * sizeof(float));
 }
 
 void Controller::updatePosition() {

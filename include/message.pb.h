@@ -161,7 +161,9 @@ typedef struct _NavigationPacket {
     int32_t rightEncoderTotal; 
     float voltage; 
     float batPercentage; 
-    uint32_t timestamp; /* PosDistribution posDistribution = 10; */
+    uint32_t timestamp; 
+    bool has_posDistribution;
+    PosDistribution posDistribution; 
 } NavigationPacket;
 
 typedef struct _MausIncomingMessage { 
@@ -224,7 +226,7 @@ extern "C" {
 #define PongPacket_init_default                  {0}
 #define SensorPacket_init_default                {0, 0, 0}
 #define PosDistribution_init_default             {{0, 0, 0}, {0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}}
-#define NavigationPacket_init_default            {false, SensorPacket_init_default, false, Position_init_default, 0, 0, 0, 0, 0, 0, 0}
+#define NavigationPacket_init_default            {false, SensorPacket_init_default, false, Position_init_default, 0, 0, 0, 0, 0, 0, 0, false, PosDistribution_init_default}
 #define InfoPacket_init_default                  {_InfoCmdType_MIN}
 #define PidTuningInfo_init_default               {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}
 #define MazeStatePacket_init_default             {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_default, false, Position_init_default}
@@ -246,7 +248,7 @@ extern "C" {
 #define PongPacket_init_zero                     {0}
 #define SensorPacket_init_zero                   {0, 0, 0}
 #define PosDistribution_init_zero                {{0, 0, 0}, {0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0}}
-#define NavigationPacket_init_zero               {false, SensorPacket_init_zero, false, Position_init_zero, 0, 0, 0, 0, 0, 0, 0}
+#define NavigationPacket_init_zero               {false, SensorPacket_init_zero, false, Position_init_zero, 0, 0, 0, 0, 0, 0, 0, false, PosDistribution_init_zero}
 #define InfoPacket_init_zero                     {_InfoCmdType_MIN}
 #define PidTuningInfo_init_zero                  {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}
 #define MazeStatePacket_init_zero                {{{NULL}, NULL}, {{NULL}, NULL}, false, Position_init_zero, false, Position_init_zero}
@@ -312,6 +314,7 @@ extern "C" {
 #define NavigationPacket_voltage_tag             7
 #define NavigationPacket_batPercentage_tag       8
 #define NavigationPacket_timestamp_tag           9
+#define NavigationPacket_posDistribution_tag     10
 #define MausIncomingMessage_init_tag             2
 #define MausIncomingMessage_control_tag          3
 #define MausIncomingMessage_motorCallibration_tag 4
@@ -387,11 +390,13 @@ X(a, STATIC,   SINGULAR, INT32,    leftEncoderTotal,   5) \
 X(a, STATIC,   SINGULAR, INT32,    rightEncoderTotal,   6) \
 X(a, STATIC,   SINGULAR, FLOAT,    voltage,           7) \
 X(a, STATIC,   SINGULAR, FLOAT,    batPercentage,     8) \
-X(a, STATIC,   SINGULAR, UINT32,   timestamp,         9)
+X(a, STATIC,   SINGULAR, UINT32,   timestamp,         9) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  posDistribution,  10)
 #define NavigationPacket_CALLBACK NULL
 #define NavigationPacket_DEFAULT NULL
 #define NavigationPacket_sensors_MSGTYPE SensorPacket
 #define NavigationPacket_position_MSGTYPE Position
+#define NavigationPacket_posDistribution_MSGTYPE PosDistribution
 
 #define InfoPacket_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UENUM,    cmd,               1)
@@ -578,7 +583,7 @@ extern const pb_msgdesc_t MausIncomingMessage_msg;
 #define MsgSetPosition_size                      15
 #define MsgSolve_size                            7
 #define MsgStop_size                             0
-#define NavigationPacket_size                    82
+#define NavigationPacket_size                    204
 #define PidTuningInfo_size                       1280
 #define PongPacket_size                          0
 #define PosDistribution_size                     120
