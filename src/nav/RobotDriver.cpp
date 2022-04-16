@@ -20,7 +20,7 @@ RobotDriver::RobotDriver() {
 	// - rotate
 	// - ...
 	xTaskCreate(driveTask, "driveTask", 8192, this, 1, &this->driveTaskHandle);
-	xTaskCreate(motionProfileTask, "motionProfileTask", 8192, this, 1, &this->motionTaskHandle);
+	xTaskCreate(motionProfileTask, "motionProfileTask", 8192, this, 3, &this->motionTaskHandle);
 }
 
 RobotDriver::~RobotDriver() {

@@ -1,5 +1,6 @@
 #pragma once
 #include "Controller.hpp"
+#include "drive/MotionProfile.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
 #include "freertos/queue.h"
