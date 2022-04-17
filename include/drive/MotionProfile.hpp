@@ -20,7 +20,7 @@ class MotionProfile {
 
    public:
 	float a0, a1, a2, a3;
-	float tickEnd;
+	float distEnd;
 	int vStart;
 	int vEnd;
 	float duration;
@@ -34,6 +34,9 @@ class MotionProfile {
 	}
 
 	void optimizeCoefficients();
+	void getCurveProfile(uint8_t degrees, uint8_t radius, bool optimize = true);
+	void getGridProfile(bool optimize);
+	void getStraightProfile(bool optimize);
 	void computeVelocityProfile(bool optimize);
 	void getPolynomCoefficients();
 
@@ -47,7 +50,7 @@ class StraightProfile : public MotionProfile {
 		: MotionProfile(maxSpeed) {
 		vStart = 0;
 		vEnd = 0;
-		tickEnd = mmsToTicks(distance);
+		distEnd = distance;
 		duration = elapsedTime;
 		computeVelocityProfile(true);
 	};
@@ -71,16 +74,15 @@ class CurveProfile : public MotionProfile {
 				 uint16_t radius,
 				 float elapsedTime,
 				 uint16_t startSpeed = 300,
-				 uint16_t endSpeed = 300,
-				 bool onSpot = false)
+				 uint16_t endSpeed = 300)
 		: MotionProfile(400) {
 		this->degrees = degrees;
-		this->tickEnd = mmsToTicks(radius) * ((float)(this->degrees) / 90.0);
+		this->distEnd = radius * ((float)(this->degrees) / 90.0);
 		vStart = startSpeed;
 		vEnd = endSpeed;
 		duration = elapsedTime;
 
-		computeVelocityProfile(true);
+		getCurveProfile(degrees, radius);
 	};
 };
 
@@ -90,7 +92,7 @@ class GridProfile : public MotionProfile {
 		: MotionProfile(1700) {
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		tickEnd = mmsToTicks((numGrids - 0.5) * mazeCellSize);
+		distEnd = (numGrids - 0.5) * mazeCellSize;
 		duration = elapsedTime;
 		computeVelocityProfile(true);
 	};

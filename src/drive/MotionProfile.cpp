@@ -23,13 +23,10 @@ MotionProfile::~MotionProfile() {
 }
 
 void MotionProfile::getPolynomCoefficients() {
-	vStart = convertMMsToTPS(vStart);
-	vEnd = convertMMsToTPS(vEnd);
-
 	a0 = 0;
 	a1 = vStart;
-	a2 = (3 / pow(duration, 2)) * tickEnd - vStart * 2 / duration - vEnd / duration;
-	a3 = -2 * tickEnd / pow(duration, 3) + (vEnd + vStart) / pow(duration, 2);
+	a2 = (3 / pow(duration, 2)) * distEnd - vStart * 2 / duration - vEnd / duration;
+	a3 = -2 * distEnd / pow(duration, 3) + (vEnd + vStart) / pow(duration, 2);
 }
 
 float MotionProfile::getSpeedAt(uint16_t index) {
@@ -47,7 +44,7 @@ void MotionProfile::optimizeCoefficients() {
 		else if (tempVmax <= maxSpeed)
 			duration += 0.01;
 		getPolynomCoefficients();
-		tempVmax = encoderTicksToMm * (a1 - 0.33333 * pow(a2, 2) / a3);
+		tempVmax = a1 - 0.33333 * pow(a2, 2) / a3;
 		if (counter == 200)
 			break;
 		counter++;
@@ -55,12 +52,25 @@ void MotionProfile::optimizeCoefficients() {
 	}
 }
 
+void MotionProfile::getCurveProfile(uint8_t degrees, uint8_t radius, bool optimize) {
+	float radians = degrees * (PI / 180);
+	distEnd = radians * radius;	 // a curve of pi/2 with r=90mm is 141.37mm long
+	computeVelocityProfile(optimize);
+}
+
+void MotionProfile::getStraightProfile(bool optimize = true) {
+	computeVelocityProfile(true);
+}
+
+void MotionProfile::getGridProfile(bool optimize = true) {
+	computeVelocityProfile(true);
+}
+
 void MotionProfile::computeVelocityProfile(bool optimize) {
 	getPolynomCoefficients();
 	if (optimize) {
 		optimizeCoefficients();
 	}
-	float tickSpeed = 0;
 	int counter = 0;
 	float time = 0;
 	numIntervals = (uint16_t)ceil(duration / ((float)controlInterval / 1000.0)) + 1;
@@ -78,10 +88,7 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 		} else {
 			time = (float)counter * ((float)controlInterval / 1000);
 		}
-		tickSpeed = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
-
-		velocityProfile[counter] = (int)(encoderTicksToMm * tickSpeed);
-
+		velocityProfile[counter] = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
 		counter++;
 		vTaskDelay(stepInterval);
 	}
