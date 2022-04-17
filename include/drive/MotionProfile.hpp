@@ -10,8 +10,8 @@
 // interval in which driver will update command speed
 static const uint8_t controlInterval = 50;
 
-const float gridCurveRadius = 141.37;
-const float onSpotRadius = 95.82;
+const float gridCurveRadius = 90;
+const float onSpotRadius = wheelDistance / 2;
 
 class MotionProfile {
    private:
