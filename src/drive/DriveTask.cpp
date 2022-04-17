@@ -50,6 +50,7 @@ void motionProfileTask(void* arg) {
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: {
+				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
@@ -191,8 +192,8 @@ void driveTask(void* arg) {
 				uint8_t counter = 0;
 
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeft
-									  ? -curCmd->driveCmd.value
-									  : curCmd->driveCmd.value;
+									  ? -gridCurveRadius
+									  : gridCurveRadius;
 
 				while (counter < curCmd->profile->numIntervals) {
 					controller->drive(curCmd->profile->velocityProfile[counter], heading);
