@@ -65,9 +65,9 @@ class CurveProfile : public MotionProfile {
 		vEnd = endSpeed;
 		duration = elapsedTime;
 		if (onSpot) {
-			getCurveProfile(90, true);
+			getCurveProfile(degrees, true, true);
 		} else {
-			getCurveProfile(degrees, false);
+			getCurveProfile(degrees, false, true);
 		}
 	};
 };
