@@ -31,7 +31,10 @@ class MotionProfile {
 	}
 
 	void optimizeCoefficients();
-	void getCurveProfile(uint8_t degrees, bool onSpot, bool optimize);
+	void getCurveProfile(uint8_t degrees,
+						 uint8_t radius,
+						 bool onSpot = false,
+						 bool optimize = true);
 	void getGridProfile(bool optimize);
 	void getStraightProfile(bool optimize);
 	void computeVelocityProfile(bool optimize);
@@ -56,6 +59,7 @@ class StraightProfile : public MotionProfile {
 class CurveProfile : public MotionProfile {
    public:
 	CurveProfile(uint8_t degrees,
+				 uint8_t radius,
 				 float elapsedTime,
 				 uint16_t startSpeed = 300,
 				 uint16_t endSpeed = 300,
@@ -65,9 +69,9 @@ class CurveProfile : public MotionProfile {
 		vEnd = endSpeed;
 		duration = elapsedTime;
 		if (onSpot) {
-			getCurveProfile(degrees, true, true);
+			getCurveProfile(degrees, true);
 		} else {
-			getCurveProfile(degrees, false, true);
+			getCurveProfile(degrees, radius, false);
 		}
 	};
 };

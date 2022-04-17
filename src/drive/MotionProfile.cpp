@@ -53,18 +53,13 @@ void MotionProfile::optimizeCoefficients() {
 		counter++;
 		vTaskDelay(pdMS_TO_TICKS(1));
 	}
-	// ESP_LOGI(tag, "d=%lf c=%d tempVmax=%f", duration, counter, tempVmax);
-	// ESP_LOGI(tag, "a0=%f a1=%f a2=%f a3=%f", a0, a1, a2, a3);
 }
 
-void MotionProfile::getCurveProfile(uint8_t degrees, bool onSpot = false, bool optimize = true) {
-	tickEnd = mmsToTicks(141.37);  // a curve of pi/2 with r=90mm is 141.37mm long
-	if (degrees == 180) {
-		tickEnd *= 2;  // curve of pi is double as pi/2
-	}
+void MotionProfile::getCurveProfile(uint8_t degrees, uint8_t radius, bool onSpot, bool optimize) {
+	float radians = degrees * (PI / 180);
+	tickEnd = mmsToTicks(radians * radius);	 // a curve of pi/2 with r=90mm is 141.37mm long
 	if (onSpot) {
-		// Curve of pi/2 with r=wheelDistance/2mm is 95.82mm
-		tickEnd = mmsToTicks(95.82);
+		tickEnd = mmsToTicks(radians * radius);
 	}
 	computeVelocityProfile(optimize);
 }
