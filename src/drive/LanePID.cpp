@@ -34,7 +34,7 @@ void LaneControlPID::evaluate() {
 	} else if ((!leftWallgiven && rightWallgiven) || (!leftSensorValid && rightSensorValid)) {
 		// only right is valid
 		this->input = OPTIMAL_WALL_DISTANCE - state.sensors.right;
-		ESP_LOGD(TAG, "only right is valid");
+		ESP_LOGI(TAG, "only right is valid");
 	} else if (leftWallgiven && rightWallgiven && leftSensorValid && rightSensorValid) {
 		// both are valid
 		ESP_LOGD(TAG, "both are valid");
@@ -47,6 +47,8 @@ void LaneControlPID::evaluate() {
 
 	// compute default PID values
 	PID::evaluate();
+
+	// ESP_LOGI(TAG, "out=%lf", this->_output);
 
 	// adjust correction to Lane task constraints
 	if (abs(this->_output) < MIN_CORRECTION_AMOUNT) {

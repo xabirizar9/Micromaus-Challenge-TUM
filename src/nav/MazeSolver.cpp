@@ -168,6 +168,7 @@ void MazeSolver::driveToNextCell(float speed) {
 }
 
 void MazeSolver::startFastRun(float speed) {
+	this->isFastRun = true;
 	uint16_t actualSpeed = (uint16_t)speed;
 	// reset maze
 	this->maze.resetCosts();
@@ -191,6 +192,7 @@ void MazeSolver::startFastRun(float speed) {
 }
 
 void MazeSolver::startGoHome(float speed) {
+	this->isFastRun = true;
 	uint16_t actualSpeed = (uint16_t)speed;
 	// reset maze
 	this->maze.resetCosts();
@@ -214,6 +216,7 @@ void MazeSolver::startGoHome(float speed) {
 }
 
 void MazeSolver::startExploration(float speed) {
+	this->isFastRun = false;
 	this->heading = CardinalDirection::NORTH;
 	this->x = 0;
 	this->y = 0;

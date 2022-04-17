@@ -14,7 +14,7 @@ static const char *TAG = "PID";
 void tuneMotorPID(Motor *motor, Encoder *enc, PID *pid, uint32_t intervalMS) {
 	ESP_LOGI(TAG, "0.");
 	// compute target
-	uint16_t targetInMmS = 200;
+	uint16_t targetInMmS = 120;
 	// compute target in ticks per interval
 	float target = (targetInMmS * mmToRp * ticksPerRevolution) * ((float)intervalMS / 1000.0);
 
@@ -22,7 +22,7 @@ void tuneMotorPID(Motor *motor, Encoder *enc, PID *pid, uint32_t intervalMS) {
 	float max = 1000000000;
 
 	int i = 0;
-	int cycles = 50;
+	int cycles = 100;
 	bool output = true;
 	uint32_t interval = pdMS_TO_TICKS(intervalMS);
 	int64_t lastEncoderValue = enc->getTotalCounter();
@@ -43,7 +43,7 @@ void tuneMotorPID(Motor *motor, Encoder *enc, PID *pid, uint32_t intervalMS) {
 	float tdConstant = 0.33;
 	ESP_LOGI(TAG, "0.5");
 	while (i <= cycles) {
-		curTime = lastTime - xTaskGetTickCount();
+		curTime = xTaskGetTickCount();
 		curEncoderValue = enc->getTotalCounter();
 		float inputValue = curEncoderValue - lastEncoderValue;
 		lastEncoderValue = curEncoderValue;
@@ -53,6 +53,8 @@ void tuneMotorPID(Motor *motor, Encoder *enc, PID *pid, uint32_t intervalMS) {
 		min = (min < inputValue) ? min : inputValue;
 
 		if (output && inputValue > target) {
+			ESP_LOGI(TAG, "output is over target");
+
 			output = false;
 			outputValue = minOutput;
 			t1 = curTime;
@@ -79,6 +81,8 @@ void tuneMotorPID(Motor *motor, Encoder *enc, PID *pid, uint32_t intervalMS) {
 			kP = kpConstant * ku;
 			kI = (kP / (tiConstant * tu)) * interval;
 			kD = (tdConstant * kP * tu) / interval;
+
+			// ESP_LOGI(TAG, "tu=%f, kP=%f kI=%f kD=%f", tu, kP, kI, kD);
 
 			// Average all gains after the first two cycles
 			if (i > 1) {
@@ -141,10 +145,16 @@ void motorPidTask(void *pvParameter) {
 
 	MsgEncoderCallibration config;
 
+	config.kP = 0.003898;
+	config.kI = 0.001688;
+	config.kD = 0.011194;
 	PID lPid = PID(&lInput, &lOutput, -1.0, 1.0, monitorInterval, config);
 	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
+	config.kP = 0.003317;
+	config.kI = 0.001665;
+	config.kD = 0.004370;
 	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval, config);
 	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);

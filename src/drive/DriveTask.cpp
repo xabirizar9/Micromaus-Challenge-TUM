@@ -169,10 +169,12 @@ void driveTask(void* arg) {
 					controller->updateSensors();
 					// update lane task
 					lanePid.evaluate();
+
 					controller->drive(curCmd->profile->velocityProfile[counter],
 									  (int16_t)round(laneCorrection));
 					// STOP drive when wall in front
 					if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
+						ESP_LOGI(tag, "stop!");
 						controller->setSpeed(0);
 						controller->drive(0, 0);
 						break;
