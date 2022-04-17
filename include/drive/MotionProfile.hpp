@@ -43,12 +43,11 @@ class MotionProfile {
 
 class StraightProfile : public MotionProfile {
    public:
-	StraightProfile(int distance, float elapsedTime, uint16_t maxSpeed = 400)
-		: MotionProfile(maxSpeed) {
+	StraightProfile(int distance, uint16_t maxSpeed = 400) : MotionProfile(maxSpeed) {
 		vStart = 0;
 		vEnd = 0;
 		tickEnd = mmsToTicks(distance);
-		duration = elapsedTime;
+		duration = (float)distance / (float)maxSpeed;
 		computeVelocityProfile(true);
 	};
 };
@@ -63,22 +62,22 @@ class CurveProfile : public MotionProfile {
 	 *
 	 * @param degrees degrees as deg
 	 * @param radius radius of curve in mm
-	 * @param elapsedTime time in seconds
 	 * @param startSpeed speed in mm/s
 	 * @param endSpeed speed in mm/s
 	 */
 	CurveProfile(uint16_t degrees,
 				 uint16_t radius,
-				 float elapsedTime,
 				 uint16_t startSpeed = 300,
 				 uint16_t endSpeed = 300,
-				 bool onSpot = false)
-		: MotionProfile(400) {
+				 uint16_t maxSpeed = 400)
+		: MotionProfile(maxSpeed) {
 		this->degrees = degrees;
-		this->tickEnd = mmsToTicks(radius) * ((float)(this->degrees) / 90.0);
+		float radians = degrees * (PI / 180);
+		float distance = radians * radius;
+		tickEnd = mmsToTicks(distance);
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		duration = elapsedTime;
+		duration = (float)distance / (float)maxSpeed;
 
 		computeVelocityProfile(true);
 	};
