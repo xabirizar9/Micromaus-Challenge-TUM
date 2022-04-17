@@ -20,7 +20,7 @@ class MotionProfile {
 
    public:
 	float a0, a1, a2, a3;
-	float tickEnd;
+	float distance;
 	int vStart;
 	int vEnd;
 	float duration;
@@ -46,7 +46,7 @@ class StraightProfile : public MotionProfile {
 	StraightProfile(int distance, uint16_t maxSpeed = 400) : MotionProfile(maxSpeed) {
 		vStart = 0;
 		vEnd = 0;
-		tickEnd = mmsToTicks(distance);
+		this->distance = distance;
 		duration = (float)distance / (float)maxSpeed;
 		computeVelocityProfile(true);
 	};
@@ -74,11 +74,9 @@ class CurveProfile : public MotionProfile {
 		this->degrees = degrees;
 		float radians = degrees * (PI / 180);
 		float distance = radians * radius;
-		tickEnd = mmsToTicks(distance);
 		vStart = startSpeed;
 		vEnd = endSpeed;
 		duration = (float)distance / (float)maxSpeed;
-
 		computeVelocityProfile(true);
 	};
 };
@@ -89,7 +87,7 @@ class GridProfile : public MotionProfile {
 		: MotionProfile(1700) {
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		tickEnd = mmsToTicks((numGrids - 0.5) * mazeCellSize);
+		distance = (numGrids - 0.5) * mazeCellSize;
 		duration = elapsedTime;
 		computeVelocityProfile(true);
 	};
