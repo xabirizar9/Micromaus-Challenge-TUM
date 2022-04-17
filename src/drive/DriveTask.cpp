@@ -44,12 +44,13 @@ void motionProfileTask(void* arg) {
 			}
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
-				cmd.profile = new CurveProfile(onSpotRadius * cmd.driveCmd.value, 1.0, 0, 0, true);
+				cmd.profile =
+					new CurveProfile(90 * cmd.driveCmd.value, onSpotRadius, 1.0, 0, 0, true);
 			}
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
 				cmd.profile = new CurveProfile(
-					gridCurveRadius * cmd.driveCmd.value, 1.0, lastSpeed, cmd.driveCmd.speed);
+					90 * cmd.driveCmd.value, gridCurveRadius, 1.0, lastSpeed, cmd.driveCmd.speed);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_MoveCells: {
