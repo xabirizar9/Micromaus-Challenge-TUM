@@ -56,6 +56,7 @@ void motionProfileTask(void* arg) {
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				cmd.profile =
 					new GridProfile(cmd.driveCmd.value, 1.5, lastSpeed, cmd.driveCmd.speed);
+				break;
 			}
 			default:
 				break;
