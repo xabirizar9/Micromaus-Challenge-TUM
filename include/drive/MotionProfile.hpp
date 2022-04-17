@@ -10,6 +10,9 @@
 // interval in which driver will update command speed
 static const uint8_t controlInterval = 50;
 
+const float gridCurveRadius = 141.37;
+const float onSpotRadius = 95.82;
+
 class MotionProfile {
    private:
 	const uint16_t maxSpeed;
@@ -31,9 +34,6 @@ class MotionProfile {
 	}
 
 	void optimizeCoefficients();
-	void getCurveProfile(uint8_t degrees, bool onSpot, bool optimize);
-	void getGridProfile(bool optimize);
-	void getStraightProfile(bool optimize);
 	void computeVelocityProfile(bool optimize);
 	void getPolynomCoefficients();
 
@@ -49,26 +49,38 @@ class StraightProfile : public MotionProfile {
 		vEnd = 0;
 		tickEnd = mmsToTicks(distance);
 		duration = elapsedTime;
-		getStraightProfile(true);
+		computeVelocityProfile(true);
 	};
 };
 
 class CurveProfile : public MotionProfile {
+   private:
+	uint16_t degrees;
+
    public:
-	CurveProfile(uint8_t degrees,
+	/**
+	 * @brief Construct a new Curve Profile object
+	 *
+	 * @param degrees degrees as deg
+	 * @param radius radius of curve in mm
+	 * @param elapsedTime time in seconds
+	 * @param startSpeed speed in mm/s
+	 * @param endSpeed speed in mm/s
+	 */
+	CurveProfile(uint16_t degrees,
+				 uint16_t radius,
 				 float elapsedTime,
 				 uint16_t startSpeed = 300,
 				 uint16_t endSpeed = 300,
 				 bool onSpot = false)
 		: MotionProfile(400) {
+		this->degrees = degrees;
+		this->tickEnd = mmsToTicks(radius) * ((float)(this->degrees) / 90.0);
 		vStart = startSpeed;
 		vEnd = endSpeed;
 		duration = elapsedTime;
-		if (onSpot) {
-			getCurveProfile(90, true);
-		} else {
-			getCurveProfile(degrees, false);
-		}
+
+		computeVelocityProfile(true);
 	};
 };
 
@@ -80,6 +92,6 @@ class GridProfile : public MotionProfile {
 		vEnd = endSpeed;
 		tickEnd = mmsToTicks(numGrids * mazeCellSize);
 		duration = elapsedTime;
-		getGridProfile(true);
+		computeVelocityProfile(true);
 	};
 };

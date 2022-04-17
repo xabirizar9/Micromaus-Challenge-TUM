@@ -57,26 +57,6 @@ void MotionProfile::optimizeCoefficients() {
 	// ESP_LOGI(tag, "a0=%f a1=%f a2=%f a3=%f", a0, a1, a2, a3);
 }
 
-void MotionProfile::getCurveProfile(uint8_t degrees, bool onSpot = false, bool optimize = true) {
-	tickEnd = mmsToTicks(141.37);  // a curve of pi/2 with r=90mm is 141.37mm long
-	if (degrees == 180) {
-		tickEnd *= 2;  // curve of pi is double as pi/2
-	}
-	if (onSpot) {
-		// Curve of pi/2 with r=wheelDistance/2mm is 95.82mm
-		tickEnd = mmsToTicks(95.82);
-	}
-	computeVelocityProfile(optimize);
-}
-
-void MotionProfile::getStraightProfile(bool optimize = true) {
-	computeVelocityProfile(true);
-}
-
-void MotionProfile::getGridProfile(bool optimize = true) {
-	computeVelocityProfile(true);
-}
-
 void MotionProfile::computeVelocityProfile(bool optimize) {
 	getPolynomCoefficients();
 	if (optimize) {
