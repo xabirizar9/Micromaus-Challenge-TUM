@@ -53,6 +53,8 @@ void MotionProfile::optimizeCoefficients() {
 }
 
 void MotionProfile::computeVelocityProfile(bool optimize) {
+	ESP_LOGI(tag, "duration=%f start=%d end=%d distance=%f", duration, vStart, vEnd, distance);
+
 	getPolynomCoefficients();
 	if (optimize) {
 		optimizeCoefficients();
@@ -74,7 +76,8 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 		} else {
 			time = (float)counter * ((float)controlInterval / 1000);
 		}
-		velocityProfile[counter] = (a1 * time + 2 * a2 * time + 3 * a3 * pow(time, 2));
+		velocityProfile[counter] = (a1 + 2 * a2 + 3 * a3 * time) * time;
+		ESP_LOGI(tag, "i=%d v=%d", counter, velocityProfile[counter]);
 		counter++;
 		vTaskDelay(stepInterval);
 	}

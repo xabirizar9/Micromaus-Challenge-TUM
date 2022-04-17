@@ -28,44 +28,63 @@ void motionProfileTask(void* arg) {
 
 	DriveCmdWithMotionProfile cmd;
 	uint16_t lastSpeed = 0;
+	uint16_t nextSpeed = 0;
 	while (true) {
 		if (!xQueueReceive(driver->executionQueue, &cmd.driveCmd, 0)) {
 			vTaskDelay(interval);
 			continue;
 		}
 
+		if (driver->isFastRun) {
+			nextSpeed = cmd.driveCmd.speed;
+		}
+
 		switch (cmd.driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
-				cmd.profile = new StraightProfile((int)cmd.driveCmd.value, cmd.driveCmd.speed);
+				cmd.profile =
+					new StraightProfile((int)cmd.driveCmd.value,  // distance to drive in mm
+										lastSpeed,	// previous speed
+										nextSpeed,	// speed after profile is finished
+										cmd.driveCmd.speed	// average speed for entire profile
+					);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnAround: {
 			}
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
-				cmd.profile = new CurveProfile(
-					90 * cmd.driveCmd.value, wheelDistance / 2, 0.0, 0.0, cmd.driveCmd.speed);
+				cmd.profile =
+					new CurveProfile(90 * cmd.driveCmd.value,
+									 wheelDistance / 2,
+									 0.0,  // previous speed
+									 0.0,  // speed after profile is finished
+									 cmd.driveCmd.speed	 // average speed for entire profile
+					);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
 				cmd.profile = new CurveProfile(90 * cmd.driveCmd.value,
 											   gridCurveRadius,
-											   0.25 * cmd.driveCmd.value,
 											   lastSpeed,
+											   nextSpeed,
 											   cmd.driveCmd.speed);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				cmd.profile =
-					new GridProfile(cmd.driveCmd.value, 1.5, lastSpeed, cmd.driveCmd.speed);
+					new GridProfile(cmd.driveCmd.value, lastSpeed, nextSpeed, cmd.driveCmd.speed);
 				break;
 			}
 			default:
 				break;
 				// TODO: handle this
 		}
-		lastSpeed = cmd.driveCmd.speed;
+
+		if (driver->isFastRun) {
+			lastSpeed = cmd.driveCmd.speed;
+		}
+
 		ESP_LOGI(tag, "motion profile computed");
 		// pass command to drive task
 		xQueueSend(driver->motionProfileQueue, &cmd, 0);

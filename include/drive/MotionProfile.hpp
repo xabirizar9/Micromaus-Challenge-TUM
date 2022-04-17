@@ -13,6 +13,8 @@ static const uint8_t controlInterval = 50;
 const float gridCurveRadius = 90;
 const float onSpotRadius = wheelDistance / 2;
 
+#define MAX_SPEED 500
+
 class MotionProfile {
    private:
 	const uint16_t maxSpeed;
@@ -43,11 +45,16 @@ class MotionProfile {
 
 class StraightProfile : public MotionProfile {
    public:
-	StraightProfile(int distance, uint16_t maxSpeed = 400) : MotionProfile(maxSpeed) {
-		vStart = 0;
-		vEnd = 0;
+	StraightProfile(int distance,
+					uint16_t startSpeed = 0,
+					uint16_t endSpeed = 0,
+					uint16_t targetSpeed = 300,
+					uint16_t maxSpeed = MAX_SPEED)
+		: MotionProfile(maxSpeed) {
+		vStart = startSpeed;
+		vEnd = endSpeed;
 		this->distance = distance;
-		duration = (float)distance / (float)maxSpeed;
+		duration = (float)distance / (float)targetSpeed;
 		computeVelocityProfile(true);
 	};
 };
@@ -67,28 +74,38 @@ class CurveProfile : public MotionProfile {
 	 */
 	CurveProfile(uint16_t degrees,
 				 uint16_t radius,
-				 uint16_t startSpeed = 300,
-				 uint16_t endSpeed = 300,
-				 uint16_t maxSpeed = 400)
+				 uint16_t startSpeed = 0,
+				 uint16_t endSpeed = 0,
+				 uint16_t targetSpeed = 300,
+				 uint16_t maxSpeed = MAX_SPEED)
 		: MotionProfile(maxSpeed) {
 		this->degrees = degrees;
-		float radians = degrees * (PI / 180);
-		float distance = radians * radius;
+
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		duration = (float)distance / (float)maxSpeed;
+
+		float radians = degrees * (PI / 180);
+		distance = radians * radius;
+		duration = distance / (float)targetSpeed;
+
 		computeVelocityProfile(true);
 	};
 };
 
 class GridProfile : public MotionProfile {
    public:
-	GridProfile(uint8_t numGrids, float elapsedTime, int startSpeed, int endSpeed)
-		: MotionProfile(1700) {
+	GridProfile(uint8_t numGrids,
+				uint16_t startSpeed = 0,
+				uint16_t endSpeed = 0,
+				uint16_t targetSpeed = 300,
+				uint16_t maxSpeed = MAX_SPEED)
+		: MotionProfile(maxSpeed) {
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		distance = (numGrids - 0.5) * mazeCellSize;
-		duration = elapsedTime;
+
+		distance = numGrids * mazeCellSize;
+		duration = (float)distance / (float)targetSpeed;
+
 		computeVelocityProfile(true);
 	};
 };

@@ -23,6 +23,9 @@ class RobotDriver {
 	// queue of drive commands to be executed;
 
    public:
+	// if fast mode is enabled commands will continue with previous speed
+	bool isFastRun = false;
+
 	RobotDriver();
 	~RobotDriver();
 
