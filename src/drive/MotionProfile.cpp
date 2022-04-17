@@ -53,8 +53,6 @@ void MotionProfile::optimizeCoefficients() {
 		counter++;
 		vTaskDelay(pdMS_TO_TICKS(1));
 	}
-	// ESP_LOGI(tag, "d=%lf c=%d tempVmax=%f", duration, counter, tempVmax);
-	// ESP_LOGI(tag, "a0=%f a1=%f a2=%f a3=%f", a0, a1, a2, a3);
 }
 
 void MotionProfile::computeVelocityProfile(bool optimize) {

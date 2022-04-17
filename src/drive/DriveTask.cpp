@@ -26,7 +26,6 @@ void motionProfileTask(void* arg) {
 	RobotDriver* driver = (RobotDriver*)arg;
 	uint16_t interval = pdMS_TO_TICKS(30);
 
-	MotionProfile* profile;
 	DriveCmdWithMotionProfile cmd;
 	uint16_t lastSpeed = 0;
 	while (true) {
@@ -45,7 +44,8 @@ void motionProfileTask(void* arg) {
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
 				cmd.profile =
-					new CurveProfile(90 * cmd.driveCmd.value, onSpotRadius, 1.0, 0, 0, true);
+					new CurveProfile(90 * cmd.driveCmd.value, wheelDistance / 2, 1.0, 0, 0, true);
+				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
@@ -56,6 +56,7 @@ void motionProfileTask(void* arg) {
 			case DriveCmdType::DriveCmdType_MoveCells: {
 				cmd.profile =
 					new GridProfile(cmd.driveCmd.value, 1.5, lastSpeed, cmd.driveCmd.speed);
+				break;
 			}
 			default:
 				break;
@@ -77,10 +78,6 @@ void driveTask(void* arg) {
 	Controller* controller = driver->controller;
 
 	NetController::Manager net = NetController::Manager::getInstance();
-
-	float interval = 0;
-	float distance = 0;
-	float ticksPerOnSpotRotation = mmsToTicks(M_PI * wheelDistance / 4);
 
 	bool isFirstCmd = true;
 
@@ -136,7 +133,6 @@ void driveTask(void* arg) {
 				ESP_LOGI(tag, "DriveCell");
 
 				double laneCorrection = 0.0;
-				uint16_t curSpeed = 0;
 				LaneControlPID lanePid =
 					LaneControlPID(&laneCorrection, controlInterval, controller);
 

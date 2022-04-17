@@ -90,7 +90,7 @@ class GridProfile : public MotionProfile {
 		: MotionProfile(1700) {
 		vStart = startSpeed;
 		vEnd = endSpeed;
-		tickEnd = mmsToTicks(numGrids * mazeCellSize);
+		tickEnd = mmsToTicks((numGrids - 0.5) * mazeCellSize);
 		duration = elapsedTime;
 		computeVelocityProfile(true);
 	};
