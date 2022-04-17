@@ -43,8 +43,7 @@ void motionProfileTask(void* arg) {
 			}
 			case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
 			case DriveCmdType::DriveCmdType_TurnRightOnSpot: {
-				cmd.profile =
-					new CurveProfile(90 * cmd.driveCmd.value, wheelDistance / 2, 1.0, 0, 0);
+				cmd.profile = new CurveProfile(90 * cmd.driveCmd.value, onSpotRadius, 1.0, 0, 0);
 				break;
 			}
 			case DriveCmdType::DriveCmdType_TurnRight:
