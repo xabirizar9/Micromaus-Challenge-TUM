@@ -4575,23 +4575,23 @@ var Position = {
     return message;
   }
 };
-function createBaseMsgMotorCallibration() {
+function createBaseMsgMotorCalibration() {
   return { motor: 0, config: void 0 };
 }
-var MsgMotorCallibration = {
+var MsgMotorCalibration = {
   encode(message, writer = _m0.Writer.create()) {
     if (message.motor !== 0) {
       writer.uint32(8).int32(message.motor);
     }
     if (message.config !== void 0) {
-      MsgEncoderCallibration.encode(message.config, writer.uint32(18).fork()).ldelim();
+      MsgEncoderCalibration.encode(message.config, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
   decode(input, length) {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === void 0 ? reader.len : reader.pos + length;
-    const message = createBaseMsgMotorCallibration();
+    const message = createBaseMsgMotorCalibration();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4599,7 +4599,7 @@ var MsgMotorCallibration = {
           message.motor = reader.int32();
           break;
         case 2:
-          message.config = MsgEncoderCallibration.decode(reader, reader.uint32());
+          message.config = MsgEncoderCalibration.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -4611,26 +4611,26 @@ var MsgMotorCallibration = {
   fromJSON(object) {
     return {
       motor: isSet(object.motor) ? motorPositionFromJSON(object.motor) : 0,
-      config: isSet(object.config) ? MsgEncoderCallibration.fromJSON(object.config) : void 0
+      config: isSet(object.config) ? MsgEncoderCalibration.fromJSON(object.config) : void 0
     };
   },
   toJSON(message) {
     const obj = {};
     message.motor !== void 0 && (obj.motor = motorPositionToJSON(message.motor));
-    message.config !== void 0 && (obj.config = message.config ? MsgEncoderCallibration.toJSON(message.config) : void 0);
+    message.config !== void 0 && (obj.config = message.config ? MsgEncoderCalibration.toJSON(message.config) : void 0);
     return obj;
   },
   fromPartial(object) {
-    const message = createBaseMsgMotorCallibration();
+    const message = createBaseMsgMotorCalibration();
     message.motor = object.motor ?? 0;
-    message.config = object.config !== void 0 && object.config !== null ? MsgEncoderCallibration.fromPartial(object.config) : void 0;
+    message.config = object.config !== void 0 && object.config !== null ? MsgEncoderCalibration.fromPartial(object.config) : void 0;
     return message;
   }
 };
-function createBaseMsgEncoderCallibration() {
+function createBaseMsgEncoderCalibration() {
   return { kP: 0, kI: 0, kD: 0, streamData: false };
 }
-var MsgEncoderCallibration = {
+var MsgEncoderCalibration = {
   encode(message, writer = _m0.Writer.create()) {
     if (message.kP !== 0) {
       writer.uint32(13).float(message.kP);
@@ -4649,7 +4649,7 @@ var MsgEncoderCallibration = {
   decode(input, length) {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === void 0 ? reader.len : reader.pos + length;
-    const message = createBaseMsgEncoderCallibration();
+    const message = createBaseMsgEncoderCalibration();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4689,7 +4689,7 @@ var MsgEncoderCallibration = {
     return obj;
   },
   fromPartial(object) {
-    const message = createBaseMsgEncoderCallibration();
+    const message = createBaseMsgEncoderCalibration();
     message.kP = object.kP ?? 0;
     message.kI = object.kI ?? 0;
     message.kD = object.kD ?? 0;
@@ -5100,13 +5100,13 @@ function createBaseMausConfigPacket() {
 var MausConfigPacket = {
   encode(message, writer = _m0.Writer.create()) {
     if (message.leftMotorPid !== void 0) {
-      MsgEncoderCallibration.encode(message.leftMotorPid, writer.uint32(10).fork()).ldelim();
+      MsgEncoderCalibration.encode(message.leftMotorPid, writer.uint32(10).fork()).ldelim();
     }
     if (message.rightMotorPid !== void 0) {
-      MsgEncoderCallibration.encode(message.rightMotorPid, writer.uint32(18).fork()).ldelim();
+      MsgEncoderCalibration.encode(message.rightMotorPid, writer.uint32(18).fork()).ldelim();
     }
     if (message.lanePid !== void 0) {
-      MsgEncoderCallibration.encode(message.lanePid, writer.uint32(26).fork()).ldelim();
+      MsgEncoderCalibration.encode(message.lanePid, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -5118,13 +5118,13 @@ var MausConfigPacket = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.leftMotorPid = MsgEncoderCallibration.decode(reader, reader.uint32());
+          message.leftMotorPid = MsgEncoderCalibration.decode(reader, reader.uint32());
           break;
         case 2:
-          message.rightMotorPid = MsgEncoderCallibration.decode(reader, reader.uint32());
+          message.rightMotorPid = MsgEncoderCalibration.decode(reader, reader.uint32());
           break;
         case 3:
-          message.lanePid = MsgEncoderCallibration.decode(reader, reader.uint32());
+          message.lanePid = MsgEncoderCalibration.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -5135,23 +5135,23 @@ var MausConfigPacket = {
   },
   fromJSON(object) {
     return {
-      leftMotorPid: isSet(object.leftMotorPid) ? MsgEncoderCallibration.fromJSON(object.leftMotorPid) : void 0,
-      rightMotorPid: isSet(object.rightMotorPid) ? MsgEncoderCallibration.fromJSON(object.rightMotorPid) : void 0,
-      lanePid: isSet(object.lanePid) ? MsgEncoderCallibration.fromJSON(object.lanePid) : void 0
+      leftMotorPid: isSet(object.leftMotorPid) ? MsgEncoderCalibration.fromJSON(object.leftMotorPid) : void 0,
+      rightMotorPid: isSet(object.rightMotorPid) ? MsgEncoderCalibration.fromJSON(object.rightMotorPid) : void 0,
+      lanePid: isSet(object.lanePid) ? MsgEncoderCalibration.fromJSON(object.lanePid) : void 0
     };
   },
   toJSON(message) {
     const obj = {};
-    message.leftMotorPid !== void 0 && (obj.leftMotorPid = message.leftMotorPid ? MsgEncoderCallibration.toJSON(message.leftMotorPid) : void 0);
-    message.rightMotorPid !== void 0 && (obj.rightMotorPid = message.rightMotorPid ? MsgEncoderCallibration.toJSON(message.rightMotorPid) : void 0);
-    message.lanePid !== void 0 && (obj.lanePid = message.lanePid ? MsgEncoderCallibration.toJSON(message.lanePid) : void 0);
+    message.leftMotorPid !== void 0 && (obj.leftMotorPid = message.leftMotorPid ? MsgEncoderCalibration.toJSON(message.leftMotorPid) : void 0);
+    message.rightMotorPid !== void 0 && (obj.rightMotorPid = message.rightMotorPid ? MsgEncoderCalibration.toJSON(message.rightMotorPid) : void 0);
+    message.lanePid !== void 0 && (obj.lanePid = message.lanePid ? MsgEncoderCalibration.toJSON(message.lanePid) : void 0);
     return obj;
   },
   fromPartial(object) {
     const message = createBaseMausConfigPacket();
-    message.leftMotorPid = object.leftMotorPid !== void 0 && object.leftMotorPid !== null ? MsgEncoderCallibration.fromPartial(object.leftMotorPid) : void 0;
-    message.rightMotorPid = object.rightMotorPid !== void 0 && object.rightMotorPid !== null ? MsgEncoderCallibration.fromPartial(object.rightMotorPid) : void 0;
-    message.lanePid = object.lanePid !== void 0 && object.lanePid !== null ? MsgEncoderCallibration.fromPartial(object.lanePid) : void 0;
+    message.leftMotorPid = object.leftMotorPid !== void 0 && object.leftMotorPid !== null ? MsgEncoderCalibration.fromPartial(object.leftMotorPid) : void 0;
+    message.rightMotorPid = object.rightMotorPid !== void 0 && object.rightMotorPid !== null ? MsgEncoderCalibration.fromPartial(object.rightMotorPid) : void 0;
+    message.lanePid = object.lanePid !== void 0 && object.lanePid !== null ? MsgEncoderCalibration.fromPartial(object.lanePid) : void 0;
     return message;
   }
 };
@@ -5679,13 +5679,13 @@ function createBaseMausIncomingMessage() {
   return {
     init: void 0,
     control: void 0,
-    motorCallibration: void 0,
+    motorCalibration: void 0,
     ping: void 0,
     stop: void 0,
     drive: void 0,
     setPosition: void 0,
     solve: void 0,
-    laneCallibration: void 0
+    laneCalibration: void 0
   };
 }
 var MausIncomingMessage = {
@@ -5696,8 +5696,8 @@ var MausIncomingMessage = {
     if (message.control !== void 0) {
       MsgControl.encode(message.control, writer.uint32(26).fork()).ldelim();
     }
-    if (message.motorCallibration !== void 0) {
-      MsgMotorCallibration.encode(message.motorCallibration, writer.uint32(34).fork()).ldelim();
+    if (message.motorCalibration !== void 0) {
+      MsgMotorCalibration.encode(message.motorCalibration, writer.uint32(34).fork()).ldelim();
     }
     if (message.ping !== void 0) {
       MsgPing.encode(message.ping, writer.uint32(42).fork()).ldelim();
@@ -5714,8 +5714,8 @@ var MausIncomingMessage = {
     if (message.solve !== void 0) {
       MsgSolve.encode(message.solve, writer.uint32(74).fork()).ldelim();
     }
-    if (message.laneCallibration !== void 0) {
-      MsgEncoderCallibration.encode(message.laneCallibration, writer.uint32(82).fork()).ldelim();
+    if (message.laneCalibration !== void 0) {
+      MsgEncoderCalibration.encode(message.laneCalibration, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -5733,7 +5733,7 @@ var MausIncomingMessage = {
           message.control = MsgControl.decode(reader, reader.uint32());
           break;
         case 4:
-          message.motorCallibration = MsgMotorCallibration.decode(reader, reader.uint32());
+          message.motorCalibration = MsgMotorCalibration.decode(reader, reader.uint32());
           break;
         case 5:
           message.ping = MsgPing.decode(reader, reader.uint32());
@@ -5751,7 +5751,7 @@ var MausIncomingMessage = {
           message.solve = MsgSolve.decode(reader, reader.uint32());
           break;
         case 10:
-          message.laneCallibration = MsgEncoderCallibration.decode(reader, reader.uint32());
+          message.laneCalibration = MsgEncoderCalibration.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -5764,39 +5764,39 @@ var MausIncomingMessage = {
     return {
       init: isSet(object.init) ? MsgInit.fromJSON(object.init) : void 0,
       control: isSet(object.control) ? MsgControl.fromJSON(object.control) : void 0,
-      motorCallibration: isSet(object.motorCallibration) ? MsgMotorCallibration.fromJSON(object.motorCallibration) : void 0,
+      motorCalibration: isSet(object.motorCalibration) ? MsgMotorCalibration.fromJSON(object.motorCalibration) : void 0,
       ping: isSet(object.ping) ? MsgPing.fromJSON(object.ping) : void 0,
       stop: isSet(object.stop) ? MsgStop.fromJSON(object.stop) : void 0,
       drive: isSet(object.drive) ? MsgDrive.fromJSON(object.drive) : void 0,
       setPosition: isSet(object.setPosition) ? MsgSetPosition.fromJSON(object.setPosition) : void 0,
       solve: isSet(object.solve) ? MsgSolve.fromJSON(object.solve) : void 0,
-      laneCallibration: isSet(object.laneCallibration) ? MsgEncoderCallibration.fromJSON(object.laneCallibration) : void 0
+      laneCalibration: isSet(object.laneCalibration) ? MsgEncoderCalibration.fromJSON(object.laneCalibration) : void 0
     };
   },
   toJSON(message) {
     const obj = {};
     message.init !== void 0 && (obj.init = message.init ? MsgInit.toJSON(message.init) : void 0);
     message.control !== void 0 && (obj.control = message.control ? MsgControl.toJSON(message.control) : void 0);
-    message.motorCallibration !== void 0 && (obj.motorCallibration = message.motorCallibration ? MsgMotorCallibration.toJSON(message.motorCallibration) : void 0);
+    message.motorCalibration !== void 0 && (obj.motorCalibration = message.motorCalibration ? MsgMotorCalibration.toJSON(message.motorCalibration) : void 0);
     message.ping !== void 0 && (obj.ping = message.ping ? MsgPing.toJSON(message.ping) : void 0);
     message.stop !== void 0 && (obj.stop = message.stop ? MsgStop.toJSON(message.stop) : void 0);
     message.drive !== void 0 && (obj.drive = message.drive ? MsgDrive.toJSON(message.drive) : void 0);
     message.setPosition !== void 0 && (obj.setPosition = message.setPosition ? MsgSetPosition.toJSON(message.setPosition) : void 0);
     message.solve !== void 0 && (obj.solve = message.solve ? MsgSolve.toJSON(message.solve) : void 0);
-    message.laneCallibration !== void 0 && (obj.laneCallibration = message.laneCallibration ? MsgEncoderCallibration.toJSON(message.laneCallibration) : void 0);
+    message.laneCalibration !== void 0 && (obj.laneCalibration = message.laneCalibration ? MsgEncoderCalibration.toJSON(message.laneCalibration) : void 0);
     return obj;
   },
   fromPartial(object) {
     const message = createBaseMausIncomingMessage();
     message.init = object.init !== void 0 && object.init !== null ? MsgInit.fromPartial(object.init) : void 0;
     message.control = object.control !== void 0 && object.control !== null ? MsgControl.fromPartial(object.control) : void 0;
-    message.motorCallibration = object.motorCallibration !== void 0 && object.motorCallibration !== null ? MsgMotorCallibration.fromPartial(object.motorCallibration) : void 0;
+    message.motorCalibration = object.motorCalibration !== void 0 && object.motorCalibration !== null ? MsgMotorCalibration.fromPartial(object.motorCalibration) : void 0;
     message.ping = object.ping !== void 0 && object.ping !== null ? MsgPing.fromPartial(object.ping) : void 0;
     message.stop = object.stop !== void 0 && object.stop !== null ? MsgStop.fromPartial(object.stop) : void 0;
     message.drive = object.drive !== void 0 && object.drive !== null ? MsgDrive.fromPartial(object.drive) : void 0;
     message.setPosition = object.setPosition !== void 0 && object.setPosition !== null ? MsgSetPosition.fromPartial(object.setPosition) : void 0;
     message.solve = object.solve !== void 0 && object.solve !== null ? MsgSolve.fromPartial(object.solve) : void 0;
-    message.laneCallibration = object.laneCallibration !== void 0 && object.laneCallibration !== null ? MsgEncoderCallibration.fromPartial(object.laneCallibration) : void 0;
+    message.laneCalibration = object.laneCalibration !== void 0 && object.laneCalibration !== null ? MsgEncoderCalibration.fromPartial(object.laneCalibration) : void 0;
     return message;
   }
 };
@@ -12012,10 +12012,10 @@ function instance14($$self, $$props, $$invalidate) {
     });
   }));
   const onUpdateLaneCalibration = (config) => {
-    com.send({ laneCallibration: config });
+    com.send({ laneCalibration: config });
   };
   const onUpdateMotorCalibration = (motor, config) => {
-    com.send({ motorCallibration: { motor, config } });
+    com.send({ motorCalibration: { motor, config } });
   };
   const func = (config) => onUpdateMotorCalibration(0 /* left */, config);
   function pidform0_config_binding(value) {

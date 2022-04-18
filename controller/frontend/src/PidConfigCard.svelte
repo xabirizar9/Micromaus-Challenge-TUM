@@ -8,14 +8,14 @@
   import {
     MausOutgoingMessage,
     MotorPosition,
-    MsgEncoderCallibration,
+    MsgEncoderCalibration,
   } from "./proto/message";
 
   export let com: Communicator;
 
-  let leftMotorPid: MsgEncoderCallibration;
-  let rightMotorPid: MsgEncoderCallibration;
-  let lanePid: MsgEncoderCallibration;
+  let leftMotorPid: MsgEncoderCalibration;
+  let rightMotorPid: MsgEncoderCalibration;
+  let lanePid: MsgEncoderCalibration;
 
   onMount(async () => {
     if (com.config) {
@@ -36,18 +36,18 @@
     );
   });
 
-  const onUpdateLaneCalibration = (config: MsgEncoderCallibration) => {
+  const onUpdateLaneCalibration = (config: MsgEncoderCalibration) => {
     com.send({
-      laneCallibration: config,
+      laneCalibration: config,
     });
   };
 
   const onUpdateMotorCalibration = (
     motor: MotorPosition,
-    config: MsgEncoderCallibration
+    config: MsgEncoderCalibration
   ) => {
     com.send({
-      motorCallibration: {
+      motorCalibration: {
         motor,
         config,
       },

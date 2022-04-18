@@ -20,7 +20,7 @@ class Motor {
 	~Motor();
 
 	void setPWM(float value);
-	void updatePidConfig(MsgEncoderCallibration config);
+	void updatePidConfig(MsgEncoderCalibration config);
 	void brakeMotor(float val);
 
    private:

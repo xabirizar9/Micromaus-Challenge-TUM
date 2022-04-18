@@ -143,20 +143,20 @@ void motorPidTask(void *pvParameter) {
 	double rOutput = 0.0;
 	long rLastCounter = 0;
 
-	MsgEncoderCallibration config;
+	MsgEncoderCalibration config;
 
 	config.kP = 0.003898;
 	config.kI = 0.001688;
 	config.kD = 0.011194;
 	PID lPid = PID(&lInput, &lOutput, -1.0, 1.0, monitorInterval, config);
-	lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
+	lPid.setCalibration(lMotor->kP, lMotor->kI, lMotor->kD);
 	lPid.setTarget(&lTarget);
 
 	config.kP = 0.003317;
 	config.kI = 0.001665;
 	config.kD = 0.004370;
 	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval, config);
-	rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
+	rPid.setCalibration(rMotor->kP, rMotor->kI, rMotor->kD);
 	rPid.setTarget(&rTarget);
 
 	// tune motor
@@ -184,12 +184,12 @@ void motorPidTask(void *pvParameter) {
 		// update PID config if needed
 		if (lMotor->wasPidChanged) {
 			// update pid with latest motor settings
-			lPid.setCallibration(lMotor->kP, lMotor->kI, lMotor->kD);
+			lPid.setCalibration(lMotor->kP, lMotor->kI, lMotor->kD);
 			lMotor->wasPidChanged = false;
 		}
 		if (rMotor->wasPidChanged) {
 			// update pid with latest motor settings
-			rPid.setCallibration(rMotor->kP, rMotor->kI, rMotor->kD);
+			rPid.setCalibration(rMotor->kP, rMotor->kI, rMotor->kD);
 			rMotor->wasPidChanged = false;
 		}
 

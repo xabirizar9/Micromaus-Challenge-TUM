@@ -233,11 +233,11 @@ void Controller::setPosition(float x, float y, float heading) {
  * Pid Tuning methods
  ******************************************************************/
 
-void Controller::updateLanePid(MsgEncoderCallibration config) {
+void Controller::updateLanePid(MsgEncoderCalibration config) {
 	this->lanePidConfig = config;
 }
 
-MsgEncoderCallibration Controller::getLanePidConfig() {
+MsgEncoderCalibration Controller::getLanePidConfig() {
 	return this->lanePidConfig;
 }
 
