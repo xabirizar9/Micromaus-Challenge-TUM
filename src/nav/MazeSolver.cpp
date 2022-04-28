@@ -365,6 +365,15 @@ void MazeSolver::startExploration(float speed) {
 	this->maze.resetCosts();
 	this->maze.resetWalls();
 
+	this->maze.setWall(0, 0, CardinalDirection::EAST, true);
+	this->maze.setWall(0, 1, CardinalDirection::EAST, true);
+	this->maze.setWall(0, 2, CardinalDirection::EAST, true);
+	this->maze.setWall(0, 3, CardinalDirection::EAST, true);
+	this->maze.setWall(0, 4, CardinalDirection::EAST, true);
+	this->maze.setWall(0, 5, CardinalDirection::NORTH, false);
+	this->maze.setWall(1, 5, CardinalDirection::SOUTH, true);
+	this->maze.setWall(2, 5, CardinalDirection::EAST, true);
+
 	uint16_t actualSpeed = (uint16_t)speed;
 
 	while (true) {
