@@ -14,7 +14,7 @@ const float gridCurveRadius = 90;
 const float onSpotRadius = wheelDistance / 2;
 
 #define MAX_SPEED 700
-#define MAX_SPEED_CURVE 100
+#define MAX_SPEED_CURVE 150
 
 class MotionProfile {
    private:
