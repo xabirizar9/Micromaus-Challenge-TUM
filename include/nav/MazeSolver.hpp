@@ -1,4 +1,7 @@
 #pragma once
+
+#include <vector>
+
 #include "Controller.hpp"
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
@@ -10,8 +13,9 @@
 using nav::CardinalDirection;
 
 struct MazeDriveCmdNode {
-	MazeDriveCmdNode* prev;
-	MazeDriveCmdNode* next;
+	uint8_t x;
+	uint8_t y;
+	CardinalDirection heading;
 	MsgDrive cur;
 };
 
@@ -29,6 +33,7 @@ class MazeSolver : public RobotDriver {
 
    public:
 	MazeSolver(Controller* controller);
+	std::vector<MazeDriveCmdNode> computePath(float speed);
 
 	void startExploration(float speed) override;
 	void startGoHome(float speed) override;

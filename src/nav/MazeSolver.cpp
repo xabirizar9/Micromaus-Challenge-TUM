@@ -205,27 +205,126 @@ void MazeSolver::driveToNextCell(float speed) {
 	}
 }
 
+std::vector<MazeDriveCmdNode> MazeSolver::computePath(float speed) {
+	bool targetReached = false;
+	std::vector<MazeDriveCmdNode> list;
+
+	CardinalDirection heading = this->heading;
+	CardinalDirection newHeading = this->heading;
+	uint8_t x = 0;
+	uint8_t y = 0;
+
+	while (!targetReached) {
+		MazeDriveCmdNode node = MazeDriveCmdNode{
+			x,
+			y,
+			heading,
+			getNextDriveCmd(speed),
+		};
+		newHeading = getHeadingAfterCmd(heading, node.cur);
+		switch (newHeading) {
+			case CardinalDirection::NORTH:
+				// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y + 1);
+				y += 1;
+				break;
+			case CardinalDirection::EAST:
+				// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x + 1, y);
+				x += 1;
+				break;
+			case CardinalDirection::SOUTH:
+				// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x, y - 1);
+				y -= 1;
+				break;
+			case CardinalDirection::WEST:
+				// ESP_LOGI(TAG, "h:%c (%d, %d) -> (%d, %d)", (char)heading, x, y, x - 1, y);
+				x -= 1;
+				break;
+		}
+		heading = newHeading;
+		list.push_back(node);
+
+		if (this->maze.getCost(x, y) == 0) {
+			break;
+		}
+	}
+
+	// optimize path
+	uint8_t len = list.size();
+	int i = 0;
+	while (i < list.size()) {
+		MazeDriveCmdNode node = list.at(i);
+
+		switch (node.cur.type) {
+			case DriveCmdType_MoveCells:
+				// if the last command was also move cells combine them
+				if (i > 0 && node.cur.type == DriveCmdType_MoveCells) {
+					list.erase(list.begin() + i - 1);
+					list.at(i).cur.value++;
+					i = i - 1;
+				}
+				break;
+			case DriveCmdType_TurnLeftOnSpot:
+			case DriveCmdType_TurnRightOnSpot:
+				if (i > 0 && i < list.size() - 1 && node.cur.value == 1 &&
+					list.at(i - 1).cur.type == DriveCmdType_MoveCells &&
+					list.at(i + 1).cur.type == DriveCmdType_MoveCells) {
+					list.erase(list.begin() + i - 1, list.begin() + i + 1);
+
+					// update current node
+					list.insert(list.begin() + i - 1,
+								MazeDriveCmdNode{node.x,
+												 node.y,
+												 node.heading,
+												 MsgDrive{DriveCmdType_Move,
+														  // drive a half cell
+														  mazeCellSize / 2,
+														  node.cur.speed}});
+					list.insert(
+						list.begin() + i - 1,
+						MazeDriveCmdNode{node.x,
+										 node.y,
+										 node.heading,
+										 MsgDrive{node.cur.type == DriveCmdType_TurnLeftOnSpot
+													  ? DriveCmdType_TurnLeft
+													  : DriveCmdType_TurnRight,
+												  // drive a half cell
+												  mazeCellSize / 2,
+												  node.cur.speed}});
+
+					list.insert(list.begin() + i - 1,
+								MazeDriveCmdNode{node.x,
+												 node.y,
+												 node.heading,
+												 MsgDrive{DriveCmdType_Move,
+														  // drive a half cell
+														  mazeCellSize / 2,
+														  node.cur.speed}});
+				}
+		}
+	}
+
+	for (int i = 0; i < list.size(); i++) {
+		ESP_LOGI("%d. type=%d, value=%f, speed=%f",
+				 i,
+				 list.at(i).cur.type,
+				 list.at(i).cur.value,
+				 list.at(i).cur.speed);
+	}
+
+	return list;
+}
+
 void MazeSolver::startFastRun(float speed) {
 	this->isFastRun = true;
 	uint16_t actualSpeed = (uint16_t)speed;
 	// reset maze
 	this->maze.resetCosts();
 
-	while (true) {
+	std::vector<MazeDriveCmdNode> path = this->computePath(speed);
+	for (const auto& node : path) {
 		// broadcast current solver state
 		sendSolverState();
-
-		if (this->maze.getCost(x, y) == 0) {
-			// TODO: add what need to be done when center found
-			return;
-		}
-
-		// this->updateWalls(x, y, heading);
-
-		// rerun flood fill
-		this->maze.update();
-
-		driveToNextCell(actualSpeed);
+		this->addCmdAndWait(node.cur);
 	}
 }
 
@@ -263,7 +362,6 @@ void MazeSolver::startExploration(float speed) {
 	this->maze.resetCosts();
 	this->maze.resetWalls();
 
-	CardinalDirection newHeading = CardinalDirection::NORTH;
 	uint16_t actualSpeed = (uint16_t)speed;
 
 	while (true) {
