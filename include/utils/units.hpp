@@ -21,7 +21,7 @@ static const float mazeCellSize = 180.0;
 
 // bot measurements:
 //  distance between the wheels in millimeters
-static const float wheelDistance = 122.0;
+static const float wheelDistance = 115.0;
 static const float InnercurveRadius = 30;
 static const float OutercurveRadius = 150;
 
