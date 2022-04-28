@@ -62,7 +62,7 @@
   const onTunePid = () => {
     alert("currently disabled");
     // com.send({
-    //   encoderCallibration: {
+    //   encoderCalibration: {
     //     kD,
     //     kI,
     //     kP,

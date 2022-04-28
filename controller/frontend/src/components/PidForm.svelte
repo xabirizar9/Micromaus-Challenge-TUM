@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { MsgEncoderCallibration } from "../proto/message";
+  import { MsgEncoderCalibration } from "../proto/message";
   import Button from "./Button.svelte";
   import Grid from "./Grid.svelte";
   import Input from "./Input.svelte";
 
-  export let config: MsgEncoderCallibration;
+  export let config: MsgEncoderCalibration;
   export let title: string;
-  export let onSubmit: (pid: MsgEncoderCallibration) => void;
+  export let onSubmit: (pid: MsgEncoderCalibration) => void;
 
   const internalOnSubmit = (evt: SubmitEvent | CustomEvent<MouseEvent>) => {
     evt.preventDefault();

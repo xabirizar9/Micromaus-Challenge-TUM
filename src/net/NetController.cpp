@@ -121,18 +121,18 @@ void receiverTask(void *pvParameter) {
 
 				break;
 			}
-			case MausIncomingMessage_motorCallibration_tag:
+			case MausIncomingMessage_motorCalibration_tag:
 				ESP_LOGD(tag,
 						 "updated motors to kP=%f kD=%f kI=%f",
-						 msg.payload.motorCallibration.config.kP,
-						 msg.payload.motorCallibration.config.kD,
-						 msg.payload.motorCallibration.config.kI);
+						 msg.payload.motorCalibration.config.kP,
+						 msg.payload.motorCalibration.config.kD,
+						 msg.payload.motorCalibration.config.kI);
 				// update values for both motors
-				manager->controller->getMotor(msg.payload.motorCallibration.motor)
-					->updatePidConfig(msg.payload.motorCallibration.config);
+				manager->controller->getMotor(msg.payload.motorCalibration.motor)
+					->updatePidConfig(msg.payload.motorCalibration.config);
 
-				// // start PID callibration routine
-				// if (msg.payload.encoderCallibration.streamData) {
+				// // start PID Calibration routine
+				// if (msg.payload.encoderCalibration.streamData) {
 				// 	manager->controller->startPidTuning();
 				// 	wasPidCalibrationStarted = true;
 				// } else if (wasPidCalibrationStarted) {
@@ -143,14 +143,14 @@ void receiverTask(void *pvParameter) {
 				// }
 				break;
 
-			case MausIncomingMessage_laneCallibration_tag:
+			case MausIncomingMessage_laneCalibration_tag:
 				ESP_LOGD(tag,
 						 "updated lane PID to kP=%f kD=%f kI=%f",
-						 msg.payload.laneCallibration.kP,
-						 msg.payload.laneCallibration.kD,
-						 msg.payload.laneCallibration.kI);
+						 msg.payload.laneCalibration.kP,
+						 msg.payload.laneCalibration.kD,
+						 msg.payload.laneCalibration.kI);
 				// update values for both motors
-				manager->controller->updateLanePid(msg.payload.laneCallibration);
+				manager->controller->updateLanePid(msg.payload.laneCalibration);
 				break;
 
 			// ping pong interface

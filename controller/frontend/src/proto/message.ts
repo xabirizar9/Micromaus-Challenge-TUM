@@ -201,12 +201,12 @@ export interface Position {
   heading: number;
 }
 
-export interface MsgMotorCallibration {
+export interface MsgMotorCalibration {
   motor: MotorPosition;
-  config: MsgEncoderCallibration | undefined;
+  config: MsgEncoderCalibration | undefined;
 }
 
-export interface MsgEncoderCallibration {
+export interface MsgEncoderCalibration {
   kP: number;
   kI: number;
   kD: number;
@@ -257,9 +257,9 @@ export interface MazeStatePacket {
 }
 
 export interface MausConfigPacket {
-  leftMotorPid: MsgEncoderCallibration | undefined;
-  rightMotorPid: MsgEncoderCallibration | undefined;
-  lanePid: MsgEncoderCallibration | undefined;
+  leftMotorPid: MsgEncoderCalibration | undefined;
+  rightMotorPid: MsgEncoderCalibration | undefined;
+  lanePid: MsgEncoderCalibration | undefined;
 }
 
 export interface MausCommandStatus {
@@ -314,13 +314,13 @@ export interface MsgStop {}
 export interface MausIncomingMessage {
   init: MsgInit | undefined;
   control: MsgControl | undefined;
-  motorCallibration: MsgMotorCallibration | undefined;
+  motorCalibration: MsgMotorCalibration | undefined;
   ping: MsgPing | undefined;
   stop: MsgStop | undefined;
   drive: MsgDrive | undefined;
   setPosition: MsgSetPosition | undefined;
   solve: MsgSolve | undefined;
-  laneCallibration: MsgEncoderCallibration | undefined;
+  laneCalibration: MsgEncoderCalibration | undefined;
 }
 
 function createBaseAckPacket(): AckPacket {
@@ -432,20 +432,20 @@ export const Position = {
   },
 };
 
-function createBaseMsgMotorCallibration(): MsgMotorCallibration {
+function createBaseMsgMotorCalibration(): MsgMotorCalibration {
   return { motor: 0, config: undefined };
 }
 
-export const MsgMotorCallibration = {
+export const MsgMotorCalibration = {
   encode(
-    message: MsgMotorCallibration,
+    message: MsgMotorCalibration,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.motor !== 0) {
       writer.uint32(8).int32(message.motor);
     }
     if (message.config !== undefined) {
-      MsgEncoderCallibration.encode(
+      MsgEncoderCalibration.encode(
         message.config,
         writer.uint32(18).fork()
       ).ldelim();
@@ -456,10 +456,10 @@ export const MsgMotorCallibration = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): MsgMotorCallibration {
+  ): MsgMotorCalibration {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgMotorCallibration();
+    const message = createBaseMsgMotorCalibration();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -467,7 +467,7 @@ export const MsgMotorCallibration = {
           message.motor = reader.int32() as any;
           break;
         case 2:
-          message.config = MsgEncoderCallibration.decode(
+          message.config = MsgEncoderCalibration.decode(
             reader,
             reader.uint32()
           );
@@ -480,46 +480,46 @@ export const MsgMotorCallibration = {
     return message;
   },
 
-  fromJSON(object: any): MsgMotorCallibration {
+  fromJSON(object: any): MsgMotorCalibration {
     return {
       motor: isSet(object.motor) ? motorPositionFromJSON(object.motor) : 0,
       config: isSet(object.config)
-        ? MsgEncoderCallibration.fromJSON(object.config)
+        ? MsgEncoderCalibration.fromJSON(object.config)
         : undefined,
     };
   },
 
-  toJSON(message: MsgMotorCallibration): unknown {
+  toJSON(message: MsgMotorCalibration): unknown {
     const obj: any = {};
     message.motor !== undefined &&
       (obj.motor = motorPositionToJSON(message.motor));
     message.config !== undefined &&
       (obj.config = message.config
-        ? MsgEncoderCallibration.toJSON(message.config)
+        ? MsgEncoderCalibration.toJSON(message.config)
         : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgMotorCallibration>, I>>(
+  fromPartial<I extends Exact<DeepPartial<MsgMotorCalibration>, I>>(
     object: I
-  ): MsgMotorCallibration {
-    const message = createBaseMsgMotorCallibration();
+  ): MsgMotorCalibration {
+    const message = createBaseMsgMotorCalibration();
     message.motor = object.motor ?? 0;
     message.config =
       object.config !== undefined && object.config !== null
-        ? MsgEncoderCallibration.fromPartial(object.config)
+        ? MsgEncoderCalibration.fromPartial(object.config)
         : undefined;
     return message;
   },
 };
 
-function createBaseMsgEncoderCallibration(): MsgEncoderCallibration {
+function createBaseMsgEncoderCalibration(): MsgEncoderCalibration {
   return { kP: 0, kI: 0, kD: 0, streamData: false };
 }
 
-export const MsgEncoderCallibration = {
+export const MsgEncoderCalibration = {
   encode(
-    message: MsgEncoderCallibration,
+    message: MsgEncoderCalibration,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.kP !== 0) {
@@ -540,10 +540,10 @@ export const MsgEncoderCallibration = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): MsgEncoderCallibration {
+  ): MsgEncoderCalibration {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgEncoderCallibration();
+    const message = createBaseMsgEncoderCalibration();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -567,7 +567,7 @@ export const MsgEncoderCallibration = {
     return message;
   },
 
-  fromJSON(object: any): MsgEncoderCallibration {
+  fromJSON(object: any): MsgEncoderCalibration {
     return {
       kP: isSet(object.kP) ? Number(object.kP) : 0,
       kI: isSet(object.kI) ? Number(object.kI) : 0,
@@ -576,7 +576,7 @@ export const MsgEncoderCallibration = {
     };
   },
 
-  toJSON(message: MsgEncoderCallibration): unknown {
+  toJSON(message: MsgEncoderCalibration): unknown {
     const obj: any = {};
     message.kP !== undefined && (obj.kP = message.kP);
     message.kI !== undefined && (obj.kI = message.kI);
@@ -585,10 +585,10 @@ export const MsgEncoderCallibration = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgEncoderCallibration>, I>>(
+  fromPartial<I extends Exact<DeepPartial<MsgEncoderCalibration>, I>>(
     object: I
-  ): MsgEncoderCallibration {
-    const message = createBaseMsgEncoderCallibration();
+  ): MsgEncoderCalibration {
+    const message = createBaseMsgEncoderCalibration();
     message.kP = object.kP ?? 0;
     message.kI = object.kI ?? 0;
     message.kD = object.kD ?? 0;
@@ -1295,19 +1295,19 @@ export const MausConfigPacket = {
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.leftMotorPid !== undefined) {
-      MsgEncoderCallibration.encode(
+      MsgEncoderCalibration.encode(
         message.leftMotorPid,
         writer.uint32(10).fork()
       ).ldelim();
     }
     if (message.rightMotorPid !== undefined) {
-      MsgEncoderCallibration.encode(
+      MsgEncoderCalibration.encode(
         message.rightMotorPid,
         writer.uint32(18).fork()
       ).ldelim();
     }
     if (message.lanePid !== undefined) {
-      MsgEncoderCallibration.encode(
+      MsgEncoderCalibration.encode(
         message.lanePid,
         writer.uint32(26).fork()
       ).ldelim();
@@ -1323,19 +1323,19 @@ export const MausConfigPacket = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.leftMotorPid = MsgEncoderCallibration.decode(
+          message.leftMotorPid = MsgEncoderCalibration.decode(
             reader,
             reader.uint32()
           );
           break;
         case 2:
-          message.rightMotorPid = MsgEncoderCallibration.decode(
+          message.rightMotorPid = MsgEncoderCalibration.decode(
             reader,
             reader.uint32()
           );
           break;
         case 3:
-          message.lanePid = MsgEncoderCallibration.decode(
+          message.lanePid = MsgEncoderCalibration.decode(
             reader,
             reader.uint32()
           );
@@ -1351,13 +1351,13 @@ export const MausConfigPacket = {
   fromJSON(object: any): MausConfigPacket {
     return {
       leftMotorPid: isSet(object.leftMotorPid)
-        ? MsgEncoderCallibration.fromJSON(object.leftMotorPid)
+        ? MsgEncoderCalibration.fromJSON(object.leftMotorPid)
         : undefined,
       rightMotorPid: isSet(object.rightMotorPid)
-        ? MsgEncoderCallibration.fromJSON(object.rightMotorPid)
+        ? MsgEncoderCalibration.fromJSON(object.rightMotorPid)
         : undefined,
       lanePid: isSet(object.lanePid)
-        ? MsgEncoderCallibration.fromJSON(object.lanePid)
+        ? MsgEncoderCalibration.fromJSON(object.lanePid)
         : undefined,
     };
   },
@@ -1366,15 +1366,15 @@ export const MausConfigPacket = {
     const obj: any = {};
     message.leftMotorPid !== undefined &&
       (obj.leftMotorPid = message.leftMotorPid
-        ? MsgEncoderCallibration.toJSON(message.leftMotorPid)
+        ? MsgEncoderCalibration.toJSON(message.leftMotorPid)
         : undefined);
     message.rightMotorPid !== undefined &&
       (obj.rightMotorPid = message.rightMotorPid
-        ? MsgEncoderCallibration.toJSON(message.rightMotorPid)
+        ? MsgEncoderCalibration.toJSON(message.rightMotorPid)
         : undefined);
     message.lanePid !== undefined &&
       (obj.lanePid = message.lanePid
-        ? MsgEncoderCallibration.toJSON(message.lanePid)
+        ? MsgEncoderCalibration.toJSON(message.lanePid)
         : undefined);
     return obj;
   },
@@ -1385,15 +1385,15 @@ export const MausConfigPacket = {
     const message = createBaseMausConfigPacket();
     message.leftMotorPid =
       object.leftMotorPid !== undefined && object.leftMotorPid !== null
-        ? MsgEncoderCallibration.fromPartial(object.leftMotorPid)
+        ? MsgEncoderCalibration.fromPartial(object.leftMotorPid)
         : undefined;
     message.rightMotorPid =
       object.rightMotorPid !== undefined && object.rightMotorPid !== null
-        ? MsgEncoderCallibration.fromPartial(object.rightMotorPid)
+        ? MsgEncoderCalibration.fromPartial(object.rightMotorPid)
         : undefined;
     message.lanePid =
       object.lanePid !== undefined && object.lanePid !== null
-        ? MsgEncoderCallibration.fromPartial(object.lanePid)
+        ? MsgEncoderCalibration.fromPartial(object.lanePid)
         : undefined;
     return message;
   },
@@ -2075,13 +2075,13 @@ function createBaseMausIncomingMessage(): MausIncomingMessage {
   return {
     init: undefined,
     control: undefined,
-    motorCallibration: undefined,
+    motorCalibration: undefined,
     ping: undefined,
     stop: undefined,
     drive: undefined,
     setPosition: undefined,
     solve: undefined,
-    laneCallibration: undefined,
+    laneCalibration: undefined,
   };
 }
 
@@ -2096,9 +2096,9 @@ export const MausIncomingMessage = {
     if (message.control !== undefined) {
       MsgControl.encode(message.control, writer.uint32(26).fork()).ldelim();
     }
-    if (message.motorCallibration !== undefined) {
-      MsgMotorCallibration.encode(
-        message.motorCallibration,
+    if (message.motorCalibration !== undefined) {
+      MsgMotorCalibration.encode(
+        message.motorCalibration,
         writer.uint32(34).fork()
       ).ldelim();
     }
@@ -2120,9 +2120,9 @@ export const MausIncomingMessage = {
     if (message.solve !== undefined) {
       MsgSolve.encode(message.solve, writer.uint32(74).fork()).ldelim();
     }
-    if (message.laneCallibration !== undefined) {
-      MsgEncoderCallibration.encode(
-        message.laneCallibration,
+    if (message.laneCalibration !== undefined) {
+      MsgEncoderCalibration.encode(
+        message.laneCalibration,
         writer.uint32(82).fork()
       ).ldelim();
     }
@@ -2143,7 +2143,7 @@ export const MausIncomingMessage = {
           message.control = MsgControl.decode(reader, reader.uint32());
           break;
         case 4:
-          message.motorCallibration = MsgMotorCallibration.decode(
+          message.motorCalibration = MsgMotorCalibration.decode(
             reader,
             reader.uint32()
           );
@@ -2164,7 +2164,7 @@ export const MausIncomingMessage = {
           message.solve = MsgSolve.decode(reader, reader.uint32());
           break;
         case 10:
-          message.laneCallibration = MsgEncoderCallibration.decode(
+          message.laneCalibration = MsgEncoderCalibration.decode(
             reader,
             reader.uint32()
           );
@@ -2183,8 +2183,8 @@ export const MausIncomingMessage = {
       control: isSet(object.control)
         ? MsgControl.fromJSON(object.control)
         : undefined,
-      motorCallibration: isSet(object.motorCallibration)
-        ? MsgMotorCallibration.fromJSON(object.motorCallibration)
+      motorCalibration: isSet(object.motorCalibration)
+        ? MsgMotorCalibration.fromJSON(object.motorCalibration)
         : undefined,
       ping: isSet(object.ping) ? MsgPing.fromJSON(object.ping) : undefined,
       stop: isSet(object.stop) ? MsgStop.fromJSON(object.stop) : undefined,
@@ -2193,8 +2193,8 @@ export const MausIncomingMessage = {
         ? MsgSetPosition.fromJSON(object.setPosition)
         : undefined,
       solve: isSet(object.solve) ? MsgSolve.fromJSON(object.solve) : undefined,
-      laneCallibration: isSet(object.laneCallibration)
-        ? MsgEncoderCallibration.fromJSON(object.laneCallibration)
+      laneCalibration: isSet(object.laneCalibration)
+        ? MsgEncoderCalibration.fromJSON(object.laneCalibration)
         : undefined,
     };
   },
@@ -2207,9 +2207,9 @@ export const MausIncomingMessage = {
       (obj.control = message.control
         ? MsgControl.toJSON(message.control)
         : undefined);
-    message.motorCallibration !== undefined &&
-      (obj.motorCallibration = message.motorCallibration
-        ? MsgMotorCallibration.toJSON(message.motorCallibration)
+    message.motorCalibration !== undefined &&
+      (obj.motorCalibration = message.motorCalibration
+        ? MsgMotorCalibration.toJSON(message.motorCalibration)
         : undefined);
     message.ping !== undefined &&
       (obj.ping = message.ping ? MsgPing.toJSON(message.ping) : undefined);
@@ -2223,9 +2223,9 @@ export const MausIncomingMessage = {
         : undefined);
     message.solve !== undefined &&
       (obj.solve = message.solve ? MsgSolve.toJSON(message.solve) : undefined);
-    message.laneCallibration !== undefined &&
-      (obj.laneCallibration = message.laneCallibration
-        ? MsgEncoderCallibration.toJSON(message.laneCallibration)
+    message.laneCalibration !== undefined &&
+      (obj.laneCalibration = message.laneCalibration
+        ? MsgEncoderCalibration.toJSON(message.laneCalibration)
         : undefined);
     return obj;
   },
@@ -2242,10 +2242,10 @@ export const MausIncomingMessage = {
       object.control !== undefined && object.control !== null
         ? MsgControl.fromPartial(object.control)
         : undefined;
-    message.motorCallibration =
-      object.motorCallibration !== undefined &&
-      object.motorCallibration !== null
-        ? MsgMotorCallibration.fromPartial(object.motorCallibration)
+    message.motorCalibration =
+      object.motorCalibration !== undefined &&
+      object.motorCalibration !== null
+        ? MsgMotorCalibration.fromPartial(object.motorCalibration)
         : undefined;
     message.ping =
       object.ping !== undefined && object.ping !== null
@@ -2267,9 +2267,9 @@ export const MausIncomingMessage = {
       object.solve !== undefined && object.solve !== null
         ? MsgSolve.fromPartial(object.solve)
         : undefined;
-    message.laneCallibration =
-      object.laneCallibration !== undefined && object.laneCallibration !== null
-        ? MsgEncoderCallibration.fromPartial(object.laneCallibration)
+    message.laneCalibration =
+      object.laneCalibration !== undefined && object.laneCalibration !== null
+        ? MsgEncoderCalibration.fromPartial(object.laneCalibration)
         : undefined;
     return message;
   },

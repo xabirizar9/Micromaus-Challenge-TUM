@@ -27,7 +27,7 @@ PID::PID(double *input,
 		 double outMin,
 		 double outMax,
 		 uint32_t sampleTimeInMs,
-		 const MsgEncoderCallibration &config) {
+		 const MsgEncoderCalibration &config) {
 	this->input = input;
 	this->output = output;
 	this->outMax = outMax;
@@ -37,15 +37,15 @@ PID::PID(double *input,
 	this->sampleTimeInMs = sampleTimeInMs;
 	this->sampleRateInTicks = pdMS_TO_TICKS(this->sampleTimeInMs);
 
-	this->setCallibration(config.kP, config.kI, config.kD);
+	this->setCalibration(config.kP, config.kI, config.kD);
 	lastTime = xTaskGetTickCount();
 }
 
-void PID::setCallibration(MsgEncoderCallibration *config) {
-	this->setCallibration(config->kP, config->kI, config->kD);
+void PID::setCalibration(MsgEncoderCalibration *config) {
+	this->setCalibration(config->kP, config->kI, config->kD);
 }
 
-void PID::setCallibration(double kP, double kI, double kD) {
+void PID::setCalibration(double kP, double kI, double kD) {
 	this->kP = kP;
 	this->kI = kI * ((double)this->sampleTimeInMs / 1000);
 	this->kD = kD / ((double)this->sampleTimeInMs / 1000);

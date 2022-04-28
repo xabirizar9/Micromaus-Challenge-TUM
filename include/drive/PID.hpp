@@ -38,10 +38,10 @@ class PID {
 		double outMin,
 		double outMax,
 		uint32_t sampleTimeInMs,
-		const MsgEncoderCallibration &config);
+		const MsgEncoderCalibration &config);
 
-	void setCallibration(MsgEncoderCallibration *config);
-	void setCallibration(double kP, double kD, double kI);
+	void setCalibration(MsgEncoderCalibration *config);
+	void setCalibration(double kP, double kD, double kI);
 
 	void evaluate();
 	void reset();

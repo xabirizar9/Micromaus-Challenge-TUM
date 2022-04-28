@@ -27,7 +27,7 @@ class Controller {
 
 	int16_t speed;
 
-	MsgEncoderCallibration lanePidConfig = {80, 0.0, 0.0, false};
+	MsgEncoderCalibration lanePidConfig = {80, 0.0, 0.0, false};
 
 	bool isPidTuningEnabled = false;
 	uint32_t currentPidTuningSampleIndex = 0;
@@ -100,8 +100,8 @@ class Controller {
 
 	int64_t getAverageEncoderTicks();
 
-	MsgEncoderCallibration getLanePidConfig();
-	void updateLanePid(MsgEncoderCallibration config);
+	MsgEncoderCalibration getLanePidConfig();
+	void updateLanePid(MsgEncoderCalibration config);
 
 	// PID tuning routine
 	void startPidTuning();

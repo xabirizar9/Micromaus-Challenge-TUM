@@ -64,7 +64,7 @@ void Motor::brakeMotor(float val) {
 	// vTaskDelay(pdMS_TO_TICKS(20));
 }
 
-void Motor::updatePidConfig(MsgEncoderCallibration config) {
+void Motor::updatePidConfig(MsgEncoderCalibration config) {
 	this->kD = config.kD;
 	this->kI = config.kI;
 	this->kP = config.kP;

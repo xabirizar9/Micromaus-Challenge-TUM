@@ -336,17 +336,17 @@ func (x *Position) GetHeading() float32 {
 	return 0
 }
 
-type MsgMotorCallibration struct {
+type MsgMotorCalibration struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	Motor  MotorPosition           `protobuf:"varint,1,opt,name=motor,proto3,enum=MotorPosition" json:"motor,omitempty"`
-	Config *MsgEncoderCallibration `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	Config *MsgEncoderCalibration `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
 }
 
-func (x *MsgMotorCallibration) Reset() {
-	*x = MsgMotorCallibration{}
+func (x *MsgMotorCalibration) Reset() {
+	*x = MsgMotorCalibration{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_message_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -354,13 +354,13 @@ func (x *MsgMotorCallibration) Reset() {
 	}
 }
 
-func (x *MsgMotorCallibration) String() string {
+func (x *MsgMotorCalibration) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgMotorCallibration) ProtoMessage() {}
+func (*MsgMotorCalibration) ProtoMessage() {}
 
-func (x *MsgMotorCallibration) ProtoReflect() protoreflect.Message {
+func (x *MsgMotorCalibration) ProtoReflect() protoreflect.Message {
 	mi := &file_message_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -372,26 +372,26 @@ func (x *MsgMotorCallibration) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MsgMotorCallibration.ProtoReflect.Descriptor instead.
-func (*MsgMotorCallibration) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgMotorCalibration.ProtoReflect.Descriptor instead.
+func (*MsgMotorCalibration) Descriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgMotorCallibration) GetMotor() MotorPosition {
+func (x *MsgMotorCalibration) GetMotor() MotorPosition {
 	if x != nil {
 		return x.Motor
 	}
 	return MotorPosition_left
 }
 
-func (x *MsgMotorCallibration) GetConfig() *MsgEncoderCallibration {
+func (x *MsgMotorCalibration) GetConfig() *MsgEncoderCalibration {
 	if x != nil {
 		return x.Config
 	}
 	return nil
 }
 
-type MsgEncoderCallibration struct {
+type MsgEncoderCalibration struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -402,8 +402,8 @@ type MsgEncoderCallibration struct {
 	StreamData bool    `protobuf:"varint,4,opt,name=streamData,proto3" json:"streamData,omitempty"`
 }
 
-func (x *MsgEncoderCallibration) Reset() {
-	*x = MsgEncoderCallibration{}
+func (x *MsgEncoderCalibration) Reset() {
+	*x = MsgEncoderCalibration{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_message_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -411,13 +411,13 @@ func (x *MsgEncoderCallibration) Reset() {
 	}
 }
 
-func (x *MsgEncoderCallibration) String() string {
+func (x *MsgEncoderCalibration) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgEncoderCallibration) ProtoMessage() {}
+func (*MsgEncoderCalibration) ProtoMessage() {}
 
-func (x *MsgEncoderCallibration) ProtoReflect() protoreflect.Message {
+func (x *MsgEncoderCalibration) ProtoReflect() protoreflect.Message {
 	mi := &file_message_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -429,33 +429,33 @@ func (x *MsgEncoderCallibration) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MsgEncoderCallibration.ProtoReflect.Descriptor instead.
-func (*MsgEncoderCallibration) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgEncoderCalibration.ProtoReflect.Descriptor instead.
+func (*MsgEncoderCalibration) Descriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *MsgEncoderCallibration) GetKP() float32 {
+func (x *MsgEncoderCalibration) GetKP() float32 {
 	if x != nil {
 		return x.KP
 	}
 	return 0
 }
 
-func (x *MsgEncoderCallibration) GetKI() float32 {
+func (x *MsgEncoderCalibration) GetKI() float32 {
 	if x != nil {
 		return x.KI
 	}
 	return 0
 }
 
-func (x *MsgEncoderCallibration) GetKD() float32 {
+func (x *MsgEncoderCalibration) GetKD() float32 {
 	if x != nil {
 		return x.KD
 	}
 	return 0
 }
 
-func (x *MsgEncoderCallibration) GetStreamData() bool {
+func (x *MsgEncoderCalibration) GetStreamData() bool {
 	if x != nil {
 		return x.StreamData
 	}
@@ -923,9 +923,9 @@ type MausConfigPacket struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LeftMotorPid  *MsgEncoderCallibration `protobuf:"bytes,1,opt,name=leftMotorPid,proto3" json:"leftMotorPid,omitempty"`
-	RightMotorPid *MsgEncoderCallibration `protobuf:"bytes,2,opt,name=rightMotorPid,proto3" json:"rightMotorPid,omitempty"`
-	LanePid       *MsgEncoderCallibration `protobuf:"bytes,3,opt,name=lanePid,proto3" json:"lanePid,omitempty"`
+	LeftMotorPid  *MsgEncoderCalibration `protobuf:"bytes,1,opt,name=leftMotorPid,proto3" json:"leftMotorPid,omitempty"`
+	RightMotorPid *MsgEncoderCalibration `protobuf:"bytes,2,opt,name=rightMotorPid,proto3" json:"rightMotorPid,omitempty"`
+	LanePid       *MsgEncoderCalibration `protobuf:"bytes,3,opt,name=lanePid,proto3" json:"lanePid,omitempty"`
 }
 
 func (x *MausConfigPacket) Reset() {
@@ -960,21 +960,21 @@ func (*MausConfigPacket) Descriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *MausConfigPacket) GetLeftMotorPid() *MsgEncoderCallibration {
+func (x *MausConfigPacket) GetLeftMotorPid() *MsgEncoderCalibration {
 	if x != nil {
 		return x.LeftMotorPid
 	}
 	return nil
 }
 
-func (x *MausConfigPacket) GetRightMotorPid() *MsgEncoderCallibration {
+func (x *MausConfigPacket) GetRightMotorPid() *MsgEncoderCalibration {
 	if x != nil {
 		return x.RightMotorPid
 	}
 	return nil
 }
 
-func (x *MausConfigPacket) GetLanePid() *MsgEncoderCallibration {
+func (x *MausConfigPacket) GetLanePid() *MsgEncoderCalibration {
 	if x != nil {
 		return x.LanePid
 	}
@@ -1584,13 +1584,13 @@ type MausIncomingMessage struct {
 	// Types that are assignable to Payload:
 	//	*MausIncomingMessage_Init
 	//	*MausIncomingMessage_Control
-	//	*MausIncomingMessage_MotorCallibration
+	//	*MausIncomingMessage_MotorCalibration
 	//	*MausIncomingMessage_Ping
 	//	*MausIncomingMessage_Stop
 	//	*MausIncomingMessage_Drive
 	//	*MausIncomingMessage_SetPosition
 	//	*MausIncomingMessage_Solve
-	//	*MausIncomingMessage_LaneCallibration
+	//	*MausIncomingMessage_LaneCalibration
 	Payload isMausIncomingMessage_Payload `protobuf_oneof:"payload"`
 }
 
@@ -1647,9 +1647,9 @@ func (x *MausIncomingMessage) GetControl() *MsgControl {
 	return nil
 }
 
-func (x *MausIncomingMessage) GetMotorCallibration() *MsgMotorCallibration {
-	if x, ok := x.GetPayload().(*MausIncomingMessage_MotorCallibration); ok {
-		return x.MotorCallibration
+func (x *MausIncomingMessage) GetMotorCalibration() *MsgMotorCalibration {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_MotorCalibration); ok {
+		return x.MotorCalibration
 	}
 	return nil
 }
@@ -1689,9 +1689,9 @@ func (x *MausIncomingMessage) GetSolve() *MsgSolve {
 	return nil
 }
 
-func (x *MausIncomingMessage) GetLaneCallibration() *MsgEncoderCallibration {
-	if x, ok := x.GetPayload().(*MausIncomingMessage_LaneCallibration); ok {
-		return x.LaneCallibration
+func (x *MausIncomingMessage) GetLaneCalibration() *MsgEncoderCalibration {
+	if x, ok := x.GetPayload().(*MausIncomingMessage_LaneCalibration); ok {
+		return x.LaneCalibration
 	}
 	return nil
 }
@@ -1708,8 +1708,8 @@ type MausIncomingMessage_Control struct {
 	Control *MsgControl `protobuf:"bytes,3,opt,name=control,proto3,oneof"`
 }
 
-type MausIncomingMessage_MotorCallibration struct {
-	MotorCallibration *MsgMotorCallibration `protobuf:"bytes,4,opt,name=motorCallibration,proto3,oneof"`
+type MausIncomingMessage_MotorCalibration struct {
+	MotorCalibration *MsgMotorCalibration `protobuf:"bytes,4,opt,name=motorCalibration,proto3,oneof"`
 }
 
 type MausIncomingMessage_Ping struct {
@@ -1732,15 +1732,15 @@ type MausIncomingMessage_Solve struct {
 	Solve *MsgSolve `protobuf:"bytes,9,opt,name=solve,proto3,oneof"`
 }
 
-type MausIncomingMessage_LaneCallibration struct {
-	LaneCallibration *MsgEncoderCallibration `protobuf:"bytes,10,opt,name=laneCallibration,proto3,oneof"`
+type MausIncomingMessage_LaneCalibration struct {
+	LaneCalibration *MsgEncoderCalibration `protobuf:"bytes,10,opt,name=laneCalibration,proto3,oneof"`
 }
 
 func (*MausIncomingMessage_Init) isMausIncomingMessage_Payload() {}
 
 func (*MausIncomingMessage_Control) isMausIncomingMessage_Payload() {}
 
-func (*MausIncomingMessage_MotorCallibration) isMausIncomingMessage_Payload() {}
+func (*MausIncomingMessage_MotorCalibration) isMausIncomingMessage_Payload() {}
 
 func (*MausIncomingMessage_Ping) isMausIncomingMessage_Payload() {}
 
@@ -1752,7 +1752,7 @@ func (*MausIncomingMessage_SetPosition) isMausIncomingMessage_Payload() {}
 
 func (*MausIncomingMessage_Solve) isMausIncomingMessage_Payload() {}
 
-func (*MausIncomingMessage_LaneCallibration) isMausIncomingMessage_Payload() {}
+func (*MausIncomingMessage_LaneCalibration) isMausIncomingMessage_Payload() {}
 
 var File_message_proto protoreflect.FileDescriptor
 
@@ -1973,8 +1973,8 @@ var file_message_proto_goTypes = []interface{}{
 	(SolveCmdType)(0),              // 3: SolveCmdType
 	(*AckPacket)(nil),              // 4: AckPacket
 	(*Position)(nil),               // 5: Position
-	(*MsgMotorCallibration)(nil),   // 6: MsgMotorCallibration
-	(*MsgEncoderCallibration)(nil), // 7: MsgEncoderCallibration
+	(*MsgMotorCalibration)(nil),   // 6: MsgMotorCalibration
+	(*MsgEncoderCalibration)(nil), // 7: MsgEncoderCalibration
 	(*PongPacket)(nil),             // 8: PongPacket
 	(*SensorPacket)(nil),           // 9: SensorPacket
 	(*PosDistribution)(nil),        // 10: PosDistribution
@@ -1995,17 +1995,17 @@ var file_message_proto_goTypes = []interface{}{
 	(*MausIncomingMessage)(nil),    // 25: MausIncomingMessage
 }
 var file_message_proto_depIdxs = []int32{
-	0,  // 0: MsgMotorCallibration.motor:type_name -> MotorPosition
-	7,  // 1: MsgMotorCallibration.config:type_name -> MsgEncoderCallibration
+	0,  // 0: MsgMotorCalibration.motor:type_name -> MotorPosition
+	7,  // 1: MsgMotorCalibration.config:type_name -> MsgEncoderCalibration
 	9,  // 2: NavigationPacket.sensors:type_name -> SensorPacket
 	5,  // 3: NavigationPacket.position:type_name -> Position
 	10, // 4: NavigationPacket.posDistribution:type_name -> PosDistribution
 	1,  // 5: InfoPacket.cmd:type_name -> InfoCmdType
 	5,  // 6: MazeStatePacket.position:type_name -> Position
 	5,  // 7: MazeStatePacket.target:type_name -> Position
-	7,  // 8: MausConfigPacket.leftMotorPid:type_name -> MsgEncoderCallibration
-	7,  // 9: MausConfigPacket.rightMotorPid:type_name -> MsgEncoderCallibration
-	7,  // 10: MausConfigPacket.lanePid:type_name -> MsgEncoderCallibration
+	7,  // 8: MausConfigPacket.leftMotorPid:type_name -> MsgEncoderCalibration
+	7,  // 9: MausConfigPacket.rightMotorPid:type_name -> MsgEncoderCalibration
+	7,  // 10: MausConfigPacket.lanePid:type_name -> MsgEncoderCalibration
 	2,  // 11: MausCommandStatus.cmd:type_name -> DriveCmdType
 	4,  // 12: MausOutgoingMessage.ack:type_name -> AckPacket
 	11, // 13: MausOutgoingMessage.nav:type_name -> NavigationPacket
@@ -2019,13 +2019,13 @@ var file_message_proto_depIdxs = []int32{
 	3,  // 21: MsgSolve.type:type_name -> SolveCmdType
 	18, // 22: MausIncomingMessage.init:type_name -> MsgInit
 	20, // 23: MausIncomingMessage.control:type_name -> MsgControl
-	6,  // 24: MausIncomingMessage.motorCallibration:type_name -> MsgMotorCallibration
+	6,  // 24: MausIncomingMessage.motorCalibration:type_name -> MsgMotorCalibration
 	19, // 25: MausIncomingMessage.ping:type_name -> MsgPing
 	24, // 26: MausIncomingMessage.stop:type_name -> MsgStop
 	21, // 27: MausIncomingMessage.drive:type_name -> MsgDrive
 	23, // 28: MausIncomingMessage.setPosition:type_name -> MsgSetPosition
 	22, // 29: MausIncomingMessage.solve:type_name -> MsgSolve
-	7,  // 30: MausIncomingMessage.laneCallibration:type_name -> MsgEncoderCallibration
+	7,  // 30: MausIncomingMessage.laneCalibration:type_name -> MsgEncoderCalibration
 	31, // [31:31] is the sub-list for method output_type
 	31, // [31:31] is the sub-list for method input_type
 	31, // [31:31] is the sub-list for extension type_name
@@ -2064,7 +2064,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgMotorCallibration); i {
+			switch v := v.(*MsgMotorCalibration); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2076,7 +2076,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgEncoderCallibration); i {
+			switch v := v.(*MsgEncoderCalibration); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2317,13 +2317,13 @@ func file_message_proto_init() {
 	file_message_proto_msgTypes[21].OneofWrappers = []interface{}{
 		(*MausIncomingMessage_Init)(nil),
 		(*MausIncomingMessage_Control)(nil),
-		(*MausIncomingMessage_MotorCallibration)(nil),
+		(*MausIncomingMessage_MotorCalibration)(nil),
 		(*MausIncomingMessage_Ping)(nil),
 		(*MausIncomingMessage_Stop)(nil),
 		(*MausIncomingMessage_Drive)(nil),
 		(*MausIncomingMessage_SetPosition)(nil),
 		(*MausIncomingMessage_Solve)(nil),
-		(*MausIncomingMessage_LaneCallibration)(nil),
+		(*MausIncomingMessage_LaneCalibration)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

@@ -15,12 +15,12 @@ enum MotorPosition {
 	right = 1;
 }
 
-message MsgMotorCallibration {
+message MsgMotorCalibration {
 	MotorPosition motor = 1;
-	MsgEncoderCallibration config = 2;
+	MsgEncoderCalibration config = 2;
 }
 
-message MsgEncoderCallibration {
+message MsgEncoderCalibration {
 	float kP = 1;
 	float kI = 2;
 	float kD = 3;
@@ -80,9 +80,9 @@ message MazeStatePacket {
 }
 
 message MausConfigPacket {
-	MsgEncoderCallibration leftMotorPid = 1;
-	MsgEncoderCallibration rightMotorPid = 2;
-	MsgEncoderCallibration lanePid = 3;
+	MsgEncoderCalibration leftMotorPid = 1;
+	MsgEncoderCalibration rightMotorPid = 2;
+	MsgEncoderCalibration lanePid = 3;
 }
 
 message MausCommandStatus {
@@ -158,12 +158,12 @@ message MausIncomingMessage {
 	oneof payload {
 		MsgInit init = 2;
 		MsgControl control = 3;
-		MsgMotorCallibration motorCallibration = 4;
+		MsgMotorCalibration motorCalibration = 4;
 		MsgPing ping = 5;
 		MsgStop stop = 6;
 		MsgDrive drive = 7;
 		MsgSetPosition setPosition = 8;
 		MsgSolve solve = 9;
-		MsgEncoderCallibration laneCallibration = 10;
+		MsgEncoderCalibration laneCalibration = 10;
 	}
 }

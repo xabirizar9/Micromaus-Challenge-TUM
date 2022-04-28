@@ -8,72 +8,44 @@
 
 PB_BIND(AckPacket, AckPacket, AUTO)
 
-
 PB_BIND(Position, Position, AUTO)
 
+PB_BIND(MsgMotorCalibration, MsgMotorCalibration, AUTO)
 
-PB_BIND(MsgMotorCallibration, MsgMotorCallibration, AUTO)
-
-
-PB_BIND(MsgEncoderCallibration, MsgEncoderCallibration, AUTO)
-
+PB_BIND(MsgEncoderCalibration, MsgEncoderCalibration, AUTO)
 
 PB_BIND(PongPacket, PongPacket, AUTO)
 
-
 PB_BIND(SensorPacket, SensorPacket, AUTO)
-
 
 PB_BIND(PosDistribution, PosDistribution, AUTO)
 
-
 PB_BIND(NavigationPacket, NavigationPacket, AUTO)
-
 
 PB_BIND(InfoPacket, InfoPacket, AUTO)
 
-
 PB_BIND(PidTuningInfo, PidTuningInfo, 2)
-
 
 PB_BIND(MazeStatePacket, MazeStatePacket, AUTO)
 
-
 PB_BIND(MausConfigPacket, MausConfigPacket, AUTO)
-
 
 PB_BIND(MausCommandStatus, MausCommandStatus, AUTO)
 
-
 PB_BIND(MausOutgoingMessage, MausOutgoingMessage, 2)
-
 
 PB_BIND(MsgInit, MsgInit, AUTO)
 
-
 PB_BIND(MsgPing, MsgPing, AUTO)
-
 
 PB_BIND(MsgControl, MsgControl, AUTO)
 
-
 PB_BIND(MsgDrive, MsgDrive, AUTO)
-
 
 PB_BIND(MsgSolve, MsgSolve, AUTO)
 
-
 PB_BIND(MsgSetPosition, MsgSetPosition, AUTO)
-
 
 PB_BIND(MsgStop, MsgStop, AUTO)
 
-
 PB_BIND(MausIncomingMessage, MausIncomingMessage, AUTO)
-
-
-
-
-
-
-

@@ -29,7 +29,7 @@ bool laneControlTask(Controller *controller, MsgDrive *cmd) {
 
 	// declare variables for sensor distances
 	NavigationPacket state;
-	MsgEncoderCallibration config;
+	MsgEncoderCalibration config;
 
 	int64_t curEncoderValue = controller->getAverageEncoderTicks();
 
