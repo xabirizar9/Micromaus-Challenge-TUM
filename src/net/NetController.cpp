@@ -84,7 +84,7 @@ void receiverTask(void *pvParameter) {
 			continue;
 		}
 
-		ESP_LOGD(tag, "got msg ID=%d", msg.which_payload);
+		ESP_LOGI(tag, "got msg ID=%d", msg.which_payload);
 
 		switch (msg.which_payload) {
 			case MausIncomingMessage_init_tag: {
@@ -204,6 +204,8 @@ void receiverTask(void *pvParameter) {
 						manager->driver->startGoHome(msg.payload.solve.speed);
 						break;
 				}
+				break;
+			case MausIncomingMessage_stop_tag: esp_restart(); break;
 		}
 		vTaskDelay(taskInterval);
 	}

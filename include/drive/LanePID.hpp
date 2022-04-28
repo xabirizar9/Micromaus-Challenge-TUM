@@ -20,9 +20,6 @@ class LaneControlPID : private PID {
 	 * @brief new direction to be used in robot drive call
 	 *
 	 */
-	double input;
-	double target;
-	double _output;
 	double *laneOutput;
 
    public:

@@ -14,9 +14,9 @@ class PID {
 	double kI;
 	double kD;
 
-	double *input;
-	double *output;
-	double *target;
+	double input;
+	double output;
+	double target;
 
 	double error;
 	double lastInput;
@@ -33,18 +33,22 @@ class PID {
 	uint32_t sampleRateInTicks;
 
    public:
-	PID(double *input,
-		double *output,
-		double outMin,
-		double outMax,
-		uint32_t sampleTimeInMs,
-		const MsgEncoderCalibration &config);
+	PID(double outMin, double outMax, uint32_t sampleTimeInMs, const MsgEncoderCalibration &config);
 
 	void setCalibration(MsgEncoderCalibration *config);
 	void setCalibration(double kP, double kD, double kI);
 
-	void evaluate();
+	void setMinMax(double min, double max) {
+		outMax = max;
+		outMin = min;
+	}
+
+	void evaluate(double input);
 	void reset();
 
-	void setTarget(double *target);
+	double getOutput() const {
+		return output;
+	}
+
+	void setTarget(double target);
 };

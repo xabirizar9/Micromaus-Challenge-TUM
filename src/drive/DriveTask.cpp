@@ -165,19 +165,42 @@ void driveTask(void* arg) {
 
 				double laneCorrection = 0.0;
 				LaneControlPID lanePid = LaneControlPID(&laneCorrection, driveInterval, controller);
-				cmdStatus.target = controller->getAverageEncoderTicks() +
-								   mmsToTicks(mazeCellSize) * curCmd->driveCmd.value;
+				double target = controller->getAverageEncoderTicks() +
+								mmsToTicks(mazeCellSize) * curCmd->driveCmd.value;
+				cmdStatus.target = target;
 
-				uint8_t counter = 0;
+				double diff = target - controller->getAverageEncoderTicks();
 
-				while (counter < curCmd->profile->numIntervals) {
+				uint16_t maxVelocity = 0;
+				for (size_t counter = 0; counter < curCmd->profile->numIntervals; counter++) {
+					const uint16_t theVelocity = curCmd->profile->velocityProfile[counter];
+					if (theVelocity > maxVelocity)
+						maxVelocity = theVelocity;
+				}
+
+				PID thePID(-maxVelocity,
+						   maxVelocity,
+						   controlInterval,
+						   MsgEncoderCalibration{1, 0, 0.1, false});
+				thePID.setTarget(0);
+
+				double envelope = 1;
+
+				/*
+				for (size_t counter = 0; counter < curCmd->profile->numIntervals; counter++) {
 					controller->updatePosition();
 					controller->updateSensors();
 					// update lane task
 					lanePid.evaluate();
+					thePID.evaluate(-diff);
 					ESP_LOGI(tag, "Correction=%f", laneCorrection);
-					controller->drive(curCmd->profile->velocityProfile[counter],
-									  (int16_t)round(laneCorrection));
+					const uint16_t theVelocity = curCmd->profile->velocityProfile[counter];
+					if (theVelocity == maxVelocity)
+						break;
+
+					controller->drive(theVelocity, (int16_t)round(laneCorrection));
+
+					maxVelocity = theVelocity;
 					// STOP drive when wall in front
 					if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
 						ESP_LOGI(tag, "stop!");
@@ -188,21 +211,38 @@ void driveTask(void* arg) {
 					counter++;
 
 					vTaskDelay(pdMS_TO_TICKS(controlInterval));
+					diff = cmdStatus.target - controller->getAverageEncoderTicks();
 				}
+				*/
 
-				ESP_LOGI(tag, "correction start");
-				float diff = cmdStatus.target - controller->getAverageEncoderTicks();
 				while (std::abs(diff) > 10) {
 					controller->updatePosition();
 					controller->updateSensors();
 					lanePid.evaluate();
+					thePID.evaluate(-diff);
 
-					controller->drive(diff / 10, (int16_t)round(laneCorrection));
+					const float enveloped = thePID.getOutput() * (1 - envelope);
 
-					diff = cmdStatus.target - controller->getAverageEncoderTicks();
+					ESP_LOGI(tag,
+							 "correction: %f -> %f (%f) / %f",
+							 diff,
+							 thePID.getOutput(),
+							 enveloped,
+							 laneCorrection);
+
+					controller->drive(enveloped, (int16_t)round(laneCorrection));
+
+					if ((state.sensors.front > 0.2) && (state.sensors.front < 30)) {
+						ESP_LOGI(tag, "stop!");
+						controller->setSpeed(0);
+						controller->drive(0, 0);
+						break;
+					}
+
 					vTaskDelay(pdMS_TO_TICKS(driveInterval));
+					diff = target - controller->getAverageEncoderTicks();
+					envelope *= 0.95;
 				}
-				ESP_LOGI(tag, "correction done");
 
 				controller->drive(0, 0);
 				// laneControlTask(controller, curCmd);
@@ -304,7 +344,7 @@ void driveTask(void* arg) {
 				// cmdStatus.actual = cur;
 
 				// break;
-			}
+			} break;
 			default: break;
 		}
 

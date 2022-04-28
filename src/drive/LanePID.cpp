@@ -9,14 +9,13 @@
 static const char *TAG = "lane-ctrl";
 
 LaneControlPID::LaneControlPID(double *output, uint32_t sampleTimeInMs, Controller *controller)
-	: PID(&input, &_output, -2000, 2000, sampleTimeInMs, controller->getLanePidConfig()) {
+	: PID(-2000, 2000, sampleTimeInMs, controller->getLanePidConfig()) {
 	MsgEncoderCalibration cfg = controller->getLanePidConfig();
 	this->controller = controller;
 	this->setCalibration(&cfg);
 
 	// the target is 0.0 since it means both wall are equally far away
-	this->target = 0.0;
-	this->setTarget(&this->target);
+	this->setTarget(0);
 	this->laneOutput = output;
 }
 
@@ -31,36 +30,32 @@ void LaneControlPID::evaluate() {
 
 	// only left is valid
 	if ((!rightWallgiven && leftWallgiven) || (!rightSensorValid && leftSensorValid)) {
-		this->input = state.sensors.left - OPTIMAL_WALL_DISTANCE;
+		PID::evaluate(-(state.sensors.left - OPTIMAL_WALL_DISTANCE));
 		ESP_LOGD(TAG, "only left is valid");
 	} else if ((!leftWallgiven && rightWallgiven) || (!leftSensorValid && rightSensorValid)) {
 		// only right is valid
-		this->input = OPTIMAL_WALL_DISTANCE - state.sensors.right;
+		PID::evaluate(-(OPTIMAL_WALL_DISTANCE - state.sensors.right));
 		ESP_LOGI(TAG, "only right is valid");
 	} else if (leftWallgiven && rightWallgiven && leftSensorValid && rightSensorValid) {
 		// both are valid
 		ESP_LOGD(TAG, "both are valid");
-		this->input = state.sensors.left - state.sensors.right;
+		PID::evaluate(-(state.sensors.left - state.sensors.right));
 	} else {
 		// pray that all is okay
 
-		this->input = 0;
+		PID::evaluate(0);
 	}
 
-	// compute default PID values
-	PID::evaluate();
-
-	// ESP_LOGI(TAG, "out=%lf", this->_output);
-
 	// adjust correction to Lane task constraints
-	if (abs(this->_output) < MIN_CORRECTION_AMOUNT) {
+	if (abs(getOutput()) < MIN_CORRECTION_AMOUNT) {
 		*laneOutput = 0;
 	} else {
 		// make sure error is reasonable meaning:
 		// lane correction is not too small or too large
 		// too large is more problematic
-		*laneOutput =
-			copysign((CORRECTION_MIN_BOUND - std::min(abs(this->_output), CORRECTION_MAX_BOUND)),
-					 this->_output);
+		*laneOutput = copysign(
+			(CORRECTION_MIN_BOUND - std::min(abs(getOutput()), CORRECTION_MAX_BOUND)), getOutput());
 	}
+
+	ESP_LOGI(TAG, "out=%f, laneOut=%f", getOutput(), *laneOutput);
 }

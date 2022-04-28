@@ -133,14 +133,8 @@ void motorPidTask(void *pvParameter) {
 	// needed to compute target speed for a given PID loop interval
 	double targetScaleFactor = (double)monitorInterval / 1000.0;
 	// current speed target in ticks
-	double lTarget = 0.0;
-	double lInput = 0.0;
-	double lOutput = 0.0;
 	long lLastCounter = 0;
 
-	double rTarget = 0.0;
-	double rInput = 0.0;
-	double rOutput = 0.0;
 	long rLastCounter = 0;
 
 	MsgEncoderCalibration config;
@@ -148,38 +142,34 @@ void motorPidTask(void *pvParameter) {
 	config.kP = 0.003898;
 	config.kI = 0.001688;
 	config.kD = 0.011194;
-	PID lPid = PID(&lInput, &lOutput, -1.0, 1.0, monitorInterval, config);
+	PID lPid = PID(-1.0, 1.0, monitorInterval, config);
 	lPid.setCalibration(lMotor->kP, lMotor->kI, lMotor->kD);
-	lPid.setTarget(&lTarget);
 
 	config.kP = 0.003317;
 	config.kI = 0.001665;
 	config.kD = 0.004370;
-	PID rPid = PID(&rInput, &rOutput, -1.0, 1.0, monitorInterval, config);
+	PID rPid = PID(-1.0, 1.0, monitorInterval, config);
 	rPid.setCalibration(rMotor->kP, rMotor->kI, rMotor->kD);
-	rPid.setTarget(&rTarget);
 
 	// tune motor
 	// tuneMotorPID(lMotor, lEnc, &lPid, monitorInterval);
 	// tuneMotorPID(rMotor, rEnc, &rPid, monitorInterval);
 
 	while (true) {
-		lInput = lEnc->getTotalCounter() - lLastCounter;
-		rInput = rEnc->getTotalCounter() - rLastCounter;
-		lTarget = (double)controller->getSpeedInTicks(MotorPosition::MotorPosition_left) *
-				  targetScaleFactor;
-		rTarget = (double)controller->getSpeedInTicks(MotorPosition::MotorPosition_right) *
-				  targetScaleFactor;
+		lPid.setTarget(controller->getSpeedInTicks(MotorPosition::MotorPosition_left) *
+					   targetScaleFactor);
+		rPid.setTarget(controller->getSpeedInTicks(MotorPosition::MotorPosition_right) *
+					   targetScaleFactor);
 
 		// ESP_LOGI(TAG, "le=%lf re=%lf", lInput, rInput);
 
-		lPid.evaluate();
-		rPid.evaluate();
+		lPid.evaluate(lEnc->getTotalCounter() - lLastCounter);
+		rPid.evaluate(rEnc->getTotalCounter() - rLastCounter);
 		// reset encoder to avoid overflows
 
 		// ESP_LOGI(TAG, "lo=%lf ro=%lf", lOutput, rOutput);
-		lMotor->setPWM((float)lOutput);
-		rMotor->setPWM((float)rOutput);
+		lMotor->setPWM((float)lPid.getOutput());
+		rMotor->setPWM((float)rPid.getOutput());
 
 		// update PID config if needed
 		if (lMotor->wasPidChanged) {
