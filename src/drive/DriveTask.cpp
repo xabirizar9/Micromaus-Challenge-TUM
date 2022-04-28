@@ -179,9 +179,25 @@ void driveTask(void* arg) {
 						break;
 					}
 					counter++;
+
 					vTaskDelay(pdMS_TO_TICKS(controlInterval));
 				}
 
+				ESP_LOGI(tag, "correction start");
+				float diff = cmdStatus.target - controller->getAverageEncoderTicks();
+				while (std::abs(diff) > 10) {
+					controller->updatePosition();
+					controller->updateSensors();
+					lanePid.evaluate();
+
+					controller->drive(diff / 10, (int16_t)round(laneCorrection));
+
+					diff = cmdStatus.target - controller->getAverageEncoderTicks();
+					vTaskDelay(pdMS_TO_TICKS(controlInterval));
+				}
+				ESP_LOGI(tag, "correction done");
+
+				controller->drive(0, 0);
 				// laneControlTask(controller, curCmd);
 				cmdStatus.actual = controller->getAverageEncoderTicks();
 				break;
