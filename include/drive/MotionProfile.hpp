@@ -13,7 +13,8 @@ static const uint8_t controlInterval = 40;
 const float gridCurveRadius = 90;
 const float onSpotRadius = wheelDistance / 2;
 
-#define MAX_SPEED 500
+#define MAX_SPEED 700
+#define MAX_SPEED_CURVE 100
 
 class MotionProfile {
    private:
@@ -76,8 +77,8 @@ class CurveProfile : public MotionProfile {
 				 uint16_t radius,
 				 uint16_t startSpeed = 0,
 				 uint16_t endSpeed = 0,
-				 uint16_t targetSpeed = 300,
-				 uint16_t maxSpeed = MAX_SPEED)
+				 uint16_t targetSpeed = 100,
+				 uint16_t maxSpeed = MAX_SPEED_CURVE)
 		: MotionProfile(maxSpeed) {
 		this->degrees = degrees;
 
