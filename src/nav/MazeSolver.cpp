@@ -176,11 +176,11 @@ MsgDrive MazeSolver::getNextDriveCmd(float speed) {
 void MazeSolver::driveToNextCell(float speed) {
 	MsgDrive cmd = this->getNextDriveCmd(speed);
 	CardinalDirection newHeading = getHeadingAfterCmd(this->heading, cmd);
-	this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+	this->addCmdAndWait(cmd);
 	this->heading = newHeading;
 	if (newHeading != this->heading) {
 		cmd = this->getNextDriveCmd(speed);
-		this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+		this->addCmdAndWait(cmd);
 	}
 
 	// update position based on heading
