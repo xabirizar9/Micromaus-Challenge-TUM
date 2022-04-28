@@ -8,7 +8,7 @@
 #include "utils/units.hpp"
 
 // interval in which driver will update command speed
-static const uint8_t controlInterval = 20;
+static const uint8_t controlInterval = 40;
 
 const float gridCurveRadius = 90;
 const float onSpotRadius = wheelDistance / 2;

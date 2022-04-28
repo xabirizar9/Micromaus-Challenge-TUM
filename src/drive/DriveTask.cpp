@@ -17,6 +17,8 @@
 #include "periph/Motor.hpp"
 #include "utils/units.hpp"
 static const char* tag = "[drive]";
+static const uint8_t driveInterval = 10;
+static const uint8_t intervalFactor = controlInterval / driveInterval;
 
 float ticksPerRotation(float radius) {
 	return mmsToTicks(0.5 * PI * radius);
@@ -107,8 +109,14 @@ void driveTask(void* arg) {
 	DriveCmdWithMotionProfile cmd;
 	DriveCmdWithMotionProfile lastCmd;
 	DriveCmdWithMotionProfile* curCmd = NULL;
-
+	uint8_t counter = 0;
+	uint16_t interval = pdMS_TO_TICKS(driveInterval);
 	while (true) {
+		if (counter % intervalFactor != 0) {
+			counter++;
+			vTaskDelay(interval);
+			continue;
+		}
 		// update and get state
 		// controller->updateSensors();
 		controller->updatePosition();
@@ -139,7 +147,7 @@ void driveTask(void* arg) {
 					ESP_LOGI(
 						tag, "c=%d speed=%d", counter, curCmd->profile->velocityProfile[counter]);
 					counter++;
-					vTaskDelay(pdMS_TO_TICKS(controlInterval));
+					vTaskDelay(interval);
 				}
 				break;
 			}
@@ -156,8 +164,7 @@ void driveTask(void* arg) {
 				ESP_LOGI(tag, "DriveCell");
 
 				double laneCorrection = 0.0;
-				LaneControlPID lanePid =
-					LaneControlPID(&laneCorrection, controlInterval, controller);
+				LaneControlPID lanePid = LaneControlPID(&laneCorrection, driveInterval, controller);
 				cmdStatus.target = controller->getAverageEncoderTicks() +
 								   mmsToTicks(mazeCellSize) * curCmd->driveCmd.value;
 
@@ -193,7 +200,7 @@ void driveTask(void* arg) {
 					controller->drive(diff / 10, (int16_t)round(laneCorrection));
 
 					diff = cmdStatus.target - controller->getAverageEncoderTicks();
-					vTaskDelay(pdMS_TO_TICKS(controlInterval));
+					vTaskDelay(pdMS_TO_TICKS(driveInterval));
 				}
 				ESP_LOGI(tag, "correction done");
 
@@ -215,7 +222,7 @@ void driveTask(void* arg) {
 				while (counter < curCmd->profile->numIntervals) {
 					controller->drive(curCmd->profile->velocityProfile[counter], heading);
 					counter++;
-					vTaskDelay(pdMS_TO_TICKS(controlInterval));
+					vTaskDelay(pdMS_TO_TICKS(driveInterval));
 				}
 				break;
 			}
@@ -229,7 +236,7 @@ void driveTask(void* arg) {
 				while (counter < curCmd->profile->numIntervals) {
 					controller->drive(curCmd->profile->velocityProfile[counter], heading);
 					counter++;
-					vTaskDelay(pdMS_TO_TICKS(controlInterval));
+					vTaskDelay(pdMS_TO_TICKS(driveInterval));
 				}
 				// MotorPosition pos = cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
 				// 						? MotorPosition::MotorPosition_left
