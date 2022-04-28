@@ -158,7 +158,6 @@ void driveTask(void* arg) {
 				double laneCorrection = 0.0;
 				LaneControlPID lanePid =
 					LaneControlPID(&laneCorrection, controlInterval, controller);
-
 				cmdStatus.target = controller->getAverageEncoderTicks() +
 								   mmsToTicks(mazeCellSize) * curCmd->driveCmd.value;
 
@@ -169,7 +168,7 @@ void driveTask(void* arg) {
 					controller->updateSensors();
 					// update lane task
 					lanePid.evaluate();
-
+					ESP_LOGI(tag, "Correction=%f", laneCorrection);
 					controller->drive(curCmd->profile->velocityProfile[counter],
 									  (int16_t)round(laneCorrection));
 					// STOP drive when wall in front
