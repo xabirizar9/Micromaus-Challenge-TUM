@@ -87,7 +87,7 @@ class CurveProfile : public MotionProfile {
 
 		float radians = degrees * (PI / 180);
 		distance = radians * radius;
-		duration = (distance / (float)targetSpeed) * 2;
+		duration = distance / (float)targetSpeed;
 
 		computeVelocityProfile(true);
 	};
