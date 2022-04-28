@@ -16,7 +16,7 @@
 static const char* tag = "[motion]";
 
 MotionProfile::~MotionProfile() {
-	ESP_LOGI(tag, "Movement completed");
+	// ESP_LOGI(tag, "Movement completed");
 	if (velocityProfile != NULL) {
 		delete velocityProfile;
 	}
@@ -53,7 +53,7 @@ void MotionProfile::optimizeCoefficients() {
 }
 
 void MotionProfile::computeVelocityProfile(bool optimize) {
-	ESP_LOGI(tag, "duration=%f start=%d end=%d distance=%f", duration, vStart, vEnd, distance);
+	// ESP_LOGI(tag, "duration=%f start=%d end=%d distance=%f", duration, vStart, vEnd, distance);
 
 	getPolynomCoefficients();
 	if (optimize) {
@@ -77,7 +77,7 @@ void MotionProfile::computeVelocityProfile(bool optimize) {
 			time = (float)counter * ((float)controlInterval / 1000);
 		}
 		velocityProfile[counter] = (a1 + 2 * a2 + 3 * a3 * time) * time;
-		ESP_LOGI(tag, "i=%d v=%d", counter, velocityProfile[counter]);
+		// ESP_LOGI(tag, "i=%d v=%d", counter, velocityProfile[counter]);
 		counter++;
 		vTaskDelay(stepInterval);
 	}

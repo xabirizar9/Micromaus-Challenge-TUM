@@ -134,7 +134,7 @@ void driveTask(void* arg) {
 
 		switch (curCmd->driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
-				ESP_LOGI(tag, "intervals=%d", curCmd->profile->numIntervals);
+				// ESP_LOGI(tag, "intervals=%d", curCmd->profile->numIntervals);
 				size_t counter = 0;
 				size_t turnIterator = 0;
 				while (counter < curCmd->profile->numIntervals) {
@@ -144,8 +144,8 @@ void driveTask(void* arg) {
 						continue;
 					}
 					controller->drive(curCmd->profile->velocityProfile[counter], 0);
-					ESP_LOGI(
-						tag, "c=%d speed=%d", counter, curCmd->profile->velocityProfile[counter]);
+					// ESP_LOGI(
+					// 	tag, "c=%d speed=%d", counter, curCmd->profile->velocityProfile[counter]);
 					counter++;
 					vTaskDelay(interval);
 				}
@@ -223,12 +223,12 @@ void driveTask(void* arg) {
 
 					const float enveloped = thePID.getOutput() * (1 - envelope);
 
-					ESP_LOGI(tag,
-							 "correction: %f -> %f (%f) / %f",
-							 diff,
-							 thePID.getOutput(),
-							 enveloped,
-							 laneCorrection);
+					// ESP_LOGI(tag,
+					// 		 "correction: %f -> %f (%f) / %f",
+					// 		 diff,
+					// 		 thePID.getOutput(),
+					// 		 enveloped,
+					// 		 laneCorrection);
 
 					controller->drive(enveloped, (int16_t)round(laneCorrection));
 
