@@ -119,7 +119,29 @@ Maze* MazeSolver::getMaze() {
 	return &this->maze;
 }
 
-void MazeSolver::driveToNextCell(float speed) {
+CardinalDirection getHeadingAfterCmd(CardinalDirection heading, MsgDrive cmd) {
+	CardinalDirection newHeading = heading;
+
+	switch (cmd.type) {
+		case DriveCmdType::DriveCmdType_TurnRight:
+		case DriveCmdType::DriveCmdType_TurnLeft:
+			newHeading = CardinalDirection(
+				heading + (cmd.type == DriveCmdType_TurnLeft ? -cmd.value : cmd.value));
+			break;
+		case DriveCmdType::DriveCmdType_TurnLeftOnSpot:
+		case DriveCmdType::DriveCmdType_TurnRightOnSpot:
+			newHeading = CardinalDirection(
+				heading + (cmd.type == DriveCmdType_TurnLeftOnSpot ? -cmd.value : cmd.value));
+			break;
+
+		default: break;
+	}
+
+	return newHeading;
+}
+
+MsgDrive MazeSolver::getNextDriveCmd(float speed) {
+	MsgDrive cmd;
 	// find cell will lover cost/distance to center;
 	CardinalDirection newHeading = this->getNewHeading(x, y);
 
@@ -138,12 +160,28 @@ void MazeSolver::driveToNextCell(float speed) {
 							? DriveCmdType::DriveCmdType_TurnRightOnSpot
 							: DriveCmdType::DriveCmdType_TurnLeftOnSpot;
 		}
-
-		this->addCmdAndWait(direction, turns, speed);
-		heading = newHeading;
+		cmd.type = direction;
+		cmd.speed = speed;
+		cmd.value = turns;
+		return cmd;
 	}
 
+	cmd.type = DriveCmdType_MoveCells;
+	cmd.speed = speed;
+	cmd.value = 1;
+
+	return cmd;
+}
+
+void MazeSolver::driveToNextCell(float speed) {
+	MsgDrive cmd = this->getNextDriveCmd(speed);
+	CardinalDirection newHeading = getHeadingAfterCmd(this->heading, cmd);
 	this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+	this->heading = newHeading;
+	if (newHeading != this->heading) {
+		cmd = this->getNextDriveCmd(speed);
+		this->addCmdAndWait(DriveCmdType::DriveCmdType_MoveCells, 1, speed);
+	}
 
 	// update position based on heading
 	// TODO: maybe use robot position here

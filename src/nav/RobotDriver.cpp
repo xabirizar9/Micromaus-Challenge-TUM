@@ -66,3 +66,15 @@ void RobotDriver::addCmdAndWait(DriveCmdType type, float value, float speed) {
 	this->addCmd(type, value, speed);
 	waitForDriveCompletion(this->eventHandle);
 }
+
+/**
+ * @brief the same as addCmd but waits for its completion
+ *
+ * @param type
+ * @param value
+ * @param speed
+ */
+void RobotDriver::addCmdAndWait(MsgDrive cmd) {
+	this->addCmd(cmd.type, cmd.value, cmd.speed);
+	waitForDriveCompletion(this->eventHandle);
+}

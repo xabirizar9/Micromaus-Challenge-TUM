@@ -10,7 +10,9 @@ static const char *TAG = "lane-ctrl";
 
 LaneControlPID::LaneControlPID(double *output, uint32_t sampleTimeInMs, Controller *controller)
 	: PID(&input, &_output, -2000, 2000, sampleTimeInMs, controller->getLanePidConfig()) {
+	MsgEncoderCalibration cfg = controller->getLanePidConfig();
 	this->controller = controller;
+	this->setCalibration(&cfg);
 
 	// the target is 0.0 since it means both wall are equally far away
 	this->target = 0.0;

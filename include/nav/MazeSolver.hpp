@@ -24,6 +24,7 @@ class MazeSolver : public RobotDriver {
 	CardinalDirection heading = CardinalDirection::NORTH;
 
 	void driveToNextCell(float speed);
+	MsgDrive getNextDriveCmd(float speed);
 	void sendSolverState();
 
    public:

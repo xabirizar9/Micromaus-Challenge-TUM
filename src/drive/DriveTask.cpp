@@ -193,8 +193,8 @@ void driveTask(void* arg) {
 				uint8_t counter = 0;
 
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeft
-									  ? -gridCurveRadius
-									  : gridCurveRadius;
+									  ? gridCurveRadius
+									  : -gridCurveRadius;
 
 				while (counter < curCmd->profile->numIntervals) {
 					controller->drive(curCmd->profile->velocityProfile[counter], heading);

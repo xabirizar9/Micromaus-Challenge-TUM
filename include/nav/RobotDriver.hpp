@@ -30,6 +30,7 @@ class RobotDriver {
 	~RobotDriver();
 
 	void addCmd(DriveCmdType type, float value, float speed);
+	void addCmdAndWait(MsgDrive cmd);
 	void addCmdAndWait(DriveCmdType type, float value, float speed);
 
 	virtual void setPosition(float x, float y){};
