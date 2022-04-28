@@ -22,14 +22,10 @@ void clampAndIntegrate(float &correction,
 	}
 }
 
-PID::PID(double *input,
-		 double *output,
-		 double outMin,
+PID::PID(double outMin,
 		 double outMax,
 		 uint32_t sampleTimeInMs,
 		 const MsgEncoderCalibration &config) {
-	this->input = input;
-	this->output = output;
 	this->outMax = outMax;
 	this->outMin = outMin;
 	sumError = 0;
@@ -53,7 +49,7 @@ void PID::setCalibration(double kP, double kI, double kD) {
 	sumError = 0;
 }
 
-void PID::setTarget(double *target) {
+void PID::setTarget(double target) {
 	this->target = target;
 }
 
@@ -62,12 +58,9 @@ void PID::reset() {
 	error = 0.0;
 }
 
-void PID::evaluate() {
+void PID::evaluate(double input) {
 	this->curTime = xTaskGetTickCount();
 	uint32_t timeDiff = this->curTime - this->lastTime;
-
-	double input;
-	double output;
 
 	// errors
 	double error;
@@ -79,8 +72,7 @@ void PID::evaluate() {
 	}
 
 	// copy values;
-	input = *this->input;
-	error = *this->target - input;
+	error = target - input;
 
 	derError = input - lastInput;
 
@@ -116,8 +108,6 @@ void PID::evaluate() {
 	// 			 sumError,
 	// 			 output);
 	// }
-
-	*this->output = output;
 
 	lastTime = curTime;
 	lastInput = input;
