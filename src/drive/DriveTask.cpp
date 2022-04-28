@@ -109,7 +109,7 @@ void driveTask(void* arg) {
 	DriveCmdWithMotionProfile cmd;
 	DriveCmdWithMotionProfile lastCmd;
 	DriveCmdWithMotionProfile* curCmd = NULL;
-	uint8_t counter = 0;
+	size_t counter = 0;
 	uint16_t interval = pdMS_TO_TICKS(driveInterval);
 	while (true) {
 		// update and get state
@@ -135,8 +135,8 @@ void driveTask(void* arg) {
 		switch (curCmd->driveCmd.type) {
 			case DriveCmdType::DriveCmdType_Move: {
 				ESP_LOGI(tag, "intervals=%d", curCmd->profile->numIntervals);
-				uint8_t counter = 0;
-				uint8_t turnIterator = 0;
+				size_t counter = 0;
+				size_t turnIterator = 0;
 				while (counter < curCmd->profile->numIntervals) {
 					if (turnIterator % intervalFactor != 0) {
 						turnIterator++;
@@ -252,19 +252,20 @@ void driveTask(void* arg) {
 
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
-				uint8_t counter = 0;
-				uint8_t turnIterator = 0;
+				size_t counter = 0;
+				size_t turnIterator = 0;
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeft
 									  ? gridCurveRadius
 									  : -gridCurveRadius;
 
 				while (counter < curCmd->profile->numIntervals) {
-					if (turnIterator % intervalFactor != 0) {
-						turnIterator++;
+					if (turnIterator++ % intervalFactor != 0) {
 						vTaskDelay(interval);
 						continue;
 					}
-					controller->drive(curCmd->profile->velocityProfile[counter], heading);
+					uint16_t vel = curCmd->profile->velocityProfile[counter];
+					controller->drive(vel, heading);
+					ESP_LOGI(tag, "turn: [%u] %hu", counter, vel);
 					counter++;
 					vTaskDelay(interval);
 				}
@@ -275,12 +276,11 @@ void driveTask(void* arg) {
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
 									  ? INT16_MIN
 									  : INT16_MAX;
-				uint8_t counter = 0;
-				uint8_t turnIterator = 0;
+				size_t counter = 0;
+				size_t turnIterator = 0;
 
 				while (counter < curCmd->profile->numIntervals) {
-					if (turnIterator % intervalFactor != 0) {
-						turnIterator++;
+					if (turnIterator++ % intervalFactor != 0) {
 						vTaskDelay(interval);
 						continue;
 					}
