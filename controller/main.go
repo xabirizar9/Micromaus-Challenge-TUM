@@ -41,10 +41,12 @@ func openbrowser(url string) {
 
 func main() {
 	var forceMDNS = flag.Bool("force-mdns", false, "if enabled only mDNS mouses will be discovered")
-	flag.Parse()
 
 	c := Config{}
 	c.getConf()
+
+	var mausAddr = flag.String("maus-ip", c.MausAddr, "set robot IP")
+	flag.Parse()
 	m := NewManager()
 
 	// only search for mDNS if explicitly enabled, this does not make sense on the server
@@ -55,8 +57,8 @@ func main() {
 				log.Info("connecting to robot...")
 				r, err := NewRobot(log, RobotConnectionOptions{
 					Baud: 0,
-					Dev:  "waxn-robot.local",
-					Addr: c.MausAddr,
+					Dev:  *mausAddr,
+					Addr: *mausAddr,
 				})
 				if err != nil {
 					log.Info("low level connection failed", zap.Error(err), zap.String("addr", c.MausAddr))
