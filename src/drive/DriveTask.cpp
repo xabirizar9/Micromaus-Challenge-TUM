@@ -181,7 +181,7 @@ void driveTask(void* arg) {
 				PID thePID(-maxVelocity,
 						   maxVelocity,
 						   controlInterval,
-						   MsgEncoderCalibration{1, 0, 0.1, false});
+						   MsgEncoderCalibration{0.5, 0.01, 0.03, false});
 				thePID.setTarget(0);
 
 				double envelope = 1;
