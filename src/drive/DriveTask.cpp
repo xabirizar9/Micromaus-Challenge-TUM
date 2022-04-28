@@ -26,7 +26,7 @@ float ticksPerRotation(float radius) {
 
 void motionProfileTask(void* arg) {
 	RobotDriver* driver = (RobotDriver*)arg;
-	uint16_t interval = pdMS_TO_TICKS(30);
+	uint16_t interval = pdMS_TO_TICKS(controlInterval);
 
 	DriveCmdWithMotionProfile cmd;
 	uint16_t lastSpeed = 0;
@@ -112,11 +112,6 @@ void driveTask(void* arg) {
 	uint8_t counter = 0;
 	uint16_t interval = pdMS_TO_TICKS(driveInterval);
 	while (true) {
-		if (counter % intervalFactor != 0) {
-			counter++;
-			vTaskDelay(interval);
-			continue;
-		}
 		// update and get state
 		// controller->updateSensors();
 		controller->updatePosition();
@@ -141,8 +136,13 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_Move: {
 				ESP_LOGI(tag, "intervals=%d", curCmd->profile->numIntervals);
 				uint8_t counter = 0;
-
+				uint8_t turnIterator = 0;
 				while (counter < curCmd->profile->numIntervals) {
+					if (turnIterator % intervalFactor != 0) {
+						turnIterator++;
+						vTaskDelay(interval);
+						continue;
+					}
 					controller->drive(curCmd->profile->velocityProfile[counter], 0);
 					ESP_LOGI(
 						tag, "c=%d speed=%d", counter, curCmd->profile->velocityProfile[counter]);
@@ -238,8 +238,7 @@ void driveTask(void* arg) {
 						controller->drive(0, 0);
 						break;
 					}
-
-					vTaskDelay(pdMS_TO_TICKS(driveInterval));
+					vTaskDelay(interval);
 					diff = target - controller->getAverageEncoderTicks();
 					envelope *= 0.95;
 				}
@@ -254,15 +253,20 @@ void driveTask(void* arg) {
 			case DriveCmdType::DriveCmdType_TurnRight:
 			case DriveCmdType::DriveCmdType_TurnLeft: {
 				uint8_t counter = 0;
-
+				uint8_t turnIterator = 0;
 				int16_t heading = curCmd->driveCmd.type == DriveCmdType::DriveCmdType_TurnLeft
 									  ? gridCurveRadius
 									  : -gridCurveRadius;
 
 				while (counter < curCmd->profile->numIntervals) {
+					if (turnIterator % intervalFactor != 0) {
+						turnIterator++;
+						vTaskDelay(interval);
+						continue;
+					}
 					controller->drive(curCmd->profile->velocityProfile[counter], heading);
 					counter++;
-					vTaskDelay(pdMS_TO_TICKS(driveInterval));
+					vTaskDelay(interval);
 				}
 				break;
 			}
@@ -272,11 +276,17 @@ void driveTask(void* arg) {
 									  ? INT16_MIN
 									  : INT16_MAX;
 				uint8_t counter = 0;
+				uint8_t turnIterator = 0;
 
 				while (counter < curCmd->profile->numIntervals) {
+					if (turnIterator % intervalFactor != 0) {
+						turnIterator++;
+						vTaskDelay(interval);
+						continue;
+					}
 					controller->drive(curCmd->profile->velocityProfile[counter], heading);
 					counter++;
-					vTaskDelay(pdMS_TO_TICKS(driveInterval));
+					vTaskDelay(interval);
 				}
 				// MotorPosition pos = cmd.type == DriveCmdType::DriveCmdType_TurnLeftOnSpot
 				// 						? MotorPosition::MotorPosition_left
