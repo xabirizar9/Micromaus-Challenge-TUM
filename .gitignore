@@ -77,3 +77,4 @@ controller/micromaus
 # sdkconfig backups
 sdkconfig.*.old
 
+spionage/
